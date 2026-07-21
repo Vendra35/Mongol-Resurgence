@@ -144,7 +144,7 @@ mr_imperial.201 = {
 		ai_chance = { factor = 100 }
 		add_prestige = prestige_extreme_bonus
 		add_country_modifier = {
-			modifier = mongol_imperial_majesty
+			modifier = MR_empire_fulfilled
 			years = -1
 			mode = replace
 		}

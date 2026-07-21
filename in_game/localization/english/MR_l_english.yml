@@ -598,3 +598,40 @@
  mr_steppe.22.desc: "From the Tarim to the western steppe, one authority holds — with laws written down, taxes counted, garrisons that stay put, and artillery that answers artillery.\n\nThe age of the horse archer is over everywhere. Here, alone, the steppe has survived its ending by becoming something else."
  mr_steppe.22.historical_info: "At its height the Dzungar Khanate controlled Dzungaria, the Tarim Basin, and much of the Kazakh steppe. Its destruction by the Qianlong Emperor in 1755-58 was so complete that historians describe it as genocide, and it marked the definitive end of nomadic power in Eurasia."
  mr_steppe.22.a: "The steppe endures, in a new shape."
+
+ # ==============================================================================
+ # ----------------- CASUS BELLI & WAR GOALS -----------------
+ # ==============================================================================
+
+ cb_MR_steppe_unification: "Unification of the Steppe"
+ cb_MR_steppe_unification_desc: "The clans of the steppe answer to one banner or to none. Whoever holds the Chinggisid claim has the right to compel the rest."
+ cb_MR_silk_road: "Mastery of the Silk Road"
+ cb_MR_silk_road_desc: "The road from the Ordos to Persia has paid tribute to the horde before, and will again. The cities along it are ours to take."
+ cb_MR_westward_advance: "The Westward Advance"
+ cb_MR_westward_advance_desc: "The Russian principalities paid tribute for two hundred and forty years. Their independence is a recent accident, and a reversible one."
+
+ MR_war_goal_steppe_unification: "Unify the Steppe"
+ MR_war_goal_silk_road: "Seize the Silk Road"
+ MR_war_goal_westward_advance: "Advance into the West"
+
+ # ==============================================================================
+ # ----------------- PHASE MODIFIERS -----------------
+ # ==============================================================================
+
+ MR_mongol_warrior_spirit: "Warrior Spirit of the Steppe"
+ MR_unified_mongol_banner: "The Unified Mongol Banner"
+ MR_shattered_horde_ai: "Shattered Horde"
+ MR_shattered_horde_player: "Shattered Horde"
+ MR_imperial_conquest: "Imperial Conquest"
+ MR_empire_fulfilled: "The Empire Fulfilled"
+ MR_imperial_failure_ai: "The Campaign Broken"
+ MR_imperial_failure_player: "The Campaign Broken"
+ MR_mongol_preparing_for_conquest: "Preparing for Conquest"
+ MR_the_sleeping_horde: "The Sleeping Horde"
+ MR_pax_mongolica: "Pax Mongolica"
+ MR_mongol_world_order: "The Mongol World Order"
+ MR_dominance_failure_ai: "The Empire Undone"
+ MR_dominance_failure_player: "The Empire Undone"
+ MR_mongol_historical_modifier: "The Historical Steppe"
+ MR_imperial_historical_modifier: "The Historical Road"
+ MR_dominance_historical_modifier: "The Historical Empire"

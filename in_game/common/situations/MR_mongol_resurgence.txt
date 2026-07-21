@@ -80,6 +80,22 @@ mongol_resurgence = {
 			}
 			trigger_event_non_silently = mr_dominance.10
 
+			# Phase buff, plus the historical-mode variant when the
+			# railroad is running on the historical game rule.
+			add_country_modifier = {
+				modifier = MR_mongol_warrior_spirit
+				years = -1
+				mode = replace
+			}
+			if = {
+				limit = { has_game_rule = mr_railroad_historical }
+				add_country_modifier = {
+					modifier = MR_mongol_historical_modifier
+					years = -1
+					mode = replace
+				}
+			}
+
 			# The CB is granted by the situation rather than picked from
 			# the diplomacy screen — cb_MR_* are create_enabled = no.
 			every_country = {
@@ -285,6 +301,19 @@ mongol_resurgence = {
 	}
 
 	on_ended = {
+		# The horde is unified but has not yet turned outward — the
+		# dormant interval between Phase 1 and Phase 2.
+		if = {
+			limit = { country_exists = c:MGO }
+			c:MGO = {
+				add_country_modifier = {
+					modifier = MR_the_sleeping_horde
+					years = -1
+					mode = replace
+				}
+			}
+		}
+
 		remove_variable = mr_resurgence_momentum
 		remove_global_variable = mr_beat_100_fired
 		remove_global_variable = mr_beat_101_fired

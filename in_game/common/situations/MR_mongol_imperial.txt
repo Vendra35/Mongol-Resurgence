@@ -27,6 +27,12 @@ mongol_imperial = {
 	on_start = {
 		set_global_variable = mr_imperial_started
 
+		# The horde is awake now.
+		every_country = {
+			limit = { has_country_modifier = MR_the_sleeping_horde }
+			remove_country_modifier = MR_the_sleeping_horde
+		}
+
 		set_variable = {
 			name = mr_imperial_momentum
 			value = 0
@@ -64,6 +70,22 @@ mongol_imperial = {
 			}
 			c:MGO = {
 				trigger_event_non_silently = mr_dominance.120
+
+				# Phase buff, plus the historical-mode variant when the
+				# railroad is running on the historical game rule.
+				add_country_modifier = {
+					modifier = MR_imperial_conquest
+					years = -1
+					mode = replace
+				}
+				if = {
+					limit = { has_game_rule = mr_railroad_historical }
+					add_country_modifier = {
+						modifier = MR_imperial_historical_modifier
+						years = -1
+						mode = replace
+					}
+				}
 				trigger_event_non_silently = mr_imperial.100
 
 				every_country = {

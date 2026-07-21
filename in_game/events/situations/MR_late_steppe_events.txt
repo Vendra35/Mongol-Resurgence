@@ -248,7 +248,7 @@ mr_steppe.22 = {
 		ai_chance = { factor = 100 }
 		add_prestige = prestige_severe_bonus
 		add_country_modifier = {
-			modifier = mongol_unifier
+			modifier = MR_unified_mongol_banner
 			years = -1
 			mode = replace
 		}

@@ -65,6 +65,22 @@ mongol_dominance = {
 				}
 			}
 			trigger_event_non_silently = mr_dominance.130
+
+			# Phase buff, plus the historical-mode variant when the
+			# railroad is running on the historical game rule.
+			add_country_modifier = {
+				modifier = MR_pax_mongolica
+				years = -1
+				mode = replace
+			}
+			if = {
+				limit = { has_game_rule = mr_railroad_historical }
+				add_country_modifier = {
+					modifier = MR_dominance_historical_modifier
+					years = -1
+					mode = replace
+				}
+			}
 		}
 
 		# The claimant gets a CB against the Russian principalities.
