@@ -1,0 +1,208 @@
+﻿namespace = mr_imperial
+
+# =================================================================
+# MONGOL RESURGENCE - THE WESTWARD CAMPAIGN
+# =================================================================
+# The invasion arc proper: planning, the first wave, the fall of a
+# great city, the counter-attack, and how it ends. Fired by the
+# Phase 2 and Phase 3 situations, not by date windows.
+#
+#   100-103  the campaign as it unfolds (103 is the branch)
+#   200-202  the campaign succeeds
+#   210-211  the campaign fails
+# =================================================================
+
+
+# --- The Invasion Plans -----------------------------------------
+mr_imperial.100 = {
+	type = country_event
+	title = mr_imperial.100.title
+	desc = mr_imperial.100.desc
+	outcome = neutral
+	fire_only_once = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+
+	option = {
+		name = mr_imperial.100.a
+		ai_chance = { factor = 100 }
+		add_mil = 100
+	}
+}
+
+
+# --- The First Wave ---------------------------------------------
+mr_imperial.101 = {
+	type = country_event
+	title = mr_imperial.101.title
+	desc = mr_imperial.101.desc
+	outcome = neutral
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = exterior
+	}
+
+	option = {
+		name = mr_imperial.101.a
+		ai_chance = { factor = 100 }
+		add_mil = 100
+	}
+}
+
+
+# --- The City Falls ---------------------------------------------
+mr_imperial.102 = {
+	type = country_event
+	title = mr_imperial.102.title
+	desc = mr_imperial.102.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = exterior
+	}
+
+	option = {
+		name = mr_imperial.102.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_severe_bonus
+	}
+}
+
+
+# --- The Counter-Attack -----------------------------------------
+# The campaign's branch point: press on, or dig in and hold.
+mr_imperial.103 = {
+	type = country_event
+	title = mr_imperial.103.title
+	desc = mr_imperial.103.desc
+	outcome = negative
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = angry
+	}
+
+	option = {
+		name = mr_imperial.103.a
+		ai_chance = { factor = 60 }
+		add_mil = 150
+	}
+
+	option = {
+		name = mr_imperial.103.b
+		ai_chance = { factor = 40 }
+		add_government_power = government_power_mild_bonus
+	}
+}
+
+
+# --- The Empire Secured -----------------------------------------
+mr_imperial.200 = {
+	type = country_event
+	title = mr_imperial.200.title
+	desc = mr_imperial.200.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = interior
+		10 = happy
+	}
+
+	option = {
+		name = mr_imperial.200.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_severe_bonus
+	}
+}
+
+
+# --- A New Empire Rises -----------------------------------------
+mr_imperial.201 = {
+	type = country_event
+	title = mr_imperial.201.title
+	desc = mr_imperial.201.desc
+	outcome = positive
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = happy
+	}
+
+	option = {
+		name = mr_imperial.201.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_extreme_bonus
+		add_country_modifier = {
+			modifier = mongol_imperial_majesty
+			years = -1
+			mode = replace
+		}
+	}
+}
+
+
+# --- The Grand Review -------------------------------------------
+mr_imperial.202 = {
+	type = country_event
+	title = mr_imperial.202.title
+	desc = mr_imperial.202.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = happy
+	}
+
+	option = {
+		name = mr_imperial.202.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_mild_bonus
+		add_mil = 100
+	}
+}
+
+
+# --- The Campaign Stalls ----------------------------------------
+mr_imperial.210 = {
+	type = country_event
+	title = mr_imperial.210.title
+	desc = mr_imperial.210.desc
+	outcome = negative
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = angry
+	}
+
+	option = {
+		name = mr_imperial.210.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_mild_penalty
+	}
+}
+
+
+# --- The Retreat from the West ----------------------------------
+mr_imperial.211 = {
+	type = country_event
+	title = mr_imperial.211.title
+	desc = mr_imperial.211.desc
+	outcome = negative
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = exterior
+		10 = angry
+	}
+
+	option = {
+		name = mr_imperial.211.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_severe_penalty
+	}
+}

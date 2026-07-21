@@ -473,3 +473,39 @@
  MGO_f: "Mongol Horde"
  MGO_f_desc: "A powerful confederation of Mongol tribes, united under a single khan. Though not yet an empire, its warrior traditions and steppe mobility make it a threat to all settled civilizations on its borders."
  mgo_horde: ""
+
+ # ==============================================================================
+ # ----------------- HISTORICAL DHE LAYER (mr_history) -----------------
+ # ==============================================================================
+
+ mr_history.1.title: "The Last Stand of the Yuan"
+ mr_history.1.desc: "The Mandate of Heaven slips from our grasp. Red Turban banners rise across the southern provinces, the granaries stand empty, and the Yellow River has broken its banks once more. Our ancestors rode from the steppe and took the greatest empire on earth in a single lifetime; their descendants now sit in Zhongdu counting the provinces they have lost this season.\n\nThe court speaks of restoration. The generals speak of retreat to the grasslands. Both may be right, and neither will save the dynasty."
+ mr_history.1.a: "China is lost. The steppe remains."
+
+ mr_history.2.title: "The Ilkhanate Fragments"
+ mr_history.2.desc: "Abu Sa'id died without an heir, and with him died the unity of Hulagu's realm. Every governor with a horse and a grievance now proclaims his own khan. Baghdad, which our grandfathers took at the cost of a caliphate, is a prize to be haggled over by men who could not have held a wing of the army a generation ago.\n\nThe Jalayirids press from one side, the Chobanids from the other, and Persia is carved up between them."
+ mr_history.2.a: "Hulagu's house has fallen."
+
+ mr_history.3.title: "The Chagatai Schism"
+ mr_history.3.desc: "The ulus splits along a line older than the Mongols themselves: the settled west against the nomadic east. In Transoxiana the emirs have taken to cities, to Islam, and to Persian scribes. In Moghulistan the clans still winter in tents and swear by the Eternal Blue Sky.\n\nEach half calls the other faithless. Both are right, by their own lights, and the choice before us will decide which half we belong to."
+ mr_history.3.a: "The faith of the cities. Let us take the Word."
+ mr_history.3.b: "The sky is our roof, as it was our fathers'."
+
+ mr_history.5.title: "Tokhtamysh and the Golden Horde"
+ mr_history.5.desc: "After a generation of murdered khans, the Jochid ulus has a master again. Tokhtamysh has reunited the White and Blue Hordes, and Sarai al-Jadid stirs with the traffic of a capital rather than the sullenness of a prize.\n\nBut the man who lifted him to the throne was Timur, and the debt is neither forgotten nor forgivable. There is not room on this steppe for both a Jochid restoration and a Chagatai conqueror."
+ mr_history.5.a: "The Horde is whole. Let Sarai be great again."
+ mr_history.5.b: "Timur will come. We will be ready for him."
+
+ mr_history.6.title: "The Looting of Delhi"
+ mr_history.6.desc: "The Sultanate's elephants broke on our lines, and the richest city in the world lay open before an army that had ridden across a subcontinent to reach it. For three days Delhi was emptied of everything that could be carried and many things that could not.\n\nThe masons and the stonecutters ride north with us in chains; Samarkand will be built from what Delhi lost. It will take the Sultanate a century to remember what it was."
+ mr_history.6.a: "Let the caravans north be heavy with it."
+
+ mr_history.7.title: "The Oirat Challenge"
+ mr_history.7.desc: "The western Mongols have never accepted that the Borjigin blood alone confers the right to rule. Now the Oirat confederation puts the question directly: descent from Chinggis, or the loyalty of those who can actually field horsemen?\n\nEsen and his kin have the second in abundance. Whoever answers this challenge will hold the steppe; whoever fails it will be remembered as the last of a line."
+ mr_history.7.a: "Let it be settled in the saddle."
+ mr_history.7.b: "There is a way to bind them that does not cost us an army."
+
+ mr_history.8.title: "The Mughal Precursor"
+ mr_history.8.desc: "A young Timurid prince has lost Samarkand for the third time, and with it any prospect of holding his inheritance in Transoxiana. The Uzbeks have taken what his great-great-grandfather built.\n\nBabur turns south instead, toward Kabul and the passes beyond. Men are already saying that a throne lost on the steppe may yet be found in Hindustan."
+ mr_history.8.a: "If not Samarkand, then somewhere greater."
+ mr_history.8.b: "Transoxiana is not lost while a Timurid lives."
