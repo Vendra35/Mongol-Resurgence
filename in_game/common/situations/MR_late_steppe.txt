@@ -33,7 +33,13 @@ mr_chahar_reunification = {
 	}
 
 	can_end = {
-		mr_chahar_end_trigger = yes
+		OR = {
+			mr_chahar_end_trigger = yes
+			custom_tooltip = {
+				text = mr_chahar_timeout_tt
+				current_date > 1634.1.1
+			}
+		}
 	}
 
 	hint_tag = hint_mr_chahar
@@ -72,12 +78,16 @@ mr_chahar_reunification = {
 	}
 
 	on_ending = {
-		every_country = {
-			limit = {
-				culture = { has_culture_group = culture_group:mongolian_group }
-				government_type = government_type:steppe_horde
+		# Only on the goal — these situations can also end on time expiry.
+		if = {
+			limit = { mr_chahar_end_trigger = yes }
+			every_country = {
+				limit = {
+					culture = { has_culture_group = culture_group:mongolian_group }
+					government_type = government_type:steppe_horde
+				}
+				trigger_event_non_silently = mr_steppe.3
 			}
-			trigger_event_non_silently = mr_steppe.3
 		}
 	}
 
@@ -127,7 +137,13 @@ mr_torghut_migration = {
 	}
 
 	can_end = {
-		mr_torghut_end_trigger = yes
+		OR = {
+			mr_torghut_end_trigger = yes
+			custom_tooltip = {
+				text = mr_torghut_timeout_tt
+				current_date > 1630.1.1
+			}
+		}
 	}
 
 	hint_tag = hint_mr_torghut
@@ -193,12 +209,16 @@ mr_torghut_migration = {
 	}
 
 	on_ending = {
-		every_country = {
-			limit = {
-				culture = { has_culture_group = culture_group:mongolian_group }
-				government_type = government_type:steppe_horde
+		# Only on the goal — these situations can also end on time expiry.
+		if = {
+			limit = { mr_torghut_end_trigger = yes }
+			every_country = {
+				limit = {
+					culture = { has_culture_group = culture_group:mongolian_group }
+					government_type = government_type:steppe_horde
+				}
+				trigger_event_non_silently = mr_steppe.13
 			}
-			trigger_event_non_silently = mr_steppe.13
 		}
 	}
 
@@ -265,7 +285,13 @@ mr_dzungar_khanate = {
 	}
 
 	can_end = {
-		mr_dzungar_end_trigger = yes
+		OR = {
+			mr_dzungar_end_trigger = yes
+			custom_tooltip = {
+				text = mr_dzungar_timeout_tt
+				current_date > 1650.1.1
+			}
+		}
 	}
 
 	hint_tag = hint_mr_dzungar
@@ -307,12 +333,16 @@ mr_dzungar_khanate = {
 	}
 
 	on_ending = {
-		every_country = {
-			limit = {
-				culture = { has_culture_group = culture_group:mongolian_group }
-				government_type = government_type:steppe_horde
+		# Only on the goal — these situations can also end on time expiry.
+		if = {
+			limit = { mr_dzungar_end_trigger = yes }
+			every_country = {
+				limit = {
+					culture = { has_culture_group = culture_group:mongolian_group }
+					government_type = government_type:steppe_horde
+				}
+				trigger_event_non_silently = mr_steppe.22
 			}
-			trigger_event_non_silently = mr_steppe.22
 		}
 	}
 

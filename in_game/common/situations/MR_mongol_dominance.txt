@@ -18,7 +18,16 @@ mongol_dominance = {
 	}
 
 	can_end = {
-		mr_dominance_end_trigger = yes
+		OR = {
+			mr_dominance_end_trigger = yes
+			# Time expiry. Without this the situation can only ever end in
+			# success, which leaves on_ending's failure branch unreachable
+			# and lets a failed phase run to the end of the campaign.
+			custom_tooltip = {
+				text = mr_dominance_timeout_tt
+				current_date > 1650.1.1
+			}
+		}
 	}
 
 	hint_tag = hint_mongol_dominance
@@ -225,91 +234,140 @@ mongol_dominance = {
 				save_scope_as = mr_claimant
 			}
 
-			location:karakorum = {
-				if = {
+			# The areas holding MGE_f's nine required locations. Iterating
+			# areas rather than naming locations one by one keeps this
+			# readable and hands over the surrounding land too — the same
+			# shape as PD's every_ownable_location_in_area blocks.
+			area:upper_selenga_area = {
+				every_ownable_location_in_area = {
 					limit = {
-						owner = { is_ai = yes }
-						NOT = { owner = scope:mr_claimant }
+						owner = {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
 					}
 					change_location_owner = scope:mr_claimant
 					add_core = scope:mr_claimant
 				}
 			}
-			location:sarai_al_jadid = {
-				if = {
+			area:lower_don_area = {
+				every_ownable_location_in_area = {
 					limit = {
-						owner = { is_ai = yes }
-						NOT = { owner = scope:mr_claimant }
+						owner = {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
 					}
 					change_location_owner = scope:mr_claimant
 					add_core = scope:mr_claimant
 				}
 			}
-			location:kazan = {
-				if = {
+			area:kazan_area = {
+				every_ownable_location_in_area = {
 					limit = {
-						owner = { is_ai = yes }
-						NOT = { owner = scope:mr_claimant }
+						owner = {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
 					}
 					change_location_owner = scope:mr_claimant
 					add_core = scope:mr_claimant
 				}
 			}
-			location:samarkand = {
-				if = {
+			area:transoxiana_area = {
+				every_ownable_location_in_area = {
 					limit = {
-						owner = { is_ai = yes }
-						NOT = { owner = scope:mr_claimant }
+						owner = {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
 					}
 					change_location_owner = scope:mr_claimant
 					add_core = scope:mr_claimant
 				}
 			}
-			location:kaffa = {
-				if = {
+			area:crimea_area = {
+				every_ownable_location_in_area = {
 					limit = {
-						owner = { is_ai = yes }
-						NOT = { owner = scope:mr_claimant }
+						owner = {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
 					}
 					change_location_owner = scope:mr_claimant
 					add_core = scope:mr_claimant
 				}
 			}
-			location:dadu = {
-				if = {
+			area:beiping_area = {
+				every_ownable_location_in_area = {
 					limit = {
-						owner = { is_ai = yes }
-						NOT = { owner = scope:mr_claimant }
+						owner = {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
 					}
 					change_location_owner = scope:mr_claimant
 					add_core = scope:mr_claimant
 				}
 			}
-			location:shangyuan = {
-				if = {
+			area:jiangnan_area = {
+				every_ownable_location_in_area = {
 					limit = {
-						owner = { is_ai = yes }
-						NOT = { owner = scope:mr_claimant }
+						owner = {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
 					}
 					change_location_owner = scope:mr_claimant
 					add_core = scope:mr_claimant
 				}
 			}
-			location:baxian = {
-				if = {
+			area:chuandong_area = {
+				every_ownable_location_in_area = {
 					limit = {
-						owner = { is_ai = yes }
-						NOT = { owner = scope:mr_claimant }
+						owner = {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
 					}
 					change_location_owner = scope:mr_claimant
 					add_core = scope:mr_claimant
 				}
 			}
-			location:guangzhou = {
-				if = {
+			area:guangdong_area = {
+				every_ownable_location_in_area = {
 					limit = {
-						owner = { is_ai = yes }
-						NOT = { owner = scope:mr_claimant }
+						owner = {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
 					}
 					change_location_owner = scope:mr_claimant
 					add_core = scope:mr_claimant
@@ -367,6 +425,11 @@ mongol_dominance = {
 		remove_global_variable = mr_beat_201i_fired
 		remove_global_variable = mr_beat_202i_fired
 		remove_global_variable = mr_beat_211i_fired
+
+		# The wiki recommends clearing situation variables in on_ended
+		# to keep them out of the savefile.
+		remove_variable = mr_leading_country
+		remove_variable = mr_rival_country
 	}
 
 	tooltip = {

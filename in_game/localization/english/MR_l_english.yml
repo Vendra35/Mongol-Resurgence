@@ -482,9 +482,9 @@
  mr_history.1.desc: "The Mandate of Heaven slips from our grasp. Red Turban banners rise across the southern provinces, the granaries stand empty, and the Yellow River has broken its banks once more. Our ancestors rode from the steppe and took the greatest empire on earth in a single lifetime; their descendants now sit in Dadu counting the provinces they have lost this season.\n\nThe court speaks of restoration. The generals speak of retreat to the grasslands. Both may be right, and neither will save the dynasty."
  mr_history.1.a: "China is lost. The steppe remains."
 
- mr_history.2.title: "The Ilkhanate Fragments"
- mr_history.2.desc: "Abu Sa'id died without an heir, and with him died the unity of Hulagu's realm. Every governor with a horse and a grievance now proclaims his own khan. Baghdad, which our grandfathers took at the cost of a caliphate, is a prize to be haggled over by men who could not have held a wing of the army a generation ago.\n\nThe Jalayirids press from one side, the Chobanids from the other, and Persia is carved up between them."
- mr_history.2.a: "Hulagu's house has fallen."
+ mr_history.2.title: "The Ilkhanid Succession"
+ mr_history.2.desc: "Abu Sa'id died two years ago without an heir, and Hulagu's realm died with him. What remains is us and our rivals — Jalayirid, Chobanid, Muzaffarid, Injuid, Gurgan — each holding a corner of Persia and a claim none of the others accept.\n\nBaghdad, which our grandfathers took at the cost of a caliphate, is now a prize to be haggled over by men who could not have held a wing of the old army. Whoever wins this will inherit an Ilkhanate in name only."
+ mr_history.2.a: "Hulagu's house has fallen. Ours will replace it."
 
  mr_history.3.title: "The Chagatai Schism"
  mr_history.3.desc: "The ulus splits along a line older than the Mongols themselves: the settled west against the nomadic east. In Transoxiana the emirs have taken to cities, to Islam, and to Persian scribes. In Moghulistan the clans still winter in tents and swear by the Eternal Blue Sky.\n\nEach half calls the other faithless. Both are right, by their own lights, and the choice before us will decide which half we belong to."
@@ -635,3 +635,18 @@
  MR_mongol_historical_modifier: "The Historical Steppe"
  MR_imperial_historical_modifier: "The Historical Road"
  MR_dominance_historical_modifier: "The Historical Empire"
+
+ mr_dominance.997.a: "Hidden Action"
+ mr_resurgence_end_tt: "#Y MGO holds Karakorum and the Gobi.#! The Mongolian heartland answers to one banner."
+ mr_imperial_end_tt: "#Y MGO holds Samarkand and Dadu.#! The Silk Road corridor runs from the Ordos to Transoxiana under one authority."
+ mr_dominance_end_tt: "#Y All nine seats of the Mongol Empire are held.#! Karakorum, Sarai, Kazan, Samarkand, Kaffa, Dadu, Shangyuan, Baxian and Guangzhou."
+
+ mr_resurgence_timeout_tt: "#Y Or 1420 arrives.#! If the steppe is not united by then, the moment has passed."
+ mr_imperial_timeout_tt: "#Y Or 1550 arrives.#! The Silk Road will not wait forever."
+ mr_dominance_timeout_tt: "#Y Or 1650 arrives.#! The age of the horse archer ends with or without us."
+ mr_chahar_timeout_tt: "#Y Or 1634 arrives.#! Ligdan's claim dies with him."
+ mr_torghut_timeout_tt: "#Y Or 1630 arrives.#! The trek ends where it ends."
+ mr_dzungar_timeout_tt: "#Y Or 1650 arrives.#!"
+
+ mr_dominance.995.a: "Hidden Action"
+ mr_dominance.996.a: "Hidden Action"

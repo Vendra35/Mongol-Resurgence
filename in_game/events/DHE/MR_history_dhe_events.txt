@@ -12,9 +12,24 @@
 # monthly_chance), which is the vanilla idiom for a historically
 # anchored event. Reference: pirate_events.txt, flavor_tim.8.
 #
-# Tags verified against vanilla setup/countries:
-#   CHI Yuan/China   HLG Hulaguids (Ilkhanate)   CHG Chagatai
-#   GLH Golden Horde   OIR Oirat   TIM Timurids   DLH Delhi
+# Tag availability verified against the 1337 start, NOT merely
+# against setup/countries — a tag can be defined there and still hold
+# no land on the map:
+#
+#   ON THE MAP AT 1337:  CHI (Great Yuan)  CHG (Chagatai Horde)
+#                        GLH (Golden Horde)  DLH (Delhi)
+#                        CHB MZF INJ GRG JLY (Ilkhanid successors)
+#   EMERGE LATER:        TIM  via flavor_tim.8 (create_country_from_
+#                             cores_in_our_locations, ~1360-1400)
+#                        OIR  via flavor_chi.txt, out of the Yuan collapse
+#   NOT USABLE:          HLG — defined but has ZERO script uses in all
+#                        of vanilla. The Ilkhanate broke up in 1335,
+#                        two years before the game begins, so there is
+#                        no Ilkhanate to fragment. Events keyed to HLG
+#                        can never fire.
+#
+# Events targeting TIM/OIR are conditional by design: they fire only
+# if vanilla spawned those countries, which is the historical path.
 # =================================================================
 
 
@@ -60,7 +75,11 @@ mr_history.1 = {
 }
 
 
-# --- The Ilkhanate Fragments (1337-1357) -------------------------
+# --- The Ilkhanid Succession (1337-1357) -------------------------
+# Reframed. The original version fired for HLG, "the Ilkhanate
+# fragments" — but the Ilkhanate had already dissolved in 1335 and
+# HLG holds nothing. What the 1337 map actually shows is five
+# successor states carving up Persia, so the event fires for them.
 mr_history.2 = {
 	type = country_event
 	title = mr_history.2.title
@@ -74,7 +93,11 @@ mr_history.2 = {
 	}
 
 	dynamic_historical_event = {
-		tag = HLG
+		tag = JLY
+		tag = CHB
+		tag = MZF
+		tag = INJ
+		tag = GRG
 		from = 1337.1.1
 		to = 1357.1.1
 		monthly_chance = 1
@@ -82,7 +105,6 @@ mr_history.2 = {
 
 	trigger = {
 		has_game_rule = mr_railroad_historical
-		owns = location:baghdad
 	}
 
 	immediate = {
@@ -98,6 +120,8 @@ mr_history.2 = {
 		name = mr_history.2.a
 		historical_option = yes
 		ai_chance = { factor = 100 }
+		add_legitimacy = legitimacy_mild_penalty
+		add_stability = stability_weak_penalty
 	}
 }
 

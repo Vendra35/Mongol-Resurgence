@@ -45,7 +45,13 @@ mr_dominance_dhe.1 = {
 	option = {
 		name = mr_dominance_dhe.1.a
 		ai_chance = { factor = 100 }
-		add_army_tradition = army_tradition_mild_bonus
+		add_army_tradition = army_tradition_severe_bonus
+		add_tribal_cohesion = tribal_cohesion_mild_bonus
+		add_country_modifier = {
+			modifier = MR_mongol_warrior_spirit
+			years = 30
+			mode = add_and_extend
+		}
 	}
 }
 
@@ -81,6 +87,8 @@ mr_dominance_dhe.4 = {
 		name = mr_dominance_dhe.4.a
 		ai_chance = { factor = 100 }
 		add_prestige = prestige_severe_bonus
+		add_legitimacy = legitimacy_severe_bonus
+		add_horde_unity = horde_unity_extreme_bonus
 		add_country_modifier = {
 			modifier = MR_unified_mongol_banner
 			years = -1
@@ -118,7 +126,9 @@ mr_dominance_dhe.5 = {
 	option = {
 		name = mr_dominance_dhe.5.a
 		ai_chance = { factor = 100 }
-		add_government_power = government_power_mild_bonus
+		add_horde_unity = horde_unity_mild_bonus
+		add_tribal_cohesion = tribal_cohesion_severe_bonus
+		add_manpower = { value = root.monthly_manpower multiply = 6 }
 	}
 }
 
@@ -150,7 +160,8 @@ mr_dominance_dhe.3 = {
 	option = {
 		name = mr_dominance_dhe.3.a
 		ai_chance = { factor = 100 }
-		add_army_tradition = army_tradition_mild_bonus
+		add_army_tradition = army_tradition_severe_bonus
+		add_research_progress = research_progress_mild_bonus
 	}
 }
 
@@ -183,7 +194,9 @@ mr_dominance_dhe.6 = {
 	option = {
 		name = mr_dominance_dhe.6.a
 		ai_chance = { factor = 100 }
-		add_cultural_influence = cultural_influence_mild_bonus
+		add_gold = 1000
+		add_cultural_influence = cultural_influence_severe_bonus
+		add_research_progress = research_progress_mild_bonus
 	}
 }
 
@@ -217,6 +230,8 @@ mr_dominance_dhe.2 = {
 		name = mr_dominance_dhe.2.a
 		ai_chance = { factor = 100 }
 		add_prestige = prestige_mild_bonus
+		add_legitimacy = legitimacy_mild_bonus
+		add_government_power = government_power_extreme_bonus
 	}
 }
 
@@ -248,7 +263,9 @@ mr_dominance_dhe.7 = {
 	option = {
 		name = mr_dominance_dhe.7.a
 		ai_chance = { factor = 100 }
-		add_government_power = government_power_mild_bonus
+		add_research_progress = research_progress_severe_bonus
+		add_cultural_influence = cultural_influence_severe_bonus
+		add_stability = stability_mild_bonus
 	}
 }
 
@@ -280,6 +297,8 @@ mr_dominance_dhe.8 = {
 	option = {
 		name = mr_dominance_dhe.8.a
 		ai_chance = { factor = 100 }
-		add_government_power = government_power_mild_bonus
+		add_government_power = government_power_extreme_bonus
+		add_stability = stability_mild_bonus
+		add_legitimacy = legitimacy_mild_bonus
 	}
 }

@@ -45,14 +45,14 @@ MR_war_goal_silk_road = {
 		antagonism = 0.25
 		allowed_locations = {
 			OR = {
-				scope:location.region = region:steppes_region
+				scope:location.region = region:khorasan_region
 				scope:location.region = region:north_china_region
 				scope:location.region = region:persia_region
 			}
 		}
 		allowed_subjugation = {
 			OR = {
-				scope:loser.capital.region = region:steppes_region
+				scope:loser.capital.region = region:khorasan_region
 				scope:loser.capital.region = region:north_china_region
 				scope:loser.capital.region = region:persia_region
 			}
