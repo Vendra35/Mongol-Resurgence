@@ -1,0 +1,142 @@
+situation_panel = {
+
+    ##################################### TOP HEADER (SINGLE PORTRAIT - THE DOMINANT EMPIRE) #####################################
+    blockoverride "situation_panel_image" {
+        using = one_country_header_template
+    
+        blockoverride "FirstCountryContext" {
+            datacontext = "[GetCountry('MGE')]"
+        }
+
+        blockoverride "first_character_portrait_anchor" {
+            parentanchor = bottom|left
+        }
+
+        blockoverride "character_religion_visibility" {
+            visible = no
+        }
+
+        blockoverride "character_name_maximumsize" {
+            maximumsize = { 270 -1 }
+        }
+    }
+
+    ##################################### MAIN CONTENT #####################################
+    blockoverride "situation_panel_main_content" {
+        vbox = {
+            layoutpolicy_horizontal = expanding
+            layoutpolicy_vertical = expanding
+            margin_left = 15
+            margin_right = 15
+            margin_bottom = 10
+            margin_top = -10
+            spacing = 8
+
+            # 1. KART: DURUM AÇIKLAMASI
+            situation_card_expandable = {
+                blockoverride "header_button_onclick" {
+                    onclick = "[LateralView.Vars.Toggle( 'mr_dominance_desc_toggled' )]"
+                }
+                blockoverride "header_text" {
+                    text = "situation_mongol_dominance_title"
+                }
+                blockoverride "header_icon" {
+                    texture = "gfx/interface/icons/traits/_default.dds"
+                }
+                blockoverride "bottom_content" {
+                    text_multi = {
+                        margin = { 15 10 }
+                        layoutpolicy_horizontal = expanding
+                        max_width = 460
+                        autoresize = yes
+                        text = "situation_mongol_dominance_desc"
+                        using = fontsize_medium
+                    }
+                }
+                blockoverride "bottom_content_onclick" {
+                    visible = "[LateralView.Vars.Exists( 'mr_dominance_desc_toggled' )]"
+                }
+                blockoverride "icon_replace_visible_yes" {
+                    visible = "[LateralView.Vars.Exists( 'mr_dominance_desc_toggled' )]"
+                }
+                blockoverride "icon_replace_visible_not" {
+                    visible = "[Not(LateralView.Vars.Exists( 'mr_dominance_desc_toggled' ))]"
+                }
+            }
+
+            # 2. KART: HEDEFLER LİSTESİ
+            situation_card_expandable = {
+                blockoverride "header_button_onclick" {
+                    onclick = "[LateralView.Vars.Toggle( 'mr_dominance_req_toggled' )]"
+                }
+                blockoverride "header_text" {
+                    text = "END_REQUIREMENTS"
+                }
+                blockoverride "header_icon" {
+                    texture = "gfx/interface/icons/disasters/end_requirements_green.dds"
+                }
+                blockoverride "bottom_content" {
+                    TooltipRequirementsList = {
+                        textcontext = "[SituationView.GetActiveSituation.GetSituation.GetEndConditions]"
+                        margin = { 15 10 }
+                    }
+                }
+                blockoverride "bottom_content_onclick" {
+                    visible = "[LateralView.Vars.Exists( 'mr_dominance_req_toggled' )]"
+                }
+                blockoverride "icon_replace_visible_yes" {
+                    visible = "[LateralView.Vars.Exists( 'mr_dominance_req_toggled' )]"
+                }
+                blockoverride "icon_replace_visible_not" {
+                    visible = "[Not(LateralView.Vars.Exists( 'mr_dominance_req_toggled' ))]"
+                }
+            }
+
+            # 3. KART: SKOR VE İLERLEME
+            situation_card_expandable = {
+                blockoverride "header_button_onclick" {
+                    onclick = "[LateralView.Vars.Toggle( 'mr_dominance_score_toggled' )]"
+                }
+                blockoverride "header_text" {
+                    text = "mongol_dominance_progress_tooltip"
+                }
+                blockoverride "header_icon" {
+                    texture = "gfx/interface/icons/disasters/end_requirements_green.dds"
+                }
+                blockoverride "bottom_content" {
+                    vbox = {
+                        margin = { 15 10 }
+                        spacing = 5
+                        layoutpolicy_horizontal = expanding
+                        
+                        textbox_single = {
+                            name = "score_label"
+                            fontsize = 14
+                            text = "MR_MGE_SCORE_TT"
+                        }
+
+                        progressbar = {
+                            name = "dominance_progress"
+                            size = { 380 24 }
+                            progress = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('MR_dominance_score').GetValue|0]"
+                            max = 100
+                            tooltip = "mongol_dominance_progress_tooltip"
+                        }
+                    }
+                }
+                blockoverride "bottom_content_onclick" {
+                    visible = "[LateralView.Vars.Exists( 'mr_dominance_score_toggled' )]"
+                }
+                blockoverride "icon_replace_visible_yes" {
+                    visible = "[LateralView.Vars.Exists( 'mr_dominance_score_toggled' )]"
+                }
+                blockoverride "icon_replace_visible_not" {
+                    visible = "[Not(LateralView.Vars.Exists( 'mr_dominance_score_toggled' ))]"
+                }
+            }
+
+            # Alttaki boşluğu sıfırlayan kod
+            expand = {} 
+        }
+    }
+}

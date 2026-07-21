@@ -1,0 +1,43 @@
+﻿# Mongol Railroad Mod - Casus Belli
+
+mongol_tributary = {
+icon = cb_icon_tributary
+cost = 150
+diplomatic_cost = 25
+war_exhaustion = 0.10
+allowed_provinces_self = yes
+po_demand_tributary = yes
+po_annex = no
+po_demand_provinces = yes
+po_release_country = yes
+po_release_vassal = yes
+po_return_cores = yes
+po_revoke_cores = no
+po_transfer_trade = yes
+po_humiliate = yes
+po_war_reparations = yes
+war_goal = superiority
+war_name = MONGOL_TRIBUTARY_WAR_NAME
+}
+
+mongol_imperial = {
+icon = cb_icon_imperial
+cost = 200
+diplomatic_cost = 10
+war_exhaustion = 0.10
+allowed_provinces_self = yes
+po_annex = no
+po_demand_provinces = yes
+po_demand_tributary = yes
+po_release_country = yes
+po_release_vassal = yes
+po_return_cores = yes
+po_revoke_cores = no
+po_transfer_trade = yes
+po_humiliate = yes
+po_war_reparations = yes
+war_goal = superiority
+war_name = MONGOL_IMPERIAL_WAR_NAME
+province_annex_cost = -0.25
+badboy_factor = 0.75
+}

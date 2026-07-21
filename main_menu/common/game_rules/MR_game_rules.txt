@@ -1,0 +1,17 @@
+# =================================================================
+# MONGOL RAILROAD (MR) - GAME RULES
+# =================================================================
+
+MR_mongol_historical_mode = {
+	name = "MR_mongol_historical_mode"
+	description = "MR_mongol_historical_mode_desc"
+	default = no
+	flag = is_MR_historical
+}
+
+MR_mongol_fantasy_mode = {
+	name = "MR_mongol_fantasy_mode"
+	description = "MR_mongol_fantasy_mode_desc"
+	default = yes
+	flag = is_MR_fantasy
+}

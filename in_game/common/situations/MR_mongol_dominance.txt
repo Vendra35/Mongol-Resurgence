@@ -1,0 +1,63 @@
+﻿# Mongol Railroad Mod - Situation: Mongol Dominance (Phase 3)
+
+mongol_dominance_situation = {
+	title = "situation_mongol_dominance_title"
+	description = "situation_mongol_dominance_desc"
+
+	trigger = {
+		has_global_variable = mongol_dominance_active
+		NOR = {
+			has_global_variable = mongol_railroad_complete
+			has_global_variable = mongol_railroad_failed
+		}
+	}
+
+	visible = {
+		mr_dominance_visible = yes
+	}
+
+	icon = gfx_interface_situation_mongol_dominance
+
+	targets = {
+		MGE = { country_score = 10 }
+	}
+
+	sort_order = 12
+
+	progress = { target = 100 }
+
+	completion = {
+		trigger = { mr_dominance_end_trigger = yes }
+		effect = {
+			set_global_variable = { name = mongol_railroad_complete }
+			trigger_event = { id = flavor_mr.209 }
+		}
+	}
+
+	abort = {
+		trigger = { has_global_variable = mongol_railroad_failed }
+	}
+
+	actions = {
+		mongol_dominance_restore_action = {
+			trigger = {
+				country_exists = c:MGE
+				c:MGE = {
+					controls = location:sarai_al_jadid
+					controls = location:zhongdu
+					controls = location:baghdad
+				}
+			}
+			effect = {
+				c:MGE = {
+					add_country_modifier = {
+						type = mongol_golden_age
+						days = 3650
+					}
+				}
+				set_global_variable = { name = mongol_railroad_complete }
+			}
+			ai_weight = 1000
+		}
+	}
+}

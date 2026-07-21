@@ -1,0 +1,174 @@
+﻿# =============================================
+# DHE_5: Tokhtamysh and the Golden Horde (1370-1406)
+# =============================================
+
+country_event = {
+id = flavor_mr.5
+title = "dhe_mr.5.t"
+desc = "dhe_mr.5.d"
+picture = gfx_event_mongol_war
+
+type = country_event
+scope = country
+
+pre_trigger = { is_ai = no }
+
+trigger = {
+current_year >= 1370
+current_year <= 1406
+has_game_rule = { rule = rule_mongol_railroad setting = historical }
+tag = GOLD
+	controls = location:sarai_al_jadid
+NOT = { has_global_variable = timur_emerged }
+}
+
+mean_time_to_happen = { months = 60 }
+
+immediate = {
+hidden_effect = { set_variable = { name = mr_dhe_5 value = 1 } }
+}
+
+option = {
+name = "dhe_mr.5.a"
+ai_chance = { factor = 70 }
+custom_tooltip = "dhe_mr.5.a.tt"
+}
+
+option = {
+name = "dhe_mr.5.b"
+ai_chance = { factor = 30 }
+custom_tooltip = "dhe_mr.5.b.tt"
+}
+}
+
+# =============================================
+# DHE_6: The Looting of Delhi - 1398
+# =============================================
+
+country_event = {
+id = flavor_mr.6
+title = "dhe_mr.6.t"
+desc = "dhe_mr.6.d"
+picture = gfx_event_timur_rise
+
+type = country_event
+scope = country
+
+pre_trigger = { is_ai = no }
+
+trigger = {
+current_year >= 1395
+current_year <= 1405
+has_game_rule = { rule = rule_mongol_railroad setting = historical }
+OR = {
+tag = TIM
+tag = TRSX
+}
+owns = location:samarkand
+any_enemy_country = { tag = DEL }
+}
+
+mean_time_to_happen = { months = 36 }
+
+immediate = {
+hidden_effect = { set_variable = { name = mr_dhe_6 value = 1 } }
+}
+
+option = {
+name = "dhe_mr.6.a"
+ai_chance = { factor = 100 }
+custom_tooltip = "dhe_mr.6.a.tt"
+}
+}
+
+# =============================================
+# DHE_7: The Oirat Challenge (1400-1450)
+# =============================================
+
+country_event = {
+id = flavor_mr.7
+title = "dhe_mr.7.t"
+desc = "dhe_mr.7.d"
+picture = gfx_event_mongol_war
+
+type = country_event
+scope = country
+
+pre_trigger = { is_ai = no }
+
+trigger = {
+current_year >= 1400
+current_year <= 1450
+has_game_rule = { rule = rule_mongol_railroad setting = historical }
+OR = {
+tag = OIRA
+tag = MGO
+tag = MGE
+}
+government_type = government_type:steppe_horde
+}
+
+mean_time_to_happen = { months = 72 }
+
+immediate = {
+hidden_effect = { set_variable = { name = mr_dhe_7 value = 1 } }
+}
+
+option = {
+name = "dhe_mr.7.a"
+ai_chance = { factor = 60 }
+custom_tooltip = "dhe_mr.7.a.tt"
+change_mil = 100
+}
+
+option = {
+name = "dhe_mr.7.b"
+ai_chance = { factor = 40 }
+change_prestige = 25
+}
+}
+
+# =============================================
+# DHE_8: The Mughal Precursor - Babur (1494-1530)
+# =============================================
+
+country_event = {
+id = flavor_mr.8
+title = "dhe_mr.8.t"
+desc = "dhe_mr.8.d"
+picture = gfx_event_mongol_court
+
+type = country_event
+scope = country
+
+pre_trigger = { is_ai = no }
+
+trigger = {
+current_year >= 1494
+current_year <= 1530
+has_game_rule = { rule = rule_mongol_railroad setting = historical }
+OR = {
+tag = TIM
+tag = TRSX
+}
+any_owned_location = { is_in_region = region:transoxiana_region }
+}
+
+mean_time_to_happen = { months = 48 }
+
+immediate = {
+hidden_effect = { set_variable = { name = mr_dhe_8 value = 1 } }
+}
+
+option = {
+name = "dhe_mr.8.a"
+ai_chance = { factor = 70 }
+custom_tooltip = "dhe_mr.8.a.tt"
+}
+
+option = {
+name = "dhe_mr.8.b"
+ai_chance = { factor = 30 }
+custom_tooltip = "dhe_mr.8.b.tt"
+}
+}

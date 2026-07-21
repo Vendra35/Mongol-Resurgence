@@ -1,0 +1,14 @@
+# Mongol Railroad Mod - Game Rules
+
+rule_mongol_railroad = {
+	default = historical
+	historical = {
+		desc = "rule_mongol_railroad_historical_desc"
+	}
+	random = {
+		desc = "rule_mongol_railroad_random_desc"
+	}
+	off = {
+		desc = "rule_mongol_railroad_off_desc"
+	}
+}

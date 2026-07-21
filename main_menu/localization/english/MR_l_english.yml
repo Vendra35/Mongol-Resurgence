@@ -1,0 +1,97 @@
+l_english:
+
+ # ==============================================================================
+ # ----------------- STATIC MODIFIER NAMES -----------------
+ # ==============================================================================
+
+ # --- Situation 1 ---
+ STATIC_MODIFIER_NAME_MR_mongol_warrior_spirit: "Mongol Warrior Spirit (Terminator)"
+ STATIC_MODIFIER_DESC_MR_mongol_warrior_spirit: "The warrior traditions of the steppe are reawakening. #color_red (This effect will be removed upon the completion of the current Situation.)#!"
+ STATIC_MODIFIER_NAME_MR_unified_mongol_banner: "Unified Mongol Banner"
+ STATIC_MODIFIER_DESC_MR_unified_mongol_banner: "The clans have been united under a single khan. #color_red (This effect will be removed upon the start of the 2nd Situation.)#!"
+ STATIC_MODIFIER_NAME_MR_shattered_horde_ai: "Shattered Ambition"
+ STATIC_MODIFIER_NAME_MR_shattered_horde_player: "Unfulfilled Destiny"
+
+ # --- Situation 2 ---
+ STATIC_MODIFIER_NAME_MR_imperial_conquest: "Imperial Conquest (Terminator)"
+ STATIC_MODIFIER_DESC_MR_imperial_conquest: "The Mongol war machine is operational and hungry for conquest. #color_red (This effect will be removed upon the completion of the current Situation.)#!"
+ STATIC_MODIFIER_NAME_MR_empire_fulfilled: "Mongol Empire Fulfilled"
+ STATIC_MODIFIER_DESC_MR_empire_fulfilled: "Our imperial destiny has been realized. #color_red (This effect will be removed upon the start of the 3rd Situation.)#!"
+ STATIC_MODIFIER_NAME_MR_imperial_failure_ai: "Shackled Empire"
+ STATIC_MODIFIER_NAME_MR_imperial_failure_player: "Failed Imperial Dream"
+ STATIC_MODIFIER_NAME_MR_mongol_preparing_for_conquest: "Mongol War Preparations"
+ STATIC_MODIFIER_NAME_MR_the_sleeping_horde: "The Sleeping Horde"
+ STATIC_MODIFIER_DESC_MR_the_sleeping_horde: "This state consolidates its power and bides its time. #color_red (This effect will be removed upon the start of the 2nd Situation.)#!"
+
+ # --- Situation 3 ---
+ STATIC_MODIFIER_NAME_MR_pax_mongolica: "Pax Mongolica (Terminator)"
+ STATIC_MODIFIER_DESC_MR_pax_mongolica: "The Mongol peace has been established, bringing stability and prosperity. #color_red (This effect will be removed upon the completion of the current Situation.)#!"
+ STATIC_MODIFIER_NAME_MR_mongol_world_order: "Mongol World Order"
+ STATIC_MODIFIER_DESC_MR_mongol_world_order: "The world has been permanently reshaped by Mongol dominance."
+ STATIC_MODIFIER_NAME_MR_dominance_failure_ai: "Collapsed Hegemony"
+ STATIC_MODIFIER_NAME_MR_dominance_failure_player: "Failed World Order"
+
+ # --- Historical Modifiers ---
+ STATIC_MODIFIER_NAME_MR_mongol_historical_modifier: "Mongol Awakening"
+ STATIC_MODIFIER_DESC_MR_mongol_historical_modifier: "The warrior spirit of the steppe stirs once more. #color_red (This effect will be removed upon the completion of the current Situation.)#!"
+ STATIC_MODIFIER_NAME_MR_mongol_historical_modifier_2: "Fulfilled Mongol Destiny"
+ STATIC_MODIFIER_DESC_MR_mongol_historical_modifier_2: "Our initial destiny on the steppe is secured, but greater ambitions await. #color_red (This effect will be removed upon the start of the 2nd Situation.)#!"
+ STATIC_MODIFIER_NAME_MR_imperial_historical_modifier: "Imperial Awakening"
+ STATIC_MODIFIER_DESC_MR_imperial_historical_modifier: "The Mongol empire expands with historical momentum. #color_red (This effect will be removed upon the completion of the current Situation.)#!"
+ STATIC_MODIFIER_NAME_MR_dominance_historical_modifier: "Mongol Hegemony"
+ STATIC_MODIFIER_DESC_MR_dominance_historical_modifier: "The Mongol Empire dominates the world stage. #color_red (This effect will be removed upon the completion of the current Situation.)#!"
+
+ # ==============================================================================
+ # ----------------- GAME RULES -----------------
+ # ==============================================================================
+
+ # --- Situation 1 Conquest Automation ---
+ rule_MR_mongol_resurgence_auto_conquest: "(MR) Mongol Resurgence Conquest Automation"
+ setting_MR_mongol_resurgence_auto_conquest_no: "Deactivated (Normal Game)"
+ setting_MR_mongol_resurgence_auto_conquest_no_desc: "The AI will not receive any automatic territorial annexations. The rise of the Mongol Empire must be achieved through standard gameplay mechanics."
+ setting_MR_mongol_resurgence_auto_conquest_yes: "Activated (Mongol Rise)"
+ setting_MR_mongol_resurgence_auto_conquest_yes_desc: "Ensures the rise of the unified Mongol nation. If the AI is at peace by the designated date, it will automatically annex rival khan territories to fulfill its destiny.\n#G Highly recommended if Mongol nations are controlled by the AI.#!"
+
+ # --- Military Buffs ---
+ rule_MR_mongol_buff_rule: "(MR) Mongol Military Buffs and Conquest Speed"
+ setting_MR_buff_disabled: "Vanilla (No Buffs)"
+ setting_MR_buff_disabled_desc: "No special military modifiers will be granted.\n#color_red Not recommended for AI-controlled Mongols.#!"
+ setting_MR_buff_historical: "Historical (Balanced and Historical Conquest)"
+ setting_MR_buff_historical_desc: "Grants balanced military modifiers focused on slow historical progression.\n#G Highly recommended if Mongols are controlled by the AI.#!"
+ setting_MR_buff_enabled: "Terminator (Fast Conquest and Arcade Boss)"
+ setting_MR_buff_enabled_desc: "Grants massive military modifiers for lightning-fast conquest.\n#color_red WARNING: Transforms the AI into an apocalyptic end-game threat.#!"
+
+ # --- Imperial Expansion Automation ---
+ rule_MR_imperial_auto_conquest: "(MR) Imperial Expansion Conquest Automation"
+ setting_MR_imperial_auto_conquest_no: "Deactivated (Normal Game)"
+ setting_MR_imperial_auto_conquest_no_desc: "The AI must secure its imperial borders through standard warfare and diplomacy."
+ setting_MR_imperial_auto_conquest_yes: "Activated (Imperial Path)"
+ setting_MR_imperial_auto_conquest_yes_desc: "Acts as a safety net for the AI to ensure historical progression.\n#G Highly recommended if Mongols are controlled by the AI.#!"
+
+ # --- Timeline & Pacing ---
+ rule_MR_timeline_pacing_rule: "(MR) Timeline & Pacing"
+ setting_MR_timeline_frontloaded: "Dynamic & Frontloaded"
+ setting_MR_timeline_frontloaded_desc: "Mongol resurgence can trigger as soon as conditions are met.\n#G Recommended if you want to experience the mod's content early.#!"
+ setting_MR_timeline_strict_historical: "Strict Historical Dates (Historical Path)"
+ setting_MR_timeline_strict_historical_desc: "Major events follow authentic historical milestones.\n#G Highly recommended for long campaigns and realistic historical playthroughs.#!"
+
+ # --- Fantasy/Historical Mode ---
+ MR_mongol_fantasy_mode: "Mongol Railroad: Fantasy Mode"
+ MR_mongol_fantasy_mode_desc: "The full Mongol Railroad experience with all custom content enabled. Mongol nations will follow a three-stage path from tribal unification to world dominance."
+ MR_mongol_historical_mode: "Mongol Railroad: Historical Mode"
+ MR_mongol_historical_mode_desc: "A more grounded historical experience with balanced modifiers and slower expansion. Mongol nations will still unify and expand, but at a more realistic pace."
+
+ # ==============================================================================
+ # ----------------- FLAG LOCALIZATION -----------------
+ # ==============================================================================
+ MGE: "Mongol Empire"
+ MGE_ADJ: "Mongol"
+ MGE_f: "Mongol Empire"
+ MGE_f_desc: "The unified Mongol Empire, forged from the fractured tribes of the steppe under the iron will of the Great Khan. Its disciplined hordes and imperial administration now stand as the dominant power across Asia and beyond."
+ mge_empire: ""
+
+ MGO: "Mongol Horde"
+ MGO_ADJ: "Mongol"
+ MGO_f: "Mongol Horde"
+ MGO_f_desc: "A powerful confederation of Mongol tribes, united under a single khan. Though not yet an empire, its warrior traditions and steppe mobility make it a threat to all settled civilizations on its borders."
+ mgo_horde: ""

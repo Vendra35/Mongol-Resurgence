@@ -1,0 +1,158 @@
+﻿# Mongol Railroad Mod - Failsafe Events
+# flavor_mr.210 - flavor_mr.213
+
+# =============================================
+# Failsafe: 1375 Emergence (No Mongol resurgence by 1375)
+# =============================================
+
+country_event = {
+id = flavor_mr.210
+title = "fail_mr.210.t"
+desc = "fail_mr.210.d"
+picture = gfx_event_mongol_rise
+
+type = country_event
+scope = country
+
+pre_trigger = { is_ai = no }
+
+trigger = {
+is_triggered_only = yes
+any_country = {
+culture = { has_culture_group = culture_group:mongolian_group }
+government_type = government_type:steppe_horde
+}
+}
+
+immediate = {
+random_country = {
+limit = {
+culture = { has_culture_group = culture_group:mongolian_group }
+government_type = government_type:steppe_horde
+}
+save_event_target_as = mr_emergence_candidate
+}
+}
+
+option = {
+name = "fail_mr.210.a"
+ai_chance = { factor = 100 }
+event_target:mr_emergence_candidate = {
+form_country = formable_country:MGO_f
+}
+set_global_variable = { name = mongol_resurgence_active }
+}
+}
+
+# =============================================
+# Failsafe: Phase 1 Timeout (Resurgence not complete by 1415)
+# =============================================
+
+country_event = {
+id = flavor_mr.211
+title = "fail_mr.211.t"
+desc = "fail_mr.211.d"
+picture = gfx_event_mongol_decline
+
+type = country_event
+scope = country
+
+pre_trigger = { is_ai = no }
+
+trigger = { is_triggered_only = yes }
+
+option = {
+name = "fail_mr.211.a"
+ai_chance = { factor = 100 }
+if = {
+limit = { NOT = { country_exists = c:MGO } }
+set_global_variable = { name = mongol_railroad_failed }
+}
+else = {
+c:MGO = { add_prestige = -50 }
+}
+}
+}
+
+# =============================================
+# Failsafe: Phase 2 Timeout (Imperial not complete by 1545)
+# =============================================
+
+country_event = {
+id = flavor_mr.212
+title = "fail_mr.212.t"
+desc = "fail_mr.212.d"
+picture = gfx_event_mongol_decline
+
+type = country_event
+scope = country
+
+pre_trigger = { is_ai = no }
+
+trigger = { is_triggered_only = yes }
+
+option = {
+name = "fail_mr.212.a"
+ai_chance = { factor = 100 }
+if = {
+limit = { NOT = { country_exists = c:MGE } }
+set_global_variable = { name = mongol_railroad_failed }
+}
+else = {
+c:MGE = { add_prestige = -50 }
+}
+}
+}
+
+# =============================================
+# Failsafe: Railroad Complete Check (by 1645)
+# =============================================
+
+country_event = {
+id = flavor_mr.213
+title = "fail_mr.213.t"
+desc = "fail_mr.213.d"
+picture = gfx_event_mongol_decline
+
+type = country_event
+scope = country
+
+pre_trigger = { is_ai = no }
+
+trigger = { is_triggered_only = yes }
+
+option = {
+name = "fail_mr.213.a"
+trigger = {
+country_exists = c:MGE
+c:MGE = {
+controls = location:sarai_al_jadid
+controls = location:zhongdu
+controls = location:baghdad
+}
+}
+ai_chance = { factor = 100 }
+c:MGE = {
+add_country_modifier = { type = mongol_golden_age days = 3650 }
+add_prestige = 100
+}
+}
+
+option = {
+name = "fail_mr.213.b"
+trigger = {
+OR = {
+NOT = { country_exists = c:MGE }
+c:MGE = {
+OR = {
+NOT = { controls = location:sarai_al_jadid }
+NOT = { controls = location:zhongdu }
+NOT = { controls = location:baghdad }
+}
+}
+}
+}
+ai_chance = { factor = 100 }
+set_global_variable = { name = mongol_railroad_failed }
+}
+}

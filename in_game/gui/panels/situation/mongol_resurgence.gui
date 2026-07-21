@@ -1,0 +1,184 @@
+situation_panel = {
+
+    ##################################### TOP HEADER (DUAL PORTRAIT) #####################################
+    blockoverride "situation_panel_image" {
+        using = two_countries_header_template
+    
+        blockoverride "FirstCountryContext" {
+            datacontext = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_leading_country').GetCountry]"
+        }
+
+        blockoverride "SecondCountryContext" {
+            datacontext = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_rival_country').GetCountry]"
+        }
+
+        blockoverride "first_character_portrait_anchor" {
+            parentanchor = bottom|left
+        }
+
+        blockoverride "second_character_portrait_anchor" {
+            parentanchor = bottom|right
+        }
+
+        blockoverride "character_religion_visibility" {
+            visible = no
+        }
+
+        blockoverride "character_name_maximumsize" {
+            maximumsize = { 270 -1 }
+        }
+    }
+
+    ##################################### MAIN CONTENT #####################################
+    blockoverride "situation_panel_main_content" {
+        vbox = {
+            layoutpolicy_horizontal = expanding
+            layoutpolicy_vertical = expanding
+            margin_left = 15
+            margin_right = 15
+            margin_bottom = 10
+            margin_top = -10
+            spacing = 8
+
+            # 1. KART: DURUM AÇIKLAMASI
+            situation_card_expandable = {
+                blockoverride "header_button_onclick" {
+                    onclick = "[LateralView.Vars.Toggle( 'mr_resurgence_desc_toggled' )]"
+                }
+                blockoverride "header_text" {
+                    text = "situation_mongol_resurgence_title"
+                }
+                blockoverride "header_icon" {
+                    texture = "gfx/interface/icons/traits/_default.dds"
+                }
+                blockoverride "bottom_content" {
+                    text_multi = {
+                        margin = { 15 10 }
+                        layoutpolicy_horizontal = expanding
+                        max_width = 460
+                        autoresize = yes
+                        text = "situation_mongol_resurgence_desc"
+                        using = fontsize_medium
+                    }
+                }
+                blockoverride "bottom_content_onclick" {
+                    visible = "[LateralView.Vars.Exists( 'mr_resurgence_desc_toggled' )]"
+                }
+                blockoverride "icon_replace_visible_yes" {
+                    visible = "[LateralView.Vars.Exists( 'mr_resurgence_desc_toggled' )]"
+                }
+                blockoverride "icon_replace_visible_not" {
+                    visible = "[Not(LateralView.Vars.Exists( 'mr_resurgence_desc_toggled' ))]"
+                }
+            }
+
+            # 2. KART: HEDEFLER LİSTESİ
+            situation_card_expandable = {
+                blockoverride "header_button_onclick" {
+                    onclick = "[LateralView.Vars.Toggle( 'mr_resurgence_req_toggled' )]"
+                }
+                blockoverride "header_text" {
+                    text = "END_REQUIREMENTS"
+                }
+                blockoverride "header_icon" {
+                    texture = "gfx/interface/icons/disasters/end_requirements_green.dds"
+                }
+                blockoverride "bottom_content" {
+                    TooltipRequirementsList = {
+                        textcontext = "[SituationView.GetActiveSituation.GetSituation.GetEndConditions]"
+                        margin = { 15 10 }
+                    }
+                }
+                blockoverride "bottom_content_onclick" {
+                    visible = "[LateralView.Vars.Exists( 'mr_resurgence_req_toggled' )]"
+                }
+                blockoverride "icon_replace_visible_yes" {
+                    visible = "[LateralView.Vars.Exists( 'mr_resurgence_req_toggled' )]"
+                }
+                blockoverride "icon_replace_visible_not" {
+                    visible = "[Not(LateralView.Vars.Exists( 'mr_resurgence_req_toggled' ))]"
+                }
+            }
+
+            # 3. KART: LİDER KARŞILAŞTIRMA KARTI
+            situation_fancy_two_line_card = {
+                block "card_datacontext" { }
+                
+                # Left Side - Leading Khan
+                blockoverride "left_flag_properties" {
+                    datacontext = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_leading_country').GetCountry]"
+                    visible = "[Country.IsValid]"
+                }
+                blockoverride "left_bottom_flag" { }
+                blockoverride "left_top_text" {
+                    layoutpolicy_horizontal = expanding
+                    layoutpolicy_vertical = expanding
+                    visible = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_leading_country').GetCountry.IsValid]"
+                    text = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_leading_country').GetCountry.GetName]"
+                }
+                blockoverride "left_bottom_text" {
+                    text = "MR_MGO_SCORE_TT"
+                    tooltipwidget = {
+                        ContextualTooltipType = {
+                            blockoverride "title_icon" {
+                                country_flag_small = {
+                                    datacontext = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_leading_country').GetCountry]"
+                                }
+                            }
+                            blockoverride "title_text" {
+                                text = "MR_MGO_MILITARY_STRENGTH_TT_TITLE"
+                            }
+                            blockoverride "tooltip_content" {
+                                TooltipStringPairList = {
+                                    blockoverride "block_title" {
+                                        visible = no
+                                    }
+                                    textcontext = "MR_MGO_SCORE_TT_DESC"
+                                }							
+                            }						
+                        }
+                    }
+                }
+                
+                # Right Side - Rival Khan
+                blockoverride "right_flag_properties" {
+                    datacontext = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_rival_country').GetCountry]"
+                    visible = "[Country.IsValid]"
+                }
+                blockoverride "right_bottom_flag" { }
+                blockoverride "right_top_text" {
+                    layoutpolicy_horizontal = expanding
+                    layoutpolicy_vertical = expanding
+                    visible = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_rival_country').GetCountry.IsValid]"
+                    text = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_rival_country').GetCountry.GetName]"
+                }
+                blockoverride "right_bottom_text" { 
+                    text = "MR_MGO_SCORE_TT"
+                    tooltipwidget = {
+                        ContextualTooltipType = {
+                            blockoverride "title_icon" {
+                                country_flag_small = {
+                                    datacontext = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_rival_country').GetCountry]"
+                                }
+                            }
+                            blockoverride "title_text" {
+                                text = "MR_MGO_MILITARY_STRENGTH_TT_TITLE"
+                            }
+                            blockoverride "tooltip_content" {
+                                TooltipStringPairList = {
+                                    blockoverride "block_title" {
+                                        visible = no
+                                    }
+                                    textcontext = "MR_MGO_SCORE_TT_DESC"
+                                }							
+                            }						
+                        }
+                    }
+                }
+            }
+
+            # Alttaki boşluğu sıfırlayan kod
+            expand = {} 
+        }
+    }
+}

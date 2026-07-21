@@ -1,0 +1,10 @@
+﻿# Mongol Railroad Mod - Customizable Localization
+
+MGO = {
+name = "Mongol Ordus"
+adjective = "Mongol"
+}
+MGE = {
+name = "Mongol Empire"
+adjective = "Mongol"
+}

@@ -1,0 +1,110 @@
+# Mongol Railroad Mod - On Actions
+
+on_yearly_pulse = {
+	effect = {
+		if = {
+			limit = {
+				mr_can_start_resurgence = yes
+				NOT = { has_global_variable = mongol_resurgence_active }
+			}
+			set_global_variable = { name = mongol_resurgence_active }
+			trigger_event = { id = flavor_mr.200 }
+		}
+	}
+	effect = {
+		if = {
+			limit = {
+				mr_can_start_imperial = yes
+			}
+			set_global_variable = { name = mongol_imperial_active }
+			trigger_event = { id = flavor_mr.203 }
+		}
+	}
+	effect = {
+		if = {
+			limit = {
+				mr_can_start_dominance = yes
+			}
+			set_global_variable = { name = mongol_dominance_active }
+			trigger_event = { id = flavor_mr.206 }
+		}
+	}
+	effect = {
+		if = {
+			limit = {
+				has_game_rule = { rule = rule_mongol_railroad setting = historical }
+				current_year >= 1375
+				NOR = {
+					has_global_variable = mongol_resurgence_active
+					has_global_variable = mongol_railroad_complete
+					has_global_variable = mongol_railroad_failed
+					has_global_variable = mongol_resurgence_emerged
+				}
+			}
+			set_global_variable = { name = mongol_resurgence_emerged }
+			trigger_event = { id = flavor_mr.210 }
+		}
+	}
+	effect = {
+		if = {
+			limit = {
+				has_global_variable = mongol_resurgence_active
+				NOT = { has_global_variable = mongol_resurgence_complete }
+				has_game_rule = { rule = rule_mongol_railroad setting = historical }
+				current_year >= 1415
+			}
+			set_global_variable = { name = mongol_resurgence_complete }
+			trigger_event = { id = flavor_mr.211 }
+		}
+	}
+	effect = {
+		if = {
+			limit = {
+				has_global_variable = mongol_imperial_active
+				NOT = { has_global_variable = mongol_imperial_complete }
+				has_game_rule = { rule = rule_mongol_railroad setting = historical }
+				current_year >= 1545
+			}
+			set_global_variable = { name = mongol_imperial_complete }
+			trigger_event = { id = flavor_mr.212 }
+		}
+	}
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					has_global_variable = mongol_dominance_active
+					has_global_variable = mongol_imperial_complete
+				}
+				NOT = { has_global_variable = mongol_railroad_complete }
+				has_game_rule = { rule = rule_mongol_railroad setting = historical }
+				current_year >= 1645
+			}
+			set_global_variable = { name = mongol_railroad_complete }
+			trigger_event = { id = flavor_mr.213 }
+		}
+	}
+}
+
+on_country_formed = {
+	effect = {
+		if = {
+			limit = {
+				tag = MGO
+				has_global_variable = mongol_resurgence_active
+			}
+			set_global_variable = { name = mongol_resurgence_complete }
+			trigger_event = { id = flavor_mr.201 }
+		}
+		if = {
+			limit = {
+				tag = MGE
+				has_global_variable = mongol_imperial_active
+				NOT = { has_global_variable = mongol_imperial_complete }
+			}
+			set_global_variable = { name = mongol_imperial_complete }
+			set_global_variable = { name = mongol_dominance_active }
+			trigger_event = { id = flavor_mr.207 }
+		}
+	}
+}
