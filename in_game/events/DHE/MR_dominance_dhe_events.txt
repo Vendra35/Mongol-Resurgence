@@ -45,7 +45,7 @@ mr_dominance_dhe.1 = {
 	option = {
 		name = mr_dominance_dhe.1.a
 		ai_chance = { factor = 100 }
-		add_mil = 100
+		add_army_tradition = army_tradition_mild_bonus
 	}
 }
 
@@ -150,7 +150,7 @@ mr_dominance_dhe.3 = {
 	option = {
 		name = mr_dominance_dhe.3.a
 		ai_chance = { factor = 100 }
-		add_mil = 100
+		add_army_tradition = army_tradition_mild_bonus
 	}
 }
 
@@ -183,7 +183,7 @@ mr_dominance_dhe.6 = {
 	option = {
 		name = mr_dominance_dhe.6.a
 		ai_chance = { factor = 100 }
-		add_dip = 100
+		add_cultural_influence = cultural_influence_mild_bonus
 	}
 }
 
@@ -248,7 +248,7 @@ mr_dominance_dhe.7 = {
 	option = {
 		name = mr_dominance_dhe.7.a
 		ai_chance = { factor = 100 }
-		add_adm = 100
+		add_government_power = government_power_mild_bonus
 	}
 }
 

@@ -25,6 +25,7 @@
 # --- The Eagle of the Steppe: the situation opens ----------------
 mr_dominance.10 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.10.title
 	desc = mr_dominance.10.desc
 	outcome = neutral
@@ -49,6 +50,7 @@ mr_dominance.10 = {
 # --- Gathering the Horde ----------------------------------------
 mr_dominance.100 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.100.title
 	desc = mr_dominance.100.desc
 	outcome = positive
@@ -61,13 +63,14 @@ mr_dominance.100 = {
 	option = {
 		name = mr_dominance.100.a
 		ai_chance = { factor = 100 }
-		add_mil = 100
+		add_army_tradition = army_tradition_mild_bonus
 	}
 }
 
 # --- The Steppe Stirs -------------------------------------------
 mr_dominance.101 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.101.title
 	desc = mr_dominance.101.desc
 	outcome = neutral
@@ -87,6 +90,7 @@ mr_dominance.101 = {
 # --- The Shadow of the Khan -------------------------------------
 mr_dominance.102 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.102.title
 	desc = mr_dominance.102.desc
 	outcome = neutral
@@ -108,6 +112,7 @@ mr_dominance.102 = {
 # consolidate what has already been gathered.
 mr_dominance.103 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.103.title
 	desc = mr_dominance.103.desc
 	outcome = neutral
@@ -120,7 +125,7 @@ mr_dominance.103 = {
 	option = {
 		name = mr_dominance.103.a
 		ai_chance = { factor = 70 }
-		add_mil = 150
+		add_army_tradition = army_tradition_severe_bonus
 	}
 
 	option = {
@@ -134,6 +139,7 @@ mr_dominance.103 = {
 # --- A New Khan Rises -------------------------------------------
 mr_dominance.104 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.104.title
 	desc = mr_dominance.104.desc
 	outcome = positive
@@ -153,6 +159,7 @@ mr_dominance.104 = {
 # --- Victory on the Steppe --------------------------------------
 mr_dominance.105 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.105.title
 	desc = mr_dominance.105.desc
 	outcome = positive
@@ -177,6 +184,7 @@ mr_dominance.105 = {
 # --- Scattered to the Winds: the Phase 1 setback ----------------
 mr_dominance.107 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.107.title
 	desc = mr_dominance.107.desc
 	outcome = negative
@@ -197,6 +205,7 @@ mr_dominance.107 = {
 # --- Phase 1 resolution: the steppe is unified -------------------
 mr_dominance.1 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.1.title
 	desc = mr_dominance.1.desc
 	outcome = positive
@@ -231,6 +240,7 @@ mr_dominance.1 = {
 # --- Phase 1 resolution: the steppe stays divided ----------------
 mr_dominance.2 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.2.title
 	desc = mr_dominance.2.desc
 	outcome = negative
@@ -264,6 +274,7 @@ mr_dominance.2 = {
 # --- Beyond the Steppe ------------------------------------------
 mr_dominance.120 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.120.title
 	desc = mr_dominance.120.desc
 	outcome = neutral
@@ -276,13 +287,14 @@ mr_dominance.120 = {
 	option = {
 		name = mr_dominance.120.a
 		ai_chance = { factor = 100 }
-		add_dip = 100
+		add_cultural_influence = cultural_influence_mild_bonus
 	}
 }
 
 # --- The Mongol Awakening ---------------------------------------
 mr_dominance.121 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.121.title
 	desc = mr_dominance.121.desc
 	outcome = positive
@@ -302,6 +314,7 @@ mr_dominance.121 = {
 # --- The Horde at the Gates -------------------------------------
 mr_dominance.122 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.122.title
 	desc = mr_dominance.122.desc
 	outcome = neutral
@@ -314,7 +327,7 @@ mr_dominance.122 = {
 	option = {
 		name = mr_dominance.122.a
 		ai_chance = { factor = 100 }
-		add_mil = 100
+		add_army_tradition = army_tradition_mild_bonus
 	}
 }
 
@@ -322,6 +335,7 @@ mr_dominance.122 = {
 # Phase 2 branch point: commit to the invasion, or consolidate.
 mr_dominance.123 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.123.title
 	desc = mr_dominance.123.desc
 	outcome = neutral
@@ -335,7 +349,7 @@ mr_dominance.123 = {
 	option = {
 		name = mr_dominance.123.a
 		ai_chance = { factor = 70 }
-		add_mil = 150
+		add_army_tradition = army_tradition_severe_bonus
 	}
 
 	option = {
@@ -349,6 +363,7 @@ mr_dominance.123 = {
 # --- The Empire Rises -------------------------------------------
 mr_dominance.124 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.124.title
 	desc = mr_dominance.124.desc
 	outcome = positive
@@ -368,6 +383,7 @@ mr_dominance.124 = {
 # --- The Mongol Tide --------------------------------------------
 mr_dominance.125 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.125.title
 	desc = mr_dominance.125.desc
 	outcome = positive
@@ -392,6 +408,7 @@ mr_dominance.125 = {
 # --- The Tide Recedes: the Phase 2 setback ----------------------
 mr_dominance.127 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.127.title
 	desc = mr_dominance.127.desc
 	outcome = negative
@@ -415,6 +432,7 @@ mr_dominance.127 = {
 # --- The Mongol Age ---------------------------------------------
 mr_dominance.130 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.130.title
 	desc = mr_dominance.130.desc
 	outcome = positive
@@ -434,6 +452,7 @@ mr_dominance.130 = {
 # --- The New World Order ----------------------------------------
 mr_dominance.131 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.131.title
 	desc = mr_dominance.131.desc
 	outcome = positive
@@ -446,13 +465,14 @@ mr_dominance.131 = {
 	option = {
 		name = mr_dominance.131.a
 		ai_chance = { factor = 100 }
-		add_adm = 150
+		add_government_power = government_power_severe_bonus
 	}
 }
 
 # --- The Eternal Empire: the railroad completed -----------------
 mr_dominance.132 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.132.title
 	desc = mr_dominance.132.desc
 	outcome = positive
@@ -487,6 +507,7 @@ mr_dominance.132 = {
 # --- The Empire Crumbles: the Phase 3 collapse ------------------
 mr_dominance.133 = {
 	type = country_event
+	category = situation_event
 	title = mr_dominance.133.title
 	desc = mr_dominance.133.desc
 	outcome = negative
@@ -521,6 +542,7 @@ mr_dominance.133 = {
 # --- Birth failsafe bookkeeping ---------------------------------
 mr_dominance.998 = {
 	type = country_event
+	category = situation_event
 	hidden = yes
 
 	immediate = {
@@ -538,6 +560,7 @@ mr_dominance.998 = {
 # --- Completion failsafe bookkeeping ----------------------------
 mr_dominance.999 = {
 	type = country_event
+	category = situation_event
 	hidden = yes
 
 	immediate = {

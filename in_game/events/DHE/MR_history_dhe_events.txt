@@ -23,6 +23,7 @@ mr_history.1 = {
 	type = country_event
 	title = mr_history.1.title
 	desc = mr_history.1.desc
+	historical_info = mr_history.1.historical_info
 	outcome = negative
 	fire_only_once = yes
 	illustration_tags = {
@@ -53,6 +54,7 @@ mr_history.1 = {
 
 	option = {
 		name = mr_history.1.a
+		historical_option = yes
 		ai_chance = { factor = 100 }
 	}
 }
@@ -63,6 +65,7 @@ mr_history.2 = {
 	type = country_event
 	title = mr_history.2.title
 	desc = mr_history.2.desc
+	historical_info = mr_history.2.historical_info
 	outcome = negative
 	fire_only_once = yes
 	illustration_tags = {
@@ -93,6 +96,7 @@ mr_history.2 = {
 
 	option = {
 		name = mr_history.2.a
+		historical_option = yes
 		ai_chance = { factor = 100 }
 	}
 }
@@ -105,6 +109,7 @@ mr_history.3 = {
 	type = country_event
 	title = mr_history.3.title
 	desc = mr_history.3.desc
+	historical_info = mr_history.3.historical_info
 	outcome = neutral
 	fire_only_once = yes
 	illustration_tags = {
@@ -136,6 +141,7 @@ mr_history.3 = {
 	# the western half Islamised, the eastern half held to the steppe cults.
 	option = {
 		name = mr_history.3.a
+		historical_option = yes
 		ai_chance = { factor = 50 }
 		change_religion = religion:sunni
 	}
@@ -153,6 +159,7 @@ mr_history.5 = {
 	type = country_event
 	title = mr_history.5.title
 	desc = mr_history.5.desc
+	historical_info = mr_history.5.historical_info
 	outcome = neutral
 	fire_only_once = yes
 	illustration_tags = {
@@ -183,6 +190,7 @@ mr_history.5 = {
 
 	option = {
 		name = mr_history.5.a
+		historical_option = yes
 		ai_chance = { factor = 70 }
 		add_prestige = prestige_mild_bonus
 	}
@@ -190,7 +198,7 @@ mr_history.5 = {
 	option = {
 		name = mr_history.5.b
 		ai_chance = { factor = 30 }
-		add_mil = 50
+		add_army_tradition = army_tradition_weak_bonus
 	}
 }
 
@@ -200,6 +208,7 @@ mr_history.6 = {
 	type = country_event
 	title = mr_history.6.title
 	desc = mr_history.6.desc
+	historical_info = mr_history.6.historical_info
 	outcome = positive
 	fire_only_once = yes
 	illustration_tags = {
@@ -231,6 +240,7 @@ mr_history.6 = {
 
 	option = {
 		name = mr_history.6.a
+		historical_option = yes
 		ai_chance = { factor = 100 }
 		add_prestige = prestige_severe_bonus
 	}
@@ -245,6 +255,7 @@ mr_history.7 = {
 	type = country_event
 	title = mr_history.7.title
 	desc = mr_history.7.desc
+	historical_info = mr_history.7.historical_info
 	outcome = neutral
 	fire_only_once = yes
 	illustration_tags = {
@@ -275,8 +286,9 @@ mr_history.7 = {
 
 	option = {
 		name = mr_history.7.a
+		historical_option = yes
 		ai_chance = { factor = 60 }
-		add_mil = 100
+		add_army_tradition = army_tradition_mild_bonus
 	}
 
 	option = {
@@ -292,6 +304,7 @@ mr_history.8 = {
 	type = country_event
 	title = mr_history.8.title
 	desc = mr_history.8.desc
+	historical_info = mr_history.8.historical_info
 	outcome = neutral
 	fire_only_once = yes
 	illustration_tags = {
@@ -322,6 +335,7 @@ mr_history.8 = {
 
 	option = {
 		name = mr_history.8.a
+		historical_option = yes
 		ai_chance = { factor = 70 }
 		add_prestige = prestige_mild_bonus
 	}
@@ -329,6 +343,6 @@ mr_history.8 = {
 	option = {
 		name = mr_history.8.b
 		ai_chance = { factor = 30 }
-		add_mil = 50
+		add_army_tradition = army_tradition_weak_bonus
 	}
 }

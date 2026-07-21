@@ -1,63 +1,240 @@
-﻿# Mongol Railroad Mod - Situation: Mongol Dominance (Phase 3)
+﻿# =================================================================
+# PHASE 3 - THE SILK EMPIRE (1550-1650)
+# =================================================================
+# The westward advance against Russia and the final formable. The
+# phase closes when one power holds all four seats of the old
+# khanates at once: Karakorum, Sarai, Zhongdu and Baghdad.
+# =================================================================
 
-mongol_dominance_situation = {
-	title = "situation_mongol_dominance_title"
-	description = "situation_mongol_dominance_desc"
+mongol_dominance = {
+	monthly_spawn_chance = monthly_spawn_chance_unique
 
-	trigger = {
-		has_global_variable = mongol_dominance_active
-		NOR = {
-			has_global_variable = mongol_railroad_complete
-			has_global_variable = mongol_railroad_failed
-		}
+	can_start = {
+		mr_can_start_dominance = yes
 	}
 
 	visible = {
 		mr_dominance_visible = yes
 	}
 
-	icon = gfx_interface_situation_mongol_dominance
-
-	targets = {
-		MGE = { country_score = 10 }
+	can_end = {
+		mr_dominance_end_trigger = yes
 	}
 
-	sort_order = 12
+	hint_tag = hint_mongol_dominance
 
-	progress = { target = 100 }
+	on_start = {
+		set_global_variable = mr_dominance_started
 
-	completion = {
-		trigger = { mr_dominance_end_trigger = yes }
-		effect = {
-			set_global_variable = { name = mongol_railroad_complete }
-			trigger_event = { id = flavor_mr.209 }
+		set_variable = {
+			name = mr_dominance_momentum
+			value = 0
+		}
+
+		every_country = {
+			limit = {
+				OR = {
+					this = c:MGO
+					this = c:MGE
+				}
+			}
+			trigger_event_non_silently = mr_dominance.130
 		}
 	}
 
-	abort = {
-		trigger = { has_global_variable = mongol_railroad_failed }
-	}
+	on_monthly = {
+		change_variable = {
+			name = mr_dominance_momentum
+			add = 1
+		}
 
-	actions = {
-		mongol_dominance_restore_action = {
-			trigger = {
-				country_exists = c:MGE
-				c:MGE = {
-					controls = location:sarai_al_jadid
-					controls = location:zhongdu
-					controls = location:baghdad
-				}
+		# --- The New World Order (~10 years) ---
+		if = {
+			limit = {
+				var:mr_dominance_momentum >= 120
+				NOT = { has_global_variable = mr_beat_131_fired }
 			}
-			effect = {
-				c:MGE = {
-					add_country_modifier = {
-						type = mongol_golden_age
-						days = 3650
+			every_country = {
+				limit = {
+					OR = {
+						this = c:MGO
+						this = c:MGE
 					}
 				}
-				set_global_variable = { name = mongol_railroad_complete }
+				trigger_event_non_silently = mr_dominance.131
 			}
-			ai_weight = 1000
+			set_global_variable = mr_beat_131_fired
+		}
+
+		# --- The westward campaign against Russia (~18 years) ---
+		if = {
+			limit = {
+				var:mr_dominance_momentum >= 216
+				NOT = { has_global_variable = mr_beat_201i_fired }
+				any_country = {
+					OR = {
+						this = c:MGO
+						this = c:MGE
+					}
+					any_owned_location = { region = region:russian_region }
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						this = c:MGO
+						this = c:MGE
+					}
+				}
+				trigger_event_non_silently = mr_imperial.201
+			}
+			set_global_variable = mr_beat_201i_fired
+		}
+
+		# --- The Grand Review (~30 years) ---
+		if = {
+			limit = {
+				var:mr_dominance_momentum >= 360
+				NOT = { has_global_variable = mr_beat_202i_fired }
+			}
+			every_country = {
+				limit = {
+					OR = {
+						this = c:MGO
+						this = c:MGE
+					}
+				}
+				trigger_event_non_silently = mr_imperial.202
+			}
+			set_global_variable = mr_beat_202i_fired
+		}
+
+		# --- The retreat, if the west holds (~40 years, still short) ---
+		if = {
+			limit = {
+				var:mr_dominance_momentum >= 480
+				NOT = { has_global_variable = mr_beat_211i_fired }
+				NOT = { mr_dominance_end_trigger = yes }
+			}
+			every_country = {
+				limit = {
+					OR = {
+						this = c:MGO
+						this = c:MGE
+					}
+				}
+				trigger_event_non_silently = mr_imperial.211
+			}
+			set_global_variable = mr_beat_211i_fired
+		}
+
+		# --- COMPLETION FAILSAFE: five years before 1650 ---
+		if = {
+			limit = {
+				current_date > 1645.1.1
+				NOT = { mr_dominance_end_trigger = yes }
+				NOT = { has_global_variable = mr_completion_failsafe_fired }
+			}
+			every_country = {
+				limit = {
+					OR = {
+						this = c:MGO
+						this = c:MGE
+					}
+				}
+				trigger_event_silently = mr_dominance.999
+				add_army_tradition = army_tradition_severe_bonus
+				add_government_power = government_power_severe_bonus
+			}
+		}
+	}
+
+	on_ending = {
+		# The railroad either completes, or the empire crumbles.
+		if = {
+			limit = {
+				mr_dominance_end_trigger = yes
+			}
+			every_country = {
+				limit = {
+					OR = {
+						this = c:MGO
+						this = c:MGE
+					}
+				}
+				trigger_event_non_silently = mr_dominance.132
+			}
+		}
+		else = {
+			every_country = {
+				limit = {
+					OR = {
+						this = c:MGO
+						this = c:MGE
+					}
+				}
+				trigger_event_non_silently = mr_dominance.133
+			}
+		}
+	}
+
+	on_ended = {
+		remove_variable = mr_dominance_momentum
+		remove_global_variable = mr_beat_131_fired
+		remove_global_variable = mr_beat_201i_fired
+		remove_global_variable = mr_beat_202i_fired
+		remove_global_variable = mr_beat_211i_fired
+	}
+
+	tooltip = {
+		if = {
+			limit = {
+				OR = {
+					region = region:russian_region
+					region = region:steppes_region
+					region = region:persia_region
+				}
+			}
+			custom_tooltip = mr_dominance_map_tt
+		}
+	}
+
+	map_color = {
+		if = {
+			limit = {
+				OR = {
+					owner ?= c:MGO
+					owner ?= c:MGE
+				}
+			}
+			value = this.owner.country_color
+		}
+		else = {
+			value = define:NMapColors|DEFAULT_COLOR
+		}
+	}
+
+	secondary_map_color = {
+		if = {
+			limit = {
+				owner ?= {
+					OR = {
+						is_subject_of = c:MGO
+						is_subject_of = c:MGE
+					}
+				}
+			}
+			value = dark_grey
+		}
+		else_if = {
+			limit = {
+				region = region:russian_region
+				NOR = {
+					owner ?= c:MGO
+					owner ?= c:MGE
+				}
+			}
+			value = red
 		}
 	}
 }

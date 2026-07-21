@@ -16,6 +16,7 @@
 # --- The Invasion Plans -----------------------------------------
 mr_imperial.100 = {
 	type = country_event
+	category = situation_event
 	title = mr_imperial.100.title
 	desc = mr_imperial.100.desc
 	outcome = neutral
@@ -28,7 +29,7 @@ mr_imperial.100 = {
 	option = {
 		name = mr_imperial.100.a
 		ai_chance = { factor = 100 }
-		add_mil = 100
+		add_army_tradition = army_tradition_mild_bonus
 	}
 }
 
@@ -36,6 +37,7 @@ mr_imperial.100 = {
 # --- The First Wave ---------------------------------------------
 mr_imperial.101 = {
 	type = country_event
+	category = situation_event
 	title = mr_imperial.101.title
 	desc = mr_imperial.101.desc
 	outcome = neutral
@@ -48,7 +50,7 @@ mr_imperial.101 = {
 	option = {
 		name = mr_imperial.101.a
 		ai_chance = { factor = 100 }
-		add_mil = 100
+		add_army_tradition = army_tradition_mild_bonus
 	}
 }
 
@@ -56,6 +58,7 @@ mr_imperial.101 = {
 # --- The City Falls ---------------------------------------------
 mr_imperial.102 = {
 	type = country_event
+	category = situation_event
 	title = mr_imperial.102.title
 	desc = mr_imperial.102.desc
 	outcome = positive
@@ -77,6 +80,7 @@ mr_imperial.102 = {
 # The campaign's branch point: press on, or dig in and hold.
 mr_imperial.103 = {
 	type = country_event
+	category = situation_event
 	title = mr_imperial.103.title
 	desc = mr_imperial.103.desc
 	outcome = negative
@@ -89,7 +93,7 @@ mr_imperial.103 = {
 	option = {
 		name = mr_imperial.103.a
 		ai_chance = { factor = 60 }
-		add_mil = 150
+		add_army_tradition = army_tradition_severe_bonus
 	}
 
 	option = {
@@ -103,6 +107,7 @@ mr_imperial.103 = {
 # --- The Empire Secured -----------------------------------------
 mr_imperial.200 = {
 	type = country_event
+	category = situation_event
 	title = mr_imperial.200.title
 	desc = mr_imperial.200.desc
 	outcome = positive
@@ -123,6 +128,7 @@ mr_imperial.200 = {
 # --- A New Empire Rises -----------------------------------------
 mr_imperial.201 = {
 	type = country_event
+	category = situation_event
 	title = mr_imperial.201.title
 	desc = mr_imperial.201.desc
 	outcome = positive
@@ -149,6 +155,7 @@ mr_imperial.201 = {
 # --- The Grand Review -------------------------------------------
 mr_imperial.202 = {
 	type = country_event
+	category = situation_event
 	title = mr_imperial.202.title
 	desc = mr_imperial.202.desc
 	outcome = positive
@@ -162,7 +169,7 @@ mr_imperial.202 = {
 		name = mr_imperial.202.a
 		ai_chance = { factor = 100 }
 		add_prestige = prestige_mild_bonus
-		add_mil = 100
+		add_army_tradition = army_tradition_mild_bonus
 	}
 }
 
@@ -170,6 +177,7 @@ mr_imperial.202 = {
 # --- The Campaign Stalls ----------------------------------------
 mr_imperial.210 = {
 	type = country_event
+	category = situation_event
 	title = mr_imperial.210.title
 	desc = mr_imperial.210.desc
 	outcome = negative
@@ -190,6 +198,7 @@ mr_imperial.210 = {
 # --- The Retreat from the West ----------------------------------
 mr_imperial.211 = {
 	type = country_event
+	category = situation_event
 	title = mr_imperial.211.title
 	desc = mr_imperial.211.desc
 	outcome = negative

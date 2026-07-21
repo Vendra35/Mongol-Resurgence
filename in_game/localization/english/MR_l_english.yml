@@ -509,3 +509,15 @@
  mr_history.8.desc: "A young Timurid prince has lost Samarkand for the third time, and with it any prospect of holding his inheritance in Transoxiana. The Uzbeks have taken what his great-great-grandfather built.\n\nBabur turns south instead, toward Kabul and the passes beyond. Men are already saying that a throne lost on the steppe may yet be found in Hindustan."
  mr_history.8.a: "If not Samarkand, then somewhere greater."
  mr_history.8.b: "Transoxiana is not lost while a Timurid lives."
+
+ # ==============================================================================
+ # ----------------- SITUATION HINTS & MAP TOOLTIPS -----------------
+ # ==============================================================================
+
+ hint_mongol_resurgence: "The Northern Yuan Resurgence"
+ hint_mongol_imperial: "The Pax Mongolica"
+ hint_mongol_dominance: "The Silk Empire"
+
+ mr_resurgence_map_tt: "#Y The Mongolian heartland.#! Whoever unites these pastures under one banner takes up the Chinggisid claim."
+ mr_imperial_map_tt: "#Y The Silk Road corridor.#! The steppe, north China and Persia — mastery of the road between them is the making of the Pax Mongolica."
+ mr_dominance_map_tt: "#Y The western frontier.#! Beyond it lie the Russian principalities, and the last road to a restored Mongol Empire."

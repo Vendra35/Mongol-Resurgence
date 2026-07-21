@@ -1,90 +1,156 @@
-﻿# Mongol Railroad Mod - Scripted Triggers
+﻿# =================================================================
+# MONGOL RESURGENCE - SCRIPTED TRIGGERS
+# =================================================================
+# Region names verified against vanilla. The fabricated ones this
+# file used to reference resolve as follows:
+#   central_asia_region  -> steppes_region
+#   china_region         -> north_china_region
+#   russia_region        -> russian_region
+#   transoxiana_region   -> no vanilla equivalent; keyed on
+#                           location:samarkand instead
+# =================================================================
 
-# =============================================
-# On-Action Conditions
-# =============================================
 
+# --- Start conditions --------------------------------------------
+
+# Phase 1 can open once the steppe is in play and nobody has yet
+# taken up the Chinggisid claim.
 mr_can_start_resurgence = {
-	has_game_rule = { rule = rule_mongol_railroad setting = historical }
-	current_year >= 1337
+	NOT = { has_game_rule = mr_railroad_off }
+	current_year >= 1368
 	any_country = {
 		culture = { has_culture_group = culture_group:mongolian_group }
 		government_type = government_type:steppe_horde
-		any_owned_location = { is_in_region = region:mongolia_region }
+		any_owned_location = {
+			region = region:mongolia_region
+		}
 	}
-	NOT = { has_global_variable = mongol_railroad_complete }
-	NOT = { has_global_variable = mongol_railroad_failed }
-	NOT = { has_global_variable = mongol_resurgence_emerged }
+	NOT = { has_global_variable = mr_railroad_complete }
+	NOT = { has_global_variable = mr_railroad_failed }
+	NOT = { has_global_variable = mr_resurgence_started }
 }
 
 mr_can_start_imperial = {
-	has_global_variable = mongol_resurgence_complete
-	NOT = { has_global_variable = mongol_imperial_active }
-	NOT = { has_global_variable = mongol_imperial_complete }
-	NOT = { has_global_variable = mongol_railroad_failed }
+	NOT = { has_game_rule = mr_railroad_off }
+	has_global_variable = mr_phase_one_complete
+	NOT = { has_global_variable = mr_imperial_started }
+	NOT = { has_global_variable = mr_railroad_failed }
 	country_exists = c:MGO
 }
 
 mr_can_start_dominance = {
-	has_global_variable = mongol_imperial_complete
-	NOT = { has_global_variable = mongol_dominance_active }
-	NOT = { has_global_variable = mongol_railroad_complete }
-	NOT = { has_global_variable = mongol_railroad_failed }
-	country_exists = c:MGE
+	NOT = { has_game_rule = mr_railroad_off }
+	has_global_variable = mr_phase_two_complete
+	NOT = { has_global_variable = mr_dominance_started }
+	NOT = { has_global_variable = mr_railroad_failed }
+	country_exists = c:MGO
 }
 
-# =============================================
-# Situation Visibility & End Triggers
-# =============================================
+
+# --- Visibility ---------------------------------------------------
+# Root is the country asking whether it can see the situation.
+# The steppe powers, their neighbours, and the settled empires they
+# threaten all have a stake; distant countries do not.
 
 mr_resurgence_visible = {
-	has_global_variable = mongol_resurgence_active
 	OR = {
 		country_exists = c:MGO
-		any_country = {
+		AND = {
 			culture = { has_culture_group = culture_group:mongolian_group }
 			government_type = government_type:steppe_horde
-			any_owned_location = { is_in_region = region:mongolia_region }
+		}
+		any_owned_location = {
+			region = region:mongolia_region
+		}
+		any_owned_location = {
+			region = region:steppes_region
+		}
+		any_owned_location = {
+			region = region:north_china_region
 		}
 	}
 }
 
-mr_resurgence_end_trigger = {
-	country_exists = c:MGO
-	c:MGO = {
-		culture = { has_culture_group = culture_group:mongolian_group }
-		government_type = government_type:steppe_horde
-		any_owned_location = { is_in_region = region:mongolia_region }
-		any_owned_location = { is_in_region = region:central_asia_region }
-		total_development = 150
-	}
-}
-
 mr_imperial_visible = {
-	has_global_variable = mongol_imperial_active
-	country_exists = c:MGE
-}
-
-mr_imperial_end_trigger = {
-	country_exists = c:MGE
-	c:MGE = {
-		total_development = 500
-		any_owned_location = { is_in_region = region:persia_region }
-		any_owned_location = { is_in_region = region:china_region }
-		any_owned_location = { is_in_region = region:russia_region }
+	OR = {
+		this = c:MGO
+		is_neighbor_of = c:MGO
+		any_owned_location = {
+			region = region:steppes_region
+		}
+		any_owned_location = {
+			region = region:north_china_region
+		}
+		any_owned_location = {
+			region = region:persia_region
+		}
 	}
 }
 
 mr_dominance_visible = {
-	has_global_variable = mongol_dominance_active
-	country_exists = c:MGE
+	OR = {
+		this = c:MGO
+		this = c:MGE
+		is_neighbor_of = c:MGO
+		is_neighbor_of = c:MGE
+		any_owned_location = {
+			region = region:russian_region
+		}
+		any_owned_location = {
+			region = region:steppes_region
+		}
+		any_owned_location = {
+			region = region:persia_region
+		}
+	}
 }
 
+
+# --- End conditions ----------------------------------------------
+# Each phase ends when its territorial goal is met. Ownership, not
+# occupation: a phase should not complete off the back of a siege
+# that is handed back at the peace table.
+
+# Phase 1: the Mongolian heartland is under one banner.
+mr_resurgence_end_trigger = {
+	country_exists = c:MGO
+	c:MGO = {
+		owns = location:karakorum
+		any_owned_location = {
+			region = region:mongolia_region
+		}
+	}
+}
+
+# Phase 2: the Silk Road corridor is held from the steppe to Persia.
+mr_imperial_end_trigger = {
+	country_exists = c:MGO
+	c:MGO = {
+		owns = location:samarkand
+		any_owned_location = {
+			region = region:steppes_region
+		}
+		any_owned_location = {
+			region = region:north_china_region
+		}
+	}
+}
+
+# Phase 3: the four seats of the old khanates are held at once —
+# Karakorum, Sarai, Zhongdu and Baghdad.
 mr_dominance_end_trigger = {
-	c:MGE = {
-		controls = location:sarai_al_jadid
-		controls = location:zhongdu
-		controls = location:baghdad
-		controls = location:samarkand
+	OR = {
+		country_exists = c:MGE
+		country_exists = c:MGO
+	}
+	any_country = {
+		OR = {
+			this = c:MGE
+			this = c:MGO
+		}
+		owns = location:karakorum
+		owns = location:sarai_al_jadid
+		owns = location:zhongdu
+		owns = location:baghdad
 	}
 }

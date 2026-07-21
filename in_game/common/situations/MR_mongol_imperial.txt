@@ -1,63 +1,252 @@
-﻿# Mongol Railroad Mod - Situation: Road to Empire (Phase 2)
+﻿# =================================================================
+# PHASE 2 - THE PAX MONGOLICA (1420-1550)
+# =================================================================
+# With the steppe unified, the horde turns outward: mastery of the
+# Silk Road corridor and a contest for hegemony with the Ming.
+# The campaign beats come from the mr_imperial namespace; the
+# phase-level beats from mr_dominance.120-127.
+# =================================================================
 
-mongol_imperial_situation = {
-	title = "situation_mongol_imperial_title"
-	description = "situation_mongol_imperial_desc"
+mongol_imperial = {
+	monthly_spawn_chance = monthly_spawn_chance_unique
 
-	trigger = {
-		has_global_variable = mongol_imperial_active
-		NOT = { has_global_variable = mongol_imperial_complete }
-		NOT = { has_global_variable = mongol_railroad_failed }
+	can_start = {
+		mr_can_start_imperial = yes
 	}
 
 	visible = {
 		mr_imperial_visible = yes
 	}
 
-	icon = gfx_interface_situation_mongol_imperial
-
-	targets = {
-		MGO = { country_score = 1 }
-		MGE = { country_score = 2 }
+	can_end = {
+		mr_imperial_end_trigger = yes
 	}
 
-	sort_order = 11
+	hint_tag = hint_mongol_imperial
 
-	progress = { target = 100 }
+	on_start = {
+		set_global_variable = mr_imperial_started
 
-	completion = {
-		trigger = { mr_imperial_end_trigger = yes }
-		effect = { set_global_variable = { name = mongol_imperial_complete } }
-	}
-
-	abort = {
-		trigger = { has_global_variable = mongol_railroad_failed }
-	}
-
-	actions = {
-		mongol_imperial_form_action = {
-			trigger = {
-				country_exists = c:MGO
-				c:MGO = {
-					controls = location:karakorum
-					government_type = government_type:steppe_horde
-					country_rank_level >= 3
-				}
-			}
-			effect = { c:MGO = { form_country = formable_country:MGE_f } }
-			ai_weight = 1000
+		set_variable = {
+			name = mr_imperial_momentum
+			value = 0
 		}
-		mongol_imperial_cb_action = {
-			trigger = {
+
+		if = {
+			limit = {
 				country_exists = c:MGO
-				c:MGO = { government_type = government_type:steppe_horde }
 			}
-			effect = {
+			c:MGO = {
+				trigger_event_non_silently = mr_dominance.120
+				trigger_event_non_silently = mr_imperial.100
+			}
+		}
+	}
+
+	on_monthly = {
+		change_variable = {
+			name = mr_imperial_momentum
+			add = 1
+		}
+
+		# --- The Mongol Awakening (~4 years) ---
+		if = {
+			limit = {
+				var:mr_imperial_momentum >= 48
+				NOT = { has_global_variable = mr_beat_121_fired }
+				country_exists = c:MGO
+			}
+			c:MGO = {
+				trigger_event_non_silently = mr_dominance.121
+			}
+			set_global_variable = mr_beat_121_fired
+		}
+
+		# --- The First Wave: the campaign opens (~8 years) ---
+		if = {
+			limit = {
+				var:mr_imperial_momentum >= 96
+				NOT = { has_global_variable = mr_beat_101i_fired }
+				country_exists = c:MGO
+			}
+			c:MGO = {
+				trigger_event_non_silently = mr_imperial.101
+			}
+			set_global_variable = mr_beat_101i_fired
+		}
+
+		# --- The Horde at the Gates (~14 years) ---
+		if = {
+			limit = {
+				var:mr_imperial_momentum >= 168
+				NOT = { has_global_variable = mr_beat_122_fired }
+			}
+			every_country = {
+				limit = {
+					any_owned_location = { region = region:north_china_region }
+				}
+				trigger_event_non_silently = mr_dominance.122
+			}
+			set_global_variable = mr_beat_122_fired
+		}
+
+		# --- The City Falls, once a great seat is actually taken ---
+		if = {
+			limit = {
+				country_exists = c:MGO
+				NOT = { has_global_variable = mr_beat_102i_fired }
 				c:MGO = {
-					add_casus_belli = { type = mongol_imperial target = this }
+					OR = {
+						owns = location:zhongdu
+						owns = location:samarkand
+					}
 				}
 			}
-			ai_weight = 500
+			c:MGO = {
+				trigger_event_non_silently = mr_imperial.102
+			}
+			set_global_variable = mr_beat_102i_fired
+		}
+
+		# --- The Great Invasion: the branch (~22 years) ---
+		if = {
+			limit = {
+				var:mr_imperial_momentum >= 264
+				NOT = { has_global_variable = mr_beat_123_fired }
+				country_exists = c:MGO
+			}
+			c:MGO = {
+				trigger_event_non_silently = mr_dominance.123
+			}
+			set_global_variable = mr_beat_123_fired
+		}
+
+		# --- The Counter-Attack: the settled powers push back ---
+		if = {
+			limit = {
+				var:mr_imperial_momentum >= 336
+				NOT = { has_global_variable = mr_beat_103i_fired }
+				country_exists = c:MGO
+				c:MGO = { at_war = yes }
+			}
+			c:MGO = {
+				trigger_event_non_silently = mr_imperial.103
+			}
+			set_global_variable = mr_beat_103i_fired
+		}
+
+		# --- The Empire Rises ---
+		if = {
+			limit = {
+				var:mr_imperial_momentum >= 420
+				NOT = { has_global_variable = mr_beat_124_fired }
+				country_exists = c:MGO
+			}
+			c:MGO = {
+				trigger_event_non_silently = mr_dominance.124
+			}
+			set_global_variable = mr_beat_124_fired
+		}
+
+		# --- COMPLETION FAILSAFE: five years before 1550 ---
+		if = {
+			limit = {
+				current_date > 1545.1.1
+				NOT = { mr_imperial_end_trigger = yes }
+				NOT = { has_global_variable = mr_completion_failsafe_fired }
+				country_exists = c:MGO
+			}
+			c:MGO = {
+				trigger_event_silently = mr_dominance.999
+				add_army_tradition = army_tradition_severe_bonus
+				add_government_power = government_power_severe_bonus
+			}
+		}
+	}
+
+	on_ending = {
+		if = {
+			limit = {
+				mr_imperial_end_trigger = yes
+				country_exists = c:MGO
+			}
+			c:MGO = {
+				trigger_event_non_silently = mr_dominance.125
+				trigger_event_non_silently = mr_imperial.200
+			}
+		}
+		else_if = {
+			limit = {
+				country_exists = c:MGO
+			}
+			c:MGO = {
+				trigger_event_non_silently = mr_dominance.127
+				trigger_event_non_silently = mr_imperial.210
+			}
+		}
+	}
+
+	on_ended = {
+		remove_variable = mr_imperial_momentum
+		remove_global_variable = mr_beat_121_fired
+		remove_global_variable = mr_beat_122_fired
+		remove_global_variable = mr_beat_123_fired
+		remove_global_variable = mr_beat_124_fired
+		remove_global_variable = mr_beat_101i_fired
+		remove_global_variable = mr_beat_102i_fired
+		remove_global_variable = mr_beat_103i_fired
+
+		if = {
+			limit = {
+				mr_imperial_end_trigger = yes
+			}
+			set_global_variable = mr_phase_two_complete
+		}
+	}
+
+	tooltip = {
+		if = {
+			limit = {
+				OR = {
+					region = region:steppes_region
+					region = region:north_china_region
+					region = region:persia_region
+				}
+			}
+			custom_tooltip = mr_imperial_map_tt
+		}
+	}
+
+	map_color = {
+		if = {
+			limit = {
+				owner ?= c:MGO
+			}
+			value = this.owner.country_color
+		}
+		else = {
+			value = define:NMapColors|DEFAULT_COLOR
+		}
+	}
+
+	secondary_map_color = {
+		if = {
+			limit = {
+				owner ?= {
+					is_subject_of = c:MGO
+				}
+			}
+			value = dark_grey
+		}
+		else_if = {
+			limit = {
+				OR = {
+					region = region:steppes_region
+					region = region:north_china_region
+				}
+				NOT = { owner ?= c:MGO }
+			}
+			value = red
 		}
 	}
 }
