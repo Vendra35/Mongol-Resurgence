@@ -41,6 +41,17 @@ corrupts the actual files. **Never write to it.**
 - Do not port or pattern-match syntax from other Paradox games (Victoria 3, CK3,
   HOI4, Stellaris, EU4). EU5's syntax is its own.
 
+### Before building anything new
+- **Search vanilla first.** Three proposed situations (Tumu Crisis, Treaty of Ugra, the
+  Altan Khan conversion) all turned out to exist already — `flavor_chi_mon`,
+  `flavor_MOS`/`flavor_LIT`, `buddhism_events.13`. Duplicating vanilla content doesn't
+  just waste effort, it conflicts with working game systems. Hook in read-only instead.
+- **Search the mod too.** 17 designed modifiers sat unused in `MR_modifiers.txt` while
+  duplicates were written alongside them.
+- Some vanilla state is unhookable: `treaty_of_ugra` is removed the moment its event
+  resolves, so nothing durable survives to read. Confirm a signal persists before
+  depending on it.
+
 ### Silent-failure rules
 These two cost you an entire mechanic with no error message, no log line, no symptom.
 - **Verify the directory name in vanilla before creating a file.** A file in a
