@@ -1,4 +1,4 @@
-# Mongol Railroad Mod - Situation: Mongol Resurgence (Phase 1)
+﻿# Mongol Railroad Mod - Situation: Mongol Resurgence (Phase 1)
 
 mongol_resurgence_situation = {
 	title = "situation_mongol_resurgence_title"

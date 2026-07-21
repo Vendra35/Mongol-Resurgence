@@ -1,4 +1,4 @@
-situation_panel = {
+﻿situation_panel = {
 
     ##################################### TOP HEADER (SINGLE PORTRAIT - ONE EMPIRE) #####################################
     blockoverride "situation_panel_image" {

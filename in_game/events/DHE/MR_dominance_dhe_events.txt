@@ -1,0 +1,285 @@
+﻿namespace = mr_dominance_dhe
+
+# =================================================================
+# MONGOL RESURGENCE - HORDE MECHANICS DHE LAYER
+# =================================================================
+# The institutions a reunified horde builds as it turns from a
+# tribal confederation into an empire: drilled armies, siege craft,
+# the Kurultai, the Silk Road, the Yam relay.
+#
+# Localisation for these already exists (mr_dominance_dhe.1-8,
+# including the .entry keys used by the DHE timeline).
+#
+# All but the Kurultai are AI-only flavour, per the .entry text.
+# Phase assignment follows the three-situation timeline:
+#   Phase 1 (1368-1420, MGO): 1 Forge, 4 Kurultai, 5 Absorption
+#   Phase 2 (1420-1550, MGO): 3 Wall Breakers, 6 Silk Road, 2 Encampment
+#   Phase 3 (1550-1650, MGE): 7 Melting Pot, 8 Yam
+# =================================================================
+
+
+# --- The Forge of Warriors --------------------------------------
+mr_dominance_dhe.1 = {
+	type = country_event
+	title = mr_dominance_dhe.1.title
+	desc = mr_dominance_dhe.1.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = interior
+	}
+
+	dynamic_historical_event = {
+		tag = MGO
+		from = 1368.1.1
+		to = 1420.1.1
+		monthly_chance = 1
+	}
+
+	trigger = {
+		NOT = { has_game_rule = mr_railroad_off }
+		is_ai = yes
+	}
+
+	option = {
+		name = mr_dominance_dhe.1.a
+		ai_chance = { factor = 100 }
+		add_mil = 100
+	}
+}
+
+
+# --- The Great Kurultai -----------------------------------------
+# The one event in this layer the player also sees: it is the
+# formal claim to supremacy over all Mongol peoples.
+mr_dominance_dhe.4 = {
+	type = country_event
+	title = mr_dominance_dhe.4.title
+	desc = mr_dominance_dhe.4.desc
+	outcome = positive
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+
+	dynamic_historical_event = {
+		tag = MGO
+		from = 1368.1.1
+		to = 1420.1.1
+		monthly_chance = 1
+	}
+
+	trigger = {
+		NOT = { has_game_rule = mr_railroad_off }
+		government_type = government_type:steppe_horde
+	}
+
+	option = {
+		name = mr_dominance_dhe.4.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_severe_bonus
+		add_country_modifier = {
+			modifier = mongol_unifier
+			years = -1
+			mode = replace
+		}
+	}
+}
+
+
+# --- The Absorption of the Rival Horde --------------------------
+mr_dominance_dhe.5 = {
+	type = country_event
+	title = mr_dominance_dhe.5.title
+	desc = mr_dominance_dhe.5.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = exterior
+	}
+
+	dynamic_historical_event = {
+		tag = MGO
+		from = 1368.1.1
+		to = 1420.1.1
+		monthly_chance = 1
+	}
+
+	trigger = {
+		NOT = { has_game_rule = mr_railroad_off }
+		is_ai = yes
+		government_type = government_type:steppe_horde
+	}
+
+	option = {
+		name = mr_dominance_dhe.5.a
+		ai_chance = { factor = 100 }
+		add_government_power = government_power_mild_bonus
+	}
+}
+
+
+# --- The Wall Breakers ------------------------------------------
+mr_dominance_dhe.3 = {
+	type = country_event
+	title = mr_dominance_dhe.3.title
+	desc = mr_dominance_dhe.3.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = exterior
+	}
+
+	dynamic_historical_event = {
+		tag = MGO
+		from = 1420.1.1
+		to = 1550.1.1
+		monthly_chance = 1
+	}
+
+	trigger = {
+		NOT = { has_game_rule = mr_railroad_off }
+		is_ai = yes
+	}
+
+	option = {
+		name = mr_dominance_dhe.3.a
+		ai_chance = { factor = 100 }
+		add_mil = 100
+	}
+}
+
+
+# --- The Silk Road Reborn ---------------------------------------
+mr_dominance_dhe.6 = {
+	type = country_event
+	title = mr_dominance_dhe.6.title
+	desc = mr_dominance_dhe.6.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+
+	dynamic_historical_event = {
+		tag = MGO
+		from = 1420.1.1
+		to = 1550.1.1
+		monthly_chance = 1
+	}
+
+	trigger = {
+		NOT = { has_game_rule = mr_railroad_off }
+		is_ai = yes
+		owns = location:samarkand
+	}
+
+	option = {
+		name = mr_dominance_dhe.6.a
+		ai_chance = { factor = 100 }
+		add_dip = 100
+	}
+}
+
+
+# --- The Imperial Encampment ------------------------------------
+mr_dominance_dhe.2 = {
+	type = country_event
+	title = mr_dominance_dhe.2.title
+	desc = mr_dominance_dhe.2.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+
+	dynamic_historical_event = {
+		tag = MGO
+		from = 1420.1.1
+		to = 1550.1.1
+		monthly_chance = 1
+	}
+
+	trigger = {
+		NOT = { has_game_rule = mr_railroad_off }
+		is_ai = yes
+		owns = location:karakorum
+	}
+
+	option = {
+		name = mr_dominance_dhe.2.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_mild_bonus
+	}
+}
+
+
+# --- The Imperial Melting Pot -----------------------------------
+mr_dominance_dhe.7 = {
+	type = country_event
+	title = mr_dominance_dhe.7.title
+	desc = mr_dominance_dhe.7.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+
+	dynamic_historical_event = {
+		tag = MGE
+		from = 1550.1.1
+		to = 1650.1.1
+		monthly_chance = 1
+	}
+
+	trigger = {
+		NOT = { has_game_rule = mr_railroad_off }
+		is_ai = yes
+	}
+
+	option = {
+		name = mr_dominance_dhe.7.a
+		ai_chance = { factor = 100 }
+		add_adm = 100
+	}
+}
+
+
+# --- The Yam Postal Relay ---------------------------------------
+mr_dominance_dhe.8 = {
+	type = country_event
+	title = mr_dominance_dhe.8.title
+	desc = mr_dominance_dhe.8.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+
+	dynamic_historical_event = {
+		tag = MGE
+		from = 1550.1.1
+		to = 1650.1.1
+		monthly_chance = 1
+	}
+
+	trigger = {
+		NOT = { has_game_rule = mr_railroad_off }
+		is_ai = yes
+	}
+
+	option = {
+		name = mr_dominance_dhe.8.a
+		ai_chance = { factor = 100 }
+		add_government_power = government_power_mild_bonus
+	}
+}

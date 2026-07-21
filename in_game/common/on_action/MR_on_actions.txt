@@ -1,4 +1,4 @@
-# Mongol Railroad Mod - On Actions
+﻿# Mongol Railroad Mod - On Actions
 
 on_yearly_pulse = {
 	effect = {

@@ -1,12 +1,11 @@
 {
-	"name": "Mongol Railroad",
-	"id": "Mongol_Railroad",
-	"version": "1.0.0",
-	"game_id": "eu5",
-	"supported_game_version": "1.0.0",
-	"short_desc": "Mongol Railroad - Mongol Empire Resurgence Mod",
-	"long_desc": "A dynamic historical situation mod that allows the Mongol Empire to re-emerge through a railroad of events. Features 3-phase situation system including MGO formation, imperial expansion, and the ultimate rise of the Mongol Empire.",
-	"tags": ["Historical", "Events", "Gameplay"],
-	"dependencies": [],
-	"picture": "thumbnail.png"
+	"name":	"Mongol Resurgence",
+	"id":	"mongolresurgence",
+	"version":	"1.0.0",
+	"supported_game_version":	"1.3.X",
+	"short_description":	"A three-phase alternate history in which the Mongol tribes reunify after the fall of the Yuan and launch a new wave of conquest westward.",
+	"tags":	["Historical", "Events", "Gameplay"],
+	"relationships":	[],
+	"game_custom_data":	{
+}
 }

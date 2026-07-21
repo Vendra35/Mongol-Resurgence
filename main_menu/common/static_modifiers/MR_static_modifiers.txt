@@ -1,4 +1,4 @@
-# Mongol Railroad Mod - Static Modifiers
+﻿# Mongol Railroad Mod - Static Modifiers
 
 mongol_unifier = {
 	icon = gfx_interface_modifier_mongol_unifier
