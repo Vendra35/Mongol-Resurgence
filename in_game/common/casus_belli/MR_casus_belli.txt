@@ -1,43 +1,74 @@
-﻿# Mongol Railroad Mod - Casus Belli
+﻿# =================================================================
+# MONGOL RESURGENCE - CASUS BELLI
+# =================================================================
+# Rewritten from EU4 format. The previous version used po_annex,
+# po_demand_provinces, po_demand_tributary, allowed_provinces_self,
+# badboy_factor, province_annex_cost, war_goal = superiority and
+# war_name — none of which exist in EU5. EU5 splits the peace terms
+# out into common/wargoals; the CB only points at one.
+#
+# Also renamed: the old CBs were mongol_tributary and
+# mongol_imperial, and the latter collided with the Phase 2
+# situation key. All three now carry the cb_MR_ prefix.
+#
+# create_visible/create_enabled are always = no because these are
+# granted by the situations rather than picked from the diplomacy
+# screen — the same approach PD uses.
+# =================================================================
 
-mongol_tributary = {
-icon = cb_icon_tributary
-cost = 150
-diplomatic_cost = 25
-war_exhaustion = 0.10
-allowed_provinces_self = yes
-po_demand_tributary = yes
-po_annex = no
-po_demand_provinces = yes
-po_release_country = yes
-po_release_vassal = yes
-po_return_cores = yes
-po_revoke_cores = no
-po_transfer_trade = yes
-po_humiliate = yes
-po_war_reparations = yes
-war_goal = superiority
-war_name = MONGOL_TRIBUTARY_WAR_NAME
+
+# --- Phase 1: the war to unify the steppe ------------------------
+cb_MR_steppe_unification = {
+	create_visible = {
+		always = no
+	}
+	create_enabled = {
+		always = no
+	}
+	additional_war_enthusiasm_attacker = 1
+	war_goal_type = MR_war_goal_steppe_unification
+	ai_will_do = {
+		add = {
+			desc = "BASE"
+			value = 100
+		}
+	}
 }
 
-mongol_imperial = {
-icon = cb_icon_imperial
-cost = 200
-diplomatic_cost = 10
-war_exhaustion = 0.10
-allowed_provinces_self = yes
-po_annex = no
-po_demand_provinces = yes
-po_demand_tributary = yes
-po_release_country = yes
-po_release_vassal = yes
-po_return_cores = yes
-po_revoke_cores = no
-po_transfer_trade = yes
-po_humiliate = yes
-po_war_reparations = yes
-war_goal = superiority
-war_name = MONGOL_IMPERIAL_WAR_NAME
-province_annex_cost = -0.25
-badboy_factor = 0.75
+
+# --- Phase 2: mastery of the Silk Road ---------------------------
+cb_MR_silk_road = {
+	create_visible = {
+		always = no
+	}
+	create_enabled = {
+		always = no
+	}
+	additional_war_enthusiasm_attacker = 1
+	war_goal_type = MR_war_goal_silk_road
+	ai_will_do = {
+		add = {
+			desc = "BASE"
+			value = 100
+		}
+	}
+}
+
+
+# --- Phase 3: the advance into the west --------------------------
+cb_MR_westward_advance = {
+	create_visible = {
+		always = no
+	}
+	create_enabled = {
+		always = no
+	}
+	additional_war_enthusiasm_attacker = 1
+	war_goal_type = MR_war_goal_westward_advance
+	ai_will_do = {
+		add = {
+			desc = "BASE"
+			value = 100
+		}
+	}
 }

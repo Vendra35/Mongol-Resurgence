@@ -1,0 +1,90 @@
+﻿# =================================================================
+# MONGOL RESURGENCE - WAR GOALS
+# =================================================================
+# These are what the mod's casus belli point at via war_goal_type.
+# The previous casus_belli file was written in EU4 format and had
+# no wargoals at all — EU4 encodes peace terms as po_* flags on the
+# CB itself, whereas EU5 splits them into a separate wargoal with
+# allowed_locations / allowed_subjugation scoping.
+#
+# Costs are cut so the AI can actually complete a railroad phase,
+# following PD's PD_war_goal_prussian_ambition.
+# =================================================================
+
+
+# --- Phase 1: unification of the steppe --------------------------
+# Deliberately narrow: this is a war for Mongolia, not a blank cheque.
+MR_war_goal_steppe_unification = {
+	type = superiority
+	attacker = {
+		conquer_cost = 1
+		subjugate_cost = 1
+		antagonism = 0.25
+		allowed_locations = {
+			scope:location.region = region:mongolia_region
+		}
+		allowed_subjugation = {
+			OR = {
+				scope:loser.capital.region = region:mongolia_region
+				scope:loser.capital.region = region:steppes_region
+			}
+		}
+	}
+	defender = {
+	}
+	ticking_war_score = 0.5
+}
+
+
+# --- Phase 2: the Silk Road corridor -----------------------------
+MR_war_goal_silk_road = {
+	type = superiority
+	attacker = {
+		conquer_cost = 1
+		subjugate_cost = 1
+		antagonism = 0.25
+		allowed_locations = {
+			OR = {
+				scope:location.region = region:steppes_region
+				scope:location.region = region:north_china_region
+				scope:location.region = region:persia_region
+			}
+		}
+		allowed_subjugation = {
+			OR = {
+				scope:loser.capital.region = region:steppes_region
+				scope:loser.capital.region = region:north_china_region
+				scope:loser.capital.region = region:persia_region
+			}
+		}
+	}
+	defender = {
+	}
+	ticking_war_score = 0.5
+}
+
+
+# --- Phase 3: the westward advance -------------------------------
+MR_war_goal_westward_advance = {
+	type = superiority
+	attacker = {
+		conquer_cost = 1
+		subjugate_cost = 1
+		antagonism = 0.25
+		allowed_locations = {
+			OR = {
+				scope:location.region = region:russian_region
+				scope:location.region = region:steppes_region
+			}
+		}
+		allowed_subjugation = {
+			OR = {
+				scope:loser.capital.region = region:russian_region
+				scope:loser.capital.region = region:steppes_region
+			}
+		}
+	}
+	defender = {
+	}
+	ticking_war_score = 0.5
+}

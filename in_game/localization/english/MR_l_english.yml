@@ -521,3 +521,12 @@
  mr_resurgence_map_tt: "#Y The Mongolian heartland.#! Whoever unites these pastures under one banner takes up the Chinggisid claim."
  mr_imperial_map_tt: "#Y The Silk Road corridor.#! The steppe, north China and Persia — mastery of the road between them is the making of the Pax Mongolica."
  mr_dominance_map_tt: "#Y The western frontier.#! Beyond it lie the Russian principalities, and the last road to a restored Mongol Empire."
+
+ # --- HISTORICAL CONTEXT BOXES (mr_history) ---
+ mr_history.1.historical_info: "The Yuan were driven from Dadu in 1368 by the Ming founder Zhu Yuanzhang. The court withdrew to the steppe and continued to claim the Mandate of Heaven for another two centuries as the Northern Yuan."
+ mr_history.2.historical_info: "Abu Sa'id Bahadur Khan died in 1335 without a successor. Within twenty years the Ilkhanate had dissolved into the Jalayirid, Chobanid, Muzaffarid and Sarbadar successor states."
+ mr_history.3.historical_info: "The Chagatai Khanate split in the 1340s. Transoxiana in the west Islamised and settled; Moghulistan in the east kept to nomadic tradition. It was from the western half that Timur emerged in 1370."
+ mr_history.5.historical_info: "Tokhtamysh reunited the White and Blue Hordes around 1380 with Timur's backing, then turned on his patron. Timur's campaigns of 1391 and 1395 broke the Golden Horde's power permanently."
+ mr_history.6.historical_info: "Timur sacked Delhi in December 1398. The Delhi Sultanate never fully recovered, and northern India fragmented for over a century afterwards."
+ mr_history.7.historical_info: "Under Esen Taishi the Oirats dominated the eastern steppe and, at Tumu in 1449, captured the Ming Zhengtong Emperor. Esen's claim to the khanate without Borjigin descent broke precedent, and after his death in 1455 the confederation collapsed."
+ mr_history.8.historical_info: "Babur lost Samarkand three times to the Uzbeks before turning south. He took Kabul in 1504 and, after Panipat in 1526, founded the Mughal Empire — the Timurid line reborn in India."
