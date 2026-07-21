@@ -1,4 +1,4 @@
-l_english:
+﻿l_english:
 
  # ==============================================================================
  # ----------------- SITUATION 1: MONGOL RESURGENCE -----------------
@@ -473,3 +473,165 @@ l_english:
  MGO_f: "Mongol Horde"
  MGO_f_desc: "A powerful confederation of Mongol tribes, united under a single khan. Though not yet an empire, its warrior traditions and steppe mobility make it a threat to all settled civilizations on its borders."
  mgo_horde: ""
+
+ # ==============================================================================
+ # ----------------- HISTORICAL DHE LAYER (mr_history) -----------------
+ # ==============================================================================
+
+ mr_history.1.title: "The Last Stand of the Yuan"
+ mr_history.1.desc: "The Mandate of Heaven slips from our grasp. Red Turban banners rise across the southern provinces, the granaries stand empty, and the Yellow River has broken its banks once more. Our ancestors rode from the steppe and took the greatest empire on earth in a single lifetime; their descendants now sit in Dadu counting the provinces they have lost this season.\n\nThe court speaks of restoration. The generals speak of retreat to the grasslands. Both may be right, and neither will save the dynasty."
+ mr_history.1.a: "China is lost. The steppe remains."
+
+ mr_history.2.title: "The Ilkhanate Fragments"
+ mr_history.2.desc: "Abu Sa'id died without an heir, and with him died the unity of Hulagu's realm. Every governor with a horse and a grievance now proclaims his own khan. Baghdad, which our grandfathers took at the cost of a caliphate, is a prize to be haggled over by men who could not have held a wing of the army a generation ago.\n\nThe Jalayirids press from one side, the Chobanids from the other, and Persia is carved up between them."
+ mr_history.2.a: "Hulagu's house has fallen."
+
+ mr_history.3.title: "The Chagatai Schism"
+ mr_history.3.desc: "The ulus splits along a line older than the Mongols themselves: the settled west against the nomadic east. In Transoxiana the emirs have taken to cities, to Islam, and to Persian scribes. In Moghulistan the clans still winter in tents and swear by the Eternal Blue Sky.\n\nEach half calls the other faithless. Both are right, by their own lights, and the choice before us will decide which half we belong to."
+ mr_history.3.a: "The faith of the cities. Let us take the Word."
+ mr_history.3.b: "The sky is our roof, as it was our fathers'."
+
+ mr_history.5.title: "Tokhtamysh and the Golden Horde"
+ mr_history.5.desc: "After a generation of murdered khans, the Jochid ulus has a master again. Tokhtamysh has reunited the White and Blue Hordes, and Sarai al-Jadid stirs with the traffic of a capital rather than the sullenness of a prize.\n\nBut the man who lifted him to the throne was Timur, and the debt is neither forgotten nor forgivable. There is not room on this steppe for both a Jochid restoration and a Chagatai conqueror."
+ mr_history.5.a: "The Horde is whole. Let Sarai be great again."
+ mr_history.5.b: "Timur will come. We will be ready for him."
+
+ mr_history.6.title: "The Looting of Delhi"
+ mr_history.6.desc: "The Sultanate's elephants broke on our lines, and the richest city in the world lay open before an army that had ridden across a subcontinent to reach it. For three days Delhi was emptied of everything that could be carried and many things that could not.\n\nThe masons and the stonecutters ride north with us in chains; Samarkand will be built from what Delhi lost. It will take the Sultanate a century to remember what it was."
+ mr_history.6.a: "Let the caravans north be heavy with it."
+
+ mr_history.7.title: "The Oirat Challenge"
+ mr_history.7.desc: "The western Mongols have never accepted that the Borjigin blood alone confers the right to rule. Now the Oirat confederation puts the question directly: descent from Chinggis, or the loyalty of those who can actually field horsemen?\n\nEsen and his kin have the second in abundance. Whoever answers this challenge will hold the steppe; whoever fails it will be remembered as the last of a line."
+ mr_history.7.a: "Let it be settled in the saddle."
+ mr_history.7.b: "There is a way to bind them that does not cost us an army."
+
+ mr_history.8.title: "The Mughal Precursor"
+ mr_history.8.desc: "A young Timurid prince has lost Samarkand for the third time, and with it any prospect of holding his inheritance in Transoxiana. The Uzbeks have taken what his great-great-grandfather built.\n\nBabur turns south instead, toward Kabul and the passes beyond. Men are already saying that a throne lost on the steppe may yet be found in Hindustan."
+ mr_history.8.a: "If not Samarkand, then somewhere greater."
+ mr_history.8.b: "Transoxiana is not lost while a Timurid lives."
+
+ # ==============================================================================
+ # ----------------- SITUATION HINTS & MAP TOOLTIPS -----------------
+ # ==============================================================================
+
+ hint_mongol_resurgence: "The Northern Yuan Resurgence"
+ hint_mongol_imperial: "The Pax Mongolica"
+ hint_mongol_dominance: "The Silk Empire"
+
+ mr_resurgence_map_tt: "#Y The Mongolian heartland.#! Whoever unites these pastures under one banner takes up the Chinggisid claim."
+ mr_imperial_map_tt: "#Y The Silk Road corridor.#! The steppe, north China and Persia — mastery of the road between them is the making of the Pax Mongolica."
+ mr_dominance_map_tt: "#Y The western frontier.#! Beyond it lie the Russian principalities, and the last road to a restored Mongol Empire."
+
+ # --- HISTORICAL CONTEXT BOXES (mr_history) ---
+ mr_history.1.historical_info: "The Yuan were driven from Dadu in 1368 by the Ming founder Zhu Yuanzhang. The court withdrew to the steppe and continued to claim the Mandate of Heaven for another two centuries as the Northern Yuan."
+ mr_history.2.historical_info: "Abu Sa'id Bahadur Khan died in 1335 without a successor. Within twenty years the Ilkhanate had dissolved into the Jalayirid, Chobanid, Muzaffarid and Sarbadar successor states."
+ mr_history.3.historical_info: "The Chagatai Khanate split in the 1340s. Transoxiana in the west Islamised and settled; Moghulistan in the east kept to nomadic tradition. It was from the western half that Timur emerged in 1370."
+ mr_history.5.historical_info: "Tokhtamysh reunited the White and Blue Hordes around 1380 with Timur's backing, then turned on his patron. Timur's campaigns of 1391 and 1395 broke the Golden Horde's power permanently."
+ mr_history.6.historical_info: "Timur sacked Delhi in December 1398. The Delhi Sultanate never fully recovered, and northern India fragmented for over a century afterwards."
+ mr_history.7.historical_info: "Under Esen Taishi the Oirats dominated the eastern steppe and, at Tumu in 1449, captured the Ming Zhengtong Emperor. Esen's claim to the khanate without Borjigin descent broke precedent, and after his death in 1455 the confederation collapsed."
+ mr_history.8.historical_info: "Babur lost Samarkand three times to the Uzbeks before turning south. He took Kabul in 1504 and, after Panipat in 1526, founded the Mughal Empire — the Timurid line reborn in India."
+
+ # ==============================================================================
+ # ----------------- LATE-STEPPE SITUATIONS (1600s) -----------------
+ # ==============================================================================
+
+ hint_mr_chahar: "Ligdan Khan and the Chahar"
+ hint_mr_torghut: "The Torghut Migration"
+ hint_mr_dzungar: "The Dzungar Khanate"
+
+ mr_chahar_map_tt: "#Y The Mongolian heartland.#! The last Chinggisid Great Khan is trying to bring these clans to heel by force."
+ mr_torghut_map_tt: "#Y The road west.#! From Dzungaria across the Urals to the Volga — the last great migration of the steppe."
+ mr_dzungar_map_tt: "#Y Dzungaria and the western steppe.#! The ground on which the last nomadic empire is being built."
+
+ # --- Ligdan Khan and the Chahar ---
+ mr_steppe.1.title: "The Last Great Khan"
+ mr_steppe.1.desc: "Ligdan Khan of the Chahar wears the seal of Chinggis and calls himself lord of all Mongols. Few of them agree.\n\nHe has the bloodline and the seal, and almost nothing else — the eastern clans drift toward the rising Manchu power in Mukden, and the western Oirats never accepted Borjigin supremacy in the first place. He intends to compel them all. The question is whether a claim can outlive the horsemen willing to enforce it."
+ mr_steppe.1.historical_info: "Ligdan Khan (r. 1604-1634) was the last Great Khan of the Mongols descended from Chinggis. His attempts to reunify the clans by force pushed most of them to ally with the Manchus instead. He died of smallpox fleeing west in 1634, and his son surrendered the imperial seal to Hong Taiji the following year."
+ mr_steppe.1.a: "The seal of Chinggis compels obedience."
+ mr_steppe.1.b: "A claim is worth what our riders can enforce."
+
+ mr_steppe.2.title: "The Emperor in a Tent"
+ mr_steppe.2.desc: "Word has come from the south that the Son of Heaven himself is a prisoner in a Mongol camp. The Ming court is paralysed, its generals discredited, its frontier garrisons leaderless.\n\nWhatever else is true of the settled empires, they are not invulnerable. Every chieftain who hesitated to ride with us has heard the same news."
+ mr_steppe.2.historical_info: "At Tumu in 1449 the Oirat leader Esen Taishi destroyed a Ming army and captured the Zhengtong Emperor. The Ming enthroned his brother rather than pay, and Esen eventually released the emperor for nothing."
+ mr_steppe.2.a: "Then the walls can be broken after all."
+
+ mr_steppe.3.title: "The Seal Changes Hands"
+ mr_steppe.3.desc: "The contest for the Mongolian heartland is settled. One banner now flies from the Kherlen to the Gobi, and the clans that spent a generation playing rivals against each other have run out of rivals to play.\n\nWhat that banner does next is the only question left on the steppe."
+ mr_steppe.3.historical_info: "In actual history the seal passed to the Manchus in 1635, and the Mongol imperial line ended. The Qing ruled the steppe for the next two and a half centuries."
+ mr_steppe.3.a: "The heartland is ours."
+
+ # --- The Torghut Migration ---
+ mr_steppe.10.title: "The Road West"
+ mr_steppe.10.desc: "The Torghut clans have had enough of Dzungaria. The pastures are contested, the Khoshut press from one side and the Choros from the other, and to the west there is a great river valley that no horde has held since Sarai fell.\n\nTheir chief speaks of loading the carts and not stopping until the grass changes. It is two thousand miles. It has been done before, in the other direction."
+ mr_steppe.10.historical_info: "Between 1616 and 1630 roughly 200,000 Torghut Kalmyks migrated from Dzungaria to the lower Volga, one of the last great steppe migrations. They established a khanate on Russia's southern flank that lasted until 1771, when most of them attempted the return journey."
+ mr_steppe.10.a: "Load the carts. We ride until the grass changes."
+ mr_steppe.10.b: "Let them go. The pastures will be quieter."
+
+ mr_steppe.11.title: "Across the Urals"
+ mr_steppe.11.desc: "The column has crossed the stone belt. Behind it lies Dzungaria and the quarrels it was leaving; ahead lie the salt steppes and, beyond them, the river.\n\nRussian outposts watch the passage and send riders north with the news. Nobody moves to stop it. Nobody is quite sure how."
+ mr_steppe.11.historical_info: "The migration route ran north of the Aral Sea and across the Kazakh steppe. The Kazakhs and Nogais resisted the passage; Russia, whose frontier forts were thin on the ground, mostly recorded it."
+ mr_steppe.11.a: "The stone belt is behind us."
+
+ mr_steppe.12.title: "Horsemen on the Volga"
+ mr_steppe.12.desc: "Our southern voivodes report a nation on the move — not a raid, not a war band, but carts, herds, women and children, tens of thousands of them, settling onto pasture we had begun to think of as ours.\n\nThey came from the east, as such things always do. The last time this happened the reckoning lasted two hundred and forty years."
+ mr_steppe.12.historical_info: "Russia ultimately accommodated the Kalmyks, granting them the Volga pastures in exchange for military service against the Crimean Tatars and Ottomans. Kalmyk cavalry fought in Russian armies through to the Napoleonic wars."
+ mr_steppe.12.a: "Raise the frontier levies. This will not be a second yoke."
+ mr_steppe.12.b: "Better such horsemen serving us than raiding us."
+
+ mr_steppe.13.title: "The Grass Has Changed"
+ mr_steppe.13.desc: "The carts have stopped. The herds are on the Volga pasture, the felt tents are up, and for the first time since Sarai burned there is a Mongol power camped on a European river.\n\nThe elders say the ancestors rode this way once and turned back at the wrong moment. This time nobody is turning back."
+ mr_steppe.13.historical_info: "The Kalmyk Khanate on the Volga endured from the 1630s to 1771. It was the westernmost Mongol state ever established, and the only one to survive into the modern era — their descendants remain in Kalmykia today, Europe's only Buddhist-majority region."
+ mr_steppe.13.a: "Pitch the tents. We are home."
+
+ # --- The Dzungar Khanate ---
+ mr_steppe.20.title: "The Choros Ascendant"
+ mr_steppe.20.desc: "With the Torghuts gone west and the Khoshut drawn south into Tibet, the Choros are left holding Dzungaria alone — and find that they prefer it.\n\nErdeni Batur is building something the steppe has not seen in three centuries: a khanate with fixed towns, cast cannon, a written code of law, and a standing army that does not disperse after the campaigning season."
+ mr_steppe.20.historical_info: "Erdeni Batur founded the Dzungar Khanate around 1634 and convened the 1640 assembly that produced the Mongol-Oirat Code. The Dzungars were the last nomadic empire to seriously threaten a settled great power, holding out against the Qing until their destruction in 1755-58."
+ mr_steppe.20.a: "The last horde will not be a horde at all."
+
+ mr_steppe.21.title: "Cannon on the Steppe"
+ mr_steppe.21.desc: "The foundries at Kobdo are casting guns, and Swedish and Russian deserters are teaching our smiths to bore them true. The Tarim oases pay grain, the caravan routes pay silver, and both together pay for powder.\n\nOur ancestors won with the bow because nothing on earth could answer it. That advantage is gone. This one we had to build."
+ mr_steppe.21.historical_info: "The Dzungars manufactured their own gunpowder weapons, aided by a captured Swedish artilleryman, Johan Gustaf Renat. They were the only steppe power ever to industrialise its own firearms production."
+ mr_steppe.21.a: "Let the foundries run day and night."
+
+ mr_steppe.22.title: "The Last Steppe Empire"
+ mr_steppe.22.desc: "From the Tarim to the western steppe, one authority holds — with laws written down, taxes counted, garrisons that stay put, and artillery that answers artillery.\n\nThe age of the horse archer is over everywhere. Here, alone, the steppe has survived its ending by becoming something else."
+ mr_steppe.22.historical_info: "At its height the Dzungar Khanate controlled Dzungaria, the Tarim Basin, and much of the Kazakh steppe. Its destruction by the Qianlong Emperor in 1755-58 was so complete that historians describe it as genocide, and it marked the definitive end of nomadic power in Eurasia."
+ mr_steppe.22.a: "The steppe endures, in a new shape."
+
+ # ==============================================================================
+ # ----------------- CASUS BELLI & WAR GOALS -----------------
+ # ==============================================================================
+
+ cb_MR_steppe_unification: "Unification of the Steppe"
+ cb_MR_steppe_unification_desc: "The clans of the steppe answer to one banner or to none. Whoever holds the Chinggisid claim has the right to compel the rest."
+ cb_MR_silk_road: "Mastery of the Silk Road"
+ cb_MR_silk_road_desc: "The road from the Ordos to Persia has paid tribute to the horde before, and will again. The cities along it are ours to take."
+ cb_MR_westward_advance: "The Westward Advance"
+ cb_MR_westward_advance_desc: "The Russian principalities paid tribute for two hundred and forty years. Their independence is a recent accident, and a reversible one."
+
+ MR_war_goal_steppe_unification: "Unify the Steppe"
+ MR_war_goal_silk_road: "Seize the Silk Road"
+ MR_war_goal_westward_advance: "Advance into the West"
+
+ # ==============================================================================
+ # ----------------- PHASE MODIFIERS -----------------
+ # ==============================================================================
+
+ MR_mongol_warrior_spirit: "Warrior Spirit of the Steppe"
+ MR_unified_mongol_banner: "The Unified Mongol Banner"
+ MR_shattered_horde_ai: "Shattered Horde"
+ MR_shattered_horde_player: "Shattered Horde"
+ MR_imperial_conquest: "Imperial Conquest"
+ MR_empire_fulfilled: "The Empire Fulfilled"
+ MR_imperial_failure_ai: "The Campaign Broken"
+ MR_imperial_failure_player: "The Campaign Broken"
+ MR_mongol_preparing_for_conquest: "Preparing for Conquest"
+ MR_the_sleeping_horde: "The Sleeping Horde"
+ MR_pax_mongolica: "Pax Mongolica"
+ MR_mongol_world_order: "The Mongol World Order"
+ MR_dominance_failure_ai: "The Empire Undone"
+ MR_dominance_failure_player: "The Empire Undone"
+ MR_mongol_historical_modifier: "The Historical Steppe"
+ MR_imperial_historical_modifier: "The Historical Road"
+ MR_dominance_historical_modifier: "The Historical Empire"

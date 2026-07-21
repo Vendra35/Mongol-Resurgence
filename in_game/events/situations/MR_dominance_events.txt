@@ -1,0 +1,648 @@
+﻿namespace = mr_dominance
+
+# =================================================================
+# MONGOL RESURGENCE - SITUATION LIFECYCLE
+# =================================================================
+# The spine of the railroad. Every event here is fired deliberately
+# by a situation (on_start / on_monthly / on_ended) or by another
+# event, via trigger_event_non_silently — never by a date window.
+# They therefore carry no dynamic_historical_event block, and no
+# trigger of their own beyond option-level gating.
+#
+# WIRING: the three situation files still need rebuilding against
+# the real EU5 field set before these are actually called. Until
+# then these events are defined but unreferenced.
+#
+#   10       situation opens
+#   100-105  Phase 1 beats, 107 the Phase 1 setback
+#   1 / 2    Phase 1 resolution: unified / still divided
+#   120-125  Phase 2 beats, 127 the Phase 2 setback
+#   130-132  Phase 3 beats, 133 the Phase 3 collapse
+#   998/999  hidden bookkeeping, no player-facing text beyond .a
+# =================================================================
+
+
+# --- The Eagle of the Steppe: the situation opens ----------------
+mr_dominance.10 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.10.title
+	desc = mr_dominance.10.desc
+	outcome = neutral
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = armed
+		10 = exterior
+	}
+
+	option = {
+		name = mr_dominance.10.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_mild_bonus
+	}
+}
+
+
+# =========================== PHASE 1 =============================
+# 1368-1420: the unification of Mongolia.
+
+# --- Gathering the Horde ----------------------------------------
+mr_dominance.100 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.100.title
+	desc = mr_dominance.100.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = exterior
+	}
+
+	option = {
+		name = mr_dominance.100.a
+		ai_chance = { factor = 100 }
+		add_army_tradition = army_tradition_mild_bonus
+	}
+}
+
+# --- The Steppe Stirs -------------------------------------------
+mr_dominance.101 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.101.title
+	desc = mr_dominance.101.desc
+	outcome = neutral
+	fire_only_once = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+
+	option = {
+		name = mr_dominance.101.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_weak_bonus
+	}
+}
+
+# --- The Shadow of the Khan -------------------------------------
+mr_dominance.102 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.102.title
+	desc = mr_dominance.102.desc
+	outcome = neutral
+	fire_only_once = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+
+	option = {
+		name = mr_dominance.102.a
+		ai_chance = { factor = 100 }
+		add_government_power = government_power_mild_bonus
+	}
+}
+
+# --- The Thunder of Hooves --------------------------------------
+# The branch point of Phase 1: press the unification by force, or
+# consolidate what has already been gathered.
+mr_dominance.103 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.103.title
+	desc = mr_dominance.103.desc
+	outcome = neutral
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = exterior
+	}
+
+	option = {
+		name = mr_dominance.103.a
+		ai_chance = { factor = 70 }
+		add_army_tradition = army_tradition_severe_bonus
+	}
+
+	option = {
+		name = mr_dominance.103.b
+		ai_chance = { factor = 30 }
+		add_government_power = government_power_mild_bonus
+		add_prestige = prestige_weak_bonus
+	}
+}
+
+# --- A New Khan Rises -------------------------------------------
+mr_dominance.104 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.104.title
+	desc = mr_dominance.104.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = interior
+		10 = happy
+	}
+
+	option = {
+		name = mr_dominance.104.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_severe_bonus
+	}
+}
+
+# --- Victory on the Steppe --------------------------------------
+mr_dominance.105 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.105.title
+	desc = mr_dominance.105.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = happy
+	}
+
+	option = {
+		name = mr_dominance.105.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_severe_bonus
+		add_country_modifier = {
+			modifier = MR_unified_mongol_banner
+			years = -1
+			mode = replace
+		}
+	}
+}
+
+# --- Scattered to the Winds: the Phase 1 setback ----------------
+mr_dominance.107 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.107.title
+	desc = mr_dominance.107.desc
+	outcome = negative
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = angry
+	}
+
+	option = {
+		name = mr_dominance.107.a
+		ai_chance = { factor = 100 }
+		if = {
+			limit = { is_ai = yes }
+			add_country_modifier = {
+				modifier = MR_shattered_horde_ai
+				years = 25
+				mode = add_and_extend
+			}
+		}
+		else = {
+			add_country_modifier = {
+				modifier = MR_shattered_horde_player
+				years = 25
+				mode = add_and_extend
+			}
+		}
+		add_prestige = prestige_mild_penalty
+	}
+}
+
+
+# --- Phase 1 resolution: the steppe is unified -------------------
+mr_dominance.1 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.1.title
+	desc = mr_dominance.1.desc
+	outcome = positive
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = armed
+		10 = happy
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_global_variable = {
+				name = mr_phase_one_complete
+				value = yes
+			}
+		}
+	}
+
+	option = {
+		name = mr_dominance.1.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_extreme_bonus
+		add_country_modifier = {
+			modifier = MR_unified_mongol_banner
+			years = -1
+			mode = replace
+		}
+	}
+}
+
+# --- Phase 1 resolution: the steppe stays divided ----------------
+mr_dominance.2 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.2.title
+	desc = mr_dominance.2.desc
+	outcome = negative
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = exterior
+		10 = angry
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_global_variable = {
+				name = mr_railroad_failed
+				value = yes
+			}
+		}
+	}
+
+	option = {
+		name = mr_dominance.2.a
+		ai_chance = { factor = 100 }
+		if = {
+			limit = { is_ai = yes }
+			add_country_modifier = {
+				modifier = MR_shattered_horde_ai
+				years = 25
+				mode = add_and_extend
+			}
+		}
+		else = {
+			add_country_modifier = {
+				modifier = MR_shattered_horde_player
+				years = 25
+				mode = add_and_extend
+			}
+		}
+		add_prestige = prestige_severe_penalty
+	}
+}
+
+
+# =========================== PHASE 2 =============================
+# 1420-1550: dominance over the Silk Road, hegemony against the Ming.
+
+# --- Beyond the Steppe ------------------------------------------
+mr_dominance.120 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.120.title
+	desc = mr_dominance.120.desc
+	outcome = neutral
+	fire_only_once = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+
+	option = {
+		name = mr_dominance.120.a
+		ai_chance = { factor = 100 }
+		add_cultural_influence = cultural_influence_mild_bonus
+	}
+}
+
+# --- The Mongol Awakening ---------------------------------------
+mr_dominance.121 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.121.title
+	desc = mr_dominance.121.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = exterior
+	}
+
+	option = {
+		name = mr_dominance.121.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_mild_bonus
+	}
+}
+
+# --- The Horde at the Gates -------------------------------------
+mr_dominance.122 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.122.title
+	desc = mr_dominance.122.desc
+	outcome = neutral
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = exterior
+	}
+
+	option = {
+		name = mr_dominance.122.a
+		ai_chance = { factor = 100 }
+		add_army_tradition = army_tradition_mild_bonus
+	}
+}
+
+# --- The Great Invasion -----------------------------------------
+# Phase 2 branch point: commit to the invasion, or consolidate.
+mr_dominance.123 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.123.title
+	desc = mr_dominance.123.desc
+	outcome = neutral
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = armed
+		10 = exterior
+	}
+
+	option = {
+		name = mr_dominance.123.a
+		ai_chance = { factor = 70 }
+		add_army_tradition = army_tradition_severe_bonus
+	}
+
+	option = {
+		name = mr_dominance.123.b
+		ai_chance = { factor = 30 }
+		add_government_power = government_power_mild_bonus
+		add_prestige = prestige_weak_bonus
+	}
+}
+
+# --- The Empire Rises -------------------------------------------
+mr_dominance.124 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.124.title
+	desc = mr_dominance.124.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = interior
+		10 = happy
+	}
+
+	option = {
+		name = mr_dominance.124.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_severe_bonus
+	}
+}
+
+# --- The Mongol Tide --------------------------------------------
+mr_dominance.125 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.125.title
+	desc = mr_dominance.125.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = happy
+	}
+
+	option = {
+		name = mr_dominance.125.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_severe_bonus
+		add_country_modifier = {
+			modifier = MR_empire_fulfilled
+			years = -1
+			mode = replace
+		}
+	}
+}
+
+# --- The Tide Recedes: the Phase 2 setback ----------------------
+mr_dominance.127 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.127.title
+	desc = mr_dominance.127.desc
+	outcome = negative
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = angry
+	}
+
+	option = {
+		name = mr_dominance.127.a
+		ai_chance = { factor = 100 }
+		if = {
+			limit = { is_ai = yes }
+			add_country_modifier = {
+				modifier = MR_imperial_failure_ai
+				years = 25
+				mode = add_and_extend
+			}
+		}
+		else = {
+			add_country_modifier = {
+				modifier = MR_imperial_failure_player
+				years = 25
+				mode = add_and_extend
+			}
+		}
+		add_prestige = prestige_mild_penalty
+	}
+}
+
+
+# =========================== PHASE 3 =============================
+# 1550-1650: the westward advance and the final empire.
+
+# --- The Mongol Age ---------------------------------------------
+mr_dominance.130 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.130.title
+	desc = mr_dominance.130.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = interior
+		10 = happy
+	}
+
+	option = {
+		name = mr_dominance.130.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_severe_bonus
+	}
+}
+
+# --- The New World Order ----------------------------------------
+mr_dominance.131 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.131.title
+	desc = mr_dominance.131.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+
+	option = {
+		name = mr_dominance.131.a
+		ai_chance = { factor = 100 }
+		add_government_power = government_power_severe_bonus
+	}
+}
+
+# --- The Eternal Empire: the railroad completed -----------------
+mr_dominance.132 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.132.title
+	desc = mr_dominance.132.desc
+	outcome = positive
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = happy
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_global_variable = {
+				name = mr_railroad_complete
+				value = yes
+			}
+		}
+	}
+
+	option = {
+		name = mr_dominance.132.a
+		ai_chance = { factor = 100 }
+		add_prestige = prestige_ultimate_bonus
+		add_country_modifier = {
+			modifier = MR_mongol_world_order
+			years = -1
+			mode = replace
+		}
+	}
+}
+
+# --- The Empire Crumbles: the Phase 3 collapse ------------------
+mr_dominance.133 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.133.title
+	desc = mr_dominance.133.desc
+	outcome = negative
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = angry
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_global_variable = {
+				name = mr_railroad_failed
+				value = yes
+			}
+		}
+	}
+
+	option = {
+		name = mr_dominance.133.a
+		ai_chance = { factor = 100 }
+		if = {
+			limit = { is_ai = yes }
+			add_country_modifier = {
+				modifier = MR_dominance_failure_ai
+				years = 25
+				mode = add_and_extend
+			}
+		}
+		else = {
+			add_country_modifier = {
+				modifier = MR_dominance_failure_player
+				years = 25
+				mode = add_and_extend
+			}
+		}
+		add_prestige = prestige_extreme_penalty
+	}
+}
+
+
+# ====================== HIDDEN BOOKKEEPING =======================
+# Only .a localisation exists for these two, which is consistent
+# with them never being shown: they carry no title or desc.
+
+# --- Birth failsafe bookkeeping ---------------------------------
+mr_dominance.998 = {
+	type = country_event
+	category = situation_event
+	hidden = yes
+
+	immediate = {
+		set_global_variable = {
+			name = mr_birth_failsafe_fired
+			value = yes
+		}
+	}
+
+	option = {
+		name = mr_dominance.998.a
+	}
+}
+
+# --- Completion failsafe ---
+# The territory transfer itself happens in the situation's on_monthly
+# (that is where the location scopes are available). This event gives
+# the claimant the means to hold what it was just handed, and records
+# that the failsafe fired. Hidden, so the AI resolves it silently.
+mr_dominance.999 = {
+	type = country_event
+	category = situation_event
+	hidden = yes
+
+	immediate = {
+		set_global_variable = {
+			name = mr_completion_failsafe_fired
+			value = yes
+		}
+		add_army_tradition = army_tradition_severe_bonus
+		add_government_power = government_power_ultimate_bonus
+		add_country_modifier = {
+			modifier = MR_mongol_preparing_for_conquest
+			years = 25
+			mode = add_and_extend
+		}
+	}
+
+	option = {
+		name = mr_dominance.999.a
+	}
+}
+

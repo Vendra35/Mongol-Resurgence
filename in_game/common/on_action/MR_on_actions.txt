@@ -1,0 +1,51 @@
+﻿# =================================================================
+# MONGOL RESURGENCE - ON ACTIONS
+# =================================================================
+# The situations now own their own lifecycle: can_start opens them,
+# on_monthly drives the beats, can_end closes them. So this file no
+# longer needs to hand-fire the phase events — that duplication was
+# what produced the dangling trigger_event calls.
+#
+# What remains is the DHE registration hook, following PD's shape:
+# a real vanilla pulse delegates to our own named on_action, which
+# carries the trigger and the event list.
+#
+# Corrections from the previous version:
+#   on_yearly_pulse   -> yearly_country_pulse   (the real hook)
+#   on_country_formed -> does not exist; dropped
+#   trigger_event     -> trigger_event_non_silently / _silently
+# =================================================================
+
+yearly_country_pulse = {
+	on_actions = {
+		mr_steppe_yearly_pulse
+	}
+}
+
+# Keeps the horde's own flavour ticking for whoever currently holds
+# the Chinggisid claim. The DHE layer handles its own date windows
+# via dynamic_historical_event, so this only needs to cover the
+# claim-holder's ongoing state.
+mr_steppe_yearly_pulse = {
+	trigger = {
+		NOT = { has_game_rule = mr_railroad_off }
+		OR = {
+			this = c:MGO
+			this = c:MGE
+			AND = {
+				culture = { has_culture_group = culture_group:mongolian_group }
+				government_type = government_type:steppe_horde
+			}
+		}
+	}
+	effect = {
+		# Record that a Chinggisid claimant is active, so the
+		# situations' can_start triggers have something to read.
+		if = {
+			limit = {
+				NOT = { has_global_variable = mr_claimant_present }
+			}
+			set_global_variable = mr_claimant_present
+		}
+	}
+}

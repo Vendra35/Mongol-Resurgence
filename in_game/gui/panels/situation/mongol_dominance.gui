@@ -1,4 +1,4 @@
-situation_panel = {
+﻿situation_panel = {
 
     ##################################### TOP HEADER (SINGLE PORTRAIT - THE DOMINANT EMPIRE) #####################################
     blockoverride "situation_panel_image" {
@@ -32,7 +32,7 @@ situation_panel = {
             margin_top = -10
             spacing = 8
 
-            # 1. KART: DURUM AÇIKLAMASI
+            # CARD 1: SITUATION DESCRIPTION
             situation_card_expandable = {
                 blockoverride "header_button_onclick" {
                     onclick = "[LateralView.Vars.Toggle( 'mr_dominance_desc_toggled' )]"
@@ -64,7 +64,7 @@ situation_panel = {
                 }
             }
 
-            # 2. KART: HEDEFLER LİSTESİ
+            # CARD 2: OBJECTIVES LIST
             situation_card_expandable = {
                 blockoverride "header_button_onclick" {
                     onclick = "[LateralView.Vars.Toggle( 'mr_dominance_req_toggled' )]"
@@ -92,7 +92,7 @@ situation_panel = {
                 }
             }
 
-            # 3. KART: SKOR VE İLERLEME
+            # CARD 3: SCORE AND PROGRESS
             situation_card_expandable = {
                 blockoverride "header_button_onclick" {
                     onclick = "[LateralView.Vars.Toggle( 'mr_dominance_score_toggled' )]"
@@ -135,7 +135,7 @@ situation_panel = {
                 }
             }
 
-            # Alttaki boşluğu sıfırlayan kod
+            # Zeroes out the gap below
             expand = {} 
         }
     }

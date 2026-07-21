@@ -1,36 +1,64 @@
-## 2. Mod Tasarımı — Ne Yapmaya Çalışıyoruz
+## 2. Mod Design — What We Are Trying To Build
 
-### Konsept
-"1368'de Yuan Hanedanı Çin'den kovulduğunda (Kuzey Yuan), Moğol boyları gerçekten birleşseydi ve batıya doğru yeni bir fetih dalgası başlatsaydı?" sorusuna cevap veren, tarihsel zemine bağlı bir alternatif tarih senaryosu.
+### Concept
+An alternate-history scenario, anchored to real history, answering the question:
+"When the Yuan dynasty was driven out of China in 1368 (the Northern Yuan), what if
+the Mongol tribes had genuinely reunified and launched a new wave of conquest westward?"
 
-### 3 Situation (İngilizce isimlerle)
-1. **"The Northern Yuan Resurgence"** (~1368-1420) — Moğolistan'ın birleşmesi.
-2. **"The Pax Mongolica"** (~1420-1550) — İpek Yolu'na hakimiyet, Ming ile hegemonya savaşı.
-3. **"The Silk Empire"** (~1550-1650) — Rusya'ya karşı batıya ilerleme, final formable.
+### The 3 Situations
+1. **"The Northern Yuan Resurgence"** (~1368–1420) — the unification of Mongolia.
+2. **"The Pax Mongolica"** (~1420–1550) — dominance over the Silk Road, a war for
+   hegemony against the Ming.
+3. **"The Silk Empire"** (~1550–1650) — westward advance against Russia, the final formable.
 
-### Tag'ler — DİKKAT: Bunlar wiki'den bulundu ama tekrar teyit gerekiyor (çelişkili bilgi geçmişi var)
-| Konsept | Tag (iddia edilen) | Durum |
-|---------|---------------------|-------|
-| Yuan | CHI (ayrıca YUA diye ayrı bir versiyon da olabilir, netleştir) | Belirsiz, teyit et |
-| Chagatai | CHG | Wiki'den teyitli deniyor |
-| Ilkhanate | Tek tag değil — HLG (Hüleguids) + İlhanan diye bir International Organization | Wiki'den teyitli deniyor |
-| Golden Horde (Jochi) | GLH | Teyitli |
-| Oirat | OIR | Teyitli |
-| **Mongolia** (Situation 1'in doğuş hedefi) | **MGO** — tier 3 formable | ⚠️ Bir noktada "MGE" ile karıştırıldı, sonra düzeltildi. `00_formable_countries.txt` için önceki AI'lar (DeepSeek/Cline) oluşturmuştu bu dosyayı Mongol modum için ama yapmamıza/oluşturmamıza gerek yok çünkü zaten MGO_f Mongolia formable'ı zaten vanillada oyun dosyalarında var üstüne bi daha yazmamıza gerek yok. Prussian Destiny modunda `00_formable_countries.txt` klasörü var çünkü NGC yani North German Confederation vanillada yok ondan yeni oluşturmuştum o modumda. |
-| **Mongol Empire** (Situation 3'ün final formable'ı) | **MGE** — tier 4 formable. | ⚠️ Bir noktada bu "Moghulistan" ile karıştırıldı. Sen bağımsız olarak tekrar doğrula. |
+### Tags — WARNING: these came from the wiki but need re-confirmation (there is a history of contradictory information)
 
-**Bu tag tablosunu ilk iş olarak, sıfırdan, kendi bağımsız araştırmanla doğrula.** Önceki AI'ların (DeepSeek/Cline) birbiriyle çelişen iddiaları var, onlara güvenme.
+| Concept | Tag (claimed) | Status |
+|---------|---------------|--------|
+| Yuan | CHI (there may also be a separate version called YUA — clarify) | Uncertain, confirm |
+| Chagatai | CHG | Said to be wiki-confirmed |
+| Ilkhanate | Not a single tag — HLG (Hulaguids) + an International Organization called the Ilkhanate | Said to be wiki-confirmed |
+| Golden Horde (Jochi) | GLH | Confirmed |
+| Oirat | OIR | Confirmed |
+| **Mongolia** (the birth target of Situation 1) | **MGO** — tier 3 formable | ⚠️ At one point confused with "MGE", then corrected. The previous AIs (DeepSeek/Cline) created a `00_formable_countries.txt` for my Mongol mod, but we do not need to — the MGO_f Mongolia formable already exists in the vanilla game files, so there is no need to overwrite it. The Prussian Destiny mod has a `00_formable_countries.txt` because NGC, the North German Confederation, does not exist in vanilla, so I created it there. |
+| **Mongol Empire** (the final formable of Situation 3) | **MGE** — tier 4 formable | ⚠️ At one point this was confused with "Moghulistan". Verify it independently yourself. |
 
-### Mimari Prensip: Dinamik Doğuş (Sabit Tag Yok)
-1337-1368 arası Asya bozkırı çok kaotik olduğu için (Brandenburg/Teutonic Order'ın HRE içinde güvenle hayatta kalmasının aksine), Situation 1'in aktörü **sabit bir tag'e değil, dinamik bir trigger'a** bağlı:
+**Verify this tag table from scratch, independently, as the very first task.** The
+previous AIs (DeepSeek/Cline) made claims that contradict each other — do not trust them.
 
-- Vanilla'daki **Timur emergence event'ini** (`flavor_tim.8`, Çağatay'dan Timur'u "doğuran" event) referans al.
-- Trigger mantığı: "Kim Karakurum'a sahipse + steppe horde hükümetindeyse + Moğol kültür grubundaysa" → o ülke `create_country_from_cores_in_our_locations` ile MGO'ya dönüşüyor ya da direk dönüştüremezsek `form_country = formable_country:MGO_f` çalıştırılıyor (Prussian Destiny'deki `form_country = formable_country:PRU_f` pattern'inin aynısı).
+> **Verification status (2026-07-21):** `MGO_f` and `MGE_f` are both confirmed to
+> exist as vanilla formables, and MGO correctly has no starting country entry. The
+> Yuan (CHI vs YUA) and Ilkhanate (HLG + International Organization) questions remain
+> open. See `AUDIT-2026-07-21.md`.
 
-### İki Katmanlı Failsafe Sistemi
-**(a) Doğuş failsafe'i — sadece Situation 1'de:** Eğer ~1370'e kadar (1368'den kısa süre sonra) hiçbir ülke organik olarak trigger şartlarını sağlamazsa, bölgedeki en uygun adayı (en çok Moğolistan/Gobi bölgesi toprağına sahip, steppe horde + Moğol kültürlü ülke) zorla MGO'ya dönüştür.
+### Architectural Principle: Dynamic Birth (No Fixed Tag)
+Because the Asian steppe between 1337 and 1368 is so chaotic — unlike Brandenburg or
+the Teutonic Order, which survive safely inside the HRE — the actor in Situation 1 is
+bound **not to a fixed tag but to a dynamic trigger**:
 
-**(b) Tamamlama failsafe'i — her 3 situation'da da:** Prussian Destiny'deki `PD_brandenburg_rise_auto_conquest_yes/PD_the_prussian_ascension_auto_conquest_yes` mantığının **aynısı**: her situation'ın bitiş tarihinden **5 yıl önce**, hedefler sağlanmamışsa AI'a bedava toprak/vassal/savaş zaferi vererek o son 5 yılda zorla tamamlat. (Prusya modunda bu 1495/1632 gibi tarihlerde uygulanmıştı, aynı 5 yıllık buffer mantığını kullan.)
+- Use vanilla's **Timur emergence event** (`flavor_tim.8`, the event that "births"
+  Timur out of Chagatai) as the reference.
+- Trigger logic: "whoever holds Karakorum + has a steppe horde government + belongs to
+  the Mongol culture group" → that country becomes MGO via
+  `create_country_from_cores_in_our_locations`, or if we cannot convert directly,
+  `form_country = formable_country:MGO_f` is run (exactly the same pattern as
+  Prussian Destiny's `form_country = formable_country:PRU_f`).
 
-### Dil Kuralı
-**Modun tamamı İngilizce.** Situation isimleri, event başlıkları/açıklamaları, decision isimleri, localisation metinleri, kod içi yorumlar dahil her şey İngilizce. Namespace: `mongol_resurgence`, Prussian Destiny'deki `the_prussian_destiny`/`PD` pattern'ine paralel bir isimlendirme kullan.
+### Two-Layer Failsafe System
+**(a) Birth failsafe — Situation 1 only:** if no country organically satisfies the
+trigger conditions by roughly 1370 (shortly after 1368), forcibly convert the most
+suitable candidate in the region — the country holding the most Mongolia/Gobi
+territory, with a steppe horde government and Mongol culture — into MGO.
+
+**(b) Completion failsafe — in all three situations:** exactly the same logic as
+Prussian Destiny's `PD_brandenburg_rise_auto_conquest_yes` /
+`PD_the_prussian_ascension_auto_conquest_yes`: **5 years before** each situation's end
+date, if the objectives have not been met, force completion during those final 5 years
+by handing the AI free territory, vassals or war victories. (In the Prussia mod this
+was applied at dates like 1495/1632 — use the same 5-year buffer logic.)
+
+### Language Rule
+**The entire mod is in English.** Situation names, event titles and descriptions,
+decision names, localisation text and in-code comments — everything in English.
+Namespace: `mongol_resurgence`, using a naming scheme parallel to Prussian Destiny's
+`the_prussian_destiny` / `PD` pattern.
