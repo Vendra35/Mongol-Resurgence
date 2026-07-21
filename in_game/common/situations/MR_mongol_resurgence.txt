@@ -39,6 +39,39 @@ mongol_resurgence = {
 			value = 0
 		}
 
+		# The .gui panel reads these two off the situation scope to
+		# draw its dual-portrait header. Without them it renders blank.
+		random_country = {
+			limit = {
+				culture = { has_culture_group = culture_group:mongolian_group }
+				government_type = government_type:steppe_horde
+				any_owned_location = { region = region:mongolia_region }
+			}
+			save_scope_as = mr_first_claimant
+		}
+		if = {
+			limit = { exists = scope:mr_first_claimant }
+			set_variable = {
+				name = mr_leading_country
+				value = scope:mr_first_claimant
+			}
+		}
+		random_country = {
+			limit = {
+				culture = { has_culture_group = culture_group:mongolian_group }
+				government_type = government_type:steppe_horde
+				NOT = { this = scope:mr_first_claimant }
+			}
+			save_scope_as = mr_first_rival
+		}
+		if = {
+			limit = { exists = scope:mr_first_rival }
+			set_variable = {
+				name = mr_rival_country
+				value = scope:mr_first_rival
+			}
+		}
+
 		# The opening event goes to every steppe power with a stake.
 		every_country = {
 			limit = {
@@ -46,6 +79,21 @@ mongol_resurgence = {
 				government_type = government_type:steppe_horde
 			}
 			trigger_event_non_silently = mr_dominance.10
+
+			# The CB is granted by the situation rather than picked from
+			# the diplomacy screen — cb_MR_* are create_enabled = no.
+			every_country = {
+				limit = {
+					culture = { has_culture_group = culture_group:mongolian_group }
+					government_type = government_type:steppe_horde
+					NOT = { this = prev }
+				}
+				add_casus_belli = {
+					target = prev
+					type = casus_belli:cb_MR_steppe_unification
+					years = 25
+				}
+			}
 		}
 	}
 

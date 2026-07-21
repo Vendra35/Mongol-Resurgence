@@ -40,7 +40,7 @@
             margin_top = -10
             spacing = 8
 
-            # 1. KART: DURUM AÇIKLAMASI
+            # CARD 1: SITUATION DESCRIPTION
             situation_card_expandable = {
                 blockoverride "header_button_onclick" {
                     onclick = "[LateralView.Vars.Toggle( 'mr_resurgence_desc_toggled' )]"
@@ -72,7 +72,7 @@
                 }
             }
 
-            # 2. KART: HEDEFLER LİSTESİ
+            # CARD 2: OBJECTIVES LIST
             situation_card_expandable = {
                 blockoverride "header_button_onclick" {
                     onclick = "[LateralView.Vars.Toggle( 'mr_resurgence_req_toggled' )]"
@@ -100,7 +100,7 @@
                 }
             }
 
-            # 3. KART: LİDER KARŞILAŞTIRMA KARTI
+            # CARD 3: LEADER COMPARISON CARD
             situation_fancy_two_line_card = {
                 block "card_datacontext" { }
                 
@@ -177,7 +177,7 @@
                 }
             }
 
-            # Alttaki boşluğu sıfırlayan kod
+            # Zeroes out the gap below
             expand = {} 
         }
     }

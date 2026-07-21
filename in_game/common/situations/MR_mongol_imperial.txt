@@ -32,6 +32,32 @@ mongol_imperial = {
 			value = 0
 		}
 
+		# Values the .gui panel reads off the situation scope.
+		if = {
+			limit = { country_exists = c:MGO }
+			set_variable = {
+				name = mr_leading_country
+				value = c:MGO
+			}
+		}
+		random_country = {
+			limit = {
+				any_owned_location = { region = region:north_china_region }
+				NOR = {
+					this = c:MGO
+					this = c:MGE
+				}
+			}
+			save_scope_as = mr_theatre_rival
+		}
+		if = {
+			limit = { exists = scope:mr_theatre_rival }
+			set_variable = {
+				name = mr_rival_country
+				value = scope:mr_theatre_rival
+			}
+		}
+
 		if = {
 			limit = {
 				country_exists = c:MGO
@@ -39,6 +65,25 @@ mongol_imperial = {
 			c:MGO = {
 				trigger_event_non_silently = mr_dominance.120
 				trigger_event_non_silently = mr_imperial.100
+
+				every_country = {
+					limit = {
+						OR = {
+							any_owned_location = { region = region:north_china_region }
+							any_owned_location = { region = region:steppes_region }
+							any_owned_location = { region = region:persia_region }
+						}
+						NOT = { this = c:MGO }
+					}
+					save_scope_as = mr_silk_road_target
+					c:MGO = {
+						add_casus_belli = {
+							target = scope:mr_silk_road_target
+							type = casus_belli:cb_MR_silk_road
+							years = 50
+						}
+					}
+				}
 			}
 		}
 	}

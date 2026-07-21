@@ -31,6 +31,32 @@ mongol_dominance = {
 			value = 0
 		}
 
+		# Values the .gui panel reads off the situation scope.
+		if = {
+			limit = { country_exists = c:MGO }
+			set_variable = {
+				name = mr_leading_country
+				value = c:MGO
+			}
+		}
+		random_country = {
+			limit = {
+				any_owned_location = { region = region:russian_region }
+				NOR = {
+					this = c:MGO
+					this = c:MGE
+				}
+			}
+			save_scope_as = mr_theatre_rival
+		}
+		if = {
+			limit = { exists = scope:mr_theatre_rival }
+			set_variable = {
+				name = mr_rival_country
+				value = scope:mr_theatre_rival
+			}
+		}
+
 		every_country = {
 			limit = {
 				OR = {
@@ -39,6 +65,31 @@ mongol_dominance = {
 				}
 			}
 			trigger_event_non_silently = mr_dominance.130
+		}
+
+		# The claimant gets a CB against the Russian principalities.
+		every_country = {
+			limit = {
+				any_owned_location = { region = region:russian_region }
+				NOR = {
+					this = c:MGO
+					this = c:MGE
+				}
+			}
+			save_scope_as = mr_westward_target
+			every_country = {
+				limit = {
+					OR = {
+						this = c:MGO
+						this = c:MGE
+					}
+				}
+				add_casus_belli = {
+					target = scope:mr_westward_target
+					type = casus_belli:cb_MR_westward_advance
+					years = 50
+				}
+			}
 		}
 	}
 
@@ -154,6 +205,16 @@ mongol_dominance = {
 		if = {
 			limit = {
 				mr_dominance_end_trigger = yes
+			}
+			# Form the Mongol Empire. The phase's end trigger is MGE_f's
+			# own nine required locations, so by this point the formable
+			# is genuinely available rather than merely thematic.
+			every_country = {
+				limit = {
+					this = c:MGO
+					NOT = { country_exists = c:MGE }
+				}
+				form_country = formable_country:MGE_f
 			}
 			every_country = {
 				limit = {

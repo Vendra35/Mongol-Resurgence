@@ -116,6 +116,7 @@ mr_resurgence_end_trigger = {
 	country_exists = c:MGO
 	c:MGO = {
 		owns = location:karakorum
+		owns = location:shangyuan
 		any_owned_location = {
 			region = region:mongolia_region
 		}
@@ -136,13 +137,11 @@ mr_imperial_end_trigger = {
 	}
 }
 
-# Phase 3: the four seats of the old khanates are held at once —
-# Karakorum, Sarai, Dadu and Baghdad.
+# Phase 3: the empire is actually formable. These are MGE_f's own
+# nine required locations from vanilla's 00_formable_countries.txt,
+# not an invented list — otherwise the phase can complete while the
+# player still cannot form the Mongol Empire.
 mr_dominance_end_trigger = {
-	OR = {
-		country_exists = c:MGE
-		country_exists = c:MGO
-	}
 	any_country = {
 		OR = {
 			this = c:MGE
@@ -150,8 +149,13 @@ mr_dominance_end_trigger = {
 		}
 		owns = location:karakorum
 		owns = location:sarai_al_jadid
+		owns = location:kazan
+		owns = location:samarkand
+		owns = location:kaffa
 		owns = location:dadu
-		owns = location:baghdad
+		owns = location:shangyuan
+		owns = location:baxian
+		owns = location:guangzhou
 	}
 }
 
