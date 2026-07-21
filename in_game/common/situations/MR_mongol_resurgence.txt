@@ -204,20 +204,62 @@ mongol_resurgence = {
 		}
 
 		# --- COMPLETION FAILSAFE (design doc, layer b) ---
-		# Five years before the phase closes, if the goal is unmet,
-		# give the AI what it needs to finish. Mirrors PD's
-		# PD_brandenburg_rise_auto_conquest pattern.
+		# Five years before the phase closes. This does NOT just buff the
+		# AI and hope — it hands over the objective outright, which is
+		# what the design document specifies and what PD actually does
+		# (brandenburg_rise.txt: every_ownable_location_in_area +
+		# change_location_owner).
+		#
+		# Gated on is_ai = yes, per the design doc ("AI'a ... vererek"):
+		# a human player who fails the phase is allowed to fail it.
+		# Locations are only taken from AI owners, never from the player.
 		if = {
 			limit = {
 				current_date > 1415.1.1
 				NOT = { mr_resurgence_end_trigger = yes }
 				NOT = { has_global_variable = mr_completion_failsafe_fired }
 				country_exists = c:MGO
+				c:MGO = { is_ai = yes }
 			}
+			set_global_variable = mr_completion_failsafe_fired
+
+			# 1. Hand MGO the Mongolian heartland outright.
+			region:mongolia_region = {
+				every_ownable_location_in_region = {
+					limit = {
+						owner = {
+							is_ai = yes
+							NOR = {
+								this = c:MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
+					change_location_owner = c:MGO
+					add_core = c:MGO
+				}
+			}
+
+			# 2. Reduce the surviving rival hordes to tributaries.
+			every_country = {
+				limit = {
+					is_ai = yes
+					culture = { has_culture_group = culture_group:mongolian_group }
+					government_type = government_type:steppe_horde
+					NOR = {
+						this = c:MGO
+						is_subject_of = c:MGO
+					}
+					any_owned_location = { region = region:mongolia_region }
+				}
+				make_subject_of = {
+					target = c:MGO
+					type = subject_type:tributary
+				}
+			}
+
 			c:MGO = {
 				trigger_event_silently = mr_dominance.999
-				add_army_tradition = army_tradition_severe_bonus
-				add_government_power = government_power_severe_bonus
 			}
 		}
 	}

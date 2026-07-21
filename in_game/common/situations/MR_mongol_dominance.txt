@@ -180,22 +180,128 @@ mongol_dominance = {
 		}
 
 		# --- COMPLETION FAILSAFE: five years before 1650 ---
+		# Grants MGE_f's own nine required locations outright, so the
+		# formable is genuinely reachable at the end of the railroad.
+		# AI-only, and never takes a location from the player.
 		if = {
 			limit = {
 				current_date > 1645.1.1
 				NOT = { mr_dominance_end_trigger = yes }
 				NOT = { has_global_variable = mr_completion_failsafe_fired }
+				any_country = {
+					OR = {
+						this = c:MGO
+						this = c:MGE
+					}
+					is_ai = yes
+				}
 			}
-			every_country = {
+			set_global_variable = mr_completion_failsafe_fired
+
+			random_country = {
 				limit = {
 					OR = {
 						this = c:MGO
 						this = c:MGE
 					}
+					is_ai = yes
 				}
+				save_scope_as = mr_claimant
+			}
+
+			location:karakorum = {
+				if = {
+					limit = {
+						owner = { is_ai = yes }
+						NOT = { owner = scope:mr_claimant }
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			location:sarai_al_jadid = {
+				if = {
+					limit = {
+						owner = { is_ai = yes }
+						NOT = { owner = scope:mr_claimant }
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			location:kazan = {
+				if = {
+					limit = {
+						owner = { is_ai = yes }
+						NOT = { owner = scope:mr_claimant }
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			location:samarkand = {
+				if = {
+					limit = {
+						owner = { is_ai = yes }
+						NOT = { owner = scope:mr_claimant }
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			location:kaffa = {
+				if = {
+					limit = {
+						owner = { is_ai = yes }
+						NOT = { owner = scope:mr_claimant }
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			location:dadu = {
+				if = {
+					limit = {
+						owner = { is_ai = yes }
+						NOT = { owner = scope:mr_claimant }
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			location:shangyuan = {
+				if = {
+					limit = {
+						owner = { is_ai = yes }
+						NOT = { owner = scope:mr_claimant }
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			location:baxian = {
+				if = {
+					limit = {
+						owner = { is_ai = yes }
+						NOT = { owner = scope:mr_claimant }
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			location:guangzhou = {
+				if = {
+					limit = {
+						owner = { is_ai = yes }
+						NOT = { owner = scope:mr_claimant }
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+
+			scope:mr_claimant = {
 				trigger_event_silently = mr_dominance.999
-				add_army_tradition = army_tradition_severe_bonus
-				add_government_power = government_power_severe_bonus
 			}
 		}
 	}

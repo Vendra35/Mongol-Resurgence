@@ -557,7 +557,11 @@ mr_dominance.998 = {
 	}
 }
 
-# --- Completion failsafe bookkeeping ----------------------------
+# --- Completion failsafe ---
+# The territory transfer itself happens in the situation's on_monthly
+# (that is where the location scopes are available). This event gives
+# the claimant the means to hold what it was just handed, and records
+# that the failsafe fired. Hidden, so the AI resolves it silently.
 mr_dominance.999 = {
 	type = country_event
 	category = situation_event
@@ -568,9 +572,17 @@ mr_dominance.999 = {
 			name = mr_completion_failsafe_fired
 			value = yes
 		}
+		add_army_tradition = army_tradition_severe_bonus
+		add_government_power = government_power_ultimate_bonus
+		add_country_modifier = {
+			modifier = mongol_unifier
+			years = 25
+			mode = add_and_extend
+		}
 	}
 
 	option = {
 		name = mr_dominance.999.a
 	}
 }
+

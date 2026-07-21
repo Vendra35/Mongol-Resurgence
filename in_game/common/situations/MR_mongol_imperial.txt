@@ -194,17 +194,59 @@ mongol_imperial = {
 		}
 
 		# --- COMPLETION FAILSAFE: five years before 1550 ---
+		# Hands over the Silk Road corridor outright rather than buffing
+		# and hoping. AI-only, and never takes from the player.
 		if = {
 			limit = {
 				current_date > 1545.1.1
 				NOT = { mr_imperial_end_trigger = yes }
 				NOT = { has_global_variable = mr_completion_failsafe_fired }
 				country_exists = c:MGO
+				c:MGO = { is_ai = yes }
 			}
+			set_global_variable = mr_completion_failsafe_fired
+
+			# The corridor: the western steppe and the north China march.
+			region:steppes_region = {
+				every_ownable_location_in_region = {
+					limit = {
+						owner = {
+							is_ai = yes
+							NOR = {
+								this = c:MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
+					change_location_owner = c:MGO
+					add_core = c:MGO
+				}
+			}
+
+			# The two seats the phase is actually judged on.
+			location:samarkand = {
+				if = {
+					limit = {
+						owner = { is_ai = yes }
+						NOT = { owner = c:MGO }
+					}
+					change_location_owner = c:MGO
+					add_core = c:MGO
+				}
+			}
+			location:dadu = {
+				if = {
+					limit = {
+						owner = { is_ai = yes }
+						NOT = { owner = c:MGO }
+					}
+					change_location_owner = c:MGO
+					add_core = c:MGO
+				}
+			}
+
 			c:MGO = {
 				trigger_event_silently = mr_dominance.999
-				add_army_tradition = army_tradition_severe_bonus
-				add_government_power = government_power_severe_bonus
 			}
 		}
 	}
