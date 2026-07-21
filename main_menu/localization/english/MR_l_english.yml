@@ -76,10 +76,6 @@
  setting_MR_timeline_strict_historical_desc: "Major events follow authentic historical milestones.\n#G Highly recommended for long campaigns and realistic historical playthroughs.#!"
 
  # --- Fantasy/Historical Mode ---
- MR_mongol_fantasy_mode: "Mongol Railroad: Fantasy Mode"
- MR_mongol_fantasy_mode_desc: "The full Mongol Railroad experience with all custom content enabled. Mongol nations will follow a three-stage path from tribal unification to world dominance."
- MR_mongol_historical_mode: "Mongol Railroad: Historical Mode"
- MR_mongol_historical_mode_desc: "A more grounded historical experience with balanced modifiers and slower expansion. Mongol nations will still unify and expand, but at a more realistic pace."
 
  # ==============================================================================
  # ----------------- FLAG LOCALIZATION -----------------
@@ -95,3 +91,12 @@
  MGO_f: "Mongol Horde"
  MGO_f_desc: "A powerful confederation of Mongol tribes, united under a single khan. Though not yet an empire, its warrior traditions and steppe mobility make it a threat to all settled civilizations on its borders."
  mgo_horde: ""
+
+ # --- GAME RULE (main-menu loaded; convention: rule_<key> + setting_<option>) ---
+ rule_mr_railroad: "Mongol Resurgence: Railroad"
+ setting_mr_railroad_historical: "Historical"
+ setting_mr_railroad_historical_desc: "The railroad follows the real timeline: the 1368 Yuan collapse, historical DHE anchoring, and a measured AI pace of roughly one unification war per decade."
+ setting_mr_railroad_divergent: "Divergent"
+ setting_mr_railroad_divergent_desc: "The same three phases, but actors and timings may vary, and the AI presses its wars far more aggressively."
+ setting_mr_railroad_off: "Off"
+ setting_mr_railroad_off_desc: "All Mongol Resurgence content is disabled."

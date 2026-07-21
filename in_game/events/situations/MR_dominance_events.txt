@@ -740,10 +740,6 @@ mr_dominance.999 = {
 	hidden = yes
 
 	immediate = {
-		set_global_variable = {
-			name = mr_completion_failsafe_fired
-			value = yes
-		}
 		add_army_tradition = army_tradition_severe_bonus
 		add_government_power = government_power_ultimate_bonus
 		add_country_modifier = {

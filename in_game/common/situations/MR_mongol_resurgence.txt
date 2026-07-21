@@ -323,6 +323,11 @@ mongol_resurgence = {
 			c:MGO = {
 				trigger_event_non_silently = mr_dominance.104
 			}
+			# The claim is real now — point the panel header at MGO.
+			set_variable = {
+				name = mr_leading_country
+				value = c:MGO
+			}
 			set_global_variable = mr_beat_104_fired
 		}
 
@@ -402,11 +407,14 @@ mongol_resurgence = {
 			limit = {
 				current_date > 1415.1.1
 				NOT = { mr_resurgence_end_trigger = yes }
-				NOT = { has_global_variable = mr_completion_failsafe_fired }
+				NOT = { has_global_variable = mr_failsafe_p1_fired }
 				country_exists = c:MGO
-				c:MGO = { is_ai = yes }
+				c:MGO = {
+					is_ai = yes
+					at_war = no
+				}
 			}
-			set_global_variable = mr_completion_failsafe_fired
+			set_global_variable = mr_failsafe_p1_fired
 
 			# 1. Hand MGO the Mongolian heartland outright.
 			region:mongolia_region = {
@@ -450,10 +458,9 @@ mongol_resurgence = {
 	}
 
 	on_ending = {
-		# Resolution: unified, or the steppe stays divided.
-		# Branch on the GOAL, not on whether MGO merely exists — the
-		# situation can now also end on time expiry, and a timeout with
-		# MGO alive but the heartland unclaimed is a failure, not a win.
+		# Resolution: unified, or the steppe stays divided. Branch on the
+		# GOAL, not on mere MGO existence — a timeout with MGO alive but
+		# the heartland unclaimed is a failure, not a win.
 		if = {
 			limit = {
 				mr_resurgence_end_trigger = yes
@@ -470,6 +477,9 @@ mongol_resurgence = {
 				}
 				trigger_event_non_silently = mr_dominance.2
 			}
+			# Direct set as well as in mr_dominance.2's immediate, so the
+			# terminal state never depends on an event having a recipient.
+			set_global_variable = mr_railroad_failed
 		}
 	}
 

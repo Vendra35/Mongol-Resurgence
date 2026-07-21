@@ -231,11 +231,14 @@ mongol_imperial = {
 			limit = {
 				current_date > 1545.1.1
 				NOT = { mr_imperial_end_trigger = yes }
-				NOT = { has_global_variable = mr_completion_failsafe_fired }
+				NOT = { has_global_variable = mr_failsafe_p2_fired }
 				country_exists = c:MGO
-				c:MGO = { is_ai = yes }
+				c:MGO = {
+					is_ai = yes
+					at_war = no
+				}
 			}
-			set_global_variable = mr_completion_failsafe_fired
+			set_global_variable = mr_failsafe_p2_fired
 
 			# The Silk Road corridor is khorasan_region (transoxiana,
 			# khwarazm, zhetysu), not steppes_region — that is the Pontic
@@ -298,6 +301,14 @@ mongol_imperial = {
 				trigger_event_non_silently = mr_dominance.127
 				trigger_event_non_silently = mr_imperial.210
 			}
+			# Phase 2 failure is terminal for the railroad — without this
+			# the state machine hung with no resolution recorded.
+			set_global_variable = mr_railroad_failed
+		}
+		else = {
+			# MGO no longer exists at all — still record the failure so the
+			# railroad terminates instead of hanging in a zombie state.
+			set_global_variable = mr_railroad_failed
 		}
 	}
 

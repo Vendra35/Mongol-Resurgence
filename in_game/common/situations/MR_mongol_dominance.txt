@@ -50,7 +50,11 @@ mongol_dominance = {
 		}
 		random_country = {
 			limit = {
-				any_owned_location = { region = region:russian_region }
+				OR = {
+					any_owned_location = { region = region:russian_region }
+					any_owned_location = { region = region:steppes_region }
+					any_owned_location = { region = region:ural_region }
+				}
 				NOR = {
 					this = c:MGO
 					this = c:MGE
@@ -116,12 +120,59 @@ mongol_dominance = {
 				}
 			}
 		}
+		# The China and Transoxiana seats MGE_f still demands are covered
+		# by re-granting the Silk Road CB — the Phase 2 grant expired
+		# decades before this phase begins.
+		every_country = {
+			limit = {
+				OR = {
+					any_owned_location = { region = region:north_china_region }
+					any_owned_location = { region = region:east_china_region }
+					any_owned_location = { region = region:west_china_region }
+					any_owned_location = { region = region:south_china_region }
+					any_owned_location = { region = region:khorasan_region }
+				}
+				NOR = {
+					this = c:MGO
+					this = c:MGE
+				}
+			}
+			save_scope_as = mr_seat_target
+			every_country = {
+				limit = {
+					OR = {
+						this = c:MGO
+						this = c:MGE
+					}
+				}
+				add_casus_belli = {
+					target = scope:mr_seat_target
+					type = casus_belli:cb_MR_silk_road
+					years = 50
+				}
+			}
+		}
+
 	}
 
 	on_monthly = {
 		change_variable = {
 			name = mr_dominance_momentum
 			add = 1
+		}
+
+		# Keep the panel header on the current claimant: once MGE forms,
+		# it replaces MGO as the leading country.
+		if = {
+			limit = {
+				country_exists = c:MGE
+				NOT = { has_global_variable = mr_mge_seen }
+			}
+			set_variable = {
+				name = mr_leading_country
+				value = c:MGE
+			}
+			set_global_variable = mr_mge_seen
 		}
 
 		# --- The New World Order (~10 years) ---
@@ -212,16 +263,17 @@ mongol_dominance = {
 			limit = {
 				current_date > 1645.1.1
 				NOT = { mr_dominance_end_trigger = yes }
-				NOT = { has_global_variable = mr_completion_failsafe_fired }
+				NOT = { has_global_variable = mr_failsafe_p3_fired }
 				any_country = {
 					OR = {
 						this = c:MGO
 						this = c:MGE
 					}
 					is_ai = yes
+					at_war = no
 				}
 			}
-			set_global_variable = mr_completion_failsafe_fired
+			set_global_variable = mr_failsafe_p3_fired
 
 			random_country = {
 				limit = {
@@ -230,6 +282,7 @@ mongol_dominance = {
 						this = c:MGE
 					}
 					is_ai = yes
+					at_war = no
 				}
 				save_scope_as = mr_claimant
 			}
@@ -405,6 +458,7 @@ mongol_dominance = {
 				}
 				trigger_event_non_silently = mr_dominance.132
 			}
+			set_global_variable = mr_railroad_complete
 		}
 		else = {
 			every_country = {
@@ -416,6 +470,7 @@ mongol_dominance = {
 				}
 				trigger_event_non_silently = mr_dominance.133
 			}
+			set_global_variable = mr_railroad_failed
 		}
 	}
 
@@ -425,6 +480,7 @@ mongol_dominance = {
 		remove_global_variable = mr_beat_201i_fired
 		remove_global_variable = mr_beat_202i_fired
 		remove_global_variable = mr_beat_211i_fired
+		remove_global_variable = mr_mge_seen
 
 		# The wiki recommends clearing situation variables in on_ended
 		# to keep them out of the savefile.

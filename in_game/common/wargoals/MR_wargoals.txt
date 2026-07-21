@@ -2,10 +2,15 @@
 # MONGOL RESURGENCE - WAR GOALS
 # =================================================================
 # These are what the mod's casus belli point at via war_goal_type.
-# The previous casus_belli file was written in EU4 format and had
-# no wargoals at all — EU4 encodes peace terms as po_* flags on the
-# CB itself, whereas EU5 splits them into a separate wargoal with
-# allowed_locations / allowed_subjugation scoping.
+# EU5 splits peace terms into wargoals with allowed_locations /
+# allowed_subjugation scoping; EU4-style po_* flags do not exist.
+#
+# COVERAGE RULE: each wargoal's allowed_locations must cover every
+# location its phase's end trigger demands, or the war can be won
+# while the goal stays legally untakeable. Phase 3's end trigger is
+# MGE_f's nine locations, which span nine regions — split across
+# the westward CB (Volga/Rus theatre) and the silk-road CB (China/
+# Transoxiana theatre), both granted at Phase 3 start.
 #
 # Costs are cut so the AI can actually complete a railroad phase,
 # following PD's PD_war_goal_prussian_ambition.
@@ -36,7 +41,10 @@ MR_war_goal_steppe_unification = {
 }
 
 
-# --- Phase 2: the Silk Road corridor -----------------------------
+# --- Phase 2/3: the Silk Road and the Ming hegemony war ----------
+# Covers samarkand (khorasan), dadu (north_china) and the three
+# southern seats MGE_f demands: shangyuan (east_china), baxian
+# (west_china), guangzhou (south_china).
 MR_war_goal_silk_road = {
 	type = superiority
 	attacker = {
@@ -48,6 +56,9 @@ MR_war_goal_silk_road = {
 				scope:location.region = region:khorasan_region
 				scope:location.region = region:north_china_region
 				scope:location.region = region:persia_region
+				scope:location.region = region:east_china_region
+				scope:location.region = region:west_china_region
+				scope:location.region = region:south_china_region
 			}
 		}
 		allowed_subjugation = {
@@ -55,6 +66,9 @@ MR_war_goal_silk_road = {
 				scope:loser.capital.region = region:khorasan_region
 				scope:loser.capital.region = region:north_china_region
 				scope:loser.capital.region = region:persia_region
+				scope:loser.capital.region = region:east_china_region
+				scope:loser.capital.region = region:west_china_region
+				scope:loser.capital.region = region:south_china_region
 			}
 		}
 	}
@@ -65,6 +79,8 @@ MR_war_goal_silk_road = {
 
 
 # --- Phase 3: the westward advance -------------------------------
+# Covers sarai_al_jadid and kaffa (steppes = the Pontic theatre)
+# and kazan (ural_region).
 MR_war_goal_westward_advance = {
 	type = superiority
 	attacker = {
@@ -75,12 +91,14 @@ MR_war_goal_westward_advance = {
 			OR = {
 				scope:location.region = region:russian_region
 				scope:location.region = region:steppes_region
+				scope:location.region = region:ural_region
 			}
 		}
 		allowed_subjugation = {
 			OR = {
 				scope:loser.capital.region = region:russian_region
 				scope:loser.capital.region = region:steppes_region
+				scope:loser.capital.region = region:ural_region
 			}
 		}
 	}

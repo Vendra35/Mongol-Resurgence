@@ -102,6 +102,38 @@ game version has changed.
 Note `on_ended` (21 files) vs `on_ending` (2 files, and what PD uses) — these are
 not interchangeable guesses; establish which applies before using either.
 
+## THE SCOPE RULE (added after a real failure)
+
+Existence checking passed and the code was still wrong: `add_mil` has 160+ vanilla
+hits — as a **character**-scope effect setting a ruler's skill (`ruler ?= {
+add_mil = 2 }`). It was used here at country scope with EU4-sized numbers, 17 times.
+So for every keyword, verify **three things**, not one:
+
+1. **Exists** — grep hits in vanilla.
+2. **Scope** — read 2–3 hits IN CONTEXT: what scope encloses them? Does it match
+   yours? (country / character / location / situation / province.)
+3. **Magnitude/semantics** — what values does vanilla pass? Most effects take
+   *named script values* from `main_menu/common/script_values/default_values.txt`
+   (`prestige_mild_bonus` = 10, `government_power_mild_bonus` = 5 …), almost never
+   raw numbers. `add_prestige = 25` greps as plausible and is wrong.
+
+Country-scope reward vocabulary that actually exists: `add_prestige`,
+`add_stability`, `add_legitimacy`, `add_government_power`, `add_army_tradition`,
+`add_cultural_influence`, `add_research_progress`, `add_gold`, `add_manpower`
+(block form with a scoped value), and steppe-specific `add_horde_unity` /
+`add_tribal_cohesion`. Note tier gaps: not every effect has every tier
+(`horde_unity` has no `severe_bonus`) — verify the exact value name.
+
+## Tooling traps (macOS)
+
+- **BSD grep `\b` can silently match nothing** — an orphan audit here reported
+  clean when all 17 targets were dead. Use `grep -F`, explicit patterns, or
+  python3. Prove any scan on a known positive before trusting its negative.
+- **Multi-line constructs need python3/awk.** `set_variable = { name = X }` spans
+  lines; line-grep "verified" cleanup that didn't exist.
+- A verification that can only ever print nothing is worse than none. Print counts
+  per check so a vacuous pass is visible.
+
 ## Traps specific to this project
 
 - **`exists = c:TAG` is wrong.** Use `country_exists = c:TAG`.

@@ -318,7 +318,7 @@ mr_dzungar_khanate = {
 					culture = { has_culture_group = culture_group:mongolian_group }
 					government_type = government_type:steppe_horde
 					any_owned_location = { region = region:xinjiang_region }
-					any_owned_location = { region = region:steppes_region }
+					has_presence_in = area:zhetysu_area
 				}
 			}
 			every_country = {
@@ -355,7 +355,7 @@ mr_dzungar_khanate = {
 			limit = {
 				OR = {
 					region = region:xinjiang_region
-					region = region:steppes_region
+					region = region:khorasan_region
 				}
 			}
 			custom_tooltip = mr_dzungar_map_tt

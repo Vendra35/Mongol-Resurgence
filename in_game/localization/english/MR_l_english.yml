@@ -423,36 +423,10 @@
  # ----------------- GAME RULES -----------------
  # ==============================================================================
 
- rule_mongol_railroad: "Mongol Railroad"
- rule_mongol_railroad_historical_desc: "The Mongol Railroad path is active."
- rule_mongol_railroad_random_desc: "The Mongol Railroad path will trigger under random conditions."
- rule_mongol_railroad_off_desc: "The Mongol Railroad path is disabled."
 
- rule_MR_mongol_resurgence_auto_conquest: "(MR) Mongol Resurgence Conquest Automation"
- setting_MR_mongol_resurgence_auto_conquest_no: "Deactivated (Normal Game)"
- setting_MR_mongol_resurgence_auto_conquest_no_desc: "The AI will not receive any automatic territorial annexations. The rise of the Mongol Empire must be achieved through standard gameplay mechanics."
- setting_MR_mongol_resurgence_auto_conquest_yes: "Activated (Mongol Rise)"
- setting_MR_mongol_resurgence_auto_conquest_yes_desc: "Ensures the rise of the unified Mongol nation. If the AI is at peace by the designated date, it will automatically annex rival khan territories to fulfill its destiny.\n#G Highly recommended if Mongol nations are controlled by the AI.#!"
 
- rule_MR_mongol_buff_rule: "(MR) Mongol Military Buffs and Conquest Speed"
- setting_MR_buff_disabled: "Vanilla (No Buffs)"
- setting_MR_buff_disabled_desc: "No special military modifiers will be granted.\n#color_red Not recommended for AI-controlled Mongols.#!"
- setting_MR_buff_historical: "Historical (Balanced and Historical Conquest)"
- setting_MR_buff_historical_desc: "Grants balanced military modifiers focused on slow historical progression.\n#G Highly recommended if Mongols are controlled by the AI.#!"
- setting_MR_buff_enabled: "Terminator (Fast Conquest and Arcade Boss)"
- setting_MR_buff_enabled_desc: "Grants massive military modifiers for lightning-fast conquest.\n#color_red WARNING: Transforms the AI into an apocalyptic end-game threat.#!"
 
- rule_MR_imperial_auto_conquest: "(MR) Imperial Expansion Conquest Automation"
- setting_MR_imperial_auto_conquest_no: "Deactivated (Normal Game)"
- setting_MR_imperial_auto_conquest_no_desc: "The AI must secure its imperial borders through standard warfare and diplomacy."
- setting_MR_imperial_auto_conquest_yes: "Activated (Imperial Path)"
- setting_MR_imperial_auto_conquest_yes_desc: "Acts as a safety net for the AI to ensure historical progression.\n#G Highly recommended if Mongols are controlled by the AI.#!"
 
- rule_MR_timeline_pacing_rule: "(MR) Timeline & Pacing"
- setting_MR_timeline_frontloaded: "Dynamic & Frontloaded"
- setting_MR_timeline_frontloaded_desc: "Mongol resurgence can trigger as soon as conditions are met.\n#G Recommended if you want to experience the mod's content early.#!"
- setting_MR_timeline_strict_historical: "Strict Historical Dates (Historical Path)"
- setting_MR_timeline_strict_historical_desc: "Major events follow authentic historical milestones.\n#G Highly recommended for long campaigns and realistic historical playthroughs.#!"
 
  # ==============================================================================
  # ----------------- HIDDEN ACTIONS -----------------

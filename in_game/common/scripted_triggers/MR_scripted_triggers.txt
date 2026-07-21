@@ -201,7 +201,19 @@ mr_can_start_chahar = {
 	current_year >= 1604
 	current_year < 1634
 	NOT = { has_global_variable = mr_chahar_started }
-	NOT = { has_global_variable = mr_railroad_failed }
+	# Ligdan's reunification bid needs a FRAGMENTED steppe. It fires
+	# whether or not the railroad failed — that failure is exactly the
+	# world where the last Chinggisid tries and fails — but not when a
+	# claimant already dominates the heartland.
+	NOT = {
+		any_country = {
+			OR = {
+				this = c:MGO
+				this = c:MGE
+			}
+			any_owned_location = { region = region:mongolia_region }
+		}
+	}
 	any_country = {
 		culture = { has_culture_group = culture_group:mongolian_group }
 		government_type = government_type:steppe_horde
@@ -237,6 +249,15 @@ mr_can_start_torghut = {
 	current_year < 1630
 	NOT = { has_global_variable = mr_torghut_started }
 	# Departs from Dzungaria (xinjiang_region), heads for the Volga.
+	# If a Mongol horde already sits on the Volga, the migration story
+	# is moot — the destination is taken.
+	NOT = {
+		any_country = {
+			culture = { has_culture_group = culture_group:mongolian_group }
+			government_type = government_type:steppe_horde
+			owns = location:sarai_al_jadid
+		}
+	}
 	any_country = {
 		culture = { has_culture_group = culture_group:mongolian_group }
 		government_type = government_type:steppe_horde
@@ -260,6 +281,10 @@ mr_torghut_visible = {
 
 # Ends once a steppe power actually reaches the Volga.
 mr_torghut_end_trigger = {
+	# The trek must actually have happened: the Urals beat gates the
+	# end, so a horde that already owned the Volga cannot end this the
+	# month it starts.
+	has_global_variable = mr_torghut_urals
 	any_country = {
 		culture = { has_culture_group = culture_group:mongolian_group }
 		government_type = government_type:steppe_horde
@@ -287,16 +312,22 @@ mr_dzungar_visible = {
 		this = c:MGO
 		this = c:MGE
 		any_owned_location = { region = region:xinjiang_region }
-		any_owned_location = { region = region:steppes_region }
+		any_owned_location = { region = region:khorasan_region }
 	}
 }
 
 mr_dzungar_end_trigger = {
+	# Strictly stronger than the consolidation beat, so the situation
+	# cannot end the month the beat fires. The Dzungar steppe is the
+	# KAZAKH steppe (zhetysu, khorasan_region) — not the Pontic
+	# steppes_region.
+	has_global_variable = mr_dzungar_consolidated
 	any_country = {
 		culture = { has_culture_group = culture_group:mongolian_group }
 		government_type = government_type:steppe_horde
-		any_owned_location = { region = region:xinjiang_region }
-		any_owned_location = { region = region:steppes_region }
+		has_presence_in = area:dzungaria_area
+		has_presence_in = area:tarim_area
+		has_presence_in = area:zhetysu_area
 	}
 }
 
