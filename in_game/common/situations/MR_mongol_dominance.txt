@@ -3,7 +3,7 @@
 # =================================================================
 # The westward advance against Russia and the final formable. The
 # phase closes when one power holds all four seats of the old
-# khanates at once: Karakorum, Sarai, Zhongdu and Baghdad.
+# khanates at once: Karakorum, Sarai, Dadu and Baghdad.
 # =================================================================
 
 mongol_dominance = {

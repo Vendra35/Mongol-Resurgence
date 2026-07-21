@@ -137,7 +137,7 @@ mr_imperial_end_trigger = {
 }
 
 # Phase 3: the four seats of the old khanates are held at once —
-# Karakorum, Sarai, Zhongdu and Baghdad.
+# Karakorum, Sarai, Dadu and Baghdad.
 mr_dominance_end_trigger = {
 	OR = {
 		country_exists = c:MGE
@@ -150,7 +150,143 @@ mr_dominance_end_trigger = {
 		}
 		owns = location:karakorum
 		owns = location:sarai_al_jadid
-		owns = location:zhongdu
+		owns = location:dadu
 		owns = location:baghdad
+	}
+}
+
+
+# =================================================================
+# LATE-STEPPE SITUATIONS (1600s)
+# =================================================================
+# Three moments vanilla has no content for at all — verified absent:
+# kalmyk/torghut, dzungar/zunghar and chahar all return zero files
+# across events, common and setup. They run in the Phase 3 era and
+# are built on tags that do exist (OIR, MGO, MGE), since none of
+# the historical successor states have their own tag.
+
+# --- Ligdan Khan and the Chahar (1604-1634) ----------------------
+# The last Chinggisid Great Khan's failed reunification: the dark
+# mirror of Phase 1. Only meaningful while a Chinggisid claimant
+# actually exists to be challenged.
+mr_can_start_chahar = {
+	NOT = { has_game_rule = mr_railroad_off }
+	current_year >= 1604
+	current_year < 1634
+	NOT = { has_global_variable = mr_chahar_started }
+	NOT = { has_global_variable = mr_railroad_failed }
+	any_country = {
+		culture = { has_culture_group = culture_group:mongolian_group }
+		government_type = government_type:steppe_horde
+		any_owned_location = { region = region:mongolia_region }
+	}
+}
+
+mr_chahar_visible = {
+	OR = {
+		this = c:MGO
+		this = c:MGE
+		any_owned_location = { region = region:mongolia_region }
+		any_owned_location = { region = region:north_china_region }
+	}
+}
+
+# Ends when one power holds the Mongolian heartland outright.
+mr_chahar_end_trigger = {
+	any_country = {
+		culture = { has_culture_group = culture_group:mongolian_group }
+		owns = location:karakorum
+		any_owned_location = { region = region:north_china_region }
+	}
+}
+
+
+# --- The Torghut Migration (1616-1630) ---------------------------
+# The Kalmyk trek west to the Volga: an actual Mongol westward wave
+# into Russia, which is the Phase 3 premise in miniature.
+mr_can_start_torghut = {
+	NOT = { has_game_rule = mr_railroad_off }
+	current_year >= 1616
+	current_year < 1630
+	NOT = { has_global_variable = mr_torghut_started }
+	any_country = {
+		culture = { has_culture_group = culture_group:mongolian_group }
+		government_type = government_type:steppe_horde
+		any_owned_location = { region = region:steppes_region }
+	}
+}
+
+mr_torghut_visible = {
+	OR = {
+		this = c:OIR
+		this = c:MGO
+		this = c:MGE
+		any_owned_location = { region = region:steppes_region }
+		any_owned_location = { region = region:russian_region }
+		any_owned_location = { region = region:ural_region }
+	}
+}
+
+# Ends once a steppe power actually reaches the Volga.
+mr_torghut_end_trigger = {
+	any_country = {
+		culture = { has_culture_group = culture_group:mongolian_group }
+		government_type = government_type:steppe_horde
+		owns = location:sarai_al_jadid
+	}
+}
+
+
+# --- The Dzungar Khanate (1634-1650) -----------------------------
+# The last great steppe empire, built by the Oirats who stayed east.
+mr_can_start_dzungar = {
+	NOT = { has_game_rule = mr_railroad_off }
+	current_year >= 1634
+	NOT = { has_global_variable = mr_dzungar_started }
+	any_country = {
+		culture = { has_culture_group = culture_group:mongolian_group }
+		government_type = government_type:steppe_horde
+		any_owned_location = { region = region:xinjiang_region }
+	}
+}
+
+mr_dzungar_visible = {
+	OR = {
+		this = c:OIR
+		this = c:MGO
+		this = c:MGE
+		any_owned_location = { region = region:xinjiang_region }
+		any_owned_location = { region = region:steppes_region }
+	}
+}
+
+mr_dzungar_end_trigger = {
+	any_country = {
+		culture = { has_culture_group = culture_group:mongolian_group }
+		government_type = government_type:steppe_horde
+		any_owned_location = { region = region:xinjiang_region }
+		any_owned_location = { region = region:steppes_region }
+	}
+}
+
+
+# =================================================================
+# READ-ONLY VANILLA HOOKS
+# =================================================================
+# We never write to vanilla state — these only read it, so there is
+# no compatibility risk and no file is overwritten.
+#
+# Tumu: flavor_chi_mon sets lost_emperor on the Middle Kingdom's
+# leader country while the emperor is held. It persists until
+# clear_tumu_crisis_variables runs, so it is safe to read.
+#
+# NOTE: no equivalent hook exists for the Treaty of Ugra. Vanilla's
+# treaty_of_ugra / treaty_of_ugra_declined variables are removed as
+# soon as the event resolves (flavor_MOS.txt:2473, :2541), so there
+# is nothing durable left to read. Do not add one without first
+# confirming a persistent signal exists.
+mr_vanilla_tumu_crisis_active = {
+	any_country = {
+		has_variable = lost_emperor
 	}
 }

@@ -40,7 +40,7 @@ mr_history.1 = {
 
 	trigger = {
 		has_game_rule = mr_railroad_historical
-		owns = location:zhongdu
+		owns = location:dadu
 	}
 
 	immediate = {

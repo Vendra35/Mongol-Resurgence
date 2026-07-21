@@ -97,7 +97,7 @@ mongol_imperial = {
 				NOT = { has_global_variable = mr_beat_102i_fired }
 				c:MGO = {
 					OR = {
-						owns = location:zhongdu
+						owns = location:dadu
 						owns = location:samarkand
 					}
 				}
