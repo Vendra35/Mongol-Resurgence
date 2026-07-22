@@ -2,9 +2,18 @@
 # PHASE 2 - THE PAX MONGOLICA (1420-1550)
 # =================================================================
 # With the steppe unified, the horde turns outward: mastery of the
-# Silk Road corridor and a contest for hegemony with the Ming.
+# Silk Road corridor and a contest for hegemony with the Ming. The
+# goal is the red-lined regions themselves — Khorasan, Xinjiang and
+# North China — cleared of every power outside the claimant's realm.
 # The campaign beats come from the mr_imperial namespace; the
 # phase-level beats from mr_dominance.120-127.
+#
+# AI railroad: same three-part machine as Phase 1, on the PD
+# Ascension pattern (the_prussian_ascension.txt) — the AI claimant
+# carries MR_mongol_preparing_for_conquest (blocked_from_declaring_
+# war) and the situation picks its targets and declares its wars
+# for it via mr_dominance.993 (PD-203 shape, so a human claimant
+# can postpone).
 # =================================================================
 mongol_imperial = {
 	monthly_spawn_chance = monthly_spawn_chance_unique
@@ -40,6 +49,23 @@ mongol_imperial = {
 			name = mr_imperial_momentum
 			value = 0
 		}
+		# --- AI RAILROAD BOOKKEEPING (PD ascension shape) ---
+		# The cooldown is seeded nearly ripe (PD seeds 115 of 120) so
+		# the first war comes about a year in. MGO is guaranteed to
+		# exist here — can_start requires it — so seeding the target
+		# variable with c:MGO is safe, unlike in Phase 1.
+		set_variable = {
+			name = mr_imp_conquest_cooldown
+			value = 48
+		}
+		set_variable = {
+			name = mr_imp_conquest_target
+			value = 0
+		}
+		set_variable = {
+			name = mr_imp_conquest_target_country
+			value = c:MGO
+		}
 		# Values the .gui panel reads off the situation scope.
 		if = {
 			limit = {
@@ -56,8 +82,8 @@ mongol_imperial = {
 					region = region:north_china_region
 				}
 				NOR = {
-					this = c:MGO
-					this = c:MGE
+					tag = MGO
+					tag = MGE
 				}
 			}
 			save_scope_as = mr_theatre_rival
@@ -76,17 +102,41 @@ mongol_imperial = {
 				country_exists = c:MGO
 			}
 			c:MGO = {
-				trigger_event_non_silently = mr_dominance.120
-				# Phase buff, plus the historical-mode variant when the
-				# railroad is running on the historical game rule.
-				add_country_modifier = {
-					modifier = MR_imperial_conquest
-					years = -1
-					mode = replace
-				}
+				# The Phase 1 rewards expire here, exactly as their
+				# tooltips promise ("removed upon the start of the 2nd
+				# Situation").
+				remove_country_modifier = MR_unified_mongol_banner
+				remove_country_modifier = MR_mongol_historical_modifier_2
+				# The war-preparation lock, PD Ascension style: the AI
+				# claimant must not freelance-declare — the railroad
+				# event declares for it. Never applied to a human.
 				if = {
 					limit = {
-						has_game_rule = mr_railroad_historical
+						is_ai = yes
+					}
+					add_country_modifier = {
+						modifier = MR_mongol_preparing_for_conquest
+						years = -1
+						mode = replace
+					}
+				}
+				trigger_event_non_silently = mr_dominance.120
+				# Phase buff per the buff rule, PD-style: Terminator gets
+				# the full conquest engine, Historical the balanced
+				# variant, Vanilla nothing.
+				if = {
+					limit = {
+						has_game_rule = MR_buff_enabled
+					}
+					add_country_modifier = {
+						modifier = MR_imperial_conquest
+						years = -1
+						mode = replace
+					}
+				}
+				else_if = {
+					limit = {
+						has_game_rule = MR_buff_historical
 					}
 					add_country_modifier = {
 						modifier = MR_imperial_historical_modifier
@@ -102,6 +152,9 @@ mongol_imperial = {
 								region = region:north_china_region
 							}
 							any_owned_location = {
+								region = region:xinjiang_region
+							}
+							any_owned_location = {
 								region = region:khorasan_region
 							}
 							any_owned_location = {
@@ -109,7 +162,7 @@ mongol_imperial = {
 							}
 						}
 						NOT = {
-							this = c:MGO
+							tag = MGO
 						}
 					}
 					save_scope_as = mr_silk_road_target
@@ -117,7 +170,9 @@ mongol_imperial = {
 						add_casus_belli = {
 							target = scope:mr_silk_road_target
 							type = casus_belli:cb_MR_silk_road
-							years = 50
+							# Covers the whole 1420-1550 phase window — the
+							# old 50-year grant expired mid-phase.
+							years = 130
 						}
 					}
 				}
@@ -128,6 +183,227 @@ mongol_imperial = {
 		change_variable = {
 			name = mr_imperial_momentum
 			add = 1
+		}
+		# ========== PANEL PROGRESS (0-100) ==========
+		# The .gui progressbar reads MR_mge_score. Four milestones worth
+		# 25 each: the two great seats, then each half of the corridor
+		# cleared of powers outside the claimant's realm.
+		set_variable = {
+			name = MR_mge_score
+			value = 0
+		}
+		if = {
+			limit = {
+				country_exists = c:MGO
+				c:MGO = {
+					owns = location:samarkand
+				}
+			}
+			change_variable = {
+				name = MR_mge_score
+				add = 25
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:MGO
+				c:MGO = {
+					owns = location:dadu
+				}
+			}
+			change_variable = {
+				name = MR_mge_score
+				add = 25
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:MGO
+				NOT = {
+					any_country = {
+						NOR = {
+							tag = MGO
+							is_subject_of = c:MGO
+						}
+						OR = {
+							any_owned_location = {
+								region = region:khorasan_region
+							}
+							any_owned_location = {
+								region = region:xinjiang_region
+							}
+						}
+					}
+				}
+			}
+			change_variable = {
+				name = MR_mge_score
+				add = 25
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:MGO
+				NOT = {
+					any_country = {
+						NOR = {
+							tag = MGO
+							is_subject_of = c:MGO
+						}
+						any_owned_location = {
+							region = region:north_china_region
+						}
+					}
+				}
+			}
+			change_variable = {
+				name = MR_mge_score
+				add = 25
+			}
+		}
+		# ========== AI RAILROAD: FIND A TARGET ==========
+		# PD Ascension shape: pick the weakest neighbour holding land in
+		# the goal corridor (khorasan / xinjiang / north_china) whose
+		# alliance web is weaker than the claimant's. No is_ai gate —
+		# human claimants get the war event with the postpone option.
+		if = {
+			limit = {
+				var:mr_imp_conquest_target = 0
+				country_exists = c:MGO
+				c:MGO = {
+					at_war = no
+				}
+			}
+			c:MGO = {
+				ordered_neighbor_country = {
+					limit = {
+						is_rebel_country = no
+						NOT = {
+							has_truce_with = prev
+						}
+						NOT = {
+							is_subject_of = prev
+						}
+						defensive_alliance_strength < c:MGO.offensive_alliance_strength
+						OR = {
+							any_owned_location = {
+								region = region:khorasan_region
+							}
+							any_owned_location = {
+								region = region:xinjiang_region
+							}
+							any_owned_location = {
+								region = region:north_china_region
+							}
+						}
+					}
+					max = 1
+					order_by = {
+						value = num_locations
+						multiply = -1
+					}
+					situation:mongol_imperial = {
+						set_variable = {
+							name = mr_imp_conquest_target_country
+							value = prev
+						}
+						set_variable = {
+							name = mr_imp_conquest_target
+							value = 1
+						}
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = mr_imp_conquest_cooldown
+			add = 1
+		}
+		# --- FALLBACK: the chosen target stopped being valid ---
+		if = {
+			limit = {
+				var:mr_imp_conquest_target = 1
+				country_exists = c:MGO
+				OR = {
+					NOT = {
+						exists = var:mr_imp_conquest_target_country
+					}
+					var:mr_imp_conquest_target_country = {
+						OR = {
+							tag = MGO
+							is_subject_of = c:MGO
+							NOT = {
+								OR = {
+									any_owned_location = {
+										region = region:khorasan_region
+									}
+									any_owned_location = {
+										region = region:xinjiang_region
+									}
+									any_owned_location = {
+										region = region:north_china_region
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			set_variable = {
+				name = mr_imp_conquest_target
+				value = 0
+			}
+		}
+		# ========== AI RAILROAD: DECLARE ==========
+		# PD Ascension pacing: the later phases press harder than the
+		# unification — Terminator roughly yearly, otherwise every ~5
+		# years (cooldown > 60), with the same months_since_war gates.
+		if = {
+			limit = {
+				var:mr_imp_conquest_target = 1
+				OR = {
+					AND = {
+						has_game_rule = MR_buff_enabled
+						var:mr_imp_conquest_cooldown > 12
+					}
+					AND = {
+						NOT = {
+							has_game_rule = MR_buff_enabled
+						}
+						var:mr_imp_conquest_cooldown > 60
+					}
+				}
+				country_exists = c:MGO
+			}
+			c:MGO = {
+				if = {
+					limit = {
+						OR = {
+							AND = {
+								has_game_rule = MR_buff_enabled
+								months_since_war >= 12
+							}
+							AND = {
+								NOT = {
+									has_game_rule = MR_buff_enabled
+								}
+								months_since_war >= 24
+							}
+						}
+						situation:mongol_imperial = {
+							var:mr_imp_conquest_target_country = {
+								NOT = {
+									is_subject_of = prev
+								}
+								NOT = {
+									has_truce_with = prev
+								}
+							}
+						}
+					}
+					trigger_event_silently = mr_dominance.993
+				}
+			}
 		}
 		# --- The Mongol Awakening (~4 years) ---
 		if = {
@@ -240,10 +516,14 @@ mongol_imperial = {
 			set_global_variable = mr_beat_124_fired
 		}
 		# --- COMPLETION FAILSAFE: five years before 1550 ---
-		# Hands over the Silk Road corridor outright rather than buffing
-		# and hoping. AI-only, and never takes from the player.
+		# Hands over the goal regions outright rather than buffing and
+		# hoping. Gated on the imperial conquest-automation rule and on
+		# is_ai; never takes a location from the player. The handover
+		# covers exactly what the end trigger demands: the Khorasan,
+		# Xinjiang and North China regions.
 		if = {
 			limit = {
+				has_game_rule = MR_imperial_auto_conquest_yes
 				current_date > 1545.1.1
 				NOT = {
 					mr_imperial_end_trigger = yes
@@ -258,16 +538,13 @@ mongol_imperial = {
 				}
 			}
 			set_global_variable = mr_failsafe_p2_fired
-			# The Silk Road corridor is khorasan_region (transoxiana,
-			# khwarazm, zhetysu), not steppes_region — that is the Pontic
-			# steppe and belongs to Phase 3.
 			region:khorasan_region = {
 				every_ownable_location_in_region = {
 					limit = {
 						owner = {
 							is_ai = yes
 							NOR = {
-								this = c:MGO
+								tag = MGO
 								is_subject_of = c:MGO
 							}
 						}
@@ -276,14 +553,28 @@ mongol_imperial = {
 					add_core = c:MGO
 				}
 			}
-			# The north China march, where dadu sits.
-			area:beiping_area = {
-				every_ownable_location_in_area = {
+			region:xinjiang_region = {
+				every_ownable_location_in_region = {
 					limit = {
 						owner = {
 							is_ai = yes
 							NOR = {
-								this = c:MGO
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
+					change_location_owner = c:MGO
+					add_core = c:MGO
+				}
+			}
+			region:north_china_region = {
+				every_ownable_location_in_region = {
+					limit = {
+						owner = {
+							is_ai = yes
+							NOR = {
+								tag = MGO
 								is_subject_of = c:MGO
 							}
 						}
@@ -298,6 +589,18 @@ mongol_imperial = {
 		}
 	}
 	on_ending = {
+		# 1. Strip the phase modifiers, PD-style.
+		if = {
+			limit = {
+				country_exists = c:MGO
+			}
+			c:MGO = {
+				remove_country_modifier = MR_imperial_conquest
+				remove_country_modifier = MR_imperial_historical_modifier
+				remove_country_modifier = MR_mongol_preparing_for_conquest
+			}
+		}
+		# 2. Branch on the goal.
 		if = {
 			limit = {
 				mr_imperial_end_trigger = yes
@@ -345,14 +648,18 @@ mongol_imperial = {
 		# to keep them out of the savefile.
 		remove_variable = mr_leading_country
 		remove_variable = mr_rival_country
+		remove_variable = MR_mge_score
+		remove_variable = mr_imp_conquest_cooldown
+		remove_variable = mr_imp_conquest_target
+		remove_variable = mr_imp_conquest_target_country
 	}
 	tooltip = {
 		if = {
 			limit = {
 				OR = {
 					region = region:khorasan_region
+					region = region:xinjiang_region
 					region = region:north_china_region
-					region = region:persia_region
 				}
 			}
 			custom_tooltip = mr_imperial_map_tt
@@ -361,7 +668,9 @@ mongol_imperial = {
 	map_color = {
 		if = {
 			limit = {
-				owner ?= c:MGO
+				owner ?= {
+					tag = MGO
+				}
 			}
 			value = this.owner.country_color
 		}
@@ -372,6 +681,7 @@ mongol_imperial = {
 	secondary_map_color = {
 		if = {
 			limit = {
+				country_exists = c:MGO
 				owner ?= {
 					is_subject_of = c:MGO
 				}
@@ -382,10 +692,13 @@ mongol_imperial = {
 			limit = {
 				OR = {
 					region = region:khorasan_region
+					region = region:xinjiang_region
 					region = region:north_china_region
 				}
 				NOT = {
-					owner ?= c:MGO
+					owner ?= {
+						tag = MGO
+					}
 				}
 			}
 			value = red

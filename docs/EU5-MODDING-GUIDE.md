@@ -167,6 +167,17 @@ deceive:
   ours drifted and the empire was unformable at "victory".
 - In-game screenshots of the region/area map modes are worth more than any wiki
   page for resolving names fast.
+- **`c:TAG` is a runtime link, not a name.** Any comparison whose right side is
+  `c:TAG` — `this = c:MGO`, `owner ?= c:MGO`, `is_neighbor_of = c:MGE` — throws
+  `Invalid right side during comparison 'c'` in `error.log` *every evaluation*
+  while that tag is not on the map. A `map_color` doing this spammed ~100k
+  errors in seven game-years; a Phase 3 file comparing `this = c:MGE` did it for
+  a whole century, because MGE only forms at the phase's end. The idioms:
+  - identity → `tag = MGO` (string comparison, can never fail);
+  - map modes → `owner ?= { tag = MGO }` (block form resolves no link);
+  - relations (`is_subject_of` / `is_neighbor_of = c:X`) → precede with
+    `country_exists = c:X` **in the same AND** — trigger ANDs short-circuit, so
+    the link is never touched when the tag is absent.
 
 ## 6. Wars: casus belli + wargoals
 
@@ -209,10 +220,18 @@ An AI will not conquer on theme without help. Three cooperating layers:
    (`is_rebel_country = no`, no truce/subject,
    `defensive_alliance_strength < our.offensive_alliance_strength`, holds goal
    land), `max = 1`, `order_by = { value = num_locations multiply = -1 }` (weakest
-   first) — and store it on the situation. When the cooldown matures, fire a hidden
-   event that re-validates and calls `declare_war_with_cb`. Add a **fallback**
-   that clears the slot when the stored target dies/subjects/truces, or the loop
-   deadlocks.
+   first) — and store it on the situation. When the cooldown matures, fire the
+   war event. Add a **fallback** that clears the slot when the stored target
+   dies/subjects/truces, or the loop deadlocks.
+   **The war event is NOT hidden and does NOT declare from `immediate`** — that
+   railroads a human player into a war with no say (a real bug here). PD 103's
+   shape: `immediate` zeroes the cooldown and saves the target scope; **option A**
+   (`ai_chance` 100) carries the `declare_war_with_cb`; **option B**
+   (`ai_chance` 0) postpones; `after` resets the target slot and re-seeds the
+   target-country variable with the claimant's own tag (a country guaranteed to
+   exist — never seed it with a tag that may not be on the map yet). Fire it
+   with `trigger_event_silently`, and drop the `is_ai` gate from the loop so a
+   human claimant gets the same event with a choice.
 2. **Sustainment** (`common/on_action/`): register on the *real* hooks —
    `yearly_country_pulse = { on_actions = { my_pulse } }` (there is no
    `on_yearly_pulse`). Peace-time army top-ups and infrastructure for the AI
@@ -227,11 +246,27 @@ An AI will not conquer on theme without help. Three cooperating layers:
 
 ## 8. Localisation, GUI, hints
 
+- **One tree, one file.** ALL localisation goes in
+  `main_menu/localization/<language>/` — vanilla's `in_game/localization/`
+  contains only the engine's `jomini` fallback, and PD (tested) ships a single
+  main_menu file. This mod once split loc across `in_game` and `main_menu`
+  files *with the same filename*; the in_game copy shadowed the main_menu one,
+  so every main_menu-only key (`rule_*`, `setting_*`, several
+  `STATIC_MODIFIER_NAME_*`) rendered as its raw key in game.
 - Loc files: `﻿l_english:` once at the top, one leading space per key,
   `key: "value"`, `\n` for newlines, `#Y ...#!` colour markup. Duplicate keys —
   last one silently wins; audit for them.
 - Every referenced key must exist: event `title`/`desc`/`historical_info`/option
   `name`s, `custom_tooltip` texts, modifier names, CB/wargoal names, hint names.
+- **Key conventions the engine derives for you** (get them wrong and the UI
+  shows raw keys):
+  - situations → `<situation_key>` + `<situation_key>_desc`
+    (vanilla `situations_l_english.yml`: `black_death`);
+  - wargoals → `war_goal_<wargoal_key>` + `_desc` — with a `MR_war_goal_x`
+    wargoal that means the double-prefixed `war_goal_MR_war_goal_x`;
+  - game rules → `rule_<rule_key>`, `setting_<option>`, `setting_<option>_desc`;
+  - hints → `hint_<key>` + `hint_<key>_hint_text`;
+  - static modifiers → `STATIC_MODIFIER_NAME_<key>` (+ `_DESC_`).
 - Situation panels: copy the closest vanilla `.gui` (`the_revolution.gui` is the
   simplest); a `blockoverride` naming a block that doesn't exist in the vanilla
   template renders *nothing*, silently. Panels read situation variables — set them.

@@ -2,8 +2,21 @@
 # PHASE 3 - THE SILK EMPIRE (1550-1650)
 # =================================================================
 # The westward advance against Russia and the final formable. The
-# phase closes when one power holds all four seats of the old
-# khanates at once: Karakorum, Sarai, Dadu and Baghdad.
+# phase closes when one claimant holds all nine of MGE_f's required
+# locations AND has planted its banner in the Russian lands.
+#
+# NOTE ON c:MGE: MGE does not exist for almost this entire phase —
+# it is formed in on_ending. Identity checks therefore use tag =
+# (string comparison, never errors) and every c:MGE link sits
+# behind a country_exists guard; this = c:MGE comparisons were the
+# mod's biggest source of "Invalid right side" error-log spam.
+#
+# AI railroad: same machine as Phases 1-2 (PD Ascension pattern).
+# The claimant is scoped dynamically (random_country over tag MGO /
+# MGE) because a player can form MGE mid-phase; wars are declared
+# by mr_dominance.992, which picks the westward or silk-road CB by
+# where the target's land lies. The AI claimant carries
+# MR_mongol_preparing_for_conquest for the whole phase.
 # =================================================================
 mongol_dominance = {
 	monthly_spawn_chance = monthly_spawn_chance_unique
@@ -32,6 +45,22 @@ mongol_dominance = {
 			name = mr_dominance_momentum
 			value = 0
 		}
+		# --- AI RAILROAD BOOKKEEPING (PD ascension shape) ---
+		# MGO is guaranteed to exist here (can_start requires it), so
+		# seeding the target variable with c:MGO is safe. The event's
+		# after block re-seeds with root, which handles the MGE case.
+		set_variable = {
+			name = mr_dom_conquest_cooldown
+			value = 48
+		}
+		set_variable = {
+			name = mr_dom_conquest_target
+			value = 0
+		}
+		set_variable = {
+			name = mr_dom_conquest_target_country
+			value = c:MGO
+		}
 		# Values the .gui panel reads off the situation scope.
 		if = {
 			limit = {
@@ -56,8 +85,8 @@ mongol_dominance = {
 					}
 				}
 				NOR = {
-					this = c:MGO
-					this = c:MGE
+					tag = MGO
+					tag = MGE
 				}
 			}
 			save_scope_as = mr_theatre_rival
@@ -74,21 +103,43 @@ mongol_dominance = {
 		every_country = {
 			limit = {
 				OR = {
-					this = c:MGO
-					this = c:MGE
+					tag = MGO
+					tag = MGE
+				}
+			}
+			# The Phase 2 reward expires here, as its tooltip promises
+			# ("removed upon the start of the 3rd Situation").
+			remove_country_modifier = MR_empire_fulfilled
+			# The war-preparation lock, PD Ascension style: the AI
+			# claimant must not freelance-declare — the railroad event
+			# declares for it. Never applied to a human player.
+			if = {
+				limit = {
+					is_ai = yes
+				}
+				add_country_modifier = {
+					modifier = MR_mongol_preparing_for_conquest
+					years = -1
+					mode = replace
 				}
 			}
 			trigger_event_non_silently = mr_dominance.130
-			# Phase buff, plus the historical-mode variant when the
-			# railroad is running on the historical game rule.
-			add_country_modifier = {
-				modifier = MR_pax_mongolica
-				years = -1
-				mode = replace
-			}
+			# Phase buff per the buff rule, PD-style: Terminator gets
+			# the Pax Mongolica engine, Historical the balanced
+			# variant, Vanilla nothing.
 			if = {
 				limit = {
-					has_game_rule = mr_railroad_historical
+					has_game_rule = MR_buff_enabled
+				}
+				add_country_modifier = {
+					modifier = MR_pax_mongolica
+					years = -1
+					mode = replace
+				}
+			}
+			else_if = {
+				limit = {
+					has_game_rule = MR_buff_historical
 				}
 				add_country_modifier = {
 					modifier = MR_dominance_historical_modifier
@@ -104,22 +155,23 @@ mongol_dominance = {
 					region = region:russian_region
 				}
 				NOR = {
-					this = c:MGO
-					this = c:MGE
+					tag = MGO
+					tag = MGE
 				}
 			}
 			save_scope_as = mr_westward_target
 			every_country = {
 				limit = {
 					OR = {
-						this = c:MGO
-						this = c:MGE
+						tag = MGO
+						tag = MGE
 					}
 				}
 				add_casus_belli = {
 					target = scope:mr_westward_target
 					type = casus_belli:cb_MR_westward_advance
-					years = 50
+					# Covers the whole 1550-1650 phase window.
+					years = 100
 				}
 			}
 		}
@@ -146,22 +198,23 @@ mongol_dominance = {
 					}
 				}
 				NOR = {
-					this = c:MGO
-					this = c:MGE
+					tag = MGO
+					tag = MGE
 				}
 			}
 			save_scope_as = mr_seat_target
 			every_country = {
 				limit = {
 					OR = {
-						this = c:MGO
-						this = c:MGE
+						tag = MGO
+						tag = MGE
 					}
 				}
 				add_casus_belli = {
 					target = scope:mr_seat_target
 					type = casus_belli:cb_MR_silk_road
-					years = 50
+					# Covers the whole 1550-1650 phase window.
+					years = 100
 				}
 			}
 		}
@@ -186,6 +239,376 @@ mongol_dominance = {
 			}
 			set_global_variable = mr_mge_seen
 		}
+		# ========== PANEL PROGRESS (0-100) ==========
+		# The .gui progressbar reads MR_dominance_score: ten points per
+		# imperial seat held by the claimant, ten for the Russian
+		# foothold. 100 = the end trigger is satisfied.
+		set_variable = {
+			name = MR_dominance_score
+			value = 0
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:karakorum
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:sarai_al_jadid
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:kazan
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:samarkand
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:kaffa
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:dadu
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:shangyuan
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:baxian
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:guangzhou
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					any_owned_location = {
+						region = region:russian_region
+					}
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 10
+			}
+		}
+		# ========== AI RAILROAD: FIND A TARGET ==========
+		# The claimant is whichever of MGO/MGE exists (a player can form
+		# MGE mid-phase), scoped via random_country. Targets: the
+		# weakest neighbour holding land in either theatre — the
+		# westward goal regions (russian / steppes / ural) or the seat
+		# regions (mongolia / khorasan / xinjiang / the four Chinas).
+		if = {
+			limit = {
+				var:mr_dom_conquest_target = 0
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					at_war = no
+				}
+			}
+			random_country = {
+				limit = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					at_war = no
+				}
+				save_scope_as = mr_dom_claimant
+				ordered_neighbor_country = {
+					limit = {
+						is_rebel_country = no
+						NOT = {
+							has_truce_with = prev
+						}
+						NOT = {
+							is_subject_of = prev
+						}
+						defensive_alliance_strength < scope:mr_dom_claimant.offensive_alliance_strength
+						OR = {
+							any_owned_location = {
+								region = region:russian_region
+							}
+							any_owned_location = {
+								region = region:steppes_region
+							}
+							any_owned_location = {
+								region = region:ural_region
+							}
+							any_owned_location = {
+								region = region:mongolia_region
+							}
+							any_owned_location = {
+								region = region:khorasan_region
+							}
+							any_owned_location = {
+								region = region:xinjiang_region
+							}
+							any_owned_location = {
+								region = region:north_china_region
+							}
+							any_owned_location = {
+								region = region:east_china_region
+							}
+							any_owned_location = {
+								region = region:west_china_region
+							}
+							any_owned_location = {
+								region = region:south_china_region
+							}
+						}
+					}
+					max = 1
+					order_by = {
+						value = num_locations
+						multiply = -1
+					}
+					situation:mongol_dominance = {
+						set_variable = {
+							name = mr_dom_conquest_target_country
+							value = prev
+						}
+						set_variable = {
+							name = mr_dom_conquest_target
+							value = 1
+						}
+					}
+				}
+			}
+		}
+		change_variable = {
+			name = mr_dom_conquest_cooldown
+			add = 1
+		}
+		# --- FALLBACK: the chosen target stopped being valid ---
+		# (dead, became the claimant itself, or lost every holding in
+		# both theatres). Subject/truce staleness is re-checked by the
+		# declare gate below, PD-style.
+		if = {
+			limit = {
+				var:mr_dom_conquest_target = 1
+				OR = {
+					NOT = {
+						exists = var:mr_dom_conquest_target_country
+					}
+					var:mr_dom_conquest_target_country = {
+						OR = {
+							tag = MGO
+							tag = MGE
+							NOT = {
+								OR = {
+									any_owned_location = {
+										region = region:russian_region
+									}
+									any_owned_location = {
+										region = region:steppes_region
+									}
+									any_owned_location = {
+										region = region:ural_region
+									}
+									any_owned_location = {
+										region = region:mongolia_region
+									}
+									any_owned_location = {
+										region = region:khorasan_region
+									}
+									any_owned_location = {
+										region = region:xinjiang_region
+									}
+									any_owned_location = {
+										region = region:north_china_region
+									}
+									any_owned_location = {
+										region = region:east_china_region
+									}
+									any_owned_location = {
+										region = region:west_china_region
+									}
+									any_owned_location = {
+										region = region:south_china_region
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			set_variable = {
+				name = mr_dom_conquest_target
+				value = 0
+			}
+		}
+		# ========== AI RAILROAD: DECLARE ==========
+		# PD Ascension pacing: Terminator roughly yearly, otherwise
+		# every ~5 years, with the same months_since_war gates.
+		if = {
+			limit = {
+				var:mr_dom_conquest_target = 1
+				OR = {
+					AND = {
+						has_game_rule = MR_buff_enabled
+						var:mr_dom_conquest_cooldown > 12
+					}
+					AND = {
+						NOT = {
+							has_game_rule = MR_buff_enabled
+						}
+						var:mr_dom_conquest_cooldown > 60
+					}
+				}
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+				}
+			}
+			random_country = {
+				limit = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							AND = {
+								has_game_rule = MR_buff_enabled
+								months_since_war >= 12
+							}
+							AND = {
+								NOT = {
+									has_game_rule = MR_buff_enabled
+								}
+								months_since_war >= 24
+							}
+						}
+						situation:mongol_dominance = {
+							var:mr_dom_conquest_target_country = {
+								NOT = {
+									is_subject_of = prev
+								}
+								NOT = {
+									has_truce_with = prev
+								}
+							}
+						}
+					}
+					trigger_event_silently = mr_dominance.992
+				}
+			}
+		}
 		# --- The New World Order (~10 years) ---
 		if = {
 			limit = {
@@ -197,8 +620,8 @@ mongol_dominance = {
 			every_country = {
 				limit = {
 					OR = {
-						this = c:MGO
-						this = c:MGE
+						tag = MGO
+						tag = MGE
 					}
 				}
 				trigger_event_non_silently = mr_dominance.131
@@ -214,8 +637,8 @@ mongol_dominance = {
 				}
 				any_country = {
 					OR = {
-						this = c:MGO
-						this = c:MGE
+						tag = MGO
+						tag = MGE
 					}
 					any_owned_location = {
 						region = region:russian_region
@@ -225,8 +648,8 @@ mongol_dominance = {
 			every_country = {
 				limit = {
 					OR = {
-						this = c:MGO
-						this = c:MGE
+						tag = MGO
+						tag = MGE
 					}
 				}
 				trigger_event_non_silently = mr_imperial.201
@@ -244,8 +667,8 @@ mongol_dominance = {
 			every_country = {
 				limit = {
 					OR = {
-						this = c:MGO
-						this = c:MGE
+						tag = MGO
+						tag = MGE
 					}
 				}
 				trigger_event_non_silently = mr_imperial.202
@@ -266,8 +689,8 @@ mongol_dominance = {
 			every_country = {
 				limit = {
 					OR = {
-						this = c:MGO
-						this = c:MGE
+						tag = MGO
+						tag = MGE
 					}
 				}
 				trigger_event_non_silently = mr_imperial.211
@@ -275,11 +698,15 @@ mongol_dominance = {
 			set_global_variable = mr_beat_211i_fired
 		}
 		# --- COMPLETION FAILSAFE: five years before 1650 ---
-		# Grants MGE_f's own nine required locations outright, so the
-		# formable is genuinely reachable at the end of the railroad.
-		# AI-only, and never takes a location from the player.
+		# Grants MGE_f's own nine required locations outright — plus a
+		# Russian foothold (Ryazan, historically the first principality
+		# the Mongols reached in 1237) so the end trigger's westward
+		# clause is genuinely reachable. Gated on the imperial
+		# conquest-automation rule and on is_ai; never takes a location
+		# from the player.
 		if = {
 			limit = {
+				has_game_rule = MR_imperial_auto_conquest_yes
 				current_date > 1645.1.1
 				NOT = {
 					mr_dominance_end_trigger = yes
@@ -289,8 +716,8 @@ mongol_dominance = {
 				}
 				any_country = {
 					OR = {
-						this = c:MGO
-						this = c:MGE
+						tag = MGO
+						tag = MGE
 					}
 					is_ai = yes
 					at_war = no
@@ -300,18 +727,19 @@ mongol_dominance = {
 			random_country = {
 				limit = {
 					OR = {
-						this = c:MGO
-						this = c:MGE
+						tag = MGO
+						tag = MGE
 					}
 					is_ai = yes
 					at_war = no
 				}
 				save_scope_as = mr_claimant
 			}
-			# The areas holding MGE_f's nine required locations. Iterating
-			# areas rather than naming locations one by one keeps this
-			# readable and hands over the surrounding land too — the same
-			# shape as PD's every_ownable_location_in_area blocks.
+			# The areas holding MGE_f's nine required locations, plus the
+			# Ryazan foothold. Iterating areas rather than naming
+			# locations one by one keeps this readable and hands over the
+			# surrounding land too — the same shape as PD's
+			# every_ownable_location_in_area blocks.
 			area:upper_selenga_area = {
 				every_ownable_location_in_area = {
 					limit = {
@@ -447,23 +875,50 @@ mongol_dominance = {
 					add_core = scope:mr_claimant
 				}
 			}
+			area:ryazan_area = {
+				every_ownable_location_in_area = {
+					limit = {
+						owner = {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
 			scope:mr_claimant = {
 				trigger_event_silently = mr_dominance.999
 			}
 		}
 	}
 	on_ending = {
-		# The railroad either completes, or the empire crumbles.
+		# 1. Strip the phase modifiers, PD-style.
+		every_country = {
+			limit = {
+				OR = {
+					tag = MGO
+					tag = MGE
+				}
+			}
+			remove_country_modifier = MR_pax_mongolica
+			remove_country_modifier = MR_dominance_historical_modifier
+			remove_country_modifier = MR_mongol_preparing_for_conquest
+		}
+		# 2. The railroad either completes, or the empire crumbles.
 		if = {
 			limit = {
 				mr_dominance_end_trigger = yes
 			}
-			# Form the Mongol Empire. The phase's end trigger is MGE_f's
-			# own nine required locations, so by this point the formable
-			# is genuinely available rather than merely thematic.
+			# Form the Mongol Empire. The phase's end trigger includes
+			# MGE_f's own nine required locations, so by this point the
+			# formable is genuinely available rather than merely thematic.
 			every_country = {
 				limit = {
-					this = c:MGO
+					tag = MGO
 					NOT = {
 						country_exists = c:MGE
 					}
@@ -473,8 +928,8 @@ mongol_dominance = {
 			every_country = {
 				limit = {
 					OR = {
-						this = c:MGO
-						this = c:MGE
+						tag = MGO
+						tag = MGE
 					}
 				}
 				trigger_event_non_silently = mr_dominance.132
@@ -485,8 +940,8 @@ mongol_dominance = {
 			every_country = {
 				limit = {
 					OR = {
-						this = c:MGO
-						this = c:MGE
+						tag = MGO
+						tag = MGE
 					}
 				}
 				trigger_event_non_silently = mr_dominance.133
@@ -505,6 +960,10 @@ mongol_dominance = {
 		# to keep them out of the savefile.
 		remove_variable = mr_leading_country
 		remove_variable = mr_rival_country
+		remove_variable = MR_dominance_score
+		remove_variable = mr_dom_conquest_cooldown
+		remove_variable = mr_dom_conquest_target
+		remove_variable = mr_dom_conquest_target_country
 	}
 	tooltip = {
 		if = {
@@ -521,9 +980,11 @@ mongol_dominance = {
 	map_color = {
 		if = {
 			limit = {
-				OR = {
-					owner ?= c:MGO
-					owner ?= c:MGE
+				owner ?= {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
 				}
 			}
 			value = this.owner.country_color
@@ -535,11 +996,18 @@ mongol_dominance = {
 	secondary_map_color = {
 		if = {
 			limit = {
+				country_exists = c:MGO
 				owner ?= {
-					OR = {
-						is_subject_of = c:MGO
-						is_subject_of = c:MGE
-					}
+					is_subject_of = c:MGO
+				}
+			}
+			value = dark_grey
+		}
+		else_if = {
+			limit = {
+				country_exists = c:MGE
+				owner ?= {
+					is_subject_of = c:MGE
 				}
 			}
 			value = dark_grey
@@ -547,9 +1015,13 @@ mongol_dominance = {
 		else_if = {
 			limit = {
 				region = region:russian_region
-				NOR = {
-					owner ?= c:MGO
-					owner ?= c:MGE
+				NOT = {
+					owner ?= {
+						OR = {
+							tag = MGO
+							tag = MGE
+						}
+					}
 				}
 			}
 			value = red

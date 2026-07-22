@@ -2,20 +2,76 @@
 # MONGOL RESURGENCE (MR) - GAME RULES
 # =================================================================
 # Option names are global identifiers and are what `has_game_rule`
-# takes, so they carry the mr_ prefix rather than bare words.
+# takes, so they carry the MR_/mr_ prefix rather than bare words.
+# Structure mirrors PD's PD_config.txt: per-phase conquest
+# automation, a three-tier military buff rule and a timeline pacing
+# rule, plus a master switch so the whole mod can be disabled.
 # Reference: vanilla main_menu/common/game_rules (player_normal_difficulty).
+
+# --- Master switch: all MR content on or off ---
+# Every can_start / on_action / DHE in the mod checks
+# NOT = { has_game_rule = mr_railroad_off }.
 mr_railroad = {
-	default = mr_railroad_historical
-	# Historically anchored: the railroad follows the real 1368 timeline.
-	mr_railroad_historical = {
+	default = mr_railroad_on
+	mr_railroad_on = {
 		flag = general_rule
 	}
-	# Divergent: the same three phases, but actors and timings can vary.
-	mr_railroad_divergent = {
-		flag = general_rule
-	}
-	# Mod content disabled entirely.
 	mr_railroad_off = {
+		flag = general_rule
+	}
+}
+
+# --- Situation 1 Conquest Automation ---
+# Gates the Phase 1 completion failsafe (the 1415 territorial
+# handover). The birth failsafe (MGO forming at all) is NOT gated:
+# without MGO the railroad has no actor and every later phase is
+# unreachable.
+MR_mongol_resurgence_auto_conquest = {
+	default = MR_mongol_resurgence_auto_conquest_yes
+	MR_mongol_resurgence_auto_conquest_yes = {
+		flag = general_rule
+	}
+	MR_mongol_resurgence_auto_conquest_no = {
+		flag = general_rule
+	}
+}
+
+# --- Imperial Expansion Automation (Situations 2 and 3) ---
+# Gates the Phase 2 (1545) and Phase 3 (1645) completion failsafes.
+MR_imperial_auto_conquest = {
+	default = MR_imperial_auto_conquest_yes
+	MR_imperial_auto_conquest_yes = {
+		flag = general_rule
+	}
+	MR_imperial_auto_conquest_no = {
+		flag = general_rule
+	}
+}
+
+# --- Military Buffs and Conquest Speed ---
+# Which phase buff the claimant receives, and (like PD's
+# BRA_buff_enabled) how aggressively the Phase 1 AI railroad paces
+# its unification wars.
+MR_mongol_buff_rule = {
+	default = MR_buff_historical
+	MR_buff_disabled = {
+		flag = general_rule
+	}
+	MR_buff_historical = {
+		flag = general_rule
+	}
+	MR_buff_enabled = {
+		flag = general_rule
+	}
+}
+
+# --- Timeline & Pacing ---
+MR_timeline_pacing_rule = {
+	default = MR_timeline_frontloaded
+	MR_timeline_frontloaded = {
+		flag = general_rule
+	}
+	MR_timeline_strict_historical = {
 		flag = general_rule
 	}
 }

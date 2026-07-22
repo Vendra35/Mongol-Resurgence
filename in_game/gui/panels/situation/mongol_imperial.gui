@@ -1,11 +1,15 @@
 ﻿situation_panel = {
 
     ##################################### TOP HEADER (SINGLE PORTRAIT - ONE EMPIRE) #####################################
+    # Context comes from the situation's mr_leading_country variable —
+    # the same pattern as the (working) mongol_resurgence panel.
+    # GetCountry('MGO') never resolved and left the portrait black with
+    # "No context supplied ... Character" log spam.
     blockoverride "situation_panel_image" {
         using = one_country_header_template
-    
+
         blockoverride "FirstCountryContext" {
-            datacontext = "[GetCountry('MGO')]"
+            datacontext = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_leading_country').GetCountry]"
         }
 
         blockoverride "first_character_portrait_anchor" {

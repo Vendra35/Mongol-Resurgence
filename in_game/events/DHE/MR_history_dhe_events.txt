@@ -49,16 +49,10 @@ mr_history.1 = {
 		monthly_chance = 1
 	}
 	trigger = {
-		has_game_rule = mr_railroad_historical
-		owns = location:dadu
-	}
-	immediate = {
-		hidden_effect = {
-			set_variable = {
-				name = mr_history_yuan_decline
-				value = 1
-			}
+		NOT = {
+			has_game_rule = mr_railroad_off
 		}
+		owns = location:dadu
 	}
 	option = {
 		name = mr_history.1.a
@@ -96,14 +90,8 @@ mr_history.2 = {
 		monthly_chance = 1
 	}
 	trigger = {
-		has_game_rule = mr_railroad_historical
-	}
-	immediate = {
-		hidden_effect = {
-			set_variable = {
-				name = mr_history_ilkhanate_fragmented
-				value = 1
-			}
+		NOT = {
+			has_game_rule = mr_railroad_off
 		}
 	}
 	option = {
@@ -138,14 +126,8 @@ mr_history.3 = {
 		monthly_chance = 1
 	}
 	trigger = {
-		has_game_rule = mr_railroad_historical
-	}
-	immediate = {
-		hidden_effect = {
-			set_variable = {
-				name = mr_history_chagatai_schism
-				value = 1
-			}
+		NOT = {
+			has_game_rule = mr_railroad_off
 		}
 	}
 	# The historical schism was as much religious as territorial:
@@ -186,16 +168,10 @@ mr_history.5 = {
 		monthly_chance = 1
 	}
 	trigger = {
-		has_game_rule = mr_railroad_historical
-		owns = location:sarai_al_jadid
-	}
-	immediate = {
-		hidden_effect = {
-			set_variable = {
-				name = mr_history_tokhtamysh
-				value = 1
-			}
+		NOT = {
+			has_game_rule = mr_railroad_off
 		}
+		owns = location:sarai_al_jadid
 	}
 	option = {
 		name = mr_history.5.a
@@ -233,17 +209,11 @@ mr_history.6 = {
 		monthly_chance = 2
 	}
 	trigger = {
-		has_game_rule = mr_railroad_historical
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 		owns = location:samarkand
 		country_exists = c:DLH
-	}
-	immediate = {
-		hidden_effect = {
-			set_variable = {
-				name = mr_history_delhi_sacked
-				value = 1
-			}
-		}
 	}
 	option = {
 		name = mr_history.6.a
@@ -277,16 +247,10 @@ mr_history.7 = {
 		monthly_chance = 1
 	}
 	trigger = {
-		has_game_rule = mr_railroad_historical
-		government_type = government_type:steppe_horde
-	}
-	immediate = {
-		hidden_effect = {
-			set_variable = {
-				name = mr_history_oirat_challenge
-				value = 1
-			}
+		NOT = {
+			has_game_rule = mr_railroad_off
 		}
+		government_type = government_type:steppe_horde
 	}
 	option = {
 		name = mr_history.7.a
@@ -324,16 +288,10 @@ mr_history.8 = {
 		monthly_chance = 1
 	}
 	trigger = {
-		has_game_rule = mr_railroad_historical
-		owns = location:samarkand
-	}
-	immediate = {
-		hidden_effect = {
-			set_variable = {
-				name = mr_history_babur
-				value = 1
-			}
+		NOT = {
+			has_game_rule = mr_railroad_off
 		}
+		owns = location:samarkand
 	}
 	option = {
 		name = mr_history.8.a

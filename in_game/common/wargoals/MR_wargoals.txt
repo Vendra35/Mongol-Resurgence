@@ -39,9 +39,12 @@ MR_war_goal_steppe_unification = {
 }
 
 # --- Phase 2/3: the Silk Road and the Ming hegemony war ----------
-# Covers samarkand (khorasan), dadu (north_china) and the three
-# southern seats MGE_f demands: shangyuan (east_china), baxian
-# (west_china), guangzhou (south_china).
+# Covers samarkand (khorasan), dadu (north_china), the three
+# southern seats MGE_f demands — shangyuan (east_china), baxian
+# (west_china), guangzhou (south_china) — plus xinjiang_region
+# (a Phase 2 goal region since the corridor was made contiguous)
+# and mongolia_region (so a Karakorum lost after Phase 1 stays
+# legally retakable: neither Phase 3 CB covered it before).
 MR_war_goal_silk_road = {
 	type = superiority
 	attacker = {
@@ -51,6 +54,8 @@ MR_war_goal_silk_road = {
 		allowed_locations = {
 			OR = {
 				scope:location.region = region:khorasan_region
+				scope:location.region = region:xinjiang_region
+				scope:location.region = region:mongolia_region
 				scope:location.region = region:north_china_region
 				scope:location.region = region:persia_region
 				scope:location.region = region:east_china_region
@@ -61,6 +66,8 @@ MR_war_goal_silk_road = {
 		allowed_subjugation = {
 			OR = {
 				scope:loser.capital.region = region:khorasan_region
+				scope:loser.capital.region = region:xinjiang_region
+				scope:loser.capital.region = region:mongolia_region
 				scope:loser.capital.region = region:north_china_region
 				scope:loser.capital.region = region:persia_region
 				scope:loser.capital.region = region:east_china_region

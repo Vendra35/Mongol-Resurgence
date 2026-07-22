@@ -138,6 +138,12 @@ mr_dominance.103 = {
 }
 
 # --- A New Khan Rises -------------------------------------------
+# Fires for MGO the month it first exists. Besides the beat, this
+# is where the Great Khan himself is created: a new Borjigin ruler
+# with the Timur treatment (rise_of_timur.txt gives Timur the
+# timmy_wants_to_play character modifier and the conqueror trait;
+# character creation fields follow pirate_events.txt:35 /
+# banking.txt:58 / election.txt:165).
 mr_dominance.104 = {
 	type = country_event
 	category = situation_event
@@ -148,6 +154,32 @@ mr_dominance.104 = {
 	illustration_tags = {
 		10 = interior
 		10 = happy
+	}
+	immediate = {
+		hidden_effect = {
+			create_character = {
+				estate = estate_type:nobles_estate
+				first_name = Batu
+				age = 30
+				culture = root.culture
+				religion = root.religion
+				dynasty = dynasty:borjigin_dynasty
+				adm = { 60 100 }
+				dip = { 60 100 }
+				mil = { 80 100 }
+				save_scope_as = mr_great_khan
+				create_in_limbo = yes
+			}
+			set_new_ruler = scope:mr_great_khan
+			scope:mr_great_khan = {
+				add_character_modifier = {
+					modifier = MR_great_khan
+					years = -1
+					mode = add_and_extend
+				}
+				add_trait = trait:conqueror
+			}
+		}
 	}
 	option = {
 		name = mr_dominance.104.a
@@ -176,10 +208,25 @@ mr_dominance.105 = {
 			factor = 100
 		}
 		add_prestige = prestige_severe_bonus
-		add_country_modifier = {
-			modifier = MR_unified_mongol_banner
-			years = -1
-			mode = replace
+		if = {
+			limit = {
+				has_game_rule = MR_buff_enabled
+			}
+			add_country_modifier = {
+				modifier = MR_unified_mongol_banner
+				years = -1
+				mode = replace
+			}
+		}
+		else_if = {
+			limit = {
+				has_game_rule = MR_buff_historical
+			}
+			add_country_modifier = {
+				modifier = MR_mongol_historical_modifier_2
+				years = -1
+				mode = replace
+			}
 		}
 	}
 }
@@ -249,10 +296,28 @@ mr_dominance.1 = {
 			factor = 100
 		}
 		add_prestige = prestige_extreme_bonus
-		add_country_modifier = {
-			modifier = MR_unified_mongol_banner
-			years = -1
-			mode = replace
+		# Reward scales with the buff rule, PD-style (brandenburg_rise
+		# on_ending): Terminator gets the full banner, Historical gets
+		# the balanced variant, Vanilla gets prestige only.
+		if = {
+			limit = {
+				has_game_rule = MR_buff_enabled
+			}
+			add_country_modifier = {
+				modifier = MR_unified_mongol_banner
+				years = -1
+				mode = replace
+			}
+		}
+		else_if = {
+			limit = {
+				has_game_rule = MR_buff_historical
+			}
+			add_country_modifier = {
+				modifier = MR_mongol_historical_modifier_2
+				years = -1
+				mode = replace
+			}
 		}
 	}
 }
@@ -441,10 +506,17 @@ mr_dominance.125 = {
 			factor = 100
 		}
 		add_prestige = prestige_severe_bonus
-		add_country_modifier = {
-			modifier = MR_empire_fulfilled
-			years = -1
-			mode = replace
+		if = {
+			limit = {
+				NOT = {
+					has_game_rule = MR_buff_disabled
+				}
+			}
+			add_country_modifier = {
+				modifier = MR_empire_fulfilled
+				years = -1
+				mode = replace
+			}
 		}
 	}
 }
@@ -558,10 +630,17 @@ mr_dominance.132 = {
 			factor = 100
 		}
 		add_prestige = prestige_ultimate_bonus
-		add_country_modifier = {
-			modifier = MR_mongol_world_order
-			years = -1
-			mode = replace
+		if = {
+			limit = {
+				NOT = {
+					has_game_rule = MR_buff_disabled
+				}
+			}
+			add_country_modifier = {
+				modifier = MR_mongol_world_order
+				years = -1
+				mode = replace
+			}
 		}
 	}
 }
@@ -641,9 +720,12 @@ mr_dominance.995 = {
 	hidden = yes
 	trigger = {
 		is_ai = yes
+		# tag = is a string comparison and cannot fail when the other
+		# country does not exist; this = c:MGE threw "Invalid right side"
+		# script errors whenever MGE was not yet on the map.
 		OR = {
-			this = c:MGO
-			this = c:MGE
+			tag = MGO
+			tag = MGE
 		}
 	}
 	immediate = {
@@ -709,10 +791,6 @@ mr_dominance.996 = {
 	type = country_event
 	hidden = yes
 	trigger = {
-		OR = {
-			country_exists = c:MGO
-			country_exists = c:MGE
-		}
 		is_ai = yes
 		at_war = no
 		# The AI's manpower must be above zero (economic bottleneck lock)
@@ -720,8 +798,8 @@ mr_dominance.996 = {
 		# We call the custom macro for the percentage of the army we just created
 		MR_percent_of_army_balance = yes
 		OR = {
-			this = c:MGO
-			this = c:MGE
+			tag = MGO
+			tag = MGE
 		}
 	}
 	immediate = {
@@ -810,40 +888,188 @@ mr_dominance.996 = {
 # --- AI railroad: declare the unification war ---
 # Fired by the Phase 1 situation once the cooldown matures and a
 # target has been selected. This is what makes the railroad a
-# railroad: without it the AI simply sits on the steppe. Mirrors
-# PD's pd_brandenburg.103.
+# railroad: without it the AI simply sits on the steppe. Structure
+# mirrors PD's pd_brandenburg.103 exactly: the war declaration
+# lives in option A (ai_chance 100), so a HUMAN claimant can pick
+# option B and postpone instead of being forced into the war from
+# an immediate block. The after block resets the targeting
+# variables either way, so the on_monthly picker starts fresh.
 mr_dominance.997 = {
 	type = country_event
 	category = situation_event
-	hidden = yes
+	title = mr_dominance.997.title
+	desc = mr_dominance.997.desc
 	immediate = {
 		situation:mongol_resurgence = {
+			change_variable = {
+				name = mr_conquest_cooldown
+				multiply = 0
+			}
 			var:mr_conquest_target_country = {
 				save_scope_as = mr_war_target
-			}
-		}
-		if = {
-			limit = {
-				exists = scope:mr_war_target
-			}
-			declare_war_with_cb = {
-				target = scope:mr_war_target
-				type = casus_belli:cb_MR_steppe_unification
-			}
-			situation:mongol_resurgence = {
-				set_variable = {
-					name = mr_conquest_target
-					value = 0
-				}
-				set_variable = {
-					name = mr_conquest_cooldown
-					value = 0
-				}
 			}
 		}
 	}
 	option = {
 		name = mr_dominance.997.a
+		ai_chance = {
+			factor = 100
+		}
+		declare_war_with_cb = {
+			target = scope:mr_war_target
+			type = casus_belli:cb_MR_steppe_unification
+		}
+	}
+	# Player-only in practice: the AI never postpones (factor 0).
+	option = {
+		name = mr_dominance.997.b
+		ai_chance = {
+			factor = 0
+		}
+	}
+	after = {
+		situation:mongol_resurgence = {
+			set_variable = {
+				name = mr_conquest_target
+				value = 0
+			}
+			# MGO always exists here — it is the country this event just
+			# fired for — so pointing the variable back at it is safe.
+			# Same shape as PD resetting PD_conquest_target_country to
+			# c:BRA in pd_brandenburg.103's after block.
+			set_variable = {
+				name = mr_conquest_target_country
+				value = c:MGO
+			}
+		}
+	}
+}
+
+# --- AI railroad, Phase 2: declare the Silk Road war ---
+# Fired by the mongol_imperial situation once its cooldown matures
+# and a target holding corridor land has been picked. Mirrors PD's
+# pd_brandenburg.203 (the Ascension-phase war event) exactly.
+mr_dominance.993 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.993.title
+	desc = mr_dominance.993.desc
+	immediate = {
+		situation:mongol_imperial = {
+			change_variable = {
+				name = mr_imp_conquest_cooldown
+				multiply = 0
+			}
+			var:mr_imp_conquest_target_country = {
+				save_scope_as = mr_war_target
+			}
+		}
+	}
+	option = {
+		name = mr_dominance.993.a
+		ai_chance = {
+			factor = 100
+		}
+		declare_war_with_cb = {
+			target = scope:mr_war_target
+			type = casus_belli:cb_MR_silk_road
+		}
+	}
+	# Player-only in practice: the AI never postpones (factor 0).
+	option = {
+		name = mr_dominance.993.b
+		ai_chance = {
+			factor = 0
+		}
+	}
+	after = {
+		situation:mongol_imperial = {
+			set_variable = {
+				name = mr_imp_conquest_target
+				value = 0
+			}
+			set_variable = {
+				name = mr_imp_conquest_target_country
+				value = c:MGO
+			}
+		}
+	}
+}
+
+# --- AI railroad, Phase 3: declare the westward / seats war ---
+# Fired by the mongol_dominance situation. Same PD-203 shape, but
+# the phase has two theatres, so option A picks the CB by where the
+# target's land actually lies: the Pontic/Russian/Ural theatre gets
+# the westward CB, everything else the silk-road CB. The claimant
+# can be MGO or MGE — the after block re-seeds the target variable
+# with root, the country this event just fired for.
+mr_dominance.992 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.992.title
+	desc = mr_dominance.992.desc
+	immediate = {
+		situation:mongol_dominance = {
+			change_variable = {
+				name = mr_dom_conquest_cooldown
+				multiply = 0
+			}
+			var:mr_dom_conquest_target_country = {
+				save_scope_as = mr_war_target
+			}
+		}
+	}
+	option = {
+		name = mr_dominance.992.a
+		ai_chance = {
+			factor = 100
+		}
+		if = {
+			limit = {
+				scope:mr_war_target = {
+					OR = {
+						any_owned_location = {
+							region = region:russian_region
+						}
+						any_owned_location = {
+							region = region:steppes_region
+						}
+						any_owned_location = {
+							region = region:ural_region
+						}
+					}
+				}
+			}
+			declare_war_with_cb = {
+				target = scope:mr_war_target
+				type = casus_belli:cb_MR_westward_advance
+			}
+		}
+		else = {
+			declare_war_with_cb = {
+				target = scope:mr_war_target
+				type = casus_belli:cb_MR_silk_road
+			}
+		}
+	}
+	# Player-only in practice: the AI never postpones (factor 0).
+	option = {
+		name = mr_dominance.992.b
+		ai_chance = {
+			factor = 0
+		}
+	}
+	after = {
+		situation:mongol_dominance = {
+			set_variable = {
+				name = mr_dom_conquest_target
+				value = 0
+			}
+			set_variable = {
+				name = mr_dom_conquest_target_country
+				value = root
+			}
+		}
 	}
 }
 
@@ -859,11 +1085,6 @@ mr_dominance.999 = {
 	immediate = {
 		add_army_tradition = army_tradition_severe_bonus
 		add_government_power = government_power_ultimate_bonus
-		add_country_modifier = {
-			modifier = MR_mongol_preparing_for_conquest
-			years = 25
-			mode = add_and_extend
-		}
 	}
 	option = {
 		name = mr_dominance.999.a

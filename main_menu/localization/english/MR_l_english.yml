@@ -1,7 +1,125 @@
 ﻿l_english:
 
  # ==============================================================================
- # ----------------- STATIC MODIFIER NAMES -----------------
+ # MONGOL RESURGENCE - LOCALIZATION (single file, main_menu-loaded)
+ # ==============================================================================
+ # Vanilla and PD load ALL localization from main_menu/localization/<language>;
+ # in_game/localization holds only the engine's jomini fallback. The mod
+ # previously split its loc across two same-named files (in_game + main_menu),
+ # which shadowed the main_menu copy in-game and left rule_/setting_/modifier
+ # keys unresolved. Everything now lives here.
+
+ # ==============================================================================
+ # ----------------- SITUATION NAMES & DESCRIPTIONS -----------------
+ # ==============================================================================
+ # The situation list itself localizes as <key> + <key>_desc (vanilla:
+ # situations_l_english.yml, black_death). The situation_*_title/_desc keys
+ # below them are referenced directly by the mod's .gui panels.
+
+ mongol_resurgence: "Mongol Resurgence"
+ mongol_resurgence_desc: "$situation_mongol_resurgence_desc$"
+ mongol_imperial: "Road to Empire"
+ mongol_imperial_desc: "$situation_mongol_imperial_desc$"
+ mongol_dominance: "Mongol Dominance"
+ mongol_dominance_desc: "$situation_mongol_dominance_desc$"
+ mr_chahar_reunification: "The Chahar Reunification"
+ mr_chahar_reunification_desc: "Ligdan Khan of the Chahar, last Great Khan of the Chinggisid line, is trying to bring the fractured Mongol clans back under a single banner by force. The eastern clans drift toward the rising Manchu power, and the western Oirats never accepted Borjigin supremacy in the first place. A claim is worth what the horsemen behind it can enforce."
+ mr_torghut_migration: "The Torghut Migration"
+ mr_torghut_migration_desc: "The Torghut clans have had enough of Dzungaria's contested pastures. Two thousand miles to the west lies a great river valley that no horde has held since Sarai fell. The carts are being loaded for the last great migration of the steppe: across the Kazakh steppe, over the Urals, to the Volga."
+ mr_dzungar_khanate: "The Dzungar Khanate"
+ mr_dzungar_khanate_desc: "With the Torghuts gone west and the Khoshut drawn south into Tibet, the Choros hold Dzungaria alone. Erdeni Batur is building something the steppe has not seen in three centuries: a khanate with fixed towns, cast cannon, a written code of law, and a standing army that does not disperse after the campaigning season."
+
+ situation_mongol_resurgence_title: "Mongol Resurgence"
+ situation_mongol_resurgence_desc: "The old steppe has gone silent. The once-mighty hordes that thundered across continents have been reduced to scattered tribes, bickering over pastures and petty alliances. The warrior spirit of Chinggis Khaan seems lost to the winds.\n\nBut in this chaos lies opportunity. One ambitious leader can rise from obscurity, unite the warring clans, and remind the world why their ancestors once trembled at the sound of hoofbeats. The road to empire begins with a single tent, a single banner, and a single will to dominate.\n\n#Y ----------------------------------------#!\n\n#G HISTORICAL CONTEXT & AI BEHAVIOR:#!\nThis situation depicts the chaotic struggle for dominance among the fractured Mongol successor states. Historically, the Mongol Empire fragmented after the death of Möngke Khaan in 1259, leading to centuries of internal strife and external pressures. A new unification will require crushing rival khans, absorbing their hordes, and proving absolute supremacy on the steppe.\n\n#Y What to Expect:#! The AI will opportunistically target weaker rival khans, building up its military might and tribal authority. Expect calculated wars of unification rather than mindless blobbing. The victor will emerge as the undisputed master of the Mongolian heartland, ready to look beyond the steppe."
+
+ situation_mongol_imperial_title: "Road to Empire"
+ situation_mongol_imperial_desc: "The steppe is united, but the Mongol destiny demands more. Our ancestors did not stop at the edge of the grasslands; they carved an empire that stretched from the Pacific to the Danube. The world forgot the taste of fear, but we shall remind them.\n\nNow begins the true test. We must transform our tribal confederation into a proper imperial machine, capable of sustained conquest across vast distances. The road ahead is paved with the bones of those who thought themselves safe behind walls and rivers.\n\n#Y ----------------------------------------#!\n\n#G HISTORICAL CONTEXT & AI BEHAVIOR:#!\nAfter Genghis Khan united the Mongol tribes in 1206, he didn't rest. He immediately turned outward, conquering the Jin Dynasty, the Khwarezmian Empire, and laying the foundation for the largest contiguous land empire in history. Similarly, our unified Mongol state will now look beyond the steppe.\n\n#Y What to Expect:#! The AI will aggressively expand into neighboring regions, prioritizing the Silk Road corridor from north China through Xinjiang to Transoxiana. Expect large-scale invasions, calculated sieges, and the systematic dismantling of regional powers. The empire that emerges will be a true terror to behold."
+
+ situation_mongol_dominance_title: "Mongol Dominance"
+ situation_mongol_dominance_desc: "The empire stands as the undisputed master of Asia. From the Sea of Japan to the banks of the Volga, the Mongol banner flies unchallenged. But true dominance is not merely holding territory; it is about reshaping the world in our image.\n\nNow the final phase begins. We must consolidate our imperial administration, integrate our diverse conquered peoples, and establish a lasting legacy that will define the world order for centuries. The Mongol Age will not be a brief moment in history; it will be the foundation of a new global civilization.\n\n#Y ----------------------------------------#!\n\n#G HISTORICAL CONTEXT & AI BEHAVIOR:#!\nAt its height, the Mongol Empire was not just a military machine but an administrative marvel that facilitated trade, religious tolerance, and cultural exchange across Eurasia. The Pax Mongolica connected East and West, and the Yuan Dynasty ruled China as a legitimate imperial power.\n\n#Y What to Expect:#! The AI will press westward against the Russian principalities while securing the nine great seats of the old khanates. When all nine are held, the Mongol Empire itself can be reformed."
+
+ # ==============================================================================
+ # ----------------- SITUATION HINTS -----------------
+ # ==============================================================================
+ # Convention: hint_<key> + hint_<key>_hint_text (vanilla hints_l_english.yml).
+
+ hint_mongol_resurgence: "The Northern Yuan Resurgence"
+ hint_mongol_resurgence_hint_text: "A struggle for the Chinggisid claim has begun on the Mongolian steppe. Whoever unites the clans and holds #Y Karakorum and the Gobi#! before #Y 1420#! takes up the mantle of the Great Khan.\n\nIf you rule a Mongol steppe horde, the situation grants you a #Y Unification of the Steppe#! casus belli against your rivals."
+ hint_mongol_imperial: "The Pax Mongolica"
+ hint_mongol_imperial_hint_text: "The unified horde turns outward. The Silk Road corridor — #Y Khorasan, Xinjiang and North China#! — must answer to the Khan before #Y 1550#!.\n\nThe situation grants the claimant the #Y Mastery of the Silk Road#! casus belli against the powers holding the corridor."
+ hint_mongol_dominance: "The Silk Empire"
+ hint_mongol_dominance_hint_text: "The final act: the westward advance. The claimant must hold the #Y nine great seats#! of the old khanates — from Karakorum to Kaffa — and plant its banner in the Russian lands before #Y 1650#! to restore the #Y Mongol Empire#!."
+ hint_mr_chahar: "Ligdan Khan and the Chahar"
+ hint_mr_chahar_hint_text: "The last Chinggisid Great Khan is trying to reunify the Mongol clans by force. The situation ends when one Mongol power holds #Y Karakorum#! and a foothold in North China — or when Ligdan's claim dies with him in #Y 1634#!."
+ hint_mr_torghut: "The Torghut Migration"
+ hint_mr_torghut_hint_text: "A Mongol horde is trekking west from Dzungaria toward the Volga. The situation ends once a steppe horde has crossed the Urals and taken #Y Sarai#! — or when the window closes in #Y 1630#!."
+ hint_mr_dzungar: "The Dzungar Khanate"
+ hint_mr_dzungar_hint_text: "The last steppe empire is being built in Dzungaria. Consolidate the khanate and hold #Y Dzungaria, the Tarim basin and Zhetysu#! before #Y 1650#!."
+
+ # ==============================================================================
+ # ----------------- MAP TOOLTIPS, END & TIMEOUT REQUIREMENTS -----------------
+ # ==============================================================================
+
+ mr_resurgence_map_tt: "#Y The Mongolian heartland.#! Whoever unites these pastures under one banner takes up the Chinggisid claim."
+ mr_imperial_map_tt: "#Y The Silk Road corridor.#! North China, Xinjiang and Khorasan — mastery of the road between them is the making of the Pax Mongolica."
+ mr_dominance_map_tt: "#Y The western frontier.#! Beyond it lie the Russian principalities, and the last road to a restored Mongol Empire."
+ mr_chahar_map_tt: "#Y The Mongolian heartland.#! The last Chinggisid Great Khan is trying to bring these clans to heel by force."
+ mr_torghut_map_tt: "#Y The road west.#! From Dzungaria across the Urals to the Volga — the last great migration of the steppe."
+ mr_dzungar_map_tt: "#Y Dzungaria and the western steppe.#! The ground on which the last nomadic empire is being built."
+
+ mr_resurgence_end_tt: "#Y MGO holds Karakorum and the entire Mongolian heartland.#! No rival banner remains anywhere in the Mongolia region."
+ mr_imperial_end_tt: "#Y MGO holds Samarkand, Dadu, and the whole Silk Road corridor.#! No foreign power remains in the Khorasan, Xinjiang or North China regions."
+ mr_dominance_end_tt: "#Y All nine seats of the Mongol Empire are held, and the horde stands on Russian soil.#! Karakorum, Sarai, Kazan, Samarkand, Kaffa, Dadu, Shangyuan, Baxian and Guangzhou."
+
+ mr_resurgence_timeout_tt: "#Y Or 1420 arrives.#! If the steppe is not united by then, the moment has passed."
+ mr_imperial_timeout_tt: "#Y Or 1550 arrives.#! The Silk Road will not wait forever."
+ mr_dominance_timeout_tt: "#Y Or 1650 arrives.#! The age of the horse archer ends with or without us."
+ mr_chahar_timeout_tt: "#Y Or 1634 arrives.#! Ligdan's claim dies with him."
+ mr_torghut_timeout_tt: "#Y Or 1630 arrives.#! The trek ends where it ends."
+ mr_dzungar_timeout_tt: "#Y Or 1650 arrives.#!"
+
+ # ==============================================================================
+ # ----------------- SITUATION PANEL SCORE & PROGRESS -----------------
+ # ==============================================================================
+ # MR_mgo_score / MR_rival_score are PD-style strength scores computed monthly
+ # in the Phase 1 situation. MR_mge_score / MR_dominance_score are 0-100 goal
+ # progress values computed monthly in Phases 2 and 3.
+
+ MR_MGO_SCORE_TT: "Score: [SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('MR_mgo_score').GetValue|0]"
+ MR_RIVAL_SCORE_TT: "Score: [SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('MR_rival_score').GetValue|0]"
+ MR_MGO_MILITARY_STRENGTH_TT_TITLE: "Mongol Military Strength"
+ MR_MGO_SCORE_TT_DESC: "Score: Calculated with a weighted formula based on military strength, income, and prestige."
+ MR_MGE_SCORE_TT: "Progress: [SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('MR_mge_score').GetValue|0]%"
+ MR_MGE_MILITARY_STRENGTH_TT_TITLE: "Great Khan's Military Strength"
+ MR_MGE_SCORE_TT_DESC: "Progress toward the phase goal: each great seat held and each corridor region cleared of foreign powers advances the bar."
+ MR_DOMINANCE_SCORE_TT: "Progress: [SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('MR_dominance_score').GetValue|0]%"
+
+ mongol_resurgence_progress_tooltip: "Unification Progress"
+ mongol_imperial_progress_tooltip: "Imperial Expansion Progress"
+ mongol_dominance_progress_tooltip: "Consolidation Progress"
+
+ # ==============================================================================
+ # ----------------- CASUS BELLI & WAR GOALS -----------------
+ # ==============================================================================
+ # War goals localize as war_goal_<wargoal_key> + _desc (vanilla:
+ # war_goal_enforce_military_access in wargoals loc).
+
+ cb_MR_steppe_unification: "Unification of the Steppe"
+ cb_MR_steppe_unification_desc: "The clans of the steppe answer to one banner or to none. Whoever holds the Chinggisid claim has the right to compel the rest."
+ cb_MR_silk_road: "Mastery of the Silk Road"
+ cb_MR_silk_road_desc: "The road from the Ordos to Persia has paid tribute to the horde before, and will again. The cities along it are ours to take."
+ cb_MR_westward_advance: "The Westward Advance"
+ cb_MR_westward_advance_desc: "The Russian principalities paid tribute for two hundred and forty years. Their independence is a recent accident, and a reversible one."
+
+ war_goal_MR_war_goal_steppe_unification: "Unify the Steppe"
+ war_goal_MR_war_goal_steppe_unification_desc: "[war_goal|e] is to bring the Mongolian heartland under a single banner. Conquest is limited to the Mongolia region."
+ war_goal_MR_war_goal_silk_road: "Seize the Silk Road"
+ war_goal_MR_war_goal_silk_road_desc: "[war_goal|e] is to master the corridor from north China through Transoxiana. Conquest is limited to the Silk Road and China regions."
+ war_goal_MR_war_goal_westward_advance: "Advance into the West"
+ war_goal_MR_war_goal_westward_advance_desc: "[war_goal|e] is to restore the western ulus. Conquest is limited to the Russian, Pontic and Ural regions."
+
+ # ==============================================================================
+ # ----------------- STATIC MODIFIERS -----------------
  # ==============================================================================
 
  # --- Situation 1 ---
@@ -20,6 +138,7 @@
  STATIC_MODIFIER_NAME_MR_imperial_failure_ai: "Shackled Empire"
  STATIC_MODIFIER_NAME_MR_imperial_failure_player: "Failed Imperial Dream"
  STATIC_MODIFIER_NAME_MR_mongol_preparing_for_conquest: "Mongol War Preparations"
+ STATIC_MODIFIER_DESC_MR_mongol_preparing_for_conquest: "The horde musters under the Khan's command. It will strike when — and only when — the Kurultai commands it. #color_red (AI only: removed when the current Situation ends.)#!"
  STATIC_MODIFIER_NAME_MR_the_sleeping_horde: "The Sleeping Horde"
  STATIC_MODIFIER_DESC_MR_the_sleeping_horde: "This state consolidates its power and bides its time. #color_red (This effect will be removed upon the start of the 2nd Situation.)#!"
 
@@ -31,7 +150,7 @@
  STATIC_MODIFIER_NAME_MR_dominance_failure_ai: "Collapsed Hegemony"
  STATIC_MODIFIER_NAME_MR_dominance_failure_player: "Failed World Order"
 
- # --- Historical Modifiers ---
+ # --- Historical Mode ---
  STATIC_MODIFIER_NAME_MR_mongol_historical_modifier: "Mongol Awakening"
  STATIC_MODIFIER_DESC_MR_mongol_historical_modifier: "The warrior spirit of the steppe stirs once more. #color_red (This effect will be removed upon the completion of the current Situation.)#!"
  STATIC_MODIFIER_NAME_MR_mongol_historical_modifier_2: "Fulfilled Mongol Destiny"
@@ -41,41 +160,52 @@
  STATIC_MODIFIER_NAME_MR_dominance_historical_modifier: "Mongol Hegemony"
  STATIC_MODIFIER_DESC_MR_dominance_historical_modifier: "The Mongol Empire dominates the world stage. #color_red (This effect will be removed upon the completion of the current Situation.)#!"
 
+ # --- The Great Khan (character modifier, Timur-style) ---
+ STATIC_MODIFIER_NAME_MR_great_khan: "The Scourge of the Steppe"
+ STATIC_MODIFIER_DESC_MR_great_khan: "This ruler carries the Borjigin blood and the will of Chinggis. The clans follow wherever the horsetail standard points."
+
  # ==============================================================================
  # ----------------- GAME RULES -----------------
  # ==============================================================================
+ # Convention: rule_<rule_key>, setting_<option>, setting_<option>_desc
+ # (vanilla game_rules_l_english.yml).
+
+ # --- Master Switch ---
+ rule_mr_railroad: "(MR) Mongol Resurgence Content"
+ setting_mr_railroad_on: "Enabled"
+ setting_mr_railroad_on_desc: "All Mongol Resurgence content is active: the three-phase railroad, the historical event layer, and the late-steppe situations."
+ setting_mr_railroad_off: "Off"
+ setting_mr_railroad_off_desc: "All Mongol Resurgence content is disabled."
 
  # --- Situation 1 Conquest Automation ---
  rule_MR_mongol_resurgence_auto_conquest: "(MR) Mongol Resurgence Conquest Automation"
  setting_MR_mongol_resurgence_auto_conquest_no: "Deactivated (Normal Game)"
- setting_MR_mongol_resurgence_auto_conquest_no_desc: "The AI will not receive any automatic territorial annexations. The rise of the Mongol Empire must be achieved through standard gameplay mechanics."
+ setting_MR_mongol_resurgence_auto_conquest_no_desc: "The AI will not receive any automatic territorial annexations. The unification of the steppe must be achieved through standard gameplay mechanics."
  setting_MR_mongol_resurgence_auto_conquest_yes: "Activated (Mongol Rise)"
- setting_MR_mongol_resurgence_auto_conquest_yes_desc: "Ensures the rise of the unified Mongol nation. If the AI is at peace by the designated date, it will automatically annex rival khan territories to fulfill its destiny.\n#G Highly recommended if Mongol nations are controlled by the AI.#!"
+ setting_MR_mongol_resurgence_auto_conquest_yes_desc: "Ensures the unification of the steppe. If the AI claimant is at peace by #G 1415#!, it will automatically annex the remaining rival khan territories in the Mongolia region and reduce the surviving hordes to tributaries.\n#G Highly recommended if the Mongol nations are controlled by the AI.#!"
+
+ # --- Imperial Expansion Automation (Situations 2 & 3) ---
+ rule_MR_imperial_auto_conquest: "(MR) Imperial Expansion Conquest Automation"
+ setting_MR_imperial_auto_conquest_no: "Deactivated (Normal Game)"
+ setting_MR_imperial_auto_conquest_no_desc: "The AI must secure the Silk Road corridor and the nine imperial seats through standard warfare and diplomacy."
+ setting_MR_imperial_auto_conquest_yes: "Activated (Imperial Path)"
+ setting_MR_imperial_auto_conquest_yes_desc: "Acts as a safety net for the AI to ensure historical progression. If the AI claimant is at peace by #G 1545#! (Situation 2) or #G 1645#! (Situation 3), the remaining goal territories are handed over automatically.\n#G Highly recommended if the Mongols are controlled by the AI.#!"
 
  # --- Military Buffs ---
  rule_MR_mongol_buff_rule: "(MR) Mongol Military Buffs and Conquest Speed"
  setting_MR_buff_disabled: "Vanilla (No Buffs)"
  setting_MR_buff_disabled_desc: "No special military modifiers will be granted.\n#color_red Not recommended for AI-controlled Mongols.#!"
  setting_MR_buff_historical: "Historical (Balanced and Historical Conquest)"
- setting_MR_buff_historical_desc: "Grants balanced military modifiers focused on slow historical progression.\n#G Highly recommended if Mongols are controlled by the AI.#!"
+ setting_MR_buff_historical_desc: "Grants balanced military modifiers focused on slow historical progression.\n#G Highly recommended if the Mongols are controlled by the AI.#!"
  setting_MR_buff_enabled: "Terminator (Fast Conquest and Arcade Boss)"
- setting_MR_buff_enabled_desc: "Grants massive military modifiers for lightning-fast conquest.\n#color_red WARNING: Transforms the AI into an apocalyptic end-game threat.#!"
-
- # --- Imperial Expansion Automation ---
- rule_MR_imperial_auto_conquest: "(MR) Imperial Expansion Conquest Automation"
- setting_MR_imperial_auto_conquest_no: "Deactivated (Normal Game)"
- setting_MR_imperial_auto_conquest_no_desc: "The AI must secure its imperial borders through standard warfare and diplomacy."
- setting_MR_imperial_auto_conquest_yes: "Activated (Imperial Path)"
- setting_MR_imperial_auto_conquest_yes_desc: "Acts as a safety net for the AI to ensure historical progression.\n#G Highly recommended if Mongols are controlled by the AI.#!"
+ setting_MR_buff_enabled_desc: "Grants massive military modifiers for lightning-fast conquest, and the Phase 1 AI railroad declares its unification wars roughly every #Y 2 years#! instead of every 4-10.\n#color_red WARNING: Transforms the AI into an apocalyptic end-game threat.#!"
 
  # --- Timeline & Pacing ---
  rule_MR_timeline_pacing_rule: "(MR) Timeline & Pacing"
  setting_MR_timeline_frontloaded: "Dynamic & Frontloaded"
- setting_MR_timeline_frontloaded_desc: "Mongol resurgence can trigger as soon as conditions are met.\n#G Recommended if you want to experience the mod's content early.#!"
+ setting_MR_timeline_frontloaded_desc: "The Phase 1 AI railroad declares a unification war roughly every #Y 4 years#!.\n#G Recommended if you want to experience the mod's content early.#!"
  setting_MR_timeline_strict_historical: "Strict Historical Dates (Historical Path)"
- setting_MR_timeline_strict_historical_desc: "Major events follow authentic historical milestones.\n#G Highly recommended for long campaigns and realistic historical playthroughs.#!"
-
- # --- Fantasy/Historical Mode ---
+ setting_MR_timeline_strict_historical_desc: "The Phase 1 AI railroad paces its unification wars at roughly one per #Y decade#!, following the real timeline.\n#G Highly recommended for long campaigns and realistic historical playthroughs.#!"
 
  # ==============================================================================
  # ----------------- FLAG LOCALIZATION -----------------
@@ -92,11 +222,303 @@
  MGO_f_desc: "A powerful confederation of Mongol tribes, united under a single khan. Though not yet an empire, its warrior traditions and steppe mobility make it a threat to all settled civilizations on its borders."
  mgo_horde: ""
 
- # --- GAME RULE (main-menu loaded; convention: rule_<key> + setting_<option>) ---
- rule_mr_railroad: "Mongol Resurgence: Railroad"
- setting_mr_railroad_historical: "Historical"
- setting_mr_railroad_historical_desc: "The railroad follows the real timeline: the 1368 Yuan collapse, historical DHE anchoring, and a measured AI pace of roughly one unification war per decade."
- setting_mr_railroad_divergent: "Divergent"
- setting_mr_railroad_divergent_desc: "The same three phases, but actors and timings may vary, and the AI presses its wars far more aggressively."
- setting_mr_railroad_off: "Off"
- setting_mr_railroad_off_desc: "All Mongol Resurgence content is disabled."
+ # ==============================================================================
+ # ----------------- SITUATION EVENTS (mr_dominance) -----------------
+ # ==============================================================================
+
+ mr_dominance.10.title: "The Eagle of the Steppe"
+ mr_dominance.10.desc: "The struggle for the Mongol destiny has begun! The fractured tribes and khanates of the steppe have entered a period of intense competition. One among them will rise to unite the warring clans and reclaim the glory of Chinggis Khaan. Our warriors are ready, our scouts have mapped the enemy camps, and the time for action is now."
+ mr_dominance.10.a: "Let the hooves thunder!"
+
+ mr_dominance.1.title: "The Rise of the Great Khan"
+ mr_dominance.1.desc: "The steppe has chosen its master! Through blood, iron, and unrelenting will, our horde has subjugated all rivals and united the Mongol tribes under a single banner. The days of petty khans and divided pastures are over. A new Great Khan has emerged, and the world shall once again learn to fear the Mongol name.\n\nFrom the Altai Mountains to the Gobi Desert, the clans now ride as one. But this is merely the beginning. Our ancestors conquered half the known world. We shall finish what they started."
+ mr_dominance.1.a: "The world is ours to conquer!"
+
+ mr_dominance.2.title: "The Steppe Remains Divided"
+ mr_dominance.2.desc: "Our ambitions lie in ruins. Another khan has claimed dominance over the steppe, and our warriors are scattered to the winds. The dream of a united Mongol nation under our banner is dead. We must accept our diminished place in history and perhaps, one day, a new generation will rise to reclaim what we have lost."
+ mr_dominance.2.a: "We will endure, as the steppe always does."
+
+ mr_dominance.100.title: "Gathering the Horde"
+ mr_dominance.100.desc: "Before we can strike at our rivals, we must consolidate our own forces. The scattered tribes and clans must be rallied to our banner. Our diplomats ride to every camp, offering a simple choice: join us willingly or face the consequences after our victory."
+ mr_dominance.100.a: "Summon every warrior!"
+
+ mr_dominance.101.title: "The Steppe Stirs"
+ mr_dominance.101.desc: "Reports from the Mongol heartland indicate a major power struggle is underway. Tribes are abandoning their ancestral pastures, alliances are being forged and broken with alarming speed, and the thunder of massing cavalry can be heard across the grasslands. A new power is rising on the steppe."
+ mr_dominance.101.a: "We shall watch closely."
+
+ mr_dominance.102.title: "The Shadow of the Khan"
+ mr_dominance.102.desc: "Ominous news from the steppe! A rival khan has been gathering unprecedented support among the tribes. Their warriors outnumber ours, and their scouts have been spotted near our borders. It is clear they intend to challenge us for supremacy. We must prepare our defenses or risk being swept away by the coming storm."
+ mr_dominance.102.a: "We will not be conquered!"
+
+ mr_dominance.103.title: "The Thunder of Hooves"
+ mr_dominance.103.desc: "The preparations are complete. Our warriors have gathered from every corner of the steppe, their horses restless and their blades sharp. The time has come to strike at our rival and claim our rightful place as the sole power of the Mongol nation. Let our enemies tremble!"
+ mr_dominance.103.a: "Charge! For the glory of the Khan!"
+ mr_dominance.103.b: "Wait... we are not ready yet. (Postpone for 10 years)"
+
+ mr_dominance.104.title: "A New Khan Rises"
+ mr_dominance.104.desc: "The power struggle on the steppe has reached its conclusion. A new Great Khan of the Borjigin blood has emerged victorious, having crushed all rivals and united the Mongol tribes under a single war banner. The balance of power in Asia has been fundamentally altered, and the established empires beyond the steppe must now reckon with a resurgent Mongol threat."
+ mr_dominance.104.a: "They grow stronger by the day."
+
+ mr_dominance.105.title: "Victory on the Steppe"
+ mr_dominance.105.desc: "The enemy lies broken beneath our horses' hooves! Our rival khan has been decisively defeated, their warriors scattered, and their lands absorbed into our growing domain. The steppe now recognizes only one master, and the path to greater conquests lies open before us."
+ mr_dominance.105.a: "A glorious day for the Mongol people!"
+
+ mr_dominance.107.title: "Scattered to the Winds"
+ mr_dominance.107.desc: "Disaster! Our forces have been routed, our warriors flee in disarray, and our rival has proven the stronger. The campaign has ended in humiliating defeat. Our prestige is shattered, and many of the tribes that swore allegiance to us now abandon our banner. We must retreat and lick our wounds."
+ mr_dominance.107.a: "We will remember this shame."
+
+ mr_dominance.120.title: "Beyond the Steppe"
+ mr_dominance.120.desc: "The steppe is united under our banner, but the Mongol destiny demands more. The great empires beyond our borders are wealthy, decadent, and ripe for conquest. Our scouts report that the settled peoples have grown soft behind their walls. They have forgotten what it means to face the Mongol horde. It is time to remind them.\n\nThe Road to Empire begins now."
+ mr_dominance.120.a: "Point us toward the richest lands!"
+
+ mr_dominance.121.title: "The Mongol Awakening"
+ mr_dominance.121.desc: "Having secured dominance over the steppe, the unified Mongol nation is now turning its gaze outward. Mass mobilization is underway, and the great khans speak openly of resurrecting the empire of Chinggis. The settled civilizations bordering the grasslands prepare nervously for what may come."
+ mr_dominance.121.a: "The storm approaches."
+
+ mr_dominance.122.title: "The Horde at the Gates"
+ mr_dominance.122.desc: "Our worst fears have materialized. The Mongol horde has been sighted massing on our borders, their numbers beyond counting. The steppe tribes have united under a single Great Khan, and their eyes are fixed hungrily upon our lands. We must rally every soldier we have or face annihilation."
+ mr_dominance.122.a: "Sound the alarm!"
+
+ mr_dominance.123.title: "The Great Invasion"
+ mr_dominance.123.desc: "The time for preparation is over. Our horde stands ready, a sea of warriors stretching to the horizon. The walls of our enemies will crumble, their armies will scatter, and their treasures will fill our carts. The Mongol Empire rises today!"
+ mr_dominance.123.a: "Let the conquest begin!"
+ mr_dominance.123.b: "We need more time to gather our full strength... (Postpone for 5 years)"
+
+ mr_dominance.124.title: "The Empire Rises"
+ mr_dominance.124.desc: "Our armies have swept across the continent like a divine wind. Cities that had stood for centuries have fallen, empires that thought themselves eternal have crumbled, and the Mongol banner now flies over lands our ancestors could only dream of. The Road to Empire has reached its glorious destination."
+ mr_dominance.124.a: "The world kneels before the Great Khan!"
+
+ mr_dominance.125.title: "The Mongol Tide"
+ mr_dominance.125.desc: "The unthinkable has occurred. The unified Mongol horde has emerged victorious from its campaign of conquest, carving out an empire of staggering proportions. Ancient kingdoms have been reduced to vassals, and the map of Asia has been permanently redrawn by the sword. The era of Mongol dominance has begun."
+ mr_dominance.125.a: "The balance of power is shattered."
+
+ mr_dominance.127.title: "The Tide Recedes"
+ mr_dominance.127.desc: "Our great campaign has failed. The settled peoples proved more resilient than we anticipated, their walls held firm, and their armies fought with desperation born of defending their homes. Our horde has been repelled, and the dream of a new Mongol Empire lies in ruins. We must retreat to the steppe and rebuild."
+ mr_dominance.127.a: "A bitter retreat."
+
+ mr_dominance.130.title: "The Mongol Age"
+ mr_dominance.130.desc: "Our empire now stretches across continents, encompassing peoples of countless tongues and traditions. But conquest alone is not enough. To create a legacy that will endure for a thousand years, we must transform our war machine into an imperial civilization. The conquered must be integrated, the trade routes secured, and a new world order established with the Great Khan at its center."
+ mr_dominance.130.a: "Let the new era begin!"
+
+ mr_dominance.131.title: "The New World Order"
+ mr_dominance.131.desc: "Having conquered vast territories across Asia, the Mongol Empire is now consolidating its gains. Trade routes are being reorganized, imperial bureaucracies established, and the diverse peoples of the conquered lands are being systematically integrated into the Mongol imperial system. A new era of global politics is dawning."
+ mr_dominance.131.a: "The world will never be the same."
+
+ mr_dominance.132.title: "The Eternal Empire"
+ mr_dominance.132.desc: "It is done. The Mongol Empire has been transformed from a conquering horde into a permanent imperial civilization. Our institutions are robust, our trade networks span the known world, and the diverse peoples under our rule have been bound together into a single imperial identity. The Great Khan's legacy will echo through the ages, and the Mongol Age will never truly end."
+ mr_dominance.132.a: "We have built something eternal."
+
+ mr_dominance.133.title: "The Empire Crumbles"
+ mr_dominance.133.desc: "Our imperial project has failed. The strains of governing such a vast and diverse empire proved too great. Corruption spreads through our administration, conquered peoples rise in rebellion, and our once-unstoppable military has grown complacent. The dream of a lasting Mongol world order slips through our fingers."
+ mr_dominance.133.a: "All empires fall eventually."
+
+ # --- The AI railroad war events (PD pd_brandenburg.103/203 pattern) ---
+ mr_dominance.997.title: "The Kurultai Demands War"
+ mr_dominance.997.desc: "The preparations are complete. The chosen rival has been isolated, the scouts have mapped every camp and pasture, and the warriors grow restless in the saddle. The Kurultai has spoken: the steppe can have only one master. The time has come to ride."
+ mr_dominance.997.a: "For the Eternal Blue Sky! Declare war!"
+ mr_dominance.997.b: "We are not ready yet. Let the horses fatten... (Postpone)"
+
+ mr_dominance.993.title: "The Horde Rides for the Silk Road"
+ mr_dominance.993.desc: "The corridor lies open. Our scouts have ridden the caravan roads from the Ordos to Transoxiana and returned with the same report: the power we have chosen is weaker than it looks, and its allies are far away. The wealth of the Silk Road belongs to whoever dares to take it — and the horde is ready to ride."
+ mr_dominance.993.a: "The road belongs to the Khan! Declare war!"
+ mr_dominance.993.b: "Let the caravans pass a while longer... (Postpone)"
+
+ mr_dominance.992.title: "The Ulus Calls for Riders"
+ mr_dominance.992.desc: "The old empire had four corners, and one of them is still missing. The chosen target holds land that answered to the Great Khan once and will answer again. The tumens are assembled, the remounts are fat, and the way has been scouted. One more ride, and the map is whole."
+ mr_dominance.992.a: "Restore the ulus! Declare war!"
+ mr_dominance.992.b: "The empire can wait a season more... (Postpone)"
+
+ # --- Hidden bookkeeping options ---
+ mr_dominance.995.a: "Hidden Action"
+ mr_dominance.996.a: "Hidden Action"
+ mr_dominance.998.a: "Hidden Action"
+ mr_dominance.999.a: "Hidden Action"
+
+ MR_dhe_free_buildings: "Khan's Decree"
+
+ # ==============================================================================
+ # ----------------- PHASE 2 IMPERIAL EVENTS (mr_imperial) -----------------
+ # ==============================================================================
+
+ mr_imperial.100.title: "The Invasion Plans"
+ mr_imperial.100.desc: "Our scouts have returned with detailed maps of our target's defenses. We know where their armies are weak, where their walls are thin, and where their people are most vulnerable. The time has come to draw up the final invasion plans."
+ mr_imperial.100.a: "Mark the targets!"
+
+ mr_imperial.101.title: "The First Wave"
+ mr_imperial.101.desc: "Our initial assaults have struck with devastating force. The enemy's border defenses have crumbled, and our advance units are already deep in their territory. The second wave must follow quickly to exploit the breach before they can regroup."
+ mr_imperial.101.a: "Send the second wave!"
+
+ mr_imperial.102.title: "The City Falls"
+ mr_imperial.102.desc: "One of the enemy's great cities has fallen! Our warriors have breached the walls after a brutal siege, and the defenders have surrendered. The treasures of the city are ours, and its strategic position will serve as our forward base for the next phase of the invasion."
+ mr_imperial.102.a: "Strip it of everything valuable!"
+
+ mr_imperial.103.title: "The Counter-Attack"
+ mr_imperial.103.desc: "The enemy has rallied! Our overextended forces have been hit by a desperate counter-attack. Our advance has been halted, and several forward units are in danger of being cut off. We must either commit our reserves or risk losing everything we've gained."
+ mr_imperial.103.a: "Hold the line! Send reinforcements!"
+ mr_imperial.103.b: "Fall back to defensible positions."
+
+ mr_imperial.200.title: "The Empire Secured"
+ mr_imperial.200.desc: "The campaign has ended in total victory! Our enemies have been crushed, their capitals sacked, and their rulers brought before us in chains. The Mongol Empire now controls territory our ancestors never dreamed of. This is the beginning of our golden age."
+ mr_imperial.200.a: "The empire is secure!"
+
+ mr_imperial.201.title: "A New Empire Rises"
+ mr_imperial.201.desc: "News spreads across the world: the Mongol horde has triumphed. Ancient kingdoms have fallen, and a new imperial power bestrides Asia like a colossus. Foreign courts tremble at the mention of the Great Khan's name, and emissaries from distant lands seek our favor."
+ mr_imperial.201.a: "Let them come and pay tribute!"
+
+ mr_imperial.202.title: "The Grand Review"
+ mr_imperial.202.desc: "With the conquest complete, we hold a grand review of our victorious armies. Regiment after regiment of elite cavalry passes before the Great Khan, their banners fluttering in the wind, their armor gleaming, and their discipline a testament to the new Mongol military order."
+ mr_imperial.202.a: "A sight to inspire generations!"
+
+ mr_imperial.210.title: "The Campaign Stalls"
+ mr_imperial.210.desc: "Our advance has ground to a halt. The enemy has adapted to our tactics, their defenses have stiffened, and our supply lines are stretched to breaking point. The dream of a vast Mongol empire is fading with each day of stalemate."
+ mr_imperial.210.a: "We underestimated them."
+
+ mr_imperial.211.title: "The Retreat from the West"
+ mr_imperial.211.desc: "The campaign has become untenable. Our forces are being pushed back on all fronts, and every mile we retreat is a mile of conquered territory lost. The settled peoples have proven their resilience, and the Great Khan's ambition has been checked by the realities of war."
+ mr_imperial.211.a: "A painful lesson."
+
+ # ==============================================================================
+ # ----------------- HORDE INSTITUTIONS DHE (mr_dominance_dhe) -----------------
+ # ==============================================================================
+
+ mr_dominance_dhe.1.title: "The Forge of Warriors"
+ mr_dominance_dhe.1.entry: "(MR) - The Forge of Warriors (AI Only)"
+ mr_dominance_dhe.1.desc: "The old ways of tribal warfare will no longer suffice. To conquer the settled empires, we must transform our warriors into a disciplined military machine. Our smiths will forge better weapons, our trainers will drill the horde into coordinated units, and our tacticians will study the defensive weaknesses of our enemies."
+ mr_dominance_dhe.1.a: "Forge the weapon that will conquer the world!"
+
+ mr_dominance_dhe.2.title: "The Imperial Encampment"
+ mr_dominance_dhe.2.entry: "(MR) - The Imperial Encampment (AI Only)"
+ mr_dominance_dhe.2.desc: "Our capital must become worthy of a Great Khan. No longer a mere encampment, it shall be transformed into the political and military heart of our growing empire. From here, our commands will reach every corner of the steppe and beyond. The great tents of our generals, the forges of our smiths, and the training grounds of our warriors will make this the most formidable military center in the world."
+ mr_dominance_dhe.2.a: "Let the world see our power!"
+
+ mr_dominance_dhe.3.title: "The Wall Breakers"
+ mr_dominance_dhe.3.entry: "(MR) - The Wall Breakers (AI Only)"
+ mr_dominance_dhe.3.desc: "The great weakness of the settled peoples is their reliance on walls and fortifications. They believe stone can stop the Mongol horde. We will prove them wrong. By incorporating captured siege engineers and developing our own techniques, we will ensure that no city, no matter how well defended, can withstand our assault."
+ mr_dominance_dhe.3.a: "No wall shall stand in our path!"
+
+ mr_dominance_dhe.4.title: "The Kurultai"
+ mr_dominance_dhe.4.entry: "(MR) - The Great Kurultai"
+ mr_dominance_dhe.4.desc: "The time has come to formalize our supreme authority over all Mongol peoples. A great Kurultai has been called, and chieftains from every corner of the steppe have gathered to acknowledge our dominion. By the ancient traditions, we shall be proclaimed the undisputed Great Khan, and the scattered tribes shall be formally unified into a single, indivisible nation."
+ mr_dominance_dhe.4.a: "Let the Kurultai declare our destiny!"
+
+ mr_dominance_dhe.5.title: "The Absorption of the Rival Horde"
+ mr_dominance_dhe.5.entry: "(MR) - The Absorption of Rival Hordes (AI Only)"
+ mr_dominance_dhe.5.desc: "The time has come to fully integrate our subjugated rival khanates. Their warriors shall be incorporated into our horde, their pastures absorbed into our domain, and their chieftains reduced to loyal commanders under our supreme authority. The era of divided Mongol loyalties ends today."
+ mr_dominance_dhe.5.a: "They are Mongols no more. They are ours."
+
+ mr_dominance_dhe.6.title: "The Silk Road Reborn"
+ mr_dominance_dhe.6.entry: "(MR) - The Silk Road Reborn (AI Only)"
+ mr_dominance_dhe.6.desc: "The ancient trade routes that once connected the East and West have fallen into disrepair and banditry. Under Mongol rule, we shall restore and protect the Silk Road, turning it into the economic backbone of our empire. Merchants will travel safely under our protection, and the wealth of three continents will flow through our lands."
+ mr_dominance_dhe.6.a: "Let the caravans flow!"
+
+ mr_dominance_dhe.7.title: "The Imperial Melting Pot"
+ mr_dominance_dhe.7.entry: "(MR) - The Imperial Melting Pot (AI Only)"
+ mr_dominance_dhe.7.desc: "Our empire now encompasses countless cultures, faiths, and traditions. Rather than suppress this diversity, we shall harness it. The most talented administrators, engineers, and scholars from across our domain shall be brought to the imperial court, creating a sophisticated imperial culture that draws strength from all its peoples."
+ mr_dominance_dhe.7.a: "Let knowledge flow to the center!"
+
+ mr_dominance_dhe.8.title: "The Yam Postal Relay"
+ mr_dominance_dhe.8.entry: "(MR) - The Yam System (AI Only)"
+ mr_dominance_dhe.8.desc: "To govern our vast empire, communication must be swift and reliable. We shall establish the Yam, a system of relay stations across our territory that will allow messengers to cover vast distances at unprecedented speed. Orders from the Great Khan will reach the farthest corners of the empire in days rather than months."
+ mr_dominance_dhe.8.a: "Let nothing slow our commands!"
+
+ # ==============================================================================
+ # ----------------- HISTORICAL DHE LAYER (mr_history) -----------------
+ # ==============================================================================
+
+ mr_history.1.title: "The Last Stand of the Yuan"
+ mr_history.1.desc: "The Mandate of Heaven slips from our grasp. Red Turban banners rise across the southern provinces, the granaries stand empty, and the Yellow River has broken its banks once more. Our ancestors rode from the steppe and took the greatest empire on earth in a single lifetime; their descendants now sit in Dadu counting the provinces they have lost this season.\n\nThe court speaks of restoration. The generals speak of retreat to the grasslands. Both may be right, and neither will save the dynasty."
+ mr_history.1.a: "China is lost. The steppe remains."
+
+ mr_history.2.title: "The Ilkhanid Succession"
+ mr_history.2.desc: "Abu Sa'id died two years ago without an heir, and Hulagu's realm died with him. What remains is us and our rivals — Jalayirid, Chobanid, Muzaffarid, Injuid, Gurgan — each holding a corner of Persia and a claim none of the others accept.\n\nBaghdad, which our grandfathers took at the cost of a caliphate, is now a prize to be haggled over by men who could not have held a wing of the old army. Whoever wins this will inherit an Ilkhanate in name only."
+ mr_history.2.a: "Hulagu's house has fallen. Ours will replace it."
+
+ mr_history.3.title: "The Chagatai Schism"
+ mr_history.3.desc: "The ulus splits along a line older than the Mongols themselves: the settled west against the nomadic east. In Transoxiana the emirs have taken to cities, to Islam, and to Persian scribes. In Moghulistan the clans still winter in tents and swear by the Eternal Blue Sky.\n\nEach half calls the other faithless. Both are right, by their own lights, and the choice before us will decide which half we belong to."
+ mr_history.3.a: "The faith of the cities. Let us take the Word."
+ mr_history.3.b: "The sky is our roof, as it was our fathers'."
+
+ mr_history.5.title: "Tokhtamysh and the Golden Horde"
+ mr_history.5.desc: "After a generation of murdered khans, the Jochid ulus has a master again. Tokhtamysh has reunited the White and Blue Hordes, and Sarai al-Jadid stirs with the traffic of a capital rather than the sullenness of a prize.\n\nBut the man who lifted him to the throne was Timur, and the debt is neither forgotten nor forgivable. There is not room on this steppe for both a Jochid restoration and a Chagatai conqueror."
+ mr_history.5.a: "The Horde is whole. Let Sarai be great again."
+ mr_history.5.b: "Timur will come. We will be ready for him."
+
+ mr_history.6.title: "The Looting of Delhi"
+ mr_history.6.desc: "The Sultanate's elephants broke on our lines, and the richest city in the world lay open before an army that had ridden across a subcontinent to reach it. For three days Delhi was emptied of everything that could be carried and many things that could not.\n\nThe masons and the stonecutters ride north with us in chains; Samarkand will be built from what Delhi lost. It will take the Sultanate a century to remember what it was."
+ mr_history.6.a: "Let the caravans north be heavy with it."
+
+ mr_history.7.title: "The Oirat Challenge"
+ mr_history.7.desc: "The western Mongols have never accepted that the Borjigin blood alone confers the right to rule. Now the Oirat confederation puts the question directly: descent from Chinggis, or the loyalty of those who can actually field horsemen?\n\nEsen and his kin have the second in abundance. Whoever answers this challenge will hold the steppe; whoever fails it will be remembered as the last of a line."
+ mr_history.7.a: "Let it be settled in the saddle."
+ mr_history.7.b: "There is a way to bind them that does not cost us an army."
+
+ mr_history.8.title: "The Mughal Precursor"
+ mr_history.8.desc: "A young Timurid prince has lost Samarkand for the third time, and with it any prospect of holding his inheritance in Transoxiana. The Uzbeks have taken what his great-great-grandfather built.\n\nBabur turns south instead, toward Kabul and the passes beyond. Men are already saying that a throne lost on the steppe may yet be found in Hindustan."
+ mr_history.8.a: "If not Samarkand, then somewhere greater."
+ mr_history.8.b: "Transoxiana is not lost while a Timurid lives."
+
+ # --- Historical context boxes ---
+ mr_history.1.historical_info: "The Yuan were driven from Dadu in 1368 by the Ming founder Zhu Yuanzhang. The court withdrew to the steppe and continued to claim the Mandate of Heaven for another two centuries as the Northern Yuan."
+ mr_history.2.historical_info: "Abu Sa'id Bahadur Khan died in 1335 without a successor. Within twenty years the Ilkhanate had dissolved into the Jalayirid, Chobanid, Muzaffarid and Sarbadar successor states."
+ mr_history.3.historical_info: "The Chagatai Khanate split in the 1340s. Transoxiana in the west Islamised and settled; Moghulistan in the east kept to nomadic tradition. It was from the western half that Timur emerged in 1370."
+ mr_history.5.historical_info: "Tokhtamysh reunited the White and Blue Hordes around 1380 with Timur's backing, then turned on his patron. Timur's campaigns of 1391 and 1395 broke the Golden Horde's power permanently."
+ mr_history.6.historical_info: "Timur sacked Delhi in December 1398. The Delhi Sultanate never fully recovered, and northern India fragmented for over a century afterwards."
+ mr_history.7.historical_info: "Under Esen Taishi the Oirats dominated the eastern steppe and, at Tumu in 1449, captured the Ming Zhengtong Emperor. Esen's claim to the khanate without Borjigin descent broke precedent, and after his death in 1455 the confederation collapsed."
+ mr_history.8.historical_info: "Babur lost Samarkand three times to the Uzbeks before turning south. He took Kabul in 1504 and, after Panipat in 1526, founded the Mughal Empire — the Timurid line reborn in India."
+
+ # ==============================================================================
+ # ----------------- LATE-STEPPE EVENTS (mr_steppe) -----------------
+ # ==============================================================================
+
+ mr_steppe.1.title: "The Last Great Khan"
+ mr_steppe.1.desc: "Ligdan Khan of the Chahar wears the seal of Chinggis and calls himself lord of all Mongols. Few of them agree.\n\nHe has the bloodline and the seal, and almost nothing else — the eastern clans drift toward the rising Manchu power in Mukden, and the western Oirats never accepted Borjigin supremacy in the first place. He intends to compel them all. The question is whether a claim can outlive the horsemen willing to enforce it."
+ mr_steppe.1.historical_info: "Ligdan Khan (r. 1604-1634) was the last Great Khan of the Mongols descended from Chinggis. His attempts to reunify the clans by force pushed most of them to ally with the Manchus instead. He died of smallpox fleeing west in 1634, and his son surrendered the imperial seal to Hong Taiji the following year."
+ mr_steppe.1.a: "The seal of Chinggis compels obedience."
+ mr_steppe.1.b: "A claim is worth what our riders can enforce."
+
+ mr_steppe.2.title: "The Emperor in a Tent"
+ mr_steppe.2.desc: "Word has come from the south that the Son of Heaven himself is a prisoner in a Mongol camp. The Ming court is paralysed, its generals discredited, its frontier garrisons leaderless.\n\nWhatever else is true of the settled empires, they are not invulnerable. Every chieftain who hesitated to ride with us has heard the same news."
+ mr_steppe.2.historical_info: "At Tumu in 1449 the Oirat leader Esen Taishi destroyed a Ming army and captured the Zhengtong Emperor. The Ming enthroned his brother rather than pay, and Esen eventually released the emperor for nothing."
+ mr_steppe.2.a: "Then the walls can be broken after all."
+
+ mr_steppe.3.title: "The Seal Changes Hands"
+ mr_steppe.3.desc: "The contest for the Mongolian heartland is settled. One banner now flies from the Kherlen to the Gobi, and the clans that spent a generation playing rivals against each other have run out of rivals to play.\n\nWhat that banner does next is the only question left on the steppe."
+ mr_steppe.3.historical_info: "In actual history the seal passed to the Manchus in 1635, and the Mongol imperial line ended. The Qing ruled the steppe for the next two and a half centuries."
+ mr_steppe.3.a: "The heartland is ours."
+
+ mr_steppe.10.title: "The Road West"
+ mr_steppe.10.desc: "The Torghut clans have had enough of Dzungaria. The pastures are contested, the Khoshut press from one side and the Choros from the other, and to the west there is a great river valley that no horde has held since Sarai fell.\n\nTheir chief speaks of loading the carts and not stopping until the grass changes. It is two thousand miles. It has been done before, in the other direction."
+ mr_steppe.10.historical_info: "Between 1616 and 1630 roughly 200,000 Torghut Kalmyks migrated from Dzungaria to the lower Volga, one of the last great steppe migrations. They established a khanate on Russia's southern flank that lasted until 1771, when most of them attempted the return journey."
+ mr_steppe.10.a: "Load the carts. We ride until the grass changes."
+ mr_steppe.10.b: "Let them go. The pastures will be quieter."
+
+ mr_steppe.11.title: "Across the Urals"
+ mr_steppe.11.desc: "The column has crossed the stone belt. Behind it lies Dzungaria and the quarrels it was leaving; ahead lie the salt steppes and, beyond them, the river.\n\nRussian outposts watch the passage and send riders north with the news. Nobody moves to stop it. Nobody is quite sure how."
+ mr_steppe.11.historical_info: "The migration route ran north of the Aral Sea and across the Kazakh steppe. The Kazakhs and Nogais resisted the passage; Russia, whose frontier forts were thin on the ground, mostly recorded it."
+ mr_steppe.11.a: "The stone belt is behind us."
+
+ mr_steppe.12.title: "Horsemen on the Volga"
+ mr_steppe.12.desc: "Our southern voivodes report a nation on the move — not a raid, not a war band, but carts, herds, women and children, tens of thousands of them, settling onto pasture we had begun to think of as ours.\n\nThey came from the east, as such things always do. The last time this happened the reckoning lasted two hundred and forty years."
+ mr_steppe.12.historical_info: "Russia ultimately accommodated the Kalmyks, granting them the Volga pastures in exchange for military service against the Crimean Tatars and Ottomans. Kalmyk cavalry fought in Russian armies through to the Napoleonic wars."
+ mr_steppe.12.a: "Raise the frontier levies. This will not be a second yoke."
+ mr_steppe.12.b: "Better such horsemen serving us than raiding us."
+
+ mr_steppe.13.title: "The Grass Has Changed"
+ mr_steppe.13.desc: "The carts have stopped. The herds are on the Volga pasture, the felt tents are up, and for the first time since Sarai burned there is a Mongol power camped on a European river.\n\nThe elders say the ancestors rode this way once and turned back at the wrong moment. This time nobody is turning back."
+ mr_steppe.13.historical_info: "The Kalmyk Khanate on the Volga endured from the 1630s to 1771. It was the westernmost Mongol state ever established, and the only one to survive into the modern era — their descendants remain in Kalmykia today, Europe's only Buddhist-majority region."
+ mr_steppe.13.a: "Pitch the tents. We are home."
+
+ mr_steppe.20.title: "The Choros Ascendant"
+ mr_steppe.20.desc: "With the Torghuts gone west and the Khoshut drawn south into Tibet, the Choros are left holding Dzungaria alone — and find that they prefer it.\n\nErdeni Batur is building something the steppe has not seen in three centuries: a khanate with fixed towns, cast cannon, a written code of law, and a standing army that does not disperse after the campaigning season."
+ mr_steppe.20.historical_info: "Erdeni Batur founded the Dzungar Khanate around 1634 and convened the 1640 assembly that produced the Mongol-Oirat Code. The Dzungars were the last nomadic empire to seriously threaten a settled great power, holding out against the Qing until their destruction in 1755-58."
+ mr_steppe.20.a: "The last horde will not be a horde at all."
+
+ mr_steppe.21.title: "Cannon on the Steppe"
+ mr_steppe.21.desc: "The foundries at Kobdo are casting guns, and Swedish and Russian deserters are teaching our smiths to bore them true. The Tarim oases pay grain, the caravan routes pay silver, and both together pay for powder.\n\nOur ancestors won with the bow because nothing on earth could answer it. That advantage is gone. This one we had to build."
+ mr_steppe.21.historical_info: "The Dzungars manufactured their own gunpowder weapons, aided by a captured Swedish artilleryman, Johan Gustaf Renat. They were the only steppe power ever to industrialise its own firearms production."
+ mr_steppe.21.a: "Let the foundries run day and night."
+
+ mr_steppe.22.title: "The Last Steppe Empire"
+ mr_steppe.22.desc: "From the Tarim to the western steppe, one authority holds — with laws written down, taxes counted, garrisons that stay put, and artillery that answers artillery.\n\nThe age of the horse archer is over everywhere. Here, alone, the steppe has survived its ending by becoming something else."
+ mr_steppe.22.historical_info: "At its height the Dzungar Khanate controlled Dzungaria, the Tarim Basin, and much of the Kazakh steppe. Its destruction by the Qianlong Emperor in 1755-58 was so complete that historians describe it as genocide, and it marked the definitive end of nomadic power in Eurasia."
+ mr_steppe.22.a: "The steppe endures, in a new shape."

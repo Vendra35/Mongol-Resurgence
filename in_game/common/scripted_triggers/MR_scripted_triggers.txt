@@ -111,12 +111,23 @@ mr_resurgence_visible = {
 	}
 }
 
+# tag = is a plain string comparison and never errors; this = c:TAG
+# and is_neighbor_of = c:TAG throw "Invalid right side" script errors
+# whenever the tag is not on the map (MGE does not exist for almost
+# the whole of Phase 3). Links to c:TAG are therefore always guarded
+# by a preceding country_exists in the same AND.
 mr_imperial_visible = {
 	OR = {
-		this = c:MGO
-		is_neighbor_of = c:MGO
+		tag = MGO
+		AND = {
+			country_exists = c:MGO
+			is_neighbor_of = c:MGO
+		}
 		any_owned_location = {
 			region = region:khorasan_region
+		}
+		any_owned_location = {
+			region = region:xinjiang_region
 		}
 		any_owned_location = {
 			region = region:north_china_region
@@ -129,10 +140,16 @@ mr_imperial_visible = {
 
 mr_dominance_visible = {
 	OR = {
-		this = c:MGO
-		this = c:MGE
-		is_neighbor_of = c:MGO
-		is_neighbor_of = c:MGE
+		tag = MGO
+		tag = MGE
+		AND = {
+			country_exists = c:MGO
+			is_neighbor_of = c:MGO
+		}
+		AND = {
+			country_exists = c:MGE
+			is_neighbor_of = c:MGE
+		}
 		any_owned_location = {
 			region = region:russian_region
 		}
@@ -149,7 +166,13 @@ mr_dominance_visible = {
 # Each phase ends when its territorial goal is met. Ownership, not
 # occupation: a phase should not complete off the back of a siege
 # that is handed back at the peace table.
-# Phase 1: the Mongolian heartland is under one banner.
+#
+# The goals are the situations' red-lined REGIONS, the way PD's
+# prussian_ambition_end_trigger demands its areas: the phase is done
+# when no country outside the claimant's realm (itself or its
+# subjects) holds a single location in the goal regions. This keeps
+# the map drawing and the end requirement in agreement.
+# Phase 1: the entire Mongolian heartland is under one banner.
 mr_resurgence_end_trigger = {
 	custom_tooltip = {
 		text = mr_resurgence_end_tt
@@ -159,10 +182,22 @@ mr_resurgence_end_trigger = {
 			has_presence_in = area:eastern_gobi_area
 			has_presence_in = area:western_gobi_area
 		}
+		NOT = {
+			any_country = {
+				NOR = {
+					tag = MGO
+					is_subject_of = c:MGO
+				}
+				any_owned_location = {
+					region = region:mongolia_region
+				}
+			}
+		}
 	}
 }
 
-# Phase 2: the Silk Road corridor is held from the steppe to Persia.
+# Phase 2: the whole Silk Road corridor — Khorasan, Xinjiang and
+# North China — answers to the claimant or its subjects.
 mr_imperial_end_trigger = {
 	custom_tooltip = {
 		text = mr_imperial_end_tt
@@ -170,7 +205,25 @@ mr_imperial_end_trigger = {
 		c:MGO = {
 			owns = location:samarkand
 			owns = location:dadu
-			has_presence_in = area:transoxiana_area
+		}
+		NOT = {
+			any_country = {
+				NOR = {
+					tag = MGO
+					is_subject_of = c:MGO
+				}
+				OR = {
+					any_owned_location = {
+						region = region:khorasan_region
+					}
+					any_owned_location = {
+						region = region:xinjiang_region
+					}
+					any_owned_location = {
+						region = region:north_china_region
+					}
+				}
+			}
 		}
 	}
 }
@@ -178,14 +231,16 @@ mr_imperial_end_trigger = {
 # Phase 3: the empire is actually formable. These are MGE_f's own
 # nine required locations from vanilla's 00_formable_countries.txt,
 # not an invented list — otherwise the phase can complete while the
-# player still cannot form the Mongol Empire.
+# player still cannot form the Mongol Empire. On top of the nine
+# seats, the westward advance must be real: the claimant needs a
+# foothold in the Russian lands.
 mr_dominance_end_trigger = {
 	custom_tooltip = {
 		text = mr_dominance_end_tt
 		any_country = {
 			OR = {
-				this = c:MGE
-				this = c:MGO
+				tag = MGE
+				tag = MGO
 			}
 			owns = location:karakorum
 			owns = location:sarai_al_jadid
@@ -196,6 +251,9 @@ mr_dominance_end_trigger = {
 			owns = location:shangyuan
 			owns = location:baxian
 			owns = location:guangzhou
+			any_owned_location = {
+				region = region:russian_region
+			}
 		}
 	}
 }
@@ -228,8 +286,8 @@ mr_can_start_chahar = {
 	NOT = {
 		any_country = {
 			OR = {
-				this = c:MGO
-				this = c:MGE
+				tag = MGO
+				tag = MGE
 			}
 			any_owned_location = {
 				region = region:mongolia_region
@@ -249,8 +307,8 @@ mr_can_start_chahar = {
 
 mr_chahar_visible = {
 	OR = {
-		this = c:MGO
-		this = c:MGE
+		tag = MGO
+		tag = MGE
 		any_owned_location = {
 			region = region:mongolia_region
 		}
@@ -315,9 +373,9 @@ mr_can_start_torghut = {
 
 mr_torghut_visible = {
 	OR = {
-		this = c:OIR
-		this = c:MGO
-		this = c:MGE
+		tag = OIR
+		tag = MGO
+		tag = MGE
 		any_owned_location = {
 			region = region:steppes_region
 		}
@@ -368,9 +426,9 @@ mr_can_start_dzungar = {
 
 mr_dzungar_visible = {
 	OR = {
-		this = c:OIR
-		this = c:MGO
-		this = c:MGE
+		tag = OIR
+		tag = MGO
+		tag = MGE
 		any_owned_location = {
 			region = region:xinjiang_region
 		}

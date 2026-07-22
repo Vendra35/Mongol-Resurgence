@@ -11,6 +11,13 @@
 # icon, targets, sort_order, progress, completion, abort or actions
 # field on a situation — all of those were fabricated in the
 # previous version of this file.
+#
+# NOTE ON c:MGO: MGO does not exist between 1368 and its emergence
+# (~1375 at the latest). Any comparison with c:MGO on the right side
+# throws "Invalid right side" script errors until then, so this file
+# only ever uses c:MGO behind a country_exists guard in the same
+# AND, uses tag = MGO for identity checks, and never compares
+# owner ?= c:MGO directly in the map modes.
 # =================================================================
 mongol_resurgence = {
 	monthly_spawn_chance = monthly_spawn_chance_unique
@@ -44,7 +51,11 @@ mongol_resurgence = {
 		# Same shape as PD's PD_conquest_cooldown / PD_conquest_target /
 		# PD_conquest_target_country. The cooldown ticks monthly; when it
 		# matures and a target has been picked, the claimant is pushed
-		# into a war it would not otherwise start.
+		# into a war it would not otherwise start. PD also seeds
+		# PD_conquest_target_country with c:BRA here — we cannot, because
+		# MGO does not exist yet; the variable is first seeded the month
+		# MGO emerges (Beat 104) and re-seeded in mr_dominance.997's
+		# after block.
 		set_variable = {
 			name = mr_conquest_cooldown
 			value = 0
@@ -106,16 +117,23 @@ mongol_resurgence = {
 				government_type = government_type:steppe_horde
 			}
 			trigger_event_non_silently = mr_dominance.10
-			# Phase buff, plus the historical-mode variant when the
-			# railroad is running on the historical game rule.
-			add_country_modifier = {
-				modifier = MR_mongol_warrior_spirit
-				years = -1
-				mode = replace
-			}
+			# Phase buff per the buff rule, PD-style (brandenburg_rise
+			# grants by BRA_buff_enabled / _historical / _disabled):
+			# Terminator gets the full warrior spirit, Historical the
+			# balanced variant, Vanilla nothing.
 			if = {
 				limit = {
-					has_game_rule = mr_railroad_historical
+					has_game_rule = MR_buff_enabled
+				}
+				add_country_modifier = {
+					modifier = MR_mongol_warrior_spirit
+					years = -1
+					mode = replace
+				}
+			}
+			else_if = {
+				limit = {
+					has_game_rule = MR_buff_historical
 				}
 				add_country_modifier = {
 					modifier = MR_mongol_historical_modifier
@@ -152,16 +170,91 @@ mongol_resurgence = {
 			name = mr_conquest_cooldown
 			add = 1
 		}
+		# ========== PANEL SCORES (PD PD_bra_score / PD_teu_score) ==========
+		# Strength scores for the two header countries: military strength
+		# plus income plus a fifth of prestige. The .gui reads
+		# MR_mgo_score / MR_rival_score off the situation scope.
+		if = {
+			limit = {
+				exists = var:mr_leading_country
+			}
+			var:mr_leading_country = {
+				save_scope_as = mr_leading_scope
+			}
+			if = {
+				limit = {
+					exists = scope:mr_leading_scope
+				}
+				set_variable = {
+					name = MR_mgo_score
+					value = scope:mr_leading_scope.military_strength
+				}
+				change_variable = {
+					name = MR_mgo_score
+					add = scope:mr_leading_scope.monthly_income_trade_and_tax
+				}
+				scope:mr_leading_scope = {
+					set_variable = {
+						name = mr_temp_prestige
+						value = prestige
+					}
+					change_variable = {
+						name = mr_temp_prestige
+						multiply = 0.2
+					}
+				}
+				change_variable = {
+					name = MR_mgo_score
+					add = scope:mr_leading_scope.var:mr_temp_prestige
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = var:mr_rival_country
+			}
+			var:mr_rival_country = {
+				save_scope_as = mr_rival_scope
+			}
+			if = {
+				limit = {
+					exists = scope:mr_rival_scope
+				}
+				set_variable = {
+					name = MR_rival_score
+					value = scope:mr_rival_scope.military_strength
+				}
+				change_variable = {
+					name = MR_rival_score
+					add = scope:mr_rival_scope.monthly_income_trade_and_tax
+				}
+				scope:mr_rival_scope = {
+					set_variable = {
+						name = mr_temp_prestige
+						value = prestige
+					}
+					change_variable = {
+						name = mr_temp_prestige
+						multiply = 0.2
+					}
+				}
+				change_variable = {
+					name = MR_rival_score
+					add = scope:mr_rival_scope.var:mr_temp_prestige
+				}
+			}
+		}
 		# ========== AI RAILROAD: FIND A TARGET ==========
 		# Pick the weakest neighbour holding Mongolian ground whose
 		# defensive alliance web is weaker than ours. Ordered by
 		# num_locations ascending, so the softest target comes first.
+		# No is_ai gate, PD-style: a human claimant also gets targets
+		# picked and the war event offered — with the option to postpone.
 		if = {
 			limit = {
 				var:mr_conquest_target = 0
 				country_exists = c:MGO
 				c:MGO = {
-					is_ai = yes
 					at_war = no
 				}
 			}
@@ -199,19 +292,31 @@ mongol_resurgence = {
 			}
 		}
 		# ========== AI RAILROAD: DECLARE ==========
-		# Historical mode paces the unification at roughly one war per
-		# decade; otherwise every four years.
+		# Pacing follows the rules, PD-style (brandenburg_rise ties pace
+		# to BRA_buff_enabled): Terminator declares roughly every two
+		# years; otherwise Strict Historical paces at one war per decade
+		# and Frontloaded at one every four years.
 		if = {
 			limit = {
 				var:mr_conquest_target = 1
 				OR = {
 					AND = {
-						has_game_rule = mr_railroad_historical
+						has_game_rule = MR_buff_enabled
+						var:mr_conquest_cooldown > 24
+					}
+					AND = {
+						NOT = {
+							has_game_rule = MR_buff_enabled
+						}
+						has_game_rule = MR_timeline_strict_historical
 						var:mr_conquest_cooldown > 120
 					}
 					AND = {
 						NOT = {
-							has_game_rule = mr_railroad_historical
+							has_game_rule = MR_buff_enabled
+						}
+						NOT = {
+							has_game_rule = MR_timeline_strict_historical
 						}
 						var:mr_conquest_cooldown > 48
 					}
@@ -221,8 +326,18 @@ mongol_resurgence = {
 			c:MGO = {
 				if = {
 					limit = {
-						is_ai = yes
-						months_since_war >= 24
+						OR = {
+							AND = {
+								has_game_rule = MR_buff_enabled
+								months_since_war >= 12
+							}
+							AND = {
+								NOT = {
+									has_game_rule = MR_buff_enabled
+								}
+								months_since_war >= 24
+							}
+						}
 						situation:mongol_resurgence = {
 							var:mr_conquest_target_country = {
 								NOT = {
@@ -244,12 +359,14 @@ mongol_resurgence = {
 		if = {
 			limit = {
 				var:mr_conquest_target = 1
+				country_exists = c:MGO
 				OR = {
 					NOT = {
 						exists = var:mr_conquest_target_country
 					}
 					var:mr_conquest_target_country = {
 						OR = {
+							tag = MGO
 							is_subject_of = c:MGO
 							NOT = {
 								any_owned_location = {
@@ -344,6 +461,8 @@ mongol_resurgence = {
 			set_global_variable = mr_beat_103_fired
 		}
 		# --- Beat 5: A New Khan Rises, once MGO actually exists ---
+		# mr_dominance.104's immediate also creates the Borjigin Great
+		# Khan and puts him on the throne (Timur treatment).
 		if = {
 			limit = {
 				country_exists = c:MGO
@@ -353,10 +472,29 @@ mongol_resurgence = {
 			}
 			c:MGO = {
 				trigger_event_non_silently = mr_dominance.104
+				# The war-preparation lock, PD-style: the AI claimant
+				# must not freelance-declare wars — the railroad event
+				# declares for it. Never applied to a human player.
+				if = {
+					limit = {
+						is_ai = yes
+					}
+					add_country_modifier = {
+						modifier = MR_mongol_preparing_for_conquest
+						years = -1
+						mode = replace
+					}
+				}
 			}
-			# The claim is real now — point the panel header at MGO.
+			# The claim is real now — point the panel header at MGO and
+			# seed the railroad's target variable with a country that is
+			# guaranteed to exist (PD seeds c:BRA in on_start).
 			set_variable = {
 				name = mr_leading_country
+				value = c:MGO
+			}
+			set_variable = {
+				name = mr_conquest_target_country
 				value = c:MGO
 			}
 			set_global_variable = mr_beat_104_fired
@@ -389,9 +527,12 @@ mongol_resurgence = {
 					NOT = {
 						country_exists = c:MGO
 					}
-					c:MGO = {
-						NOT = {
-							owns = location:karakorum
+					AND = {
+						country_exists = c:MGO
+						c:MGO = {
+							NOT = {
+								owns = location:karakorum
+							}
 						}
 					}
 				}
@@ -409,7 +550,9 @@ mongol_resurgence = {
 		}
 		# --- BIRTH FAILSAFE (design doc, layer a) ---
 		# If nobody has organically taken up the claim by ~1375,
-		# convert the best-placed steppe power by force.
+		# convert the best-placed steppe power by force. Not gated by
+		# the auto-conquest rule: without MGO the railroad has no actor
+		# and every later phase is unreachable.
 		if = {
 			limit = {
 				current_date > 1375.1.1
@@ -451,11 +594,12 @@ mongol_resurgence = {
 		# (brandenburg_rise.txt: every_ownable_location_in_area +
 		# change_location_owner).
 		#
-		# Gated on is_ai = yes, per the design doc ("AI'a ... vererek"):
+		# Gated on the conquest-automation game rule and on is_ai = yes:
 		# a human player who fails the phase is allowed to fail it.
 		# Locations are only taken from AI owners, never from the player.
 		if = {
 			limit = {
+				has_game_rule = MR_mongol_resurgence_auto_conquest_yes
 				current_date > 1415.1.1
 				NOT = {
 					mr_resurgence_end_trigger = yes
@@ -477,7 +621,7 @@ mongol_resurgence = {
 						owner = {
 							is_ai = yes
 							NOR = {
-								this = c:MGO
+								tag = MGO
 								is_subject_of = c:MGO
 							}
 						}
@@ -495,7 +639,7 @@ mongol_resurgence = {
 					}
 					government_type = government_type:steppe_horde
 					NOR = {
-						this = c:MGO
+						tag = MGO
 						is_subject_of = c:MGO
 					}
 					any_owned_location = {
@@ -513,9 +657,28 @@ mongol_resurgence = {
 		}
 	}
 	on_ending = {
-		# Resolution: unified, or the steppe stays divided. Branch on the
-		# GOAL, not on mere MGO existence — a timeout with MGO alive but
-		# the heartland unclaimed is a failure, not a win.
+		# 1. Strip the phase modifiers, PD-style (brandenburg_rise's
+		# on_ending removes its buffs before branching on the winner).
+		every_country = {
+			limit = {
+				culture = {
+					has_culture_group = culture_group:mongolian_group
+				}
+			}
+			remove_country_modifier = MR_mongol_warrior_spirit
+			remove_country_modifier = MR_mongol_historical_modifier
+		}
+		if = {
+			limit = {
+				country_exists = c:MGO
+			}
+			c:MGO = {
+				remove_country_modifier = MR_mongol_preparing_for_conquest
+			}
+		}
+		# 2. Resolution: unified, or the steppe stays divided. Branch on
+		# the GOAL, not on mere MGO existence — a timeout with MGO alive
+		# but the heartland unclaimed is a failure, not a win.
 		if = {
 			limit = {
 				mr_resurgence_end_trigger = yes
@@ -541,10 +704,15 @@ mongol_resurgence = {
 	}
 	on_ended = {
 		# The horde is unified but has not yet turned outward — the
-		# dormant interval between Phase 1 and Phase 2.
+		# dormant interval between Phase 1 and Phase 2. AI only, like
+		# PD_the_sleeping_giant: it carries blocked_from_declaring_war,
+		# which must never be forced onto a human player.
 		if = {
 			limit = {
 				country_exists = c:MGO
+				c:MGO = {
+					is_ai = yes
+				}
 			}
 			c:MGO = {
 				add_country_modifier = {
@@ -577,6 +745,8 @@ mongol_resurgence = {
 		remove_variable = mr_conquest_target_country
 		remove_variable = mr_leading_country
 		remove_variable = mr_rival_country
+		remove_variable = MR_mgo_score
+		remove_variable = MR_rival_score
 	}
 	tooltip = {
 		if = {
@@ -587,9 +757,15 @@ mongol_resurgence = {
 		}
 	}
 	map_color = {
+		# owner ?= { tag = MGO } instead of owner ?= c:MGO: the block
+		# form never resolves a c: link, so it cannot throw "Invalid
+		# right side" while MGO does not exist (this exact line spammed
+		# the error log every tick from 1368 to 1375).
 		if = {
 			limit = {
-				owner ?= c:MGO
+				owner ?= {
+					tag = MGO
+				}
 			}
 			value = this.owner.country_color
 		}
@@ -611,6 +787,7 @@ mongol_resurgence = {
 	secondary_map_color = {
 		if = {
 			limit = {
+				country_exists = c:MGO
 				owner ?= {
 					is_subject_of = c:MGO
 				}
@@ -621,7 +798,9 @@ mongol_resurgence = {
 			limit = {
 				region = region:mongolia_region
 				NOT = {
-					owner ?= c:MGO
+					owner ?= {
+						tag = MGO
+					}
 				}
 			}
 			value = red

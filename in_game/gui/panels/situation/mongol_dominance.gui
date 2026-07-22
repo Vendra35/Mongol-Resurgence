@@ -1,11 +1,16 @@
 ﻿situation_panel = {
 
     ##################################### TOP HEADER (SINGLE PORTRAIT - THE DOMINANT EMPIRE) #####################################
+    # Context comes from the situation's mr_leading_country variable —
+    # the same pattern as the (working) mongol_resurgence panel. The
+    # situation re-points it at MGE the month the empire forms;
+    # GetCountry('MGE') never resolved (MGE does not exist for nearly
+    # the whole phase) and left the portrait black.
     blockoverride "situation_panel_image" {
         using = one_country_header_template
-    
+
         blockoverride "FirstCountryContext" {
-            datacontext = "[GetCountry('MGE')]"
+            datacontext = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_leading_country').GetCountry]"
         }
 
         blockoverride "first_character_portrait_anchor" {
@@ -112,7 +117,7 @@
                         textbox_single = {
                             name = "score_label"
                             fontsize = 14
-                            text = "MR_MGE_SCORE_TT"
+                            text = "MR_DOMINANCE_SCORE_TT"
                         }
 
                         progressbar = {

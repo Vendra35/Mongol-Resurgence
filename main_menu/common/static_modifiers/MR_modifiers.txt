@@ -203,6 +203,23 @@ MR_dominance_failure_player = {
 	monthly_rebel_growth = 0.0025
 }
 
+# --- The Great Khan (character modifier) ---
+# Given to the new Borjigin ruler when MGO first emerges
+# (mr_dominance.104). Field-for-field pattern: vanilla's
+# timmy_wants_to_play ("The Scourge from Central Asia"), the
+# character modifier Timur receives in rise_of_timur.txt.
+MR_great_khan = {
+	game_data = {
+		category = character
+	}
+	force_allow_as_leader = yes
+	auto_conquer_at_war = yes
+	global_army_levy_size_modifier = 0.25
+	max_war_exhaustion = -3
+	aggressiveness_modifier = 0.5
+	character_life_expectancy = 15
+}
+
 # =================================================================
 # HISTORICAL / GROUNDED MODE MODIFIERS
 # =================================================================

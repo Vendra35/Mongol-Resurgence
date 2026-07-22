@@ -152,8 +152,8 @@
                     visible = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_rival_country').GetCountry.IsValid]"
                     text = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_rival_country').GetCountry.GetName]"
                 }
-                blockoverride "right_bottom_text" { 
-                    text = "MR_MGO_SCORE_TT"
+                blockoverride "right_bottom_text" {
+                    text = "MR_RIVAL_SCORE_TT"
                     tooltipwidget = {
                         ContextualTooltipType = {
                             blockoverride "title_icon" {
