@@ -105,7 +105,35 @@ enters code.** The wiki can lag the patch; the files cannot.
 Anything unresolved goes in **netleştirilmesi gereken** and is raised with the
 user. Never fill a gap with a plausible guess.
 
-## The current unverified table
+## Lessons locked in from this project (all verified)
+
+- **Right name, wrong place:** `location:zhongdu` exists — as a steppe-frontier
+  village in `xinghe_province`. Beijing is `location:dadu` (34 script uses,
+  `shuntian_province`). Existence-checking passes on the wrong location. The test
+  is *script usage count* + the `definitions.txt` hierarchy
+  (region → area → province → location), never historical plausibility.
+- **Regions lie if you guess from names:** `steppes_region` is the PONTIC steppe
+  (crimea/azov/lower_don/astrakhan). The Silk Road corridor is `khorasan_region`
+  (contains `transoxiana_area`, `khwarazm_area`, `zhetysu_area`); the Kazakh steppe
+  is `zhetysu`/`desht_kipchak`. Beijing's region is `north_china_region`
+  (`beiping_area`). Derive membership from `definitions.txt`, e.g. python: find the
+  province block containing the location, then walk back to the enclosing area and
+  region declarations.
+- **Defined ≠ on the map.** A `setup/countries` entry (colour/culture/religion) may
+  hold zero land at 1337. On-map at start: CHI, CHG, GLH, DLH, JLY, CHB, MZF, INJ,
+  GRG. **Emergent:** TIM (`flavor_tim.8`), OIR (`flavor_chi.txt`,
+  `create_country_from_cores_in_our_locations`). **Dead:** HLG — zero script uses
+  in all of vanilla (the Ilkhanate dissolved in 1335, before the game starts);
+  events keyed to it can never fire. **Formable-only:** MGO (no setup entry by
+  design), MGE (`MGE_f`, nine required locations).
+- **Emergent tags in `dynamic_historical_event` are fine** — vanilla uses
+  `tag = TIM` in dhe blocks 15× though TIM emerges mid-game. Multiple `tag =`
+  lines in one dhe block are also vanilla-legal.
+- **Formables define the goal.** `MGE_f`'s own `allow` block (nine locations across
+  nine regions) is the ground truth for any "restore the empire" objective — an
+  invented location list drifted from it and broke the endgame here once.
+
+## The original tag table (RESOLVED — kept for history)
 
 From `docs/MOD-DESIGN-IDEA.md`, all of this still needs independent confirmation:
 

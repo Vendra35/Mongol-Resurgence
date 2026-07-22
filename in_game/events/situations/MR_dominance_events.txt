@@ -617,6 +617,118 @@ mr_dominance.998 = {
 	}
 }
 
+# --- AI support: military infrastructure -------------------------
+# Fired yearly by mr_claimant_manpower_pulse. The AI claimant is a
+# steppe horde and tends not to invest in buildings on its own, so
+# it gets a nudge. Mirrors PD's pd_brandenburg.999.
+mr_dominance.995 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		is_ai = yes
+		OR = {
+			this = c:MGO
+			this = c:MGE
+		}
+	}
+
+	immediate = {
+		random_owned_location = {
+			limit = {
+				can_build_building = building_type:barracks
+			}
+			construct_building = {
+				building_type = building_type:barracks
+				cost_multiplier = 0
+			}
+		}
+	}
+
+	option = {
+		name = mr_dominance.995.a
+	}
+}
+
+
+# --- AI support: keep the horde in the saddle --------------------
+# Fired yearly by mr_claimant_army_pulse, peacetime only. Raises
+# steppe horse archers at the capital so the claimant can actually
+# prosecute the railroad's wars. Mirrors PD's pd_brandenburg.998.
+mr_dominance.996 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		is_ai = yes
+		at_war = no
+		OR = {
+			this = c:MGO
+			this = c:MGE
+		}
+	}
+
+	immediate = {
+		# owner takes a scope or a tag — 'root' is not a form vanilla
+		# uses here, so the claimant is saved first.
+		save_scope_as = mr_horde_owner
+		capital = {
+			while = {
+				count = 4
+				create_sub_unit_with_owner = {
+					type = a_steppe_horse_archers
+					owner = scope:mr_horde_owner
+				}
+			}
+		}
+	}
+
+	option = {
+		name = mr_dominance.996.a
+	}
+}
+
+
+# --- AI railroad: declare the unification war ---
+# Fired by the Phase 1 situation once the cooldown matures and a
+# target has been selected. This is what makes the railroad a
+# railroad: without it the AI simply sits on the steppe. Mirrors
+# PD's pd_brandenburg.103.
+mr_dominance.997 = {
+	type = country_event
+	category = situation_event
+	hidden = yes
+
+	immediate = {
+		situation:mongol_resurgence = {
+			var:mr_conquest_target_country = {
+				save_scope_as = mr_war_target
+			}
+		}
+		if = {
+			limit = { exists = scope:mr_war_target }
+			declare_war_with_cb = {
+				target = scope:mr_war_target
+				type = casus_belli:cb_MR_steppe_unification
+			}
+			situation:mongol_resurgence = {
+				set_variable = {
+					name = mr_conquest_target
+					value = 0
+				}
+				set_variable = {
+					name = mr_conquest_cooldown
+					value = 0
+				}
+			}
+		}
+	}
+
+	option = {
+		name = mr_dominance.997.a
+	}
+}
+
 # --- Completion failsafe ---
 # The territory transfer itself happens in the situation's on_monthly
 # (that is where the location scopes are available). This event gives
@@ -628,10 +740,6 @@ mr_dominance.999 = {
 	hidden = yes
 
 	immediate = {
-		set_global_variable = {
-			name = mr_completion_failsafe_fired
-			value = yes
-		}
 		add_army_tradition = army_tradition_severe_bonus
 		add_government_power = government_power_ultimate_bonus
 		add_country_modifier = {

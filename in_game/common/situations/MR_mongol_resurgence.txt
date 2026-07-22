@@ -25,7 +25,16 @@ mongol_resurgence = {
 	}
 
 	can_end = {
-		mr_resurgence_end_trigger = yes
+		OR = {
+			mr_resurgence_end_trigger = yes
+			# Time expiry. Without this the situation can only ever end in
+			# success, which leaves on_ending's failure branch unreachable
+			# and lets a failed phase run to the end of the campaign.
+			custom_tooltip = {
+				text = mr_resurgence_timeout_tt
+				current_date > 1420.1.1
+			}
+		}
 	}
 
 	hint_tag = hint_mongol_resurgence
@@ -36,6 +45,20 @@ mongol_resurgence = {
 		# Unification pressure. Beats fire as this climbs.
 		set_variable = {
 			name = mr_resurgence_momentum
+			value = 0
+		}
+
+		# --- AI RAILROAD BOOKKEEPING ---
+		# Same shape as PD's PD_conquest_cooldown / PD_conquest_target /
+		# PD_conquest_target_country. The cooldown ticks monthly; when it
+		# matures and a target has been picked, the claimant is pushed
+		# into a war it would not otherwise start.
+		set_variable = {
+			name = mr_conquest_cooldown
+			value = 0
+		}
+		set_variable = {
+			name = mr_conquest_target
 			value = 0
 		}
 
@@ -118,6 +141,116 @@ mongol_resurgence = {
 			name = mr_resurgence_momentum
 			add = 1
 		}
+		change_variable = {
+			name = mr_conquest_cooldown
+			add = 1
+		}
+
+		# ========== AI RAILROAD: FIND A TARGET ==========
+		# Pick the weakest neighbour holding Mongolian ground whose
+		# defensive alliance web is weaker than ours. Ordered by
+		# num_locations ascending, so the softest target comes first.
+		if = {
+			limit = {
+				var:mr_conquest_target = 0
+				country_exists = c:MGO
+				c:MGO = {
+					is_ai = yes
+					at_war = no
+				}
+			}
+			c:MGO = {
+				ordered_neighbor_country = {
+					limit = {
+						is_rebel_country = no
+						NOT = { has_truce_with = prev }
+						NOT = { is_subject_of = prev }
+						defensive_alliance_strength < c:MGO.offensive_alliance_strength
+						any_owned_location = {
+							region = region:mongolia_region
+						}
+					}
+					max = 1
+					order_by = {
+						value = num_locations
+						multiply = -1
+					}
+					situation:mongol_resurgence = {
+						set_variable = {
+							name = mr_conquest_target_country
+							value = prev
+						}
+						set_variable = {
+							name = mr_conquest_target
+							value = 1
+						}
+					}
+				}
+			}
+		}
+
+		# ========== AI RAILROAD: DECLARE ==========
+		# Historical mode paces the unification at roughly one war per
+		# decade; otherwise every four years.
+		if = {
+			limit = {
+				var:mr_conquest_target = 1
+				OR = {
+					AND = {
+						has_game_rule = mr_railroad_historical
+						var:mr_conquest_cooldown > 120
+					}
+					AND = {
+						NOT = { has_game_rule = mr_railroad_historical }
+						var:mr_conquest_cooldown > 48
+					}
+				}
+				country_exists = c:MGO
+			}
+			c:MGO = {
+				if = {
+					limit = {
+						is_ai = yes
+						months_since_war >= 24
+						situation:mongol_resurgence = {
+							var:mr_conquest_target_country = {
+								NOT = { is_subject_of = prev }
+								NOT = { has_truce_with = prev }
+							}
+						}
+					}
+					trigger_event_silently = mr_dominance.997
+				}
+			}
+		}
+
+		# --- FALLBACK: the chosen target stopped being valid ---
+		# (annexed, became our subject, truced, or lost its Mongolian
+		# holdings). Clear the slot so a new target can be picked.
+		if = {
+			limit = {
+				var:mr_conquest_target = 1
+				OR = {
+					NOT = { exists = var:mr_conquest_target_country }
+					var:mr_conquest_target_country = {
+						OR = {
+							is_subject_of = c:MGO
+							NOT = {
+								any_owned_location = { region = region:mongolia_region }
+							}
+						}
+					}
+				}
+			}
+			set_variable = {
+				name = mr_conquest_target
+				value = 0
+			}
+			set_variable = {
+				name = mr_conquest_cooldown
+				value = 0
+			}
+		}
 
 		# --- Beat 1: Gathering the Horde (~2 years in) ---
 		if = {
@@ -190,7 +323,48 @@ mongol_resurgence = {
 			c:MGO = {
 				trigger_event_non_silently = mr_dominance.104
 			}
+			# The claim is real now — point the panel header at MGO.
+			set_variable = {
+				name = mr_leading_country
+				value = c:MGO
+			}
 			set_global_variable = mr_beat_104_fired
+		}
+
+		# --- Beat: Victory on the Steppe, when Karakorum falls to MGO ---
+		if = {
+			limit = {
+				country_exists = c:MGO
+				NOT = { has_global_variable = mr_beat_105_fired }
+				c:MGO = { owns = location:karakorum }
+			}
+			c:MGO = {
+				trigger_event_non_silently = mr_dominance.105
+			}
+			set_global_variable = mr_beat_105_fired
+		}
+
+		# --- Beat: Scattered to the Winds, a genuine reversal ---
+		# Fires if the claimant loses Karakorum again after taking it.
+		if = {
+			limit = {
+				has_global_variable = mr_beat_105_fired
+				NOT = { has_global_variable = mr_beat_107_fired }
+				OR = {
+					NOT = { country_exists = c:MGO }
+					c:MGO = {
+						NOT = { owns = location:karakorum }
+					}
+				}
+			}
+			every_country = {
+				limit = {
+					culture = { has_culture_group = culture_group:mongolian_group }
+					government_type = government_type:steppe_horde
+				}
+				trigger_event_non_silently = mr_dominance.107
+			}
+			set_global_variable = mr_beat_107_fired
 		}
 
 		# --- BIRTH FAILSAFE (design doc, layer a) ---
@@ -233,11 +407,14 @@ mongol_resurgence = {
 			limit = {
 				current_date > 1415.1.1
 				NOT = { mr_resurgence_end_trigger = yes }
-				NOT = { has_global_variable = mr_completion_failsafe_fired }
+				NOT = { has_global_variable = mr_failsafe_p1_fired }
 				country_exists = c:MGO
-				c:MGO = { is_ai = yes }
+				c:MGO = {
+					is_ai = yes
+					at_war = no
+				}
 			}
-			set_global_variable = mr_completion_failsafe_fired
+			set_global_variable = mr_failsafe_p1_fired
 
 			# 1. Hand MGO the Mongolian heartland outright.
 			region:mongolia_region = {
@@ -281,9 +458,12 @@ mongol_resurgence = {
 	}
 
 	on_ending = {
-		# Resolution: unified, or the steppe stays divided.
+		# Resolution: unified, or the steppe stays divided. Branch on the
+		# GOAL, not on mere MGO existence — a timeout with MGO alive but
+		# the heartland unclaimed is a failure, not a win.
 		if = {
 			limit = {
+				mr_resurgence_end_trigger = yes
 				country_exists = c:MGO
 			}
 			c:MGO = {
@@ -297,6 +477,9 @@ mongol_resurgence = {
 				}
 				trigger_event_non_silently = mr_dominance.2
 			}
+			# Direct set as well as in mr_dominance.2's immediate, so the
+			# terminal state never depends on an event having a recipient.
+			set_global_variable = mr_railroad_failed
 		}
 	}
 
@@ -320,6 +503,25 @@ mongol_resurgence = {
 		remove_global_variable = mr_beat_102_fired
 		remove_global_variable = mr_beat_103_fired
 		remove_global_variable = mr_beat_104_fired
+		remove_global_variable = mr_beat_105_fired
+		remove_global_variable = mr_beat_107_fired
+
+		# Set here as well as in mr_dominance.1, so the hand-off to
+		# Phase 2 does not depend on an event firing and resolving.
+		if = {
+			limit = {
+				mr_resurgence_end_trigger = yes
+			}
+			set_global_variable = mr_phase_one_complete
+		}
+
+		# The wiki recommends clearing situation variables in on_ended
+		# to keep them out of the savefile.
+		remove_variable = mr_conquest_cooldown
+		remove_variable = mr_conquest_target
+		remove_variable = mr_conquest_target_country
+		remove_variable = mr_leading_country
+		remove_variable = mr_rival_country
 	}
 
 	tooltip = {

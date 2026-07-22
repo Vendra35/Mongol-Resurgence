@@ -114,6 +114,48 @@ Beyond syntax, does the code implement what `docs/MOD-DESIGN-IDEA.md` describes?
 
 A syntactically perfect file that implements the wrong design is still a finding.
 
+## Error classes added after later audit rounds (all found real bugs here)
+
+### 9. Scope misuse (existence checks pass, code still wrong)
+`add_mil` at country scope; `owner = root` where vanilla only uses `scope:X`/
+`c:TAG`. For every effect: verify enclosing scope in 2–3 vanilla hits, not just
+presence. See `verify-eu5-syntax` → THE SCOPE RULE.
+
+### 10. Geography-for-intent
+The name exists but is the wrong place: `zhongdu` vs `dadu`; `steppes_region`
+(Pontic) used as the Silk Road corridor (`khorasan_region`). Check
+`map_data/definitions.txt` hierarchy against the comment-stated intent.
+
+### 11. Coverage: wargoals vs goals
+Each wargoal's `allowed_locations` must cover every location its phase's end
+trigger demands. Here the westward CB covered 2 of 9 required regions — wars could
+be won while the goal stayed legally untakeable.
+
+### 12. Reachability and terminal states
+Simulate the state machine: can every event fire (defined+fired or dhe)? Can every
+situation END on both success AND failure (goal OR time expiry in `can_end`)?
+Does every failure path set the terminal global? Is any one-shot flag shared
+across phases that should be per-phase (`mr_failsafe_pN_fired`)? Can an end
+trigger already be true at `can_start` (instant-end)? Is any `on_ending` branch
+keyed on a side-signal (`country_exists`) instead of the goal trigger?
+
+### 13. Loader-split localisation
+Game-rule names/settings must live in `main_menu/localization`
+(`rule_<key>` / `setting_<option>` / `_desc`); in-game strings in
+`in_game/localization`. A key in the wrong tree shows raw in the UI.
+
+### 14. Vacuous verification
+BSD grep `\b` and line-grep on multi-line constructs both produced false "clean"
+audits here. Every check must print a count; prove scans on a known positive.
+
+## The standing harness
+
+A ~19-check python harness exists (see `docs/EU5-MODDING-GUIDE.md` §9): braces,
+situation field whitelist, loc binding (both trees), event definition/reachability,
+trigger/modifier/hint resolution, global set↔read symmetry, situation-var cleanup,
+region/area reality, wargoal coverage, duplicate ids/keys, BOM. Run it after every
+change; silence on any check is only meaningful because each prints its item count.
+
 ## Report format
 
 Three groups, most severe first. Every finding cites `file:line` and, where the

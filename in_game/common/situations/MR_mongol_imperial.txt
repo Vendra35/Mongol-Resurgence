@@ -19,7 +19,16 @@ mongol_imperial = {
 	}
 
 	can_end = {
-		mr_imperial_end_trigger = yes
+		OR = {
+			mr_imperial_end_trigger = yes
+			# Time expiry. Without this the situation can only ever end in
+			# success, which leaves on_ending's failure branch unreachable
+			# and lets a failed phase run to the end of the campaign.
+			custom_tooltip = {
+				text = mr_imperial_timeout_tt
+				current_date > 1550.1.1
+			}
+		}
 	}
 
 	hint_tag = hint_mongol_imperial
@@ -92,7 +101,7 @@ mongol_imperial = {
 					limit = {
 						OR = {
 							any_owned_location = { region = region:north_china_region }
-							any_owned_location = { region = region:steppes_region }
+							any_owned_location = { region = region:khorasan_region }
 							any_owned_location = { region = region:persia_region }
 						}
 						NOT = { this = c:MGO }
@@ -222,14 +231,19 @@ mongol_imperial = {
 			limit = {
 				current_date > 1545.1.1
 				NOT = { mr_imperial_end_trigger = yes }
-				NOT = { has_global_variable = mr_completion_failsafe_fired }
+				NOT = { has_global_variable = mr_failsafe_p2_fired }
 				country_exists = c:MGO
-				c:MGO = { is_ai = yes }
+				c:MGO = {
+					is_ai = yes
+					at_war = no
+				}
 			}
-			set_global_variable = mr_completion_failsafe_fired
+			set_global_variable = mr_failsafe_p2_fired
 
-			# The corridor: the western steppe and the north China march.
-			region:steppes_region = {
+			# The Silk Road corridor is khorasan_region (transoxiana,
+			# khwarazm, zhetysu), not steppes_region — that is the Pontic
+			# steppe and belongs to Phase 3.
+			region:khorasan_region = {
 				every_ownable_location_in_region = {
 					limit = {
 						owner = {
@@ -245,22 +259,17 @@ mongol_imperial = {
 				}
 			}
 
-			# The two seats the phase is actually judged on.
-			location:samarkand = {
-				if = {
+			# The north China march, where dadu sits.
+			area:beiping_area = {
+				every_ownable_location_in_area = {
 					limit = {
-						owner = { is_ai = yes }
-						NOT = { owner = c:MGO }
-					}
-					change_location_owner = c:MGO
-					add_core = c:MGO
-				}
-			}
-			location:dadu = {
-				if = {
-					limit = {
-						owner = { is_ai = yes }
-						NOT = { owner = c:MGO }
+						owner = {
+							is_ai = yes
+							NOR = {
+								this = c:MGO
+								is_subject_of = c:MGO
+							}
+						}
 					}
 					change_location_owner = c:MGO
 					add_core = c:MGO
@@ -292,6 +301,14 @@ mongol_imperial = {
 				trigger_event_non_silently = mr_dominance.127
 				trigger_event_non_silently = mr_imperial.210
 			}
+			# Phase 2 failure is terminal for the railroad — without this
+			# the state machine hung with no resolution recorded.
+			set_global_variable = mr_railroad_failed
+		}
+		else = {
+			# MGO no longer exists at all — still record the failure so the
+			# railroad terminates instead of hanging in a zombie state.
+			set_global_variable = mr_railroad_failed
 		}
 	}
 
@@ -311,13 +328,18 @@ mongol_imperial = {
 			}
 			set_global_variable = mr_phase_two_complete
 		}
+
+		# The wiki recommends clearing situation variables in on_ended
+		# to keep them out of the savefile.
+		remove_variable = mr_leading_country
+		remove_variable = mr_rival_country
 	}
 
 	tooltip = {
 		if = {
 			limit = {
 				OR = {
-					region = region:steppes_region
+					region = region:khorasan_region
 					region = region:north_china_region
 					region = region:persia_region
 				}
@@ -350,7 +372,7 @@ mongol_imperial = {
 		else_if = {
 			limit = {
 				OR = {
-					region = region:steppes_region
+					region = region:khorasan_region
 					region = region:north_china_region
 				}
 				NOT = { owner ?= c:MGO }

@@ -1,15 +1,35 @@
 ﻿# =================================================================
 # MONGOL RESURGENCE - SCRIPTED TRIGGERS
 # =================================================================
-# Region names verified against vanilla. The fabricated ones this
-# file used to reference resolve as follows:
-#   central_asia_region  -> steppes_region
-#   china_region         -> north_china_region
+# Geography verified against map_data/definitions.txt. Earlier
+# guesses corrected:
+#   central_asia_region  -> does not exist
+#   china_region         -> north_china_region (dadu / beiping_area)
 #   russia_region        -> russian_region
-#   transoxiana_region   -> no vanilla equivalent; keyed on
-#                           location:samarkand instead
+#   transoxiana_region   -> transoxiana_area, and its REGION is
+#                           khorasan_region (not steppes_region)
+#
+# IMPORTANT: steppes_region is the PONTIC steppe — crimea, azov,
+# lower_don, astrakhan, majar, lower_yik. It is the Golden Horde's
+# western heartland, NOT the Silk Road corridor. The Samarkand
+# corridor is khorasan_region (transoxiana, khwarazm, zhetysu,
+# badakhshan, desht_kipchak).
+#
+# Where MGE_f's nine required locations actually live:
+#   karakorum      upper_selenga_area   mongolia_region
+#   dadu           beiping_area         north_china_region
+#   sarai_al_jadid lower_don_area       steppes_region
+#   samarkand      transoxiana_area     khorasan_region
+#   kazan          kazan_area           ural_region
+#   kaffa          crimea_area          steppes_region
+#   shangyuan      jiangnan_area        east_china_region
+#   baxian         chuandong_area       west_china_region
+#   guangzhou      guangdong_area       south_china_region
+#
+# End triggers wrap their clauses in custom_tooltip so the situation
+# panel can render them as readable end requirements, the way PD's
+# prussian_ambition_end_trigger does.
 # =================================================================
-
 
 # --- Start conditions --------------------------------------------
 
@@ -76,7 +96,7 @@ mr_imperial_visible = {
 		this = c:MGO
 		is_neighbor_of = c:MGO
 		any_owned_location = {
-			region = region:steppes_region
+			region = region:khorasan_region
 		}
 		any_owned_location = {
 			region = region:north_china_region
@@ -113,26 +133,26 @@ mr_dominance_visible = {
 
 # Phase 1: the Mongolian heartland is under one banner.
 mr_resurgence_end_trigger = {
-	country_exists = c:MGO
-	c:MGO = {
-		owns = location:karakorum
-		owns = location:shangyuan
-		any_owned_location = {
-			region = region:mongolia_region
+	custom_tooltip = {
+		text = mr_resurgence_end_tt
+		country_exists = c:MGO
+		c:MGO = {
+			owns = location:karakorum
+			has_presence_in = area:eastern_gobi_area
+			has_presence_in = area:western_gobi_area
 		}
 	}
 }
 
 # Phase 2: the Silk Road corridor is held from the steppe to Persia.
 mr_imperial_end_trigger = {
-	country_exists = c:MGO
-	c:MGO = {
-		owns = location:samarkand
-		any_owned_location = {
-			region = region:steppes_region
-		}
-		any_owned_location = {
-			region = region:north_china_region
+	custom_tooltip = {
+		text = mr_imperial_end_tt
+		country_exists = c:MGO
+		c:MGO = {
+			owns = location:samarkand
+			owns = location:dadu
+			has_presence_in = area:transoxiana_area
 		}
 	}
 }
@@ -142,20 +162,23 @@ mr_imperial_end_trigger = {
 # not an invented list — otherwise the phase can complete while the
 # player still cannot form the Mongol Empire.
 mr_dominance_end_trigger = {
-	any_country = {
-		OR = {
-			this = c:MGE
-			this = c:MGO
+	custom_tooltip = {
+		text = mr_dominance_end_tt
+		any_country = {
+			OR = {
+				this = c:MGE
+				this = c:MGO
+			}
+			owns = location:karakorum
+			owns = location:sarai_al_jadid
+			owns = location:kazan
+			owns = location:samarkand
+			owns = location:kaffa
+			owns = location:dadu
+			owns = location:shangyuan
+			owns = location:baxian
+			owns = location:guangzhou
 		}
-		owns = location:karakorum
-		owns = location:sarai_al_jadid
-		owns = location:kazan
-		owns = location:samarkand
-		owns = location:kaffa
-		owns = location:dadu
-		owns = location:shangyuan
-		owns = location:baxian
-		owns = location:guangzhou
 	}
 }
 
@@ -178,7 +201,19 @@ mr_can_start_chahar = {
 	current_year >= 1604
 	current_year < 1634
 	NOT = { has_global_variable = mr_chahar_started }
-	NOT = { has_global_variable = mr_railroad_failed }
+	# Ligdan's reunification bid needs a FRAGMENTED steppe. It fires
+	# whether or not the railroad failed — that failure is exactly the
+	# world where the last Chinggisid tries and fails — but not when a
+	# claimant already dominates the heartland.
+	NOT = {
+		any_country = {
+			OR = {
+				this = c:MGO
+				this = c:MGE
+			}
+			any_owned_location = { region = region:mongolia_region }
+		}
+	}
 	any_country = {
 		culture = { has_culture_group = culture_group:mongolian_group }
 		government_type = government_type:steppe_horde
@@ -213,10 +248,23 @@ mr_can_start_torghut = {
 	current_year >= 1616
 	current_year < 1630
 	NOT = { has_global_variable = mr_torghut_started }
+	# Departs from Dzungaria (xinjiang_region), heads for the Volga.
+	# If a Mongol horde already sits on the Volga, the migration story
+	# is moot — the destination is taken.
+	NOT = {
+		any_country = {
+			culture = { has_culture_group = culture_group:mongolian_group }
+			government_type = government_type:steppe_horde
+			owns = location:sarai_al_jadid
+		}
+	}
 	any_country = {
 		culture = { has_culture_group = culture_group:mongolian_group }
 		government_type = government_type:steppe_horde
-		any_owned_location = { region = region:steppes_region }
+		OR = {
+			any_owned_location = { region = region:xinjiang_region }
+			any_owned_location = { region = region:khorasan_region }
+		}
 	}
 }
 
@@ -233,6 +281,10 @@ mr_torghut_visible = {
 
 # Ends once a steppe power actually reaches the Volga.
 mr_torghut_end_trigger = {
+	# The trek must actually have happened: the Urals beat gates the
+	# end, so a horde that already owned the Volga cannot end this the
+	# month it starts.
+	has_global_variable = mr_torghut_urals
 	any_country = {
 		culture = { has_culture_group = culture_group:mongolian_group }
 		government_type = government_type:steppe_horde
@@ -260,16 +312,22 @@ mr_dzungar_visible = {
 		this = c:MGO
 		this = c:MGE
 		any_owned_location = { region = region:xinjiang_region }
-		any_owned_location = { region = region:steppes_region }
+		any_owned_location = { region = region:khorasan_region }
 	}
 }
 
 mr_dzungar_end_trigger = {
+	# Strictly stronger than the consolidation beat, so the situation
+	# cannot end the month the beat fires. The Dzungar steppe is the
+	# KAZAKH steppe (zhetysu, khorasan_region) — not the Pontic
+	# steppes_region.
+	has_global_variable = mr_dzungar_consolidated
 	any_country = {
 		culture = { has_culture_group = culture_group:mongolian_group }
 		government_type = government_type:steppe_horde
-		any_owned_location = { region = region:xinjiang_region }
-		any_owned_location = { region = region:steppes_region }
+		has_presence_in = area:dzungaria_area
+		has_presence_in = area:tarim_area
+		has_presence_in = area:zhetysu_area
 	}
 }
 
