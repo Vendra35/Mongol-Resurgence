@@ -12,18 +12,14 @@
 # field on a situation — all of those were fabricated in the
 # previous version of this file.
 # =================================================================
-
 mongol_resurgence = {
 	monthly_spawn_chance = monthly_spawn_chance_unique
-
 	can_start = {
 		mr_can_start_resurgence = yes
 	}
-
 	visible = {
 		mr_resurgence_visible = yes
 	}
-
 	can_end = {
 		OR = {
 			mr_resurgence_end_trigger = yes
@@ -36,18 +32,14 @@ mongol_resurgence = {
 			}
 		}
 	}
-
 	hint_tag = hint_mongol_resurgence
-
 	on_start = {
 		set_global_variable = mr_resurgence_started
-
 		# Unification pressure. Beats fire as this climbs.
 		set_variable = {
 			name = mr_resurgence_momentum
 			value = 0
 		}
-
 		# --- AI RAILROAD BOOKKEEPING ---
 		# Same shape as PD's PD_conquest_cooldown / PD_conquest_target /
 		# PD_conquest_target_country. The cooldown ticks monthly; when it
@@ -61,19 +53,24 @@ mongol_resurgence = {
 			name = mr_conquest_target
 			value = 0
 		}
-
 		# The .gui panel reads these two off the situation scope to
 		# draw its dual-portrait header. Without them it renders blank.
 		random_country = {
 			limit = {
-				culture = { has_culture_group = culture_group:mongolian_group }
+				culture = {
+					has_culture_group = culture_group:mongolian_group
+				}
 				government_type = government_type:steppe_horde
-				any_owned_location = { region = region:mongolia_region }
+				any_owned_location = {
+					region = region:mongolia_region
+				}
 			}
 			save_scope_as = mr_first_claimant
 		}
 		if = {
-			limit = { exists = scope:mr_first_claimant }
+			limit = {
+				exists = scope:mr_first_claimant
+			}
 			set_variable = {
 				name = mr_leading_country
 				value = scope:mr_first_claimant
@@ -81,28 +78,34 @@ mongol_resurgence = {
 		}
 		random_country = {
 			limit = {
-				culture = { has_culture_group = culture_group:mongolian_group }
+				culture = {
+					has_culture_group = culture_group:mongolian_group
+				}
 				government_type = government_type:steppe_horde
-				NOT = { this = scope:mr_first_claimant }
+				NOT = {
+					this = scope:mr_first_claimant
+				}
 			}
 			save_scope_as = mr_first_rival
 		}
 		if = {
-			limit = { exists = scope:mr_first_rival }
+			limit = {
+				exists = scope:mr_first_rival
+			}
 			set_variable = {
 				name = mr_rival_country
 				value = scope:mr_first_rival
 			}
 		}
-
 		# The opening event goes to every steppe power with a stake.
 		every_country = {
 			limit = {
-				culture = { has_culture_group = culture_group:mongolian_group }
+				culture = {
+					has_culture_group = culture_group:mongolian_group
+				}
 				government_type = government_type:steppe_horde
 			}
 			trigger_event_non_silently = mr_dominance.10
-
 			# Phase buff, plus the historical-mode variant when the
 			# railroad is running on the historical game rule.
 			add_country_modifier = {
@@ -111,21 +114,26 @@ mongol_resurgence = {
 				mode = replace
 			}
 			if = {
-				limit = { has_game_rule = mr_railroad_historical }
+				limit = {
+					has_game_rule = mr_railroad_historical
+				}
 				add_country_modifier = {
 					modifier = MR_mongol_historical_modifier
 					years = -1
 					mode = replace
 				}
 			}
-
 			# The CB is granted by the situation rather than picked from
 			# the diplomacy screen — cb_MR_* are create_enabled = no.
 			every_country = {
 				limit = {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
-					NOT = { this = prev }
+					NOT = {
+						this = prev
+					}
 				}
 				add_casus_belli = {
 					target = prev
@@ -135,7 +143,6 @@ mongol_resurgence = {
 			}
 		}
 	}
-
 	on_monthly = {
 		change_variable = {
 			name = mr_resurgence_momentum
@@ -145,7 +152,6 @@ mongol_resurgence = {
 			name = mr_conquest_cooldown
 			add = 1
 		}
-
 		# ========== AI RAILROAD: FIND A TARGET ==========
 		# Pick the weakest neighbour holding Mongolian ground whose
 		# defensive alliance web is weaker than ours. Ordered by
@@ -163,8 +169,12 @@ mongol_resurgence = {
 				ordered_neighbor_country = {
 					limit = {
 						is_rebel_country = no
-						NOT = { has_truce_with = prev }
-						NOT = { is_subject_of = prev }
+						NOT = {
+							has_truce_with = prev
+						}
+						NOT = {
+							is_subject_of = prev
+						}
 						defensive_alliance_strength < c:MGO.offensive_alliance_strength
 						any_owned_location = {
 							region = region:mongolia_region
@@ -188,7 +198,6 @@ mongol_resurgence = {
 				}
 			}
 		}
-
 		# ========== AI RAILROAD: DECLARE ==========
 		# Historical mode paces the unification at roughly one war per
 		# decade; otherwise every four years.
@@ -201,7 +210,9 @@ mongol_resurgence = {
 						var:mr_conquest_cooldown > 120
 					}
 					AND = {
-						NOT = { has_game_rule = mr_railroad_historical }
+						NOT = {
+							has_game_rule = mr_railroad_historical
+						}
 						var:mr_conquest_cooldown > 48
 					}
 				}
@@ -214,8 +225,12 @@ mongol_resurgence = {
 						months_since_war >= 24
 						situation:mongol_resurgence = {
 							var:mr_conquest_target_country = {
-								NOT = { is_subject_of = prev }
-								NOT = { has_truce_with = prev }
+								NOT = {
+									is_subject_of = prev
+								}
+								NOT = {
+									has_truce_with = prev
+								}
 							}
 						}
 					}
@@ -223,7 +238,6 @@ mongol_resurgence = {
 				}
 			}
 		}
-
 		# --- FALLBACK: the chosen target stopped being valid ---
 		# (annexed, became our subject, truced, or lost its Mongolian
 		# holdings). Clear the slot so a new target can be picked.
@@ -231,12 +245,16 @@ mongol_resurgence = {
 			limit = {
 				var:mr_conquest_target = 1
 				OR = {
-					NOT = { exists = var:mr_conquest_target_country }
+					NOT = {
+						exists = var:mr_conquest_target_country
+					}
 					var:mr_conquest_target_country = {
 						OR = {
 							is_subject_of = c:MGO
 							NOT = {
-								any_owned_location = { region = region:mongolia_region }
+								any_owned_location = {
+									region = region:mongolia_region
+								}
 							}
 						}
 					}
@@ -251,74 +269,87 @@ mongol_resurgence = {
 				value = 0
 			}
 		}
-
 		# --- Beat 1: Gathering the Horde (~2 years in) ---
 		if = {
 			limit = {
 				var:mr_resurgence_momentum >= 24
-				NOT = { has_global_variable = mr_beat_100_fired }
+				NOT = {
+					has_global_variable = mr_beat_100_fired
+				}
 			}
 			every_country = {
 				limit = {
 					government_type = government_type:steppe_horde
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 				}
 				trigger_event_non_silently = mr_dominance.100
 			}
 			set_global_variable = mr_beat_100_fired
 		}
-
 		# --- Beat 2: The Steppe Stirs (~5 years) ---
 		if = {
 			limit = {
 				var:mr_resurgence_momentum >= 60
-				NOT = { has_global_variable = mr_beat_101_fired }
+				NOT = {
+					has_global_variable = mr_beat_101_fired
+				}
 			}
 			every_country = {
 				limit = {
-					any_owned_location = { region = region:mongolia_region }
+					any_owned_location = {
+						region = region:mongolia_region
+					}
 				}
 				trigger_event_non_silently = mr_dominance.101
 			}
 			set_global_variable = mr_beat_101_fired
 		}
-
 		# --- Beat 3: The Shadow of the Khan (~9 years) ---
 		if = {
 			limit = {
 				var:mr_resurgence_momentum >= 108
-				NOT = { has_global_variable = mr_beat_102_fired }
+				NOT = {
+					has_global_variable = mr_beat_102_fired
+				}
 			}
 			every_country = {
 				limit = {
-					any_owned_location = { region = region:mongolia_region }
+					any_owned_location = {
+						region = region:mongolia_region
+					}
 				}
 				trigger_event_non_silently = mr_dominance.102
 			}
 			set_global_variable = mr_beat_102_fired
 		}
-
 		# --- Beat 4: The Thunder of Hooves, the branch (~13 years) ---
 		if = {
 			limit = {
 				var:mr_resurgence_momentum >= 156
-				NOT = { has_global_variable = mr_beat_103_fired }
+				NOT = {
+					has_global_variable = mr_beat_103_fired
+				}
 			}
 			every_country = {
 				limit = {
 					government_type = government_type:steppe_horde
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 				}
 				trigger_event_non_silently = mr_dominance.103
 			}
 			set_global_variable = mr_beat_103_fired
 		}
-
 		# --- Beat 5: A New Khan Rises, once MGO actually exists ---
 		if = {
 			limit = {
 				country_exists = c:MGO
-				NOT = { has_global_variable = mr_beat_104_fired }
+				NOT = {
+					has_global_variable = mr_beat_104_fired
+				}
 			}
 			c:MGO = {
 				trigger_event_non_silently = mr_dominance.104
@@ -330,69 +361,89 @@ mongol_resurgence = {
 			}
 			set_global_variable = mr_beat_104_fired
 		}
-
 		# --- Beat: Victory on the Steppe, when Karakorum falls to MGO ---
 		if = {
 			limit = {
 				country_exists = c:MGO
-				NOT = { has_global_variable = mr_beat_105_fired }
-				c:MGO = { owns = location:karakorum }
+				NOT = {
+					has_global_variable = mr_beat_105_fired
+				}
+				c:MGO = {
+					owns = location:karakorum
+				}
 			}
 			c:MGO = {
 				trigger_event_non_silently = mr_dominance.105
 			}
 			set_global_variable = mr_beat_105_fired
 		}
-
 		# --- Beat: Scattered to the Winds, a genuine reversal ---
 		# Fires if the claimant loses Karakorum again after taking it.
 		if = {
 			limit = {
 				has_global_variable = mr_beat_105_fired
-				NOT = { has_global_variable = mr_beat_107_fired }
+				NOT = {
+					has_global_variable = mr_beat_107_fired
+				}
 				OR = {
-					NOT = { country_exists = c:MGO }
+					NOT = {
+						country_exists = c:MGO
+					}
 					c:MGO = {
-						NOT = { owns = location:karakorum }
+						NOT = {
+							owns = location:karakorum
+						}
 					}
 				}
 			}
 			every_country = {
 				limit = {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
 				}
 				trigger_event_non_silently = mr_dominance.107
 			}
 			set_global_variable = mr_beat_107_fired
 		}
-
 		# --- BIRTH FAILSAFE (design doc, layer a) ---
 		# If nobody has organically taken up the claim by ~1375,
 		# convert the best-placed steppe power by force.
 		if = {
 			limit = {
 				current_date > 1375.1.1
-				NOT = { country_exists = c:MGO }
-				NOT = { has_global_variable = mr_birth_failsafe_fired }
+				NOT = {
+					country_exists = c:MGO
+				}
+				NOT = {
+					has_global_variable = mr_birth_failsafe_fired
+				}
 				any_country = {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
-					any_owned_location = { region = region:mongolia_region }
+					any_owned_location = {
+						region = region:mongolia_region
+					}
 				}
 			}
 			random_country = {
 				limit = {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
-					any_owned_location = { region = region:mongolia_region }
+					any_owned_location = {
+						region = region:mongolia_region
+					}
 				}
 				save_scope_as = mr_emergence_candidate
 				form_country = formable_country:MGO_f
 				trigger_event_silently = mr_dominance.998
 			}
 		}
-
 		# --- COMPLETION FAILSAFE (design doc, layer b) ---
 		# Five years before the phase closes. This does NOT just buff the
 		# AI and hope — it hands over the objective outright, which is
@@ -406,8 +457,12 @@ mongol_resurgence = {
 		if = {
 			limit = {
 				current_date > 1415.1.1
-				NOT = { mr_resurgence_end_trigger = yes }
-				NOT = { has_global_variable = mr_failsafe_p1_fired }
+				NOT = {
+					mr_resurgence_end_trigger = yes
+				}
+				NOT = {
+					has_global_variable = mr_failsafe_p1_fired
+				}
 				country_exists = c:MGO
 				c:MGO = {
 					is_ai = yes
@@ -415,7 +470,6 @@ mongol_resurgence = {
 				}
 			}
 			set_global_variable = mr_failsafe_p1_fired
-
 			# 1. Hand MGO the Mongolian heartland outright.
 			region:mongolia_region = {
 				every_ownable_location_in_region = {
@@ -432,31 +486,32 @@ mongol_resurgence = {
 					add_core = c:MGO
 				}
 			}
-
 			# 2. Reduce the surviving rival hordes to tributaries.
 			every_country = {
 				limit = {
 					is_ai = yes
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
 					NOR = {
 						this = c:MGO
 						is_subject_of = c:MGO
 					}
-					any_owned_location = { region = region:mongolia_region }
+					any_owned_location = {
+						region = region:mongolia_region
+					}
 				}
 				make_subject_of = {
 					target = c:MGO
 					type = subject_type:tributary
 				}
 			}
-
 			c:MGO = {
 				trigger_event_silently = mr_dominance.999
 			}
 		}
 	}
-
 	on_ending = {
 		# Resolution: unified, or the steppe stays divided. Branch on the
 		# GOAL, not on mere MGO existence — a timeout with MGO alive but
@@ -473,7 +528,9 @@ mongol_resurgence = {
 		else = {
 			every_country = {
 				limit = {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 				}
 				trigger_event_non_silently = mr_dominance.2
 			}
@@ -482,12 +539,13 @@ mongol_resurgence = {
 			set_global_variable = mr_railroad_failed
 		}
 	}
-
 	on_ended = {
 		# The horde is unified but has not yet turned outward — the
 		# dormant interval between Phase 1 and Phase 2.
 		if = {
-			limit = { country_exists = c:MGO }
+			limit = {
+				country_exists = c:MGO
+			}
 			c:MGO = {
 				add_country_modifier = {
 					modifier = MR_the_sleeping_horde
@@ -496,7 +554,6 @@ mongol_resurgence = {
 				}
 			}
 		}
-
 		remove_variable = mr_resurgence_momentum
 		remove_global_variable = mr_beat_100_fired
 		remove_global_variable = mr_beat_101_fired
@@ -505,7 +562,6 @@ mongol_resurgence = {
 		remove_global_variable = mr_beat_104_fired
 		remove_global_variable = mr_beat_105_fired
 		remove_global_variable = mr_beat_107_fired
-
 		# Set here as well as in mr_dominance.1, so the hand-off to
 		# Phase 2 does not depend on an event firing and resolving.
 		if = {
@@ -514,7 +570,6 @@ mongol_resurgence = {
 			}
 			set_global_variable = mr_phase_one_complete
 		}
-
 		# The wiki recommends clearing situation variables in on_ended
 		# to keep them out of the savefile.
 		remove_variable = mr_conquest_cooldown
@@ -523,7 +578,6 @@ mongol_resurgence = {
 		remove_variable = mr_leading_country
 		remove_variable = mr_rival_country
 	}
-
 	tooltip = {
 		if = {
 			limit = {
@@ -532,7 +586,6 @@ mongol_resurgence = {
 			custom_tooltip = mr_resurgence_map_tt
 		}
 	}
-
 	map_color = {
 		if = {
 			limit = {
@@ -543,7 +596,9 @@ mongol_resurgence = {
 		else_if = {
 			limit = {
 				owner ?= {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
 				}
 			}
@@ -553,7 +608,6 @@ mongol_resurgence = {
 			value = define:NMapColors|DEFAULT_COLOR
 		}
 	}
-
 	secondary_map_color = {
 		if = {
 			limit = {
@@ -566,7 +620,9 @@ mongol_resurgence = {
 		else_if = {
 			limit = {
 				region = region:mongolia_region
-				NOT = { owner ?= c:MGO }
+				NOT = {
+					owner ?= c:MGO
+				}
 			}
 			value = red
 		}

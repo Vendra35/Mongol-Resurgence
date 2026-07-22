@@ -15,8 +15,6 @@
 # granted by the situations rather than picked from the diplomacy
 # screen — the same approach PD uses.
 # =================================================================
-
-
 # --- Phase 1: the war to unify the steppe ------------------------
 cb_MR_steppe_unification = {
 	create_visible = {
@@ -35,7 +33,6 @@ cb_MR_steppe_unification = {
 	}
 }
 
-
 # --- Phase 2: mastery of the Silk Road ---------------------------
 cb_MR_silk_road = {
 	create_visible = {
@@ -53,7 +50,6 @@ cb_MR_silk_road = {
 		}
 	}
 }
-
 
 # --- Phase 3: the advance into the west --------------------------
 cb_MR_westward_advance = {

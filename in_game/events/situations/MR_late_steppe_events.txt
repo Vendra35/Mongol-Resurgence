@@ -1,5 +1,4 @@
 ﻿namespace = mr_steppe
-
 # =================================================================
 # LATE-STEPPE EVENTS (1600s)
 # =================================================================
@@ -10,10 +9,7 @@
 # Fired by the situations in MR_late_steppe.txt, so no
 # dynamic_historical_event blocks here.
 # =================================================================
-
-
 # ============ LIGDAN KHAN AND THE CHAHAR (1604-1634) =============
-
 mr_steppe.1 = {
 	type = country_event
 	category = situation_event
@@ -27,17 +23,19 @@ mr_steppe.1 = {
 		10 = armed
 		10 = exterior
 	}
-
 	option = {
 		name = mr_steppe.1.a
 		historical_option = yes
-		ai_chance = { factor = 60 }
+		ai_chance = {
+			factor = 60
+		}
 		add_prestige = prestige_mild_bonus
 	}
-
 	option = {
 		name = mr_steppe.1.b
-		ai_chance = { factor = 40 }
+		ai_chance = {
+			factor = 40
+		}
 		add_government_power = government_power_mild_bonus
 	}
 }
@@ -55,10 +53,11 @@ mr_steppe.2 = {
 		10 = armed
 		10 = happy
 	}
-
 	option = {
 		name = mr_steppe.2.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_army_tradition = army_tradition_mild_bonus
 	}
 }
@@ -76,17 +75,16 @@ mr_steppe.3 = {
 		10 = interior
 		10 = regular
 	}
-
 	option = {
 		name = mr_steppe.3.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_severe_bonus
 	}
 }
 
-
 # ============== THE TORGHUT MIGRATION (1616-1630) ================
-
 mr_steppe.10 = {
 	type = country_event
 	category = situation_event
@@ -100,17 +98,21 @@ mr_steppe.10 = {
 		10 = exterior
 		10 = regular
 	}
-
 	option = {
 		name = mr_steppe.10.a
 		historical_option = yes
-		ai_chance = { factor = 60 }
-		add_cultural_influence = cultural_influence_mild_bonus
+		ai_chance = {
+			factor = 60
+		}
+		culture:mongolian_culture = {
+			add_cultural_influence = cultural_influence_mild_bonus
+		}
 	}
-
 	option = {
 		name = mr_steppe.10.b
-		ai_chance = { factor = 40 }
+		ai_chance = {
+			factor = 40
+		}
 		add_army_tradition = army_tradition_mild_bonus
 	}
 }
@@ -127,10 +129,11 @@ mr_steppe.11 = {
 		10 = exterior
 		10 = regular
 	}
-
 	option = {
 		name = mr_steppe.11.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_government_power = government_power_mild_bonus
 	}
 }
@@ -148,18 +151,22 @@ mr_steppe.12 = {
 		10 = armed
 		10 = angry
 	}
-
 	option = {
 		name = mr_steppe.12.a
-		ai_chance = { factor = 50 }
+		ai_chance = {
+			factor = 50
+		}
 		add_army_tradition = army_tradition_mild_bonus
 	}
-
 	option = {
 		name = mr_steppe.12.b
 		historical_option = yes
-		ai_chance = { factor = 50 }
-		add_cultural_influence = cultural_influence_mild_bonus
+		ai_chance = {
+			factor = 50
+		}
+		culture:mongolian_culture = {
+			add_cultural_influence = cultural_influence_mild_bonus
+		}
 	}
 }
 
@@ -176,17 +183,16 @@ mr_steppe.13 = {
 		10 = exterior
 		10 = happy
 	}
-
 	option = {
 		name = mr_steppe.13.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_severe_bonus
 	}
 }
 
-
 # ================= THE DZUNGAR KHANATE (1634-) ===================
-
 mr_steppe.20 = {
 	type = country_event
 	category = situation_event
@@ -200,11 +206,12 @@ mr_steppe.20 = {
 		10 = armed
 		10 = exterior
 	}
-
 	option = {
 		name = mr_steppe.20.a
 		historical_option = yes
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_army_tradition = army_tradition_mild_bonus
 	}
 }
@@ -221,10 +228,11 @@ mr_steppe.21 = {
 		10 = interior
 		10 = regular
 	}
-
 	option = {
 		name = mr_steppe.21.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_government_power = government_power_mild_bonus
 	}
 }
@@ -242,10 +250,11 @@ mr_steppe.22 = {
 		10 = armed
 		10 = happy
 	}
-
 	option = {
 		name = mr_steppe.22.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_severe_bonus
 		add_country_modifier = {
 			modifier = MR_unified_mongol_banner

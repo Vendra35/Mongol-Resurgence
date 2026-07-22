@@ -1,5 +1,4 @@
 ﻿namespace = mr_dominance_dhe
-
 # =================================================================
 # MONGOL RESURGENCE - HORDE MECHANICS DHE LAYER
 # =================================================================
@@ -16,8 +15,6 @@
 #   Phase 2 (1420-1550, MGO): 3 Wall Breakers, 6 Silk Road, 2 Encampment
 #   Phase 3 (1550-1650, MGE): 7 Melting Pot, 8 Yam
 # =================================================================
-
-
 # --- The Forge of Warriors --------------------------------------
 mr_dominance_dhe.1 = {
 	type = country_event
@@ -29,22 +26,23 @@ mr_dominance_dhe.1 = {
 		10 = armed
 		10 = interior
 	}
-
 	dynamic_historical_event = {
 		tag = MGO
 		from = 1368.1.1
 		to = 1420.1.1
 		monthly_chance = 1
 	}
-
 	trigger = {
-		NOT = { has_game_rule = mr_railroad_off }
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 		is_ai = yes
 	}
-
 	option = {
 		name = mr_dominance_dhe.1.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_army_tradition = army_tradition_severe_bonus
 		add_tribal_cohesion = tribal_cohesion_mild_bonus
 		add_country_modifier = {
@@ -54,7 +52,6 @@ mr_dominance_dhe.1 = {
 		}
 	}
 }
-
 
 # --- The Great Kurultai -----------------------------------------
 # The one event in this layer the player also sees: it is the
@@ -70,24 +67,24 @@ mr_dominance_dhe.4 = {
 		10 = interior
 		10 = regular
 	}
-
 	dynamic_historical_event = {
 		tag = MGO
 		from = 1368.1.1
 		to = 1420.1.1
 		monthly_chance = 1
 	}
-
 	trigger = {
-		NOT = { has_game_rule = mr_railroad_off }
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 		government_type = government_type:steppe_horde
 	}
-
 	option = {
 		name = mr_dominance_dhe.4.a
-		ai_chance = { factor = 100 }
-		add_prestige = prestige_severe_bonus
-		add_legitimacy = legitimacy_severe_bonus
+		ai_chance = {
+			factor = 100
+		}
+		add_prestige = prestige_extreme_bonus
 		add_horde_unity = horde_unity_extreme_bonus
 		add_country_modifier = {
 			modifier = MR_unified_mongol_banner
@@ -96,7 +93,6 @@ mr_dominance_dhe.4 = {
 		}
 	}
 }
-
 
 # --- The Absorption of the Rival Horde --------------------------
 mr_dominance_dhe.5 = {
@@ -109,29 +105,32 @@ mr_dominance_dhe.5 = {
 		10 = armed
 		10 = exterior
 	}
-
 	dynamic_historical_event = {
 		tag = MGO
 		from = 1368.1.1
 		to = 1420.1.1
 		monthly_chance = 1
 	}
-
 	trigger = {
-		NOT = { has_game_rule = mr_railroad_off }
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 		is_ai = yes
 		government_type = government_type:steppe_horde
 	}
-
 	option = {
 		name = mr_dominance_dhe.5.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_horde_unity = horde_unity_mild_bonus
 		add_tribal_cohesion = tribal_cohesion_severe_bonus
-		add_manpower = { value = root.monthly_manpower multiply = 6 }
+		add_manpower = {
+			value = root.monthly_manpower
+			multiply = 6
+		}
 	}
 }
-
 
 # --- The Wall Breakers ------------------------------------------
 mr_dominance_dhe.3 = {
@@ -144,27 +143,27 @@ mr_dominance_dhe.3 = {
 		10 = armed
 		10 = exterior
 	}
-
 	dynamic_historical_event = {
 		tag = MGO
 		from = 1420.1.1
 		to = 1550.1.1
 		monthly_chance = 1
 	}
-
 	trigger = {
-		NOT = { has_game_rule = mr_railroad_off }
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 		is_ai = yes
 	}
-
 	option = {
 		name = mr_dominance_dhe.3.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_army_tradition = army_tradition_severe_bonus
 		add_research_progress = research_progress_mild_bonus
 	}
 }
-
 
 # --- The Silk Road Reborn ---------------------------------------
 mr_dominance_dhe.6 = {
@@ -177,29 +176,31 @@ mr_dominance_dhe.6 = {
 		10 = exterior
 		10 = regular
 	}
-
 	dynamic_historical_event = {
 		tag = MGO
 		from = 1420.1.1
 		to = 1550.1.1
 		monthly_chance = 1
 	}
-
 	trigger = {
-		NOT = { has_game_rule = mr_railroad_off }
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 		is_ai = yes
 		owns = location:samarkand
 	}
-
 	option = {
 		name = mr_dominance_dhe.6.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_gold = 1000
-		add_cultural_influence = cultural_influence_severe_bonus
+		culture:mongolian_culture = {
+			add_cultural_influence = cultural_influence_severe_bonus
+		}
 		add_research_progress = research_progress_mild_bonus
 	}
 }
-
 
 # --- The Imperial Encampment ------------------------------------
 mr_dominance_dhe.2 = {
@@ -212,29 +213,29 @@ mr_dominance_dhe.2 = {
 		10 = interior
 		10 = regular
 	}
-
 	dynamic_historical_event = {
 		tag = MGO
 		from = 1420.1.1
 		to = 1550.1.1
 		monthly_chance = 1
 	}
-
 	trigger = {
-		NOT = { has_game_rule = mr_railroad_off }
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 		is_ai = yes
 		owns = location:karakorum
 	}
-
 	option = {
 		name = mr_dominance_dhe.2.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_mild_bonus
 		add_legitimacy = legitimacy_mild_bonus
 		add_government_power = government_power_extreme_bonus
 	}
 }
-
 
 # --- The Imperial Melting Pot -----------------------------------
 mr_dominance_dhe.7 = {
@@ -247,28 +248,30 @@ mr_dominance_dhe.7 = {
 		10 = interior
 		10 = regular
 	}
-
 	dynamic_historical_event = {
 		tag = MGE
 		from = 1550.1.1
 		to = 1650.1.1
 		monthly_chance = 1
 	}
-
 	trigger = {
-		NOT = { has_game_rule = mr_railroad_off }
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 		is_ai = yes
 	}
-
 	option = {
 		name = mr_dominance_dhe.7.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_research_progress = research_progress_severe_bonus
-		add_cultural_influence = cultural_influence_severe_bonus
+		culture:mongolian_culture = {
+			add_cultural_influence = cultural_influence_severe_bonus
+		}
 		add_stability = stability_mild_bonus
 	}
 }
-
 
 # --- The Yam Postal Relay ---------------------------------------
 mr_dominance_dhe.8 = {
@@ -281,22 +284,23 @@ mr_dominance_dhe.8 = {
 		10 = exterior
 		10 = regular
 	}
-
 	dynamic_historical_event = {
 		tag = MGE
 		from = 1550.1.1
 		to = 1650.1.1
 		monthly_chance = 1
 	}
-
 	trigger = {
-		NOT = { has_game_rule = mr_railroad_off }
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 		is_ai = yes
 	}
-
 	option = {
 		name = mr_dominance_dhe.8.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_government_power = government_power_extreme_bonus
 		add_stability = stability_mild_bonus
 		add_legitimacy = legitimacy_mild_bonus

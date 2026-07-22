@@ -18,7 +18,6 @@
 #   on_country_formed -> does not exist; dropped
 #   trigger_event     -> trigger_event_silently / _non_silently
 # =================================================================
-
 yearly_country_pulse = {
 	on_actions = {
 		mr_claimant_manpower_pulse
@@ -26,17 +25,18 @@ yearly_country_pulse = {
 	}
 }
 
-
 # --- Keep the horde's military base growing ----------------------
 # Mirrors PD's on_brandenburg_manpower_pulse: the AI claimant builds
 # the military infrastructure it needs, which it otherwise neglects.
 mr_claimant_manpower_pulse = {
 	trigger = {
-		NOT = { has_game_rule = mr_railroad_off }
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 		is_ai = yes
 		OR = {
-			this = c:MGO
-			this = c:MGE
+			tag = MGO
+			tag = MGE
 		}
 	}
 	events = {
@@ -44,19 +44,20 @@ mr_claimant_manpower_pulse = {
 	}
 }
 
-
 # --- Keep the horde's armies raised, in peacetime ----------------
 # Mirrors PD's on_brandenburg_construct_army_pulse. Peace-only, so
 # it tops the horde up between wars rather than during them.
 mr_claimant_army_pulse = {
 	trigger = {
-		NOT = { has_game_rule = mr_railroad_off }
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 		is_ai = yes
 		at_war = no
 		monthly_manpower >= 0.1
 		OR = {
-			this = c:MGO
-			this = c:MGE
+			tag = MGO
+			tag = MGE
 		}
 	}
 	events = {

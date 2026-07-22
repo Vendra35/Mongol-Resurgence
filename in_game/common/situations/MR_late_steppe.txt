@@ -15,23 +15,18 @@
 #   Treaty of Ugra   -> flavor_MOS / flavor_LIT + trust bias
 #   Altan Khan       -> buddhism_events.13 (met_lama)
 # =================================================================
-
-
 # --- Ligdan Khan and the Chahar (1604-1634) ----------------------
 # The last Chinggisid Great Khan tried to reunify the Mongols by
 # force and drove them into the arms of the Manchus instead. This is
 # what actually happened in place of the mod's divergence.
 mr_chahar_reunification = {
 	monthly_spawn_chance = monthly_spawn_chance_unique
-
 	can_start = {
 		mr_can_start_chahar = yes
 	}
-
 	visible = {
 		mr_chahar_visible = yes
 	}
-
 	can_end = {
 		OR = {
 			mr_chahar_end_trigger = yes
@@ -41,21 +36,19 @@ mr_chahar_reunification = {
 			}
 		}
 	}
-
 	hint_tag = hint_mr_chahar
-
 	on_start = {
 		set_global_variable = mr_chahar_started
-
 		every_country = {
 			limit = {
-				culture = { has_culture_group = culture_group:mongolian_group }
+				culture = {
+					has_culture_group = culture_group:mongolian_group
+				}
 				government_type = government_type:steppe_horde
 			}
 			trigger_event_non_silently = mr_steppe.1
 		}
 	}
-
 	on_monthly = {
 		# The Chinggisid claim is contested while a rival horde holds
 		# the heartland. Reading vanilla's Tumu state only — never
@@ -64,11 +57,15 @@ mr_chahar_reunification = {
 		if = {
 			limit = {
 				mr_vanilla_tumu_crisis_active = yes
-				NOT = { has_global_variable = mr_chahar_tumu_seen }
+				NOT = {
+					has_global_variable = mr_chahar_tumu_seen
+				}
 			}
 			every_country = {
 				limit = {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
 				}
 				trigger_event_non_silently = mr_steppe.2
@@ -76,25 +73,26 @@ mr_chahar_reunification = {
 			set_global_variable = mr_chahar_tumu_seen
 		}
 	}
-
 	on_ending = {
 		# Only on the goal — these situations can also end on time expiry.
 		if = {
-			limit = { mr_chahar_end_trigger = yes }
+			limit = {
+				mr_chahar_end_trigger = yes
+			}
 			every_country = {
 				limit = {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
 				}
 				trigger_event_non_silently = mr_steppe.3
 			}
 		}
 	}
-
 	on_ended = {
 		remove_global_variable = mr_chahar_tumu_seen
 	}
-
 	tooltip = {
 		if = {
 			limit = {
@@ -103,12 +101,13 @@ mr_chahar_reunification = {
 			custom_tooltip = mr_chahar_map_tt
 		}
 	}
-
 	map_color = {
 		if = {
 			limit = {
 				owner ?= {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
 				}
 			}
@@ -120,22 +119,18 @@ mr_chahar_reunification = {
 	}
 }
 
-
 # --- The Torghut Migration (1616-1630) ---------------------------
 # Roughly 200,000 Kalmyks left Dzungaria for the Volga, arriving as
 # a Mongol power on Russia's southern flank two centuries after the
 # Horde collapsed. The Phase 3 premise, in miniature and for real.
 mr_torghut_migration = {
 	monthly_spawn_chance = monthly_spawn_chance_unique
-
 	can_start = {
 		mr_can_start_torghut = yes
 	}
-
 	visible = {
 		mr_torghut_visible = yes
 	}
-
 	can_end = {
 		OR = {
 			mr_torghut_end_trigger = yes
@@ -145,44 +140,46 @@ mr_torghut_migration = {
 			}
 		}
 	}
-
 	hint_tag = hint_mr_torghut
-
 	on_start = {
 		set_global_variable = mr_torghut_started
-
 		set_variable = {
 			name = mr_torghut_distance
 			value = 0
 		}
-
 		every_country = {
 			limit = {
-				culture = { has_culture_group = culture_group:mongolian_group }
+				culture = {
+					has_culture_group = culture_group:mongolian_group
+				}
 				government_type = government_type:steppe_horde
 			}
 			trigger_event_non_silently = mr_steppe.10
 		}
 	}
-
 	on_monthly = {
 		change_variable = {
 			name = mr_torghut_distance
 			add = 1
 		}
-
 		# The trek reaches the Urals (~4 years out).
 		if = {
 			limit = {
 				var:mr_torghut_distance >= 48
-				NOT = { has_global_variable = mr_torghut_urals }
+				NOT = {
+					has_global_variable = mr_torghut_urals
+				}
 			}
 			every_country = {
 				limit = {
 					OR = {
-						any_owned_location = { region = region:ural_region }
+						any_owned_location = {
+							region = region:ural_region
+						}
 						AND = {
-							culture = { has_culture_group = culture_group:mongolian_group }
+							culture = {
+								has_culture_group = culture_group:mongolian_group
+							}
 							government_type = government_type:steppe_horde
 						}
 					}
@@ -191,43 +188,47 @@ mr_torghut_migration = {
 			}
 			set_global_variable = mr_torghut_urals
 		}
-
 		# Russia notices horsemen on the Volga (~8 years out).
 		if = {
 			limit = {
 				var:mr_torghut_distance >= 96
-				NOT = { has_global_variable = mr_torghut_volga }
+				NOT = {
+					has_global_variable = mr_torghut_volga
+				}
 			}
 			every_country = {
 				limit = {
-					any_owned_location = { region = region:russian_region }
+					any_owned_location = {
+						region = region:russian_region
+					}
 				}
 				trigger_event_non_silently = mr_steppe.12
 			}
 			set_global_variable = mr_torghut_volga
 		}
 	}
-
 	on_ending = {
 		# Only on the goal — these situations can also end on time expiry.
 		if = {
-			limit = { mr_torghut_end_trigger = yes }
+			limit = {
+				mr_torghut_end_trigger = yes
+			}
 			every_country = {
 				limit = {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
 				}
 				trigger_event_non_silently = mr_steppe.13
 			}
 		}
 	}
-
 	on_ended = {
 		remove_variable = mr_torghut_distance
 		remove_global_variable = mr_torghut_urals
 		remove_global_variable = mr_torghut_volga
 	}
-
 	tooltip = {
 		if = {
 			limit = {
@@ -240,12 +241,13 @@ mr_torghut_migration = {
 			custom_tooltip = mr_torghut_map_tt
 		}
 	}
-
 	map_color = {
 		if = {
 			limit = {
 				owner ?= {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
 				}
 			}
@@ -255,7 +257,6 @@ mr_torghut_migration = {
 			value = define:NMapColors|DEFAULT_COLOR
 		}
 	}
-
 	secondary_map_color = {
 		if = {
 			limit = {
@@ -269,21 +270,17 @@ mr_torghut_migration = {
 	}
 }
 
-
 # --- The Dzungar Khanate (1634-) ---------------------------------
 # The Oirats who stayed east built the last steppe empire, and the
 # last nomadic power that a settled state had to take seriously.
 mr_dzungar_khanate = {
 	monthly_spawn_chance = monthly_spawn_chance_unique
-
 	can_start = {
 		mr_can_start_dzungar = yes
 	}
-
 	visible = {
 		mr_dzungar_visible = yes
 	}
-
 	can_end = {
 		OR = {
 			mr_dzungar_end_trigger = yes
@@ -293,37 +290,43 @@ mr_dzungar_khanate = {
 			}
 		}
 	}
-
 	hint_tag = hint_mr_dzungar
-
 	on_start = {
 		set_global_variable = mr_dzungar_started
-
 		every_country = {
 			limit = {
-				culture = { has_culture_group = culture_group:mongolian_group }
+				culture = {
+					has_culture_group = culture_group:mongolian_group
+				}
 				government_type = government_type:steppe_horde
 			}
 			trigger_event_non_silently = mr_steppe.20
 		}
 	}
-
 	on_monthly = {
 		# The khanate consolidates once it holds both the Tarim basin
 		# and a foothold on the western steppe.
 		if = {
 			limit = {
-				NOT = { has_global_variable = mr_dzungar_consolidated }
+				NOT = {
+					has_global_variable = mr_dzungar_consolidated
+				}
 				any_country = {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
-					any_owned_location = { region = region:xinjiang_region }
+					any_owned_location = {
+						region = region:xinjiang_region
+					}
 					has_presence_in = area:zhetysu_area
 				}
 			}
 			every_country = {
 				limit = {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
 				}
 				trigger_event_non_silently = mr_steppe.21
@@ -331,25 +334,26 @@ mr_dzungar_khanate = {
 			set_global_variable = mr_dzungar_consolidated
 		}
 	}
-
 	on_ending = {
 		# Only on the goal — these situations can also end on time expiry.
 		if = {
-			limit = { mr_dzungar_end_trigger = yes }
+			limit = {
+				mr_dzungar_end_trigger = yes
+			}
 			every_country = {
 				limit = {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
 				}
 				trigger_event_non_silently = mr_steppe.22
 			}
 		}
 	}
-
 	on_ended = {
 		remove_global_variable = mr_dzungar_consolidated
 	}
-
 	tooltip = {
 		if = {
 			limit = {
@@ -361,12 +365,13 @@ mr_dzungar_khanate = {
 			custom_tooltip = mr_dzungar_map_tt
 		}
 	}
-
 	map_color = {
 		if = {
 			limit = {
 				owner ?= {
-					culture = { has_culture_group = culture_group:mongolian_group }
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
 					government_type = government_type:steppe_horde
 				}
 			}

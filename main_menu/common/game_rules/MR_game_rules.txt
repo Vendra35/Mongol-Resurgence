@@ -4,20 +4,16 @@
 # Option names are global identifiers and are what `has_game_rule`
 # takes, so they carry the mr_ prefix rather than bare words.
 # Reference: vanilla main_menu/common/game_rules (player_normal_difficulty).
-
 mr_railroad = {
 	default = mr_railroad_historical
-
 	# Historically anchored: the railroad follows the real 1368 timeline.
 	mr_railroad_historical = {
 		flag = general_rule
 	}
-
 	# Divergent: the same three phases, but actors and timings can vary.
 	mr_railroad_divergent = {
 		flag = general_rule
 	}
-
 	# Mod content disabled entirely.
 	mr_railroad_off = {
 		flag = general_rule

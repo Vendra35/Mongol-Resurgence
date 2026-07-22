@@ -6,13 +6,14 @@
 # Structure follows vanilla in_game/common/scriptable_hints
 # (hint_black_death): priority / hide / sort_priority.
 # =================================================================
-
 hint_mongol_resurgence = {
 	priority = {
 		can_see_situation = situation:mongol_resurgence
 	}
 	hide = {
-		NOT = { is_situation_active = situation:mongol_resurgence }
+		NOT = {
+			is_situation_active = situation:mongol_resurgence
+		}
 	}
 	sort_priority = 200
 }
@@ -22,7 +23,9 @@ hint_mongol_imperial = {
 		can_see_situation = situation:mongol_imperial
 	}
 	hide = {
-		NOT = { is_situation_active = situation:mongol_imperial }
+		NOT = {
+			is_situation_active = situation:mongol_imperial
+		}
 	}
 	sort_priority = 200
 }
@@ -32,7 +35,9 @@ hint_mongol_dominance = {
 		can_see_situation = situation:mongol_dominance
 	}
 	hide = {
-		NOT = { is_situation_active = situation:mongol_dominance }
+		NOT = {
+			is_situation_active = situation:mongol_dominance
+		}
 	}
 	sort_priority = 200
 }
@@ -42,7 +47,9 @@ hint_mr_chahar = {
 		can_see_situation = situation:mr_chahar_reunification
 	}
 	hide = {
-		NOT = { is_situation_active = situation:mr_chahar_reunification }
+		NOT = {
+			is_situation_active = situation:mr_chahar_reunification
+		}
 	}
 	sort_priority = 150
 }
@@ -52,7 +59,9 @@ hint_mr_torghut = {
 		can_see_situation = situation:mr_torghut_migration
 	}
 	hide = {
-		NOT = { is_situation_active = situation:mr_torghut_migration }
+		NOT = {
+			is_situation_active = situation:mr_torghut_migration
+		}
 	}
 	sort_priority = 150
 }
@@ -62,7 +71,9 @@ hint_mr_dzungar = {
 		can_see_situation = situation:mr_dzungar_khanate
 	}
 	hide = {
-		NOT = { is_situation_active = situation:mr_dzungar_khanate }
+		NOT = {
+			is_situation_active = situation:mr_dzungar_khanate
+		}
 	}
 	sort_priority = 150
 }

@@ -1,5 +1,4 @@
 ﻿namespace = mr_dominance
-
 # =================================================================
 # MONGOL RESURGENCE - SITUATION LIFECYCLE
 # =================================================================
@@ -20,8 +19,6 @@
 #   130-132  Phase 3 beats, 133 the Phase 3 collapse
 #   998/999  hidden bookkeeping, no player-facing text beyond .a
 # =================================================================
-
-
 # --- The Eagle of the Steppe: the situation opens ----------------
 mr_dominance.10 = {
 	type = country_event
@@ -35,18 +32,17 @@ mr_dominance.10 = {
 		10 = armed
 		10 = exterior
 	}
-
 	option = {
 		name = mr_dominance.10.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_mild_bonus
 	}
 }
 
-
 # =========================== PHASE 1 =============================
 # 1368-1420: the unification of Mongolia.
-
 # --- Gathering the Horde ----------------------------------------
 mr_dominance.100 = {
 	type = country_event
@@ -59,10 +55,11 @@ mr_dominance.100 = {
 		10 = armed
 		10 = exterior
 	}
-
 	option = {
 		name = mr_dominance.100.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_army_tradition = army_tradition_mild_bonus
 	}
 }
@@ -79,10 +76,11 @@ mr_dominance.101 = {
 		10 = exterior
 		10 = regular
 	}
-
 	option = {
 		name = mr_dominance.101.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_weak_bonus
 	}
 }
@@ -99,10 +97,11 @@ mr_dominance.102 = {
 		10 = interior
 		10 = regular
 	}
-
 	option = {
 		name = mr_dominance.102.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_government_power = government_power_mild_bonus
 	}
 }
@@ -121,16 +120,18 @@ mr_dominance.103 = {
 		10 = armed
 		10 = exterior
 	}
-
 	option = {
 		name = mr_dominance.103.a
-		ai_chance = { factor = 70 }
+		ai_chance = {
+			factor = 70
+		}
 		add_army_tradition = army_tradition_severe_bonus
 	}
-
 	option = {
 		name = mr_dominance.103.b
-		ai_chance = { factor = 30 }
+		ai_chance = {
+			factor = 30
+		}
 		add_government_power = government_power_mild_bonus
 		add_prestige = prestige_weak_bonus
 	}
@@ -148,10 +149,11 @@ mr_dominance.104 = {
 		10 = interior
 		10 = happy
 	}
-
 	option = {
 		name = mr_dominance.104.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_severe_bonus
 	}
 }
@@ -168,10 +170,11 @@ mr_dominance.105 = {
 		10 = armed
 		10 = happy
 	}
-
 	option = {
 		name = mr_dominance.105.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_severe_bonus
 		add_country_modifier = {
 			modifier = MR_unified_mongol_banner
@@ -193,12 +196,15 @@ mr_dominance.107 = {
 		10 = armed
 		10 = angry
 	}
-
 	option = {
 		name = mr_dominance.107.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		if = {
-			limit = { is_ai = yes }
+			limit = {
+				is_ai = yes
+			}
 			add_country_modifier = {
 				modifier = MR_shattered_horde_ai
 				years = 25
@@ -216,7 +222,6 @@ mr_dominance.107 = {
 	}
 }
 
-
 # --- Phase 1 resolution: the steppe is unified -------------------
 mr_dominance.1 = {
 	type = country_event
@@ -230,7 +235,6 @@ mr_dominance.1 = {
 		10 = armed
 		10 = happy
 	}
-
 	immediate = {
 		hidden_effect = {
 			set_global_variable = {
@@ -239,10 +243,11 @@ mr_dominance.1 = {
 			}
 		}
 	}
-
 	option = {
 		name = mr_dominance.1.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_extreme_bonus
 		add_country_modifier = {
 			modifier = MR_unified_mongol_banner
@@ -265,7 +270,6 @@ mr_dominance.2 = {
 		10 = exterior
 		10 = angry
 	}
-
 	immediate = {
 		hidden_effect = {
 			set_global_variable = {
@@ -274,12 +278,15 @@ mr_dominance.2 = {
 			}
 		}
 	}
-
 	option = {
 		name = mr_dominance.2.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		if = {
-			limit = { is_ai = yes }
+			limit = {
+				is_ai = yes
+			}
 			add_country_modifier = {
 				modifier = MR_shattered_horde_ai
 				years = 25
@@ -297,10 +304,8 @@ mr_dominance.2 = {
 	}
 }
 
-
 # =========================== PHASE 2 =============================
 # 1420-1550: dominance over the Silk Road, hegemony against the Ming.
-
 # --- Beyond the Steppe ------------------------------------------
 mr_dominance.120 = {
 	type = country_event
@@ -313,11 +318,14 @@ mr_dominance.120 = {
 		10 = exterior
 		10 = regular
 	}
-
 	option = {
 		name = mr_dominance.120.a
-		ai_chance = { factor = 100 }
-		add_cultural_influence = cultural_influence_mild_bonus
+		ai_chance = {
+			factor = 100
+		}
+		culture:mongolian_culture = {
+			add_cultural_influence = cultural_influence_mild_bonus
+		}
 	}
 }
 
@@ -333,10 +341,11 @@ mr_dominance.121 = {
 		10 = armed
 		10 = exterior
 	}
-
 	option = {
 		name = mr_dominance.121.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_mild_bonus
 	}
 }
@@ -353,10 +362,11 @@ mr_dominance.122 = {
 		10 = armed
 		10 = exterior
 	}
-
 	option = {
 		name = mr_dominance.122.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_army_tradition = army_tradition_mild_bonus
 	}
 }
@@ -375,16 +385,18 @@ mr_dominance.123 = {
 		10 = armed
 		10 = exterior
 	}
-
 	option = {
 		name = mr_dominance.123.a
-		ai_chance = { factor = 70 }
+		ai_chance = {
+			factor = 70
+		}
 		add_army_tradition = army_tradition_severe_bonus
 	}
-
 	option = {
 		name = mr_dominance.123.b
-		ai_chance = { factor = 30 }
+		ai_chance = {
+			factor = 30
+		}
 		add_government_power = government_power_mild_bonus
 		add_prestige = prestige_weak_bonus
 	}
@@ -402,10 +414,11 @@ mr_dominance.124 = {
 		10 = interior
 		10 = happy
 	}
-
 	option = {
 		name = mr_dominance.124.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_severe_bonus
 	}
 }
@@ -422,10 +435,11 @@ mr_dominance.125 = {
 		10 = armed
 		10 = happy
 	}
-
 	option = {
 		name = mr_dominance.125.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_severe_bonus
 		add_country_modifier = {
 			modifier = MR_empire_fulfilled
@@ -447,12 +461,15 @@ mr_dominance.127 = {
 		10 = armed
 		10 = angry
 	}
-
 	option = {
 		name = mr_dominance.127.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		if = {
-			limit = { is_ai = yes }
+			limit = {
+				is_ai = yes
+			}
 			add_country_modifier = {
 				modifier = MR_imperial_failure_ai
 				years = 25
@@ -470,10 +487,8 @@ mr_dominance.127 = {
 	}
 }
 
-
 # =========================== PHASE 3 =============================
 # 1550-1650: the westward advance and the final empire.
-
 # --- The Mongol Age ---------------------------------------------
 mr_dominance.130 = {
 	type = country_event
@@ -486,10 +501,11 @@ mr_dominance.130 = {
 		10 = interior
 		10 = happy
 	}
-
 	option = {
 		name = mr_dominance.130.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_severe_bonus
 	}
 }
@@ -506,10 +522,11 @@ mr_dominance.131 = {
 		10 = interior
 		10 = regular
 	}
-
 	option = {
 		name = mr_dominance.131.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_government_power = government_power_severe_bonus
 	}
 }
@@ -527,7 +544,6 @@ mr_dominance.132 = {
 		10 = interior
 		10 = happy
 	}
-
 	immediate = {
 		hidden_effect = {
 			set_global_variable = {
@@ -536,10 +552,11 @@ mr_dominance.132 = {
 			}
 		}
 	}
-
 	option = {
 		name = mr_dominance.132.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_ultimate_bonus
 		add_country_modifier = {
 			modifier = MR_mongol_world_order
@@ -562,7 +579,6 @@ mr_dominance.133 = {
 		10 = interior
 		10 = angry
 	}
-
 	immediate = {
 		hidden_effect = {
 			set_global_variable = {
@@ -571,12 +587,15 @@ mr_dominance.133 = {
 			}
 		}
 	}
-
 	option = {
 		name = mr_dominance.133.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		if = {
-			limit = { is_ai = yes }
+			limit = {
+				is_ai = yes
+			}
 			add_country_modifier = {
 				modifier = MR_dominance_failure_ai
 				years = 25
@@ -594,24 +613,20 @@ mr_dominance.133 = {
 	}
 }
 
-
 # ====================== HIDDEN BOOKKEEPING =======================
 # Only .a localisation exists for these two, which is consistent
 # with them never being shown: they carry no title or desc.
-
 # --- Birth failsafe bookkeeping ---------------------------------
 mr_dominance.998 = {
 	type = country_event
 	category = situation_event
 	hidden = yes
-
 	immediate = {
 		set_global_variable = {
 			name = mr_birth_failsafe_fired
 			value = yes
 		}
 	}
-
 	option = {
 		name = mr_dominance.998.a
 	}
@@ -624,7 +639,6 @@ mr_dominance.998 = {
 mr_dominance.995 = {
 	type = country_event
 	hidden = yes
-
 	trigger = {
 		is_ai = yes
 		OR = {
@@ -632,24 +646,60 @@ mr_dominance.995 = {
 			this = c:MGE
 		}
 	}
-
 	immediate = {
-		random_owned_location = {
+		if = {
 			limit = {
-				can_build_building = building_type:barracks
+				has_advance = kurultai_advance
 			}
-			construct_building = {
-				building_type = building_type:barracks
-				cost_multiplier = 0
+			random_owned_location = {
+				limit = {
+					can_build_building = building_type:kurultai
+				}
+				construct_building = {
+					building_type = building_type:kurultai
+					cost_multiplier = 0
+					cost_multiplier_reason = "MR_dhe_free_buildings"
+					instant = yes
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_advance = barracks_advance
+			}
+			random_owned_location = {
+				limit = {
+					can_build_building = building_type:barracks
+				}
+				construct_building = {
+					building_type = building_type:barracks
+					cost_multiplier = 0
+					cost_multiplier_reason = "MR_dhe_free_buildings"
+					instant = yes
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_advance = armory_advance
+			}
+			random_owned_location = {
+				limit = {
+					can_build_building = building_type:armory
+				}
+				construct_building = {
+					building_type = building_type:armory
+					cost_multiplier = 0
+					cost_multiplier_reason = "MR_dhe_free_buildings"
+					instant = yes
+				}
 			}
 		}
 	}
-
 	option = {
 		name = mr_dominance.995.a
 	}
 }
-
 
 # --- AI support: keep the horde in the saddle --------------------
 # Fired yearly by mr_claimant_army_pulse, peacetime only. Raises
@@ -658,36 +708,104 @@ mr_dominance.995 = {
 mr_dominance.996 = {
 	type = country_event
 	hidden = yes
-
 	trigger = {
+		OR = {
+			country_exists = c:MGO
+			country_exists = c:MGE
+		}
 		is_ai = yes
 		at_war = no
+		# The AI's manpower must be above zero (economic bottleneck lock)
+		monthly_manpower >= 0.1
+		# We call the custom macro for the percentage of the army we just created
+		MR_percent_of_army_balance = yes
 		OR = {
 			this = c:MGO
 			this = c:MGE
 		}
 	}
-
 	immediate = {
-		# owner takes a scope or a tag — 'root' is not a form vanilla
-		# uses here, so the claimant is saved first.
-		save_scope_as = mr_horde_owner
-		capital = {
-			while = {
-				count = 4
-				create_sub_unit_with_owner = {
-					type = a_steppe_horse_archers
-					owner = scope:mr_horde_owner
+		## The AI's army is a mix of steppe units, depending on what it has unlocked. The while loop creates a number of sub-units equal to the count,
+		## which is set to 10 for Steppe Horse Archers and 5 for Auxiliary units and Cavalry spawn units. The create_sub_unit_with_owner command creates a sub-unit of the specified type and assigns it to the AI's capital, with the AI as the owner.
+		## For Steppe Horse Archers units
+		if = {
+			limit = {
+				has_advance = horse_lords
+			}
+			capital = {
+				while = {
+					count = 10
+					create_sub_unit_with_owner = {
+						type = a_steppe_horse_archers
+						owner = root
+					}
+				}
+			}
+		}
+		## For Auxiliary units
+		if = {
+			limit = {
+				has_advance = horse_lords
+			}
+			capital = {
+				while = {
+					count = 5
+					create_sub_unit_with_owner = {
+						type = a_a_urughs
+						owner = root
+					}
+				}
+			}
+		}
+		## For Cavalry spawn units Age of Revolutions(Age 6) to Age of Reformation(Age 4). 
+		## We don't include Age 2 and Age 3 because Steppe Horse Archers units are so much better than them even tho they (Steppe Horse Archers) are belong to Age 1 (Age of Traditions) units.
+		if = {
+			limit = {
+				has_advance = unlock_light_dragoons_advance
+			}
+			capital = {
+				while = {
+					count = 5
+					create_sub_unit_with_owner = {
+						type = a_light_dragoons
+						owner = root
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_advance = unlock_hussars_advance
+			}
+			capital = {
+				while = {
+					count = 5
+					create_sub_unit_with_owner = {
+						type = a_hussars
+						owner = root
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_advance = unlock_pistoleers_advance
+			}
+			capital = {
+				while = {
+					count = 5
+					create_sub_unit_with_owner = {
+						type = a_pistoleers
+						owner = root
+					}
 				}
 			}
 		}
 	}
-
 	option = {
 		name = mr_dominance.996.a
 	}
 }
-
 
 # --- AI railroad: declare the unification war ---
 # Fired by the Phase 1 situation once the cooldown matures and a
@@ -698,7 +816,6 @@ mr_dominance.997 = {
 	type = country_event
 	category = situation_event
 	hidden = yes
-
 	immediate = {
 		situation:mongol_resurgence = {
 			var:mr_conquest_target_country = {
@@ -706,7 +823,9 @@ mr_dominance.997 = {
 			}
 		}
 		if = {
-			limit = { exists = scope:mr_war_target }
+			limit = {
+				exists = scope:mr_war_target
+			}
 			declare_war_with_cb = {
 				target = scope:mr_war_target
 				type = casus_belli:cb_MR_steppe_unification
@@ -723,7 +842,6 @@ mr_dominance.997 = {
 			}
 		}
 	}
-
 	option = {
 		name = mr_dominance.997.a
 	}
@@ -738,7 +856,6 @@ mr_dominance.999 = {
 	type = country_event
 	category = situation_event
 	hidden = yes
-
 	immediate = {
 		add_army_tradition = army_tradition_severe_bonus
 		add_government_power = government_power_ultimate_bonus
@@ -748,9 +865,7 @@ mr_dominance.999 = {
 			mode = add_and_extend
 		}
 	}
-
 	option = {
 		name = mr_dominance.999.a
 	}
 }
-

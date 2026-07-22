@@ -1,5 +1,4 @@
 ﻿namespace = mr_imperial
-
 # =================================================================
 # MONGOL RESURGENCE - THE WESTWARD CAMPAIGN
 # =================================================================
@@ -11,8 +10,6 @@
 #   200-202  the campaign succeeds
 #   210-211  the campaign fails
 # =================================================================
-
-
 # --- The Invasion Plans -----------------------------------------
 mr_imperial.100 = {
 	type = country_event
@@ -25,14 +22,14 @@ mr_imperial.100 = {
 		10 = interior
 		10 = regular
 	}
-
 	option = {
 		name = mr_imperial.100.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_army_tradition = army_tradition_mild_bonus
 	}
 }
-
 
 # --- The First Wave ---------------------------------------------
 mr_imperial.101 = {
@@ -46,14 +43,14 @@ mr_imperial.101 = {
 		10 = armed
 		10 = exterior
 	}
-
 	option = {
 		name = mr_imperial.101.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_army_tradition = army_tradition_mild_bonus
 	}
 }
-
 
 # --- The City Falls ---------------------------------------------
 mr_imperial.102 = {
@@ -67,14 +64,14 @@ mr_imperial.102 = {
 		10 = armed
 		10 = exterior
 	}
-
 	option = {
 		name = mr_imperial.102.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_severe_bonus
 	}
 }
-
 
 # --- The Counter-Attack -----------------------------------------
 # The campaign's branch point: press on, or dig in and hold.
@@ -89,20 +86,21 @@ mr_imperial.103 = {
 		10 = armed
 		10 = angry
 	}
-
 	option = {
 		name = mr_imperial.103.a
-		ai_chance = { factor = 60 }
+		ai_chance = {
+			factor = 60
+		}
 		add_army_tradition = army_tradition_severe_bonus
 	}
-
 	option = {
 		name = mr_imperial.103.b
-		ai_chance = { factor = 40 }
+		ai_chance = {
+			factor = 40
+		}
 		add_government_power = government_power_mild_bonus
 	}
 }
-
 
 # --- The Empire Secured -----------------------------------------
 mr_imperial.200 = {
@@ -116,14 +114,14 @@ mr_imperial.200 = {
 		10 = interior
 		10 = happy
 	}
-
 	option = {
 		name = mr_imperial.200.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_severe_bonus
 	}
 }
-
 
 # --- A New Empire Rises -----------------------------------------
 mr_imperial.201 = {
@@ -138,10 +136,11 @@ mr_imperial.201 = {
 		10 = interior
 		10 = happy
 	}
-
 	option = {
 		name = mr_imperial.201.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_extreme_bonus
 		add_country_modifier = {
 			modifier = MR_empire_fulfilled
@@ -150,7 +149,6 @@ mr_imperial.201 = {
 		}
 	}
 }
-
 
 # --- The Grand Review -------------------------------------------
 mr_imperial.202 = {
@@ -164,15 +162,15 @@ mr_imperial.202 = {
 		10 = armed
 		10 = happy
 	}
-
 	option = {
 		name = mr_imperial.202.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_mild_bonus
 		add_army_tradition = army_tradition_mild_bonus
 	}
 }
-
 
 # --- The Campaign Stalls ----------------------------------------
 mr_imperial.210 = {
@@ -186,14 +184,14 @@ mr_imperial.210 = {
 		10 = armed
 		10 = angry
 	}
-
 	option = {
 		name = mr_imperial.210.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_mild_penalty
 	}
 }
-
 
 # --- The Retreat from the West ----------------------------------
 mr_imperial.211 = {
@@ -208,10 +206,11 @@ mr_imperial.211 = {
 		10 = exterior
 		10 = angry
 	}
-
 	option = {
 		name = mr_imperial.211.a
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_severe_penalty
 	}
 }

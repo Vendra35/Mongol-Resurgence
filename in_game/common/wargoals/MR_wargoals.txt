@@ -15,8 +15,6 @@
 # Costs are cut so the AI can actually complete a railroad phase,
 # following PD's PD_war_goal_prussian_ambition.
 # =================================================================
-
-
 # --- Phase 1: unification of the steppe --------------------------
 # Deliberately narrow: this is a war for Mongolia, not a blank cheque.
 MR_war_goal_steppe_unification = {
@@ -39,7 +37,6 @@ MR_war_goal_steppe_unification = {
 	}
 	ticking_war_score = 0.5
 }
-
 
 # --- Phase 2/3: the Silk Road and the Ming hegemony war ----------
 # Covers samarkand (khorasan), dadu (north_china) and the three
@@ -76,7 +73,6 @@ MR_war_goal_silk_road = {
 	}
 	ticking_war_score = 0.5
 }
-
 
 # --- Phase 3: the westward advance -------------------------------
 # Covers sarai_al_jadid and kaffa (steppes = the Pontic theatre)

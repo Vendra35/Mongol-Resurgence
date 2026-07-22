@@ -1,7 +1,6 @@
 ﻿# =================================================================
 # MONGOL RAILROAD (MR) - STATIC MODIFIERS
 # =================================================================
-
 # --- Situation 1: Mongol Resurgence Buff ---
 MR_mongol_warrior_spirit = {
 	game_data = {
@@ -207,7 +206,6 @@ MR_dominance_failure_player = {
 # =================================================================
 # HISTORICAL / GROUNDED MODE MODIFIERS
 # =================================================================
-
 # Historical Phase 1 Buff
 MR_mongol_historical_modifier = {
 	game_data = {

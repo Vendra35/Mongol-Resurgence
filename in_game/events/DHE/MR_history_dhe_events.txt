@@ -1,5 +1,4 @@
 ﻿namespace = mr_history
-
 # =================================================================
 # MONGOL RESURGENCE - HISTORICAL DHE LAYER
 # =================================================================
@@ -31,8 +30,6 @@
 # Events targeting TIM/OIR are conditional by design: they fire only
 # if vanilla spawned those countries, which is the historical path.
 # =================================================================
-
-
 # --- The Last Stand of the Yuan (1335-1368) ----------------------
 mr_history.1 = {
 	type = country_event
@@ -45,19 +42,16 @@ mr_history.1 = {
 		10 = armed
 		10 = exterior
 	}
-
 	dynamic_historical_event = {
 		tag = CHI
 		from = 1335.1.1
 		to = 1368.1.1
 		monthly_chance = 1
 	}
-
 	trigger = {
 		has_game_rule = mr_railroad_historical
 		owns = location:dadu
 	}
-
 	immediate = {
 		hidden_effect = {
 			set_variable = {
@@ -66,14 +60,14 @@ mr_history.1 = {
 			}
 		}
 	}
-
 	option = {
 		name = mr_history.1.a
 		historical_option = yes
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 	}
 }
-
 
 # --- The Ilkhanid Succession (1337-1357) -------------------------
 # Reframed. The original version fired for HLG, "the Ilkhanate
@@ -91,7 +85,6 @@ mr_history.2 = {
 		10 = armed
 		10 = interior
 	}
-
 	dynamic_historical_event = {
 		tag = JLY
 		tag = CHB
@@ -102,11 +95,9 @@ mr_history.2 = {
 		to = 1357.1.1
 		monthly_chance = 1
 	}
-
 	trigger = {
 		has_game_rule = mr_railroad_historical
 	}
-
 	immediate = {
 		hidden_effect = {
 			set_variable = {
@@ -115,16 +106,16 @@ mr_history.2 = {
 			}
 		}
 	}
-
 	option = {
 		name = mr_history.2.a
 		historical_option = yes
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_legitimacy = legitimacy_mild_penalty
 		add_stability = stability_weak_penalty
 	}
 }
-
 
 # --- The Chagatai Schism (1334-1368) -----------------------------
 # The east/west split that eventually produces Moghulistan and,
@@ -140,18 +131,15 @@ mr_history.3 = {
 		10 = interior
 		10 = regular
 	}
-
 	dynamic_historical_event = {
 		tag = CHG
 		from = 1334.1.1
 		to = 1368.1.1
 		monthly_chance = 1
 	}
-
 	trigger = {
 		has_game_rule = mr_railroad_historical
 	}
-
 	immediate = {
 		hidden_effect = {
 			set_variable = {
@@ -160,23 +148,24 @@ mr_history.3 = {
 			}
 		}
 	}
-
 	# The historical schism was as much religious as territorial:
 	# the western half Islamised, the eastern half held to the steppe cults.
 	option = {
 		name = mr_history.3.a
 		historical_option = yes
-		ai_chance = { factor = 50 }
+		ai_chance = {
+			factor = 50
+		}
 		change_religion = religion:sunni
 	}
-
 	option = {
 		name = mr_history.3.b
-		ai_chance = { factor = 50 }
+		ai_chance = {
+			factor = 50
+		}
 		change_religion = religion:tengri
 	}
 }
-
 
 # --- Tokhtamysh and the Golden Horde (1370-1406) -----------------
 mr_history.5 = {
@@ -190,19 +179,16 @@ mr_history.5 = {
 		10 = armed
 		10 = exterior
 	}
-
 	dynamic_historical_event = {
 		tag = GLH
 		from = 1370.1.1
 		to = 1406.1.1
 		monthly_chance = 1
 	}
-
 	trigger = {
 		has_game_rule = mr_railroad_historical
 		owns = location:sarai_al_jadid
 	}
-
 	immediate = {
 		hidden_effect = {
 			set_variable = {
@@ -211,21 +197,22 @@ mr_history.5 = {
 			}
 		}
 	}
-
 	option = {
 		name = mr_history.5.a
 		historical_option = yes
-		ai_chance = { factor = 70 }
+		ai_chance = {
+			factor = 70
+		}
 		add_prestige = prestige_mild_bonus
 	}
-
 	option = {
 		name = mr_history.5.b
-		ai_chance = { factor = 30 }
+		ai_chance = {
+			factor = 30
+		}
 		add_army_tradition = army_tradition_weak_bonus
 	}
 }
-
 
 # --- The Looting of Delhi (1398) ---------------------------------
 mr_history.6 = {
@@ -239,20 +226,17 @@ mr_history.6 = {
 		10 = armed
 		10 = exterior
 	}
-
 	dynamic_historical_event = {
 		tag = TIM
 		from = 1395.1.1
 		to = 1405.1.1
 		monthly_chance = 2
 	}
-
 	trigger = {
 		has_game_rule = mr_railroad_historical
 		owns = location:samarkand
 		country_exists = c:DLH
 	}
-
 	immediate = {
 		hidden_effect = {
 			set_variable = {
@@ -261,15 +245,15 @@ mr_history.6 = {
 			}
 		}
 	}
-
 	option = {
 		name = mr_history.6.a
 		historical_option = yes
-		ai_chance = { factor = 100 }
+		ai_chance = {
+			factor = 100
+		}
 		add_prestige = prestige_severe_bonus
 	}
 }
-
 
 # --- The Oirat Challenge (1400-1450) -----------------------------
 # The western Mongols contest the Borjigin claim. Fires for whoever
@@ -286,19 +270,16 @@ mr_history.7 = {
 		10 = armed
 		10 = exterior
 	}
-
 	dynamic_historical_event = {
 		tag = OIR
 		from = 1400.1.1
 		to = 1450.1.1
 		monthly_chance = 1
 	}
-
 	trigger = {
 		has_game_rule = mr_railroad_historical
 		government_type = government_type:steppe_horde
 	}
-
 	immediate = {
 		hidden_effect = {
 			set_variable = {
@@ -307,21 +288,22 @@ mr_history.7 = {
 			}
 		}
 	}
-
 	option = {
 		name = mr_history.7.a
 		historical_option = yes
-		ai_chance = { factor = 60 }
+		ai_chance = {
+			factor = 60
+		}
 		add_army_tradition = army_tradition_mild_bonus
 	}
-
 	option = {
 		name = mr_history.7.b
-		ai_chance = { factor = 40 }
+		ai_chance = {
+			factor = 40
+		}
 		add_prestige = prestige_mild_bonus
 	}
 }
-
 
 # --- The Mughal Precursor: Babur (1494-1530) ---------------------
 mr_history.8 = {
@@ -335,19 +317,16 @@ mr_history.8 = {
 		10 = interior
 		10 = regular
 	}
-
 	dynamic_historical_event = {
 		tag = TIM
 		from = 1494.1.1
 		to = 1530.1.1
 		monthly_chance = 1
 	}
-
 	trigger = {
 		has_game_rule = mr_railroad_historical
 		owns = location:samarkand
 	}
-
 	immediate = {
 		hidden_effect = {
 			set_variable = {
@@ -356,17 +335,19 @@ mr_history.8 = {
 			}
 		}
 	}
-
 	option = {
 		name = mr_history.8.a
 		historical_option = yes
-		ai_chance = { factor = 70 }
+		ai_chance = {
+			factor = 70
+		}
 		add_prestige = prestige_mild_bonus
 	}
-
 	option = {
 		name = mr_history.8.b
-		ai_chance = { factor = 30 }
+		ai_chance = {
+			factor = 30
+		}
 		add_army_tradition = army_tradition_weak_bonus
 	}
 }

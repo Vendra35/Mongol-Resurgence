@@ -30,53 +30,73 @@
 # panel can render them as readable end requirements, the way PD's
 # prussian_ambition_end_trigger does.
 # =================================================================
-
 # --- Start conditions --------------------------------------------
-
 # Phase 1 can open once the steppe is in play and nobody has yet
 # taken up the Chinggisid claim.
 mr_can_start_resurgence = {
-	NOT = { has_game_rule = mr_railroad_off }
+	NOT = {
+		has_game_rule = mr_railroad_off
+	}
 	current_year >= 1368
 	any_country = {
-		culture = { has_culture_group = culture_group:mongolian_group }
+		culture = {
+			has_culture_group = culture_group:mongolian_group
+		}
 		government_type = government_type:steppe_horde
 		any_owned_location = {
 			region = region:mongolia_region
 		}
 	}
-	NOT = { has_global_variable = mr_railroad_complete }
-	NOT = { has_global_variable = mr_railroad_failed }
-	NOT = { has_global_variable = mr_resurgence_started }
+	NOT = {
+		has_global_variable = mr_railroad_complete
+	}
+	NOT = {
+		has_global_variable = mr_railroad_failed
+	}
+	NOT = {
+		has_global_variable = mr_resurgence_started
+	}
 }
 
 mr_can_start_imperial = {
-	NOT = { has_game_rule = mr_railroad_off }
+	NOT = {
+		has_game_rule = mr_railroad_off
+	}
 	has_global_variable = mr_phase_one_complete
-	NOT = { has_global_variable = mr_imperial_started }
-	NOT = { has_global_variable = mr_railroad_failed }
+	NOT = {
+		has_global_variable = mr_imperial_started
+	}
+	NOT = {
+		has_global_variable = mr_railroad_failed
+	}
 	country_exists = c:MGO
 }
 
 mr_can_start_dominance = {
-	NOT = { has_game_rule = mr_railroad_off }
+	NOT = {
+		has_game_rule = mr_railroad_off
+	}
 	has_global_variable = mr_phase_two_complete
-	NOT = { has_global_variable = mr_dominance_started }
-	NOT = { has_global_variable = mr_railroad_failed }
+	NOT = {
+		has_global_variable = mr_dominance_started
+	}
+	NOT = {
+		has_global_variable = mr_railroad_failed
+	}
 	country_exists = c:MGO
 }
-
 
 # --- Visibility ---------------------------------------------------
 # Root is the country asking whether it can see the situation.
 # The steppe powers, their neighbours, and the settled empires they
 # threaten all have a stake; distant countries do not.
-
 mr_resurgence_visible = {
 	OR = {
 		country_exists = c:MGO
 		AND = {
-			culture = { has_culture_group = culture_group:mongolian_group }
+			culture = {
+				has_culture_group = culture_group:mongolian_group
+			}
 			government_type = government_type:steppe_horde
 		}
 		any_owned_location = {
@@ -125,12 +145,10 @@ mr_dominance_visible = {
 	}
 }
 
-
 # --- End conditions ----------------------------------------------
 # Each phase ends when its territorial goal is met. Ownership, not
 # occupation: a phase should not complete off the back of a siege
 # that is handed back at the peace table.
-
 # Phase 1: the Mongolian heartland is under one banner.
 mr_resurgence_end_trigger = {
 	custom_tooltip = {
@@ -182,7 +200,6 @@ mr_dominance_end_trigger = {
 	}
 }
 
-
 # =================================================================
 # LATE-STEPPE SITUATIONS (1600s)
 # =================================================================
@@ -191,16 +208,19 @@ mr_dominance_end_trigger = {
 # across events, common and setup. They run in the Phase 3 era and
 # are built on tags that do exist (OIR, MGO, MGE), since none of
 # the historical successor states have their own tag.
-
 # --- Ligdan Khan and the Chahar (1604-1634) ----------------------
 # The last Chinggisid Great Khan's failed reunification: the dark
 # mirror of Phase 1. Only meaningful while a Chinggisid claimant
 # actually exists to be challenged.
 mr_can_start_chahar = {
-	NOT = { has_game_rule = mr_railroad_off }
+	NOT = {
+		has_game_rule = mr_railroad_off
+	}
 	current_year >= 1604
 	current_year < 1634
-	NOT = { has_global_variable = mr_chahar_started }
+	NOT = {
+		has_global_variable = mr_chahar_started
+	}
 	# Ligdan's reunification bid needs a FRAGMENTED steppe. It fires
 	# whether or not the railroad failed — that failure is exactly the
 	# world where the last Chinggisid tries and fails — but not when a
@@ -211,13 +231,19 @@ mr_can_start_chahar = {
 				this = c:MGO
 				this = c:MGE
 			}
-			any_owned_location = { region = region:mongolia_region }
+			any_owned_location = {
+				region = region:mongolia_region
+			}
 		}
 	}
 	any_country = {
-		culture = { has_culture_group = culture_group:mongolian_group }
+		culture = {
+			has_culture_group = culture_group:mongolian_group
+		}
 		government_type = government_type:steppe_horde
-		any_owned_location = { region = region:mongolia_region }
+		any_owned_location = {
+			region = region:mongolia_region
+		}
 	}
 }
 
@@ -225,45 +251,64 @@ mr_chahar_visible = {
 	OR = {
 		this = c:MGO
 		this = c:MGE
-		any_owned_location = { region = region:mongolia_region }
-		any_owned_location = { region = region:north_china_region }
+		any_owned_location = {
+			region = region:mongolia_region
+		}
+		any_owned_location = {
+			region = region:north_china_region
+		}
 	}
 }
 
 # Ends when one power holds the Mongolian heartland outright.
 mr_chahar_end_trigger = {
 	any_country = {
-		culture = { has_culture_group = culture_group:mongolian_group }
+		culture = {
+			has_culture_group = culture_group:mongolian_group
+		}
 		owns = location:karakorum
-		any_owned_location = { region = region:north_china_region }
+		any_owned_location = {
+			region = region:north_china_region
+		}
 	}
 }
-
 
 # --- The Torghut Migration (1616-1630) ---------------------------
 # The Kalmyk trek west to the Volga: an actual Mongol westward wave
 # into Russia, which is the Phase 3 premise in miniature.
 mr_can_start_torghut = {
-	NOT = { has_game_rule = mr_railroad_off }
+	NOT = {
+		has_game_rule = mr_railroad_off
+	}
 	current_year >= 1616
 	current_year < 1630
-	NOT = { has_global_variable = mr_torghut_started }
+	NOT = {
+		has_global_variable = mr_torghut_started
+	}
 	# Departs from Dzungaria (xinjiang_region), heads for the Volga.
 	# If a Mongol horde already sits on the Volga, the migration story
 	# is moot — the destination is taken.
 	NOT = {
 		any_country = {
-			culture = { has_culture_group = culture_group:mongolian_group }
+			culture = {
+				has_culture_group = culture_group:mongolian_group
+			}
 			government_type = government_type:steppe_horde
 			owns = location:sarai_al_jadid
 		}
 	}
 	any_country = {
-		culture = { has_culture_group = culture_group:mongolian_group }
+		culture = {
+			has_culture_group = culture_group:mongolian_group
+		}
 		government_type = government_type:steppe_horde
 		OR = {
-			any_owned_location = { region = region:xinjiang_region }
-			any_owned_location = { region = region:khorasan_region }
+			any_owned_location = {
+				region = region:xinjiang_region
+			}
+			any_owned_location = {
+				region = region:khorasan_region
+			}
 		}
 	}
 }
@@ -273,9 +318,15 @@ mr_torghut_visible = {
 		this = c:OIR
 		this = c:MGO
 		this = c:MGE
-		any_owned_location = { region = region:steppes_region }
-		any_owned_location = { region = region:russian_region }
-		any_owned_location = { region = region:ural_region }
+		any_owned_location = {
+			region = region:steppes_region
+		}
+		any_owned_location = {
+			region = region:russian_region
+		}
+		any_owned_location = {
+			region = region:ural_region
+		}
 	}
 }
 
@@ -286,23 +337,32 @@ mr_torghut_end_trigger = {
 	# month it starts.
 	has_global_variable = mr_torghut_urals
 	any_country = {
-		culture = { has_culture_group = culture_group:mongolian_group }
+		culture = {
+			has_culture_group = culture_group:mongolian_group
+		}
 		government_type = government_type:steppe_horde
 		owns = location:sarai_al_jadid
 	}
 }
 
-
 # --- The Dzungar Khanate (1634-1650) -----------------------------
 # The last great steppe empire, built by the Oirats who stayed east.
 mr_can_start_dzungar = {
-	NOT = { has_game_rule = mr_railroad_off }
+	NOT = {
+		has_game_rule = mr_railroad_off
+	}
 	current_year >= 1634
-	NOT = { has_global_variable = mr_dzungar_started }
+	NOT = {
+		has_global_variable = mr_dzungar_started
+	}
 	any_country = {
-		culture = { has_culture_group = culture_group:mongolian_group }
+		culture = {
+			has_culture_group = culture_group:mongolian_group
+		}
 		government_type = government_type:steppe_horde
-		any_owned_location = { region = region:xinjiang_region }
+		any_owned_location = {
+			region = region:xinjiang_region
+		}
 	}
 }
 
@@ -311,8 +371,12 @@ mr_dzungar_visible = {
 		this = c:OIR
 		this = c:MGO
 		this = c:MGE
-		any_owned_location = { region = region:xinjiang_region }
-		any_owned_location = { region = region:khorasan_region }
+		any_owned_location = {
+			region = region:xinjiang_region
+		}
+		any_owned_location = {
+			region = region:khorasan_region
+		}
 	}
 }
 
@@ -323,14 +387,15 @@ mr_dzungar_end_trigger = {
 	# steppes_region.
 	has_global_variable = mr_dzungar_consolidated
 	any_country = {
-		culture = { has_culture_group = culture_group:mongolian_group }
+		culture = {
+			has_culture_group = culture_group:mongolian_group
+		}
 		government_type = government_type:steppe_horde
 		has_presence_in = area:dzungaria_area
 		has_presence_in = area:tarim_area
 		has_presence_in = area:zhetysu_area
 	}
 }
-
 
 # =================================================================
 # READ-ONLY VANILLA HOOKS
@@ -350,5 +415,49 @@ mr_dzungar_end_trigger = {
 mr_vanilla_tumu_crisis_active = {
 	any_country = {
 		has_variable = lost_emperor
+	}
+}
+
+### Army Balance For AI support: keep the horde in the saddle
+MR_percent_of_army_balance = {
+	OR = {
+		AND = {
+			expected_army_size <= 12
+			regular_army_size < {
+				value = root.expected_army_size
+				multiply = 0.9
+			}
+		}
+		AND = {
+			expected_army_size > 12
+			expected_army_size <= 30
+			regular_army_size < {
+				value = root.expected_army_size
+				multiply = 0.75
+			}
+		}
+		AND = {
+			expected_army_size > 30
+			expected_army_size <= 50
+			regular_army_size < {
+				value = root.expected_army_size
+				multiply = 0.6
+			}
+		}
+		AND = {
+			expected_army_size > 50
+			expected_army_size <= 120
+			regular_army_size < {
+				value = root.expected_army_size
+				multiply = 0.45
+			}
+		}
+		AND = {
+			expected_army_size > 120
+			regular_army_size < {
+				value = root.expected_army_size
+				multiply = 0.3
+			}
+		}
 	}
 }
