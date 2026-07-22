@@ -80,6 +80,12 @@ If a search returns nothing, the identifier is wrong — historical plausibility
 not evidence. Karakorum, Sarai and Beijing all have in-game names that differ
 from their common English forms.
 
+**Reference maps (Asia/East Asia only):** The 3 maps under `docs/maps/` cover only
+the Asia and East Asia region (Mongol Resurgence's working area). If region/area
+verification is needed for a different region (Europe, Africa, etc.), do not rely
+on these maps — ask the user for a screenshot of that region's region/area map
+instead of guessing.
+
 ### When the game files are hard to search
 
 The design doc suggests the wiki first for tags, because the setup files are
