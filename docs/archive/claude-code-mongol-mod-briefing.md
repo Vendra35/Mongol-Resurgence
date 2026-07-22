@@ -56,7 +56,7 @@ using your WebSearch/WebFetch tools.
    look at the tags via the wiki at `https://eu5.paradoxwikis.com/Category:Country_lists`
    (with WebFetch), because finding them in the vanilla files first may be difficult. If
    you cannot find them on the wiki, then try to find them in the EU5 vanilla files at
-   `Reference EU5 vanilla and Prussian Destiny/Europa Universalis V`.
+   `../EU5-Vanilla/game`.
 3. **Audit, one by one, whether the error categories listed above have genuinely been
    fixed.** Do not rely on grep/text scanning — think about whether it is logically
    correct (for example, evaluate whether the `owns`→`controls` change is right for our

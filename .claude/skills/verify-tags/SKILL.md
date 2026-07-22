@@ -24,8 +24,7 @@ silently never fires.
 ## Reference paths
 
 ```
-REF="../Reference EU5 vanilla and Prussian Destiny"
-VANILLA="$REF/Europa Universalis V/game"
+VANILLA="../EU5-Vanilla/game"
 ```
 
 ## Procedure

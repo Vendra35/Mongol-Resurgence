@@ -19,12 +19,11 @@ subject of the audit, not a source.
 ## Reference paths
 
 ```
-REF="../Reference EU5 vanilla and Prussian Destiny"
-VANILLA="$REF/Europa Universalis V/game"
-PD="$REF/The Prussian Destiny"
+VANILLA="../EU5-Vanilla/game"
+PD="../The Prussian Destiny"
 ```
 
-Read-only. Never write under `$REF`.
+Read-only. Never write under `$VANILLA` or `$PD`.
 
 ## Error classes to check
 

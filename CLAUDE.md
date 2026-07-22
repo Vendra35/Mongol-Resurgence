@@ -16,14 +16,15 @@ The workflow depends on a read-only reference tree **one level above this repo**
 
 ```
 <parent>/
-├── Mongol-Resurgence-1/                            ← this repo (write here only)
-└── Reference EU5 vanilla and Prussian Destiny/     ← READ ONLY
-    ├── Europa Universalis V/game/                  ← full vanilla install (~51k files)
-    └── The Prussian Destiny/                       ← a working, tested reference mod
+├── Mongol Resurgence/       ← this repo (write here only)
+├── The Prussian Destiny/      ← READ ONLY, a working, tested reference mod
+└── EU5-Vanilla/               ← READ ONLY, junction → E:\SteamLibrary\steamapps\common\Europa Universalis V
+    └── game/                   ← full vanilla install (~51k files)
 ```
 
-On the original machine this is a symlink into the game install. If it is missing,
-recreate it (symlink or copy) before doing any mod work — **every rule below depends
+On this machine these are two separate junctions (EU5-Vanilla → the Steam install, 
+The Prussian Destiny → its own mod folder). 
+If either is missing, recreate it before doing any mod work — **every rule below depends
 on being able to grep vanilla**. Key vanilla paths used constantly:
 `game/in_game/common/situations/readme.txt` (authoritative situation docs),
 `game/in_game/map_data/definitions.txt` (region → area → province → location
