@@ -83,12 +83,12 @@ mr_dzungar_khanate_desc: "TODO: Write a desc"
 
 - Böyle bir hata geldi bu sanırım on_actionda biz OR = {this = c:MGO this = c:MGE} böyle yazmışız önceden tag = MGO yerine this:MGO şeklinde yazdığımız için olmuş bu hatu sanırım. Baktım Prussian Destinyde de öyle yapmamışız tag = BRA olarak yapmışız on_actionstaki kodlarımızda o sebeple bu hatayı düzelttim ben kendim ama sen yinede bir kontrol et. on_action.txt dışındaki dosyalarda this = c:MGO kullanı mı error logda hata vermiyor gözüküyor bilgin olsun. Aynı zamanda Mongol_resurgence situationı başladığı an direk bu hatalarıda verdi oyun çökmüyor tabi ki çalışıyor ama debug.logunda gördüm oyun içinde ki:
 
-## Gelmiş olan hata ilk hata benim düzelttiğim fixledim sadece bilgi al diye attım:
+## Gelmiş olan hata ilk hata benim düzelttiğim fixledim sadece bilgi al diye attım: (FIXED)
 [game] [error] [jomini_script_system.cpp:252] Script system error! Error: Invalid right side during comparison 'c'
 Script location:
 common/on_action/MR_on_actions.txt:38
 
-## Gelmiş olan 2. hata ben fixleyemedim sana bıraktım:
+## Gelmiş olan 2. hata ben fixleyemedim sana bıraktım: (FIXED)
 [game] [error] [jomini_script_system.cpp:252] Script system error! Error: Invalid right side during comparison 'c'
 Script location:
 common/situations/MR_mongol_resurgence.txt:592
@@ -102,20 +102,64 @@ common/situations/MR_mongol_resurgence.txt:592
 
 - 2. Birde şu özelliği eklesek çok güzel olur vanilla timurdaki gibi: Vanilla timur da timur ülkesi spawnlandığı zaman eventle timur ülkenin başına geliyor ve emir timurda yani sadece ülkeye değil karakterin kendisine de bufflar geliyor Conquerer's Vitaly ismin de Character life expentacy buffu ve The Scourge From Central Asia ismin de diye baya detaylı bir buff alıyor bizde bu tarz bir şey yapabiliriz ve bizim mgo ülkemiz çıktığı anda Borjigin hanedanından mı sence bir karakter oluşturmak güzel olur mu Borjigin den bir karakter ya da bizim modumuza göre tarihsel en iyi hangisi ne şekilde olursa öyle yapalım.
 
-#### 10. Mongol Imperial situation GUI sindeki sorunlar (NEED TESTING)
+#### 10. Mongol Imperial situation GUI sindeki sorunlar !!!(NOT FIXED LOOK AGAIN)!!!
 
-- 1. GUI de karakter portresi böyle simsiyah boş gözüküyor sanki karakter yok gibi ilk situationda yani mongol resurgence de doğru gözüküyorda ama bu 2. mongol imperial situationında bozuk gözüküyor. Loglara baktım loglarda böyle diyor yine çok fazla bu hataları spawnlıyor logda bide:
+- 1. (NOT FIXED LOOK AGAIN): GUI de karakter portresi böyle simsiyah boş gözüküyor sanki karakter yok gibi ilk situationda yani mongol resurgence de doğru gözüküyorda ama bu 2. mongol imperial situationında bozuk gözüküyor. Loglara baktım loglarda böyle diyor ve 2. situation gui panelini açtığım anda ve açık tuttuğum sürece bu aşağıda attım errorleri spawnlıyor logda oyun çökmüyor ama spnawlıyor bu hataları:
 
-[cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Character.Get Court Country.GetName'
-[cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetchLocalized Data failed for 'EVENT_CHARACTER_FOREIGN'
+[cw] [error] [pdx_gui_data_manager.cpp:233] FetchData failed for 'Not(Character.IsAlive)' - gui/shared/cards.gui:1037
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetDeathInfo' 
+[cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Character.GetDeathInfo'
+[cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetch Localized Data failed for '[Character.GetDeathInfo]'
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.IsAlive'
+[cw] [error] [pdx_gui_data_manager.cpp:233] FetchData failed for 'Character.IsAlive' - gui/shared/cards.gui:1053
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.HasCourt Country'
+[cw] [error] [pdx_gui_data_manager.cpp:233] FetchData failed for 'Character.HasCourt Country' - gui/shared/cards.gui:1055
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetCourt Country.IsReal' 
+[cw] [error] [pdx_gui_data_manager.cpp:233] FetchData failed for 'Character.GetCourt Country.IsReal' - gui/shared/cards.gui:1057
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetCourt Country' 
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetRoleName' 
+[cw] [error] [pdx_gui_data_manager.cpp:233] FetchData failed for 'Not(EqualTo_string(Character.GetRoleName, "'))' - gui/shared/cards.gui:1066 
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetRoleName' 
+[cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Character.GetRoleName'
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetCourt Country.GetName' 
+[cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Character.GetCourt Country.GetName'
+[cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetchLocalizedData failed for 'EVENT_CHARACTER_FOREIGN'
 [cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetRoleName'
 [cw] [error] [pdx_gui_data_manager.cpp:233] FetchData failed for 'EqualTo_string(Character.GetRoleName, "')' - gui/shared/cards.gui:1073
-[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetCourt Country.GetName' [cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Character.GetCourt Country.GetName'
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetCourt Country.GetName'
+[cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Character.Get Court Country.GetName'
+[cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetchLocalizedData failed for 'EVENT_CHARACTER_FOREIGN_NO_ROLE'
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetCourt Country'
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetNameToFit('(int32)22', '(bool)yes')' 
+[cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Character.GetNameToFit('(int32)22', '(bool)yes')'
+[cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetchLocalized Data failed for '[Character.GetNameToFit('(int32)22', '(bool)yes')]'
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Country' for 'Country.GetGovernment'
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.GetRuler' 
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.HasRuler' 
+[cw] [error] [pdx_gui_data_manager.cpp:233] FetchData failed for 'Government.HasRuler' - gui/character_header.gui:281
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetReligion' 
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.GetActiveRegent' 
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.HasActiveRegent' 
+[cw] [error] [pdx_gui_data_manager.cpp:233] FetchData failed for 'Government.HasActiveRegent' - gui/character_header.gui:291
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetReligion'
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.GetRegencyInfo' 
+[cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Government.GetRegencyInfo'
+[cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetchLocalized Data failed for '[Government.GetRegencyInfo]'
+
+- 2. (NOT FIXED LOOK AGAIN): Aynı zamanda Imperial Expansion Progress sekmesi boş gözüküyor hiç bir şey gözükmüyor. Aynı zamanda o sekme neden vardı bide bilmiyorum açıklarsan iyi olur.
+- 3. (NEW ERROR): 3. Situationda da aynı şekilde situation başladı başladıktan sonrasituation'ın guisini açıtğım anda bu error log spamlanıyor oyun içinde aam oyun çökmüyor:
+
+[cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Character.Get Court Country.GetName'
+[cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetch LocalizedData failed for 'EVENT_CHARACTER_FOREIGN'
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetRoleName'
+[cw] [error] [pdx_gui_data_manager.cpp:233] FetchData failed for 'EqualTo_string(Character.GetRoleName, "')' - gui/shared/cards.gui:1073
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetCourt Country.GetName'
+[cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Character.GetCourt Country.GetName'
 [cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetchLocalized Data failed for 'EVENT_CHARACTER_FOREIGN_NO_ROLE'
 [cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetCourt Country'
 [cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetNameToFit('(int32)22', '(bool)yes')' 
 [cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Character.GetNameToFit('(int32)22', '(bool)yes')'
-[cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetch Localized Data failed for '[Character.GetNameToFit('(int32)22', '(bool)yes')]'
+[cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetchLocalized Data failed for '[Character.GetNameToFit('(int32)22', '(bool)yes')]'
 [cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Country' for 'Country.GetGovernment' 
 [cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.GetRuler' 
 [cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.HasRuler' 
@@ -129,13 +173,9 @@ common/situations/MR_mongol_resurgence.txt:592
 [cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Government.GetRegencyInfo'
 [cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetch Localized Data failed for '[Government.GetRegencyInfo]'
 
-- 2. Aynı zamanda Imperial expansion progress sekmesi boş gözüküyor hiç bir şey gözükmüyor. Aynı zamanda o sekme neden vardı bide bilmiyorum açıklarsan iyi olur.
-- 3. mongol imperial situationında hedefler olarak khorasan region ve north_china regionları kırmızı çizgi olarak situation haritasında gözüküyor ama khorasan ile arada boşluk kalıyor o sebeple o aradaki xinjiang_region diye bir region var onuda ekleyelim bu situation için birleşik olsun hedefler yoksa khorasan_reigon uzakta kalıyor. Ayrıca şunu fark ettim end requirementları mesela sadece dadu ve samarkandı elinde tutsun diyor ama bence tüm o kırmızı ile çizilen regionları alana kadar davem etsin daha iyi olmaz mı sınırlar daha iyi gözükür Prussian Destinyde de hep öyle yapmıştım area ve regionları hedef olarak koyuyorduk. Bu mantığı diğer situationlar içindeöyle değiştirebilirsen çok sevinirim region isimlerini bilemezsen ben de verebilirim ya da palceholder yap ben kendim yazarım çok sorun değil o.
-
-
-
 
 ##### 23.07.2026 TEST RESULTS #####
+
 
 #### 1. Event Entryleri eksik:
 
@@ -176,15 +216,49 @@ common/situations/MR_mongol_resurgence.txt:592
 
 - Şu MGO nun ortaya çıkma mantığını tam anlamadım. 1368 de ilk situation başlıyor ama hiç MGO haritada olmuyor. 1375 ten sonra çıkmazsa 1375te biz rastgele ülkeyi ona çeviriyoruz ya, peki bu 1375 ten önce yani 1368 den 1375'e kadar olan zamanda çıkma ihtimali var mı ki nasıl oluyor orası yani tam anlamadım o kısmı.
 
-#### 6. Kendi eklemelerim hakkında bilgilendirme:
+#### 6. İlk situation çağırılınca gelen 8bine yakın hata:
 
-- Kendim başka moddan gördüm MR_great_khan modifier'ını güncelledim ve ekstra o çıkan MGO lideri için bi modifier daha ekledim MR_historically_needed adında onu da mr_dominance.104 eventin de ekledim ve ayrıca conqueror traitinin yanına ekstra tactical_genius ve strategist ekledim.
+- İlk situation geldiği anda ve ben situationı guisini açtığım anda oyun içinde ki debug logda böyle 8bine yakın bu aynı errorden error bu:
+
+[cw] [error] [pdx_text_formatter.cpp:807] Unknown formatting tag 'l'
+
+- Ama bu error bizim guilemi alakalı bilmiyorum ama dediğim gibi bizim situation geldiği anda geldiğine göre bu error logu heralde bizimkiyle alakalı.  Ama oyunu çöktürmüyor sadece logda yazıyor bi bakar mısın.
+
+#### 7. MGO için seçilen ülke sıkıntısı:
+
+- MGO için seçilen ülke mesela başka horde ülkesinin veya başka ülkenin vassalı da olabiliyor. Bu bence çok saçma ya seçilen ülke vassal olmayan ülke olsun ya da vassal ülke seçiliyorsa vassalığı bitsin. Ayrıca bu MGO olacak ülke seçilirken o situation bölgesindeki en güçlü horde ülkesi de seçilebilir, rastgele seçilme olmasındansa bence daha mantıklı olur.
+- Ayrıca aklıma şu da geldi seçilecek ülke savaşta ikende seçilebiliyor şuan onu da acaba savaşta değilken seçilecek şekilde mi yapsak sence hangisi daha mantıklı olur?
+
+#### 8. Çoğu eventte aynı modifierları tekrar vermişsin her situation veya eventlerde:
+
+- Çoğu dhe veya normal evetnlerde ve situation içindeki kodlarda hep aynı modifierları country olarak eklemişsin mesela MR_unified_mongol_banner hem mongol imperialda var hem MR_dominance_dhe_events'te var hem MR_dominance_events.txt te var hem de MR_late_steppe_events'te var ve bazı eventlerde ve dhe eventlerinde veya MR_late_steppe_events'teki mr_steppe.22 veya mr_dominance.1 eventinde direk buff game rule'una bakmadan eklemişsin modifierı onları komple düzeltelim ayrıca ekstra tarihsel bir sürü modifier veya başka bir şey ekleyebilirsin farklı farklı önemli değil yeter ki tarihsel, mantıklı, çeşitli ve özgün olsun. Daha fazla bilgi için 9.madde (9. Kendi eklemelerim hakkında bilgilendirme ve isteklerim:) kısmına da bakabilirsin.
+- Ayrıca modifier isimlerini ve genel oalrak tüm locları ve açıklamaları daha özgün ve tarihsel yapabilirsin yani demek istediğimi örnekle açıklayayım: Prussian Destiny ile çok benzer olmasına gerek yok, mesela Fullfilled prussian destiny modifier ismini mongolda da Fulfilled mongol destiny yapmışsın illa o kadar çok benzer yapmaya gerek yok.
+
+#### 9. Kendi eklemelerim hakkında bilgilendirme ve isteklerim:
+
+- Kendim başka moddan gördüm MR_great_khan modifier'ını güncelledim ve ekstra o çıkan MGO lideri için bi modifier daha ekledim MR_historically_needed adında onu da mr_dominance.104 eventin de ekledim ve ayrıca conqueror traitinin yanına ekstra tactical_genius, strategist ve cruel ekledim.
 - Ayrıca bazı modifierlar da reason_to_elect modifierlarını unutmuşsun onları sildim onlar HRE içindi Prussian Destiny modum da, ve monthly_legitimacy olanları monthly_horde_unity yaptım hordelarda legitimacy yerine horde_unity var çünkü. Ayrıca bu scopeları: exists = scope:mr_first_rival, exists = scope:mr_first_claimant bunları exists yapmışsın sadece, ben onları elimle hepsini country_exists yaptım haberin olsun. 
+- Ayrıca  dhe eventlerin monthly_chancelerini hep 1 yapmışsın o 1% oluyor ben hepsini 100% yaptım o tarih gelince gelsin 1% yapmayalım.
+- Ekstra DHE event ekledim Prussian Destiny modumda pd_brandenburg_dhe.1 ve pd_brandenburg_dhe.2 mirror olarak MR_dominance_dhe_events.txt içine ekledim onları düzeltir misin bize uygun olarak mantıklı olmaz mı o eventler daha önce de senden istemiştim 8. madde de hatırlarsan. İstersen pd_brandenburg_dhe.3, pd_brandenburg_dhe.4 ve devamını da entegre edebilirsin bizim modumuza tarihsel ve çzgün mantıklı olacaksa normal eventlere de bakıp ordan da fikir alabilirsin.
+- Benim diğer isteğim 2. ve 3. situationlarda da veya aralarda da bence MGO çıkarken eklediğimiz gibi character oluşturup ekleyelim bence güçlü olsun diye. Çünkü düşünsene tarihte de Genghis Khan yani Temüjin öldüğünde bile tahta gelen oğulları çok uzun süre çok güçlü ve başarılı fetihler yapmıştı o sebeple ona da özgün ve güzel bir şeyler düşünebiliriz, belki character oluşturmaktansa mevcut gelen o Batu Khan'ın oğlu varsa mesela ona da verebiliyorsak öyle de yapabiliriz gibi düşündüm, bence çok güzel olur.
+
+#### 10. Time Pacing game rule'u hakkında:
+
+- Prussian destiny de evet game rule'unda timeline pacing game rule'u vardı çünkü prusya tarihte çok daha geç ortaya çıktığı için bizim o modumuz tam tarihsel olmuyordu ondan eklemiştik tamamen tarihsel oynamak isteyenler iyice bekleyip situationları ve eventleri uzatabilsin diye mantık buydu. Ama bizim mongol modumuzda buna gerek yok bence o sebeple  MR_timeline_pacing_rule game rule ve mantığını komple çıkartabiliriz ona iyice bakar mısın detaylı düzgünce kaldıralım onu ve ona bağlı olan kod varsra onları düzeltir misin.
+
+#### 11. MR_mongol_imperial.txt Link Hatası
+- Logda böyle hata geldi fixleyebilir bir sıkıntı olmadı daha sonra da gelmedi ve oyunu çökertmedi. Çözümü sanırım o owner kısımlarını owner = yerine owner ?= yapmak ki o toprak veya ülkeye bir şey olursa hata gelmesin diye capital ?= mantığı gibi.
+
+[game] [error] [jomini_script_system.cpp:252] Script system error! Error: Event target link 'owner' returned an invalid object
+Script location: common/situations/MR_mongol_imperial.txt:559
+
+#### 12. Üçüncü situationa geldim:
+
+- 3.Situation (Mongol Dominance) da MR_late_steppe.txt ek situationlarının yapısı ve amacı nedir? Daha iyi, özgün ve mantıklı olabilir. Daha önce de sana söylediğim o situationdaki eventler (MR_late_steppe_events.txt) içindeki ödüller falan hep eski ve aynı modifierlar, yaratıcılıktan yoksun basit ödüller var. Lütfen o kısımları daha önce de 9. madde de belirttiğim gibi özgün, yaratıcı ve tarihsel yapalım.
+
+#### 13. Son isteğim:
+
+- MGE_F yani Mongol Empire'ı bence direk formlatabiliriz. form_country kodunu kullanınca formable country requirementlarına gerek olmadan direk onları ezip formlatabiliyoruz. Onu sen yanlış anlamışsın sanırım. O sebeple benim isteğim çok geç formlatmaktansa mesela 2. situaton bitince formlatmak daha mantıklı ve tarihsel olmaz mı? Sende karar verebilirsin formlatma zamanı için. Ama tabi böyle yapacaksak ona göre tagların MGE veya MGO yazan yerleri ve diğer tüm kodları bu değişikliğe göre güncellememiz gerekicek çünkü erken formlatıcaz ya, hata veya loop bug falan çıkmasın. Bu nedenle o Mongol Empire formlama için istenilen topraklara gerek olmayabilir çüğnkü onlar kodsuz normal oynarken formlayacaksan gereken zorunluluklar. 3. situation yapısını toprak isteklerini de falan komple değiştirebilirisn bu konuştuklarımıza göre ve mesela iran kısımları, anadoluya kadar benim bildiğim moğollar gitmişti/fetih etmişti. Tarihsel olarak oraları atladık oraların situatonları falan yok ayrı bir situation da yapabilirsin veya başka situation ile birleştirme de yapabilirsin. Sana bırakıyorum ve güveniyorum.
 
 
-
-
-
-
-
-#### FİNAL NOT: Event şuan gözüme çarpan ve oyun içinde debug logda ortaya çıkan hatalar bu şekildeydi bunları düzelttikten sonra tekrar bizim ana CLAUDE.md ve diğer tüm md dosyalarımızı bunlarla ilgili bir içerik rehber falan varsa onlarıda güncelleyip elden geçirir msiin detaylı bir şekilde. MD dosyalarımız güncel kalsın ki ilerde bu modu kullanıcaksam veya başka sıfırdan bir mod yapacaksam işimize yarasın.
+#### FİNAL NOT: Evet şuan gözüme çarpan ve oyun içinde debug logda ortaya çıkan hatalar bu şekildeydi bunları düzelttikten sonra tekrar bizim ana CLAUDE.md, diğer tüm .md dosyalarımızı ve bunlarla ilgili bir içerik rehber falan varsa onları da güncelleyip elden geçirir misin detaylı bir şekilde. MD dosyalarımız güncel kalsın ki ilerde bu modu kullanıcaksam veya başka sıfırdan bir mod yapacaksam işimize yarasın.

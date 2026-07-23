@@ -308,16 +308,16 @@ mongol_resurgence = {
 		}
 		# ========== AI RAILROAD: DECLARE ==========
 		# Pacing follows the rules, PD-style (brandenburg_rise ties pace
-		# to BRA_buff_enabled): Terminator declares roughly every two
+		# to BRA_buff_enabled): Terminator declares roughly every six months
 		# years; otherwise Strict Historical paces at one war per decade
-		# and Frontloaded at one every four years.
+		# and (MR_buff_historical): at every one years.
 		if = {
 			limit = {
 				var:mr_conquest_target = 1
 				OR = {
 					AND = {
 						has_game_rule = MR_buff_enabled
-						var:mr_conquest_cooldown > 24
+						var:mr_conquest_cooldown > 6
 					}
 					AND = {
 						NOT = {
@@ -333,7 +333,8 @@ mongol_resurgence = {
 						NOT = {
 							has_game_rule = MR_timeline_strict_historical
 						}
-						var:mr_conquest_cooldown > 48
+						has_game_rule = MR_buff_historical
+						var:mr_conquest_cooldown > 12
 					}
 				}
 				country_exists = c:MGO
@@ -344,13 +345,13 @@ mongol_resurgence = {
 						OR = {
 							AND = {
 								has_game_rule = MR_buff_enabled
-								months_since_war >= 12
+								months_since_war >= 6
 							}
 							AND = {
 								NOT = {
 									has_game_rule = MR_buff_enabled
 								}
-								months_since_war >= 24
+								months_since_war >= 12
 							}
 						}
 						situation:mongol_resurgence = {
@@ -621,7 +622,7 @@ mongol_resurgence = {
 				country_exists = c:MGO
 				c:MGO = {
 					is_ai = yes
-					at_war = no
+					# at_war = no // Disabled because the AI might stuck in a endless war loop, which would prevent the failsafe from firing. The failsafe should fire regardless of war status.
 				}
 			}
 			set_global_variable = mr_failsafe_p1_fired

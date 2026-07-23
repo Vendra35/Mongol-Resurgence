@@ -30,7 +30,7 @@ mr_dominance_dhe.1 = {
 		tag = MGO
 		from = 1368.1.1
 		to = 1420.1.1
-		monthly_chance = 1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {
@@ -71,7 +71,7 @@ mr_dominance_dhe.4 = {
 		tag = MGO
 		from = 1368.1.1
 		to = 1420.1.1
-		monthly_chance = 1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {
@@ -109,7 +109,7 @@ mr_dominance_dhe.5 = {
 		tag = MGO
 		from = 1368.1.1
 		to = 1420.1.1
-		monthly_chance = 1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {
@@ -147,7 +147,7 @@ mr_dominance_dhe.3 = {
 		tag = MGO
 		from = 1420.1.1
 		to = 1550.1.1
-		monthly_chance = 1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {
@@ -180,7 +180,7 @@ mr_dominance_dhe.6 = {
 		tag = MGO
 		from = 1420.1.1
 		to = 1550.1.1
-		monthly_chance = 1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {
@@ -217,7 +217,7 @@ mr_dominance_dhe.2 = {
 		tag = MGO
 		from = 1420.1.1
 		to = 1550.1.1
-		monthly_chance = 1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {
@@ -237,6 +237,182 @@ mr_dominance_dhe.2 = {
 	}
 }
 
+# --- NEED NAME AND REWORK/MIRRORING -- SPAWNING UNITS FOR EASIER AI CONQUEST, CULTURE CONVERSION AND ETC MIRROR FOR pd_brandenburg_dhe.1 and pd_brandenburg_dhe.2 ... ---------------------------------------
+pd_brandenburg_dhe.1 = {
+	type = country_event
+	title = pd_brandenburg_dhe.1.title
+	desc = pd_brandenburg_dhe.1.desc
+	#image = "gfx/interface/illustrations/situation/placeholder.dds"
+	fire_only_once = yes
+	dynamic_historical_event = {
+		tag = BRA
+		tag = PRU
+		from = 1380.1.1
+		to = 1500.1.1
+		monthly_chance = 100
+	}
+	trigger = {
+		owns = location:brandenburg
+		is_ai = yes
+		has_global_variable = prussian_ambition_active
+	}
+	immediate = {
+	}
+	option = {
+		name = pd_brandenburg_dhe.1.a
+		if = {
+			limit = {
+				NOT = {
+					has_advance = landsknechte
+				}
+			}
+			custom_tooltip = {
+				text = pd_brandenburg_dhe.1.a.tt1
+				research_advance = advance_type:landsknechte
+			}
+		}
+		custom_tooltip = pd_brandenburg_dhe.1.a.tt2
+		custom_tooltip = {
+			text = pd_brandenburg_dhe.1.a.tt3
+			location:brandenburg = {
+				while = {
+					count = 5
+					construct_building = {
+						building_type = building_type:armory
+						cost_multiplier = 0
+						cost_multiplier_reason = "PD_brandenburg_dhe_free_buildings"
+						instant = yes
+					}
+					construct_building = {
+						building_type = building_type:gun_smith
+						cost_multiplier = 0
+						cost_multiplier_reason = "PD_brandenburg_dhe_free_buildings"
+						instant = yes
+					}
+				}
+				while = {
+					count = 2
+					create_sub_unit_with_owner = {
+						type = a_landsknechte
+						owner = c:BRA
+					}
+				}
+				every_pop = {
+					limit = {
+						culture != culture:brandenburgish
+					}
+					split_pop = {
+						fraction = 0.9
+						culture = culture:brandenburgish
+					}
+				}
+			}
+		}
+		custom_tooltip = pd_brandenburg_dhe.1.a.tt4
+	}
+}
+
+pd_brandenburg_dhe.2 = {
+	type = country_event
+	title = pd_brandenburg_dhe.2.title
+	desc = pd_brandenburg_dhe.2.desc
+	#image = "gfx/interface/illustrations/situation/placeholder.dds"
+	fire_only_once = yes
+	dynamic_historical_event = {
+		tag = BRA
+		tag = PRU
+		from = 1365.1.1
+		to = 1500.1.1
+		monthly_chance = 100
+	}
+	trigger = {
+		owns = location:berlin
+		is_ai = yes
+		has_global_variable = prussian_ambition_active
+	}
+	immediate = {
+	}
+	option = {
+		name = pd_brandenburg_dhe.2.a
+		add_accepted_culture = culture:markish
+		add_accepted_culture = culture:eastern_pomeranian
+		add_accepted_culture = culture:prussian
+		if = {
+			limit = {
+				NOT = {
+					has_advance = unlock_men_at_arms_advance
+				}
+			}
+			custom_tooltip = {
+				text = pd_brandenburg_dhe.2.a.tt1
+				research_advance = advance_type:unlock_men_at_arms_advance
+			}
+		}
+		custom_tooltip = pd_brandenburg_dhe.2.a.tt2
+		custom_tooltip = {
+			text = pd_brandenburg_dhe.2.a.tt3
+			location:berlin = {
+				# --- YENİ EKLENTİ 2: KASABAYI ŞEHRE (CITY) ÇEVİR) ---
+				change_location_rank = location_rank:city
+				while = {
+					count = 5
+					construct_building = {
+						building_type = building_type:armory
+						cost_multiplier = 0
+						cost_multiplier_reason = "PD_brandenburg_dhe_free_buildings"
+						instant = yes
+					}
+					construct_building = {
+						building_type = building_type:gun_smith
+						cost_multiplier = 0
+						cost_multiplier_reason = "PD_brandenburg_dhe_free_buildings"
+						instant = yes
+					}
+				}
+				# YENİ EKLENTİ: BAŞKENTE BEDAVA KALE (BASTION) DİK!
+				construct_building = {
+					building_type = building_type:castle
+					cost_multiplier = 0
+					cost_multiplier_reason = "PD_brandenburg_dhe_free_buildings"
+					instant = yes
+				}
+				while = {
+					count = 2
+					create_sub_unit_with_owner = {
+						type = a_men_at_arms
+						owner = c:BRA
+					}
+				}
+				every_pop = {
+					limit = {
+						culture != culture:brandenburgish
+					}
+					split_pop = {
+						fraction = 0.9
+						culture = culture:brandenburgish
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				location:berlin = {
+					is_market_center = no
+					owner = c:BRA
+				}
+			}
+			# --- VANİLYA FORMATINDA HATASIZ MARKET KODU --- BRA için.
+			create_market = {
+				builder = root
+				location = location:berlin
+				instant = yes
+				price = price:create_market
+			}
+		}
+		custom_tooltip = pd_brandenburg_dhe.2.a.tt4
+	}
+}
+
 # --- The Imperial Melting Pot -----------------------------------
 mr_dominance_dhe.7 = {
 	type = country_event
@@ -252,7 +428,7 @@ mr_dominance_dhe.7 = {
 		tag = MGE
 		from = 1550.1.1
 		to = 1650.1.1
-		monthly_chance = 1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {
@@ -288,7 +464,7 @@ mr_dominance_dhe.8 = {
 		tag = MGE
 		from = 1550.1.1
 		to = 1650.1.1
-		monthly_chance = 1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {

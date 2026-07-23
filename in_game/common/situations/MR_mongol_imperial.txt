@@ -356,8 +356,8 @@ mongol_imperial = {
 		}
 		# ========== AI RAILROAD: DECLARE ==========
 		# PD Ascension pacing: the later phases press harder than the
-		# unification — Terminator roughly yearly, otherwise every ~5
-		# years (cooldown > 60), with the same months_since_war gates.
+		# unification — Terminator roughly yearly, otherwise every ~3
+		# years (cooldown > 36), with the same months_since_war gates.
 		if = {
 			limit = {
 				var:mr_imp_conquest_target = 1
@@ -370,7 +370,7 @@ mongol_imperial = {
 						NOT = {
 							has_game_rule = MR_buff_enabled
 						}
-						var:mr_imp_conquest_cooldown > 60
+						var:mr_imp_conquest_cooldown > 36
 					}
 				}
 				country_exists = c:MGO

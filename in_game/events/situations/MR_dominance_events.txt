@@ -165,7 +165,7 @@ mr_dominance.104 = {
 				religion = root.religion
 				dynasty = dynasty:borjigin_dynasty
 				adm = {
-					60
+					80
 					100
 				}
 				dip = {
@@ -173,7 +173,7 @@ mr_dominance.104 = {
 					100
 				}
 				mil = {
-					80
+					90
 					100
 				}
 				save_scope_as = mr_great_khan
@@ -193,6 +193,7 @@ mr_dominance.104 = {
 				add_trait = trait:conqueror
 				add_trait = trait:tactical_genius
 				add_trait = trait:strategist
+				add_trait = trait:cruel
 			}
 		}
 	}
