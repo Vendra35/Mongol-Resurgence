@@ -164,9 +164,18 @@ mr_dominance.104 = {
 				culture = root.culture
 				religion = root.religion
 				dynasty = dynasty:borjigin_dynasty
-				adm = { 60 100 }
-				dip = { 60 100 }
-				mil = { 80 100 }
+				adm = {
+					60
+					100
+				}
+				dip = {
+					60
+					100
+				}
+				mil = {
+					80
+					100
+				}
 				save_scope_as = mr_great_khan
 				create_in_limbo = yes
 			}
@@ -177,7 +186,13 @@ mr_dominance.104 = {
 					years = -1
 					mode = add_and_extend
 				}
+				add_character_modifier = {
+					modifier = MR_historically_needed
+					years = 65
+				}
 				add_trait = trait:conqueror
+				add_trait = trait:tactical_genius
+				add_trait = trait:strategist
 			}
 		}
 	}

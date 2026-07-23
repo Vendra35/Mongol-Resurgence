@@ -93,7 +93,7 @@ mongol_dominance = {
 		}
 		if = {
 			limit = {
-				exists = scope:mr_theatre_rival
+				country_exists = scope:mr_theatre_rival
 			}
 			set_variable = {
 				name = mr_rival_country
@@ -499,7 +499,7 @@ mongol_dominance = {
 				var:mr_dom_conquest_target = 1
 				OR = {
 					NOT = {
-						exists = var:mr_dom_conquest_target_country
+						country_exists = var:mr_dom_conquest_target_country
 					}
 					var:mr_dom_conquest_target_country = {
 						OR = {

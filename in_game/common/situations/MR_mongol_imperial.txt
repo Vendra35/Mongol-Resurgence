@@ -90,7 +90,7 @@ mongol_imperial = {
 		}
 		if = {
 			limit = {
-				exists = scope:mr_theatre_rival
+				country_exists = scope:mr_theatre_rival
 			}
 			set_variable = {
 				name = mr_rival_country
@@ -326,7 +326,7 @@ mongol_imperial = {
 				country_exists = c:MGO
 				OR = {
 					NOT = {
-						exists = var:mr_imp_conquest_target_country
+						country_exists = var:mr_imp_conquest_target_country
 					}
 					var:mr_imp_conquest_target_country = {
 						OR = {

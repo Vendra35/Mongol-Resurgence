@@ -7,13 +7,16 @@ MR_mongol_warrior_spirit = {
 		category = country
 	}
 	land_morale_modifier = 0.2
-	discipline = 0.05
+	discipline = 0.1
+	army_light_cavalry_power = 0.2
 	global_manpower_modifier = 0.5
 	global_levy_size_modifier = 0.5
 	levy_combat_efficiency_modifier = 1
 	army_maintenance_efficiency = 0.5
 	army_tradition_from_battle = 1
 	siege_ability = 0.25
+	monthly_horde_unity = 2
+	stability_investment = 1
 	monthly_rebel_growth = -0.0025
 	character_mil_child_education = 0.75
 	expected_army_size = 8
@@ -88,7 +91,6 @@ MR_empire_fulfilled = {
 	monthly_rebel_growth = -0.0025
 	character_mil_child_education = 0.75
 	expected_army_size_modifier = 2
-	reasons_to_elect = -500
 }
 
 # --- Situation 2 Failure (AI) ---
@@ -212,12 +214,35 @@ MR_great_khan = {
 	game_data = {
 		category = character
 	}
+	monthly_gold_income = 50
+	global_army_levy_size_modifier = 0.5
+	levy_recovery_modifier = 1
+	stability_investment = 1
+	monthly_rebel_growth = -0.05
+	global_manpower_modifier = 0.5
+	antagonism_received_modifier = -1
+	army_maintenance_efficiency = 0.85
+	army_reinforce_efficiency = 0.85
+	character_life_expectancy = 30
+	character_fertility = 50
+	monthly_horde_unity = 1
+	siege_ability = 1
+	army_heavy_cavalry_power = 0.5
+	army_light_cavalry_power = 0.5
+	subject_loyalty = 100
+	max_war_exhaustion = -5
+	aggressiveness_modifier = 1
 	force_allow_as_leader = yes
 	auto_conquer_at_war = yes
-	global_army_levy_size_modifier = 0.25
-	max_war_exhaustion = -3
-	aggressiveness_modifier = 0.5
-	character_life_expectancy = 15
+	can_colonize = no
+}
+
+# --- Historically Needed (character modifier) ---
+MR_historically_needed = {
+	game_data = {
+		category = character
+	}
+	is_immortal = yes
 }
 
 # =================================================================
@@ -230,14 +255,15 @@ MR_mongol_historical_modifier = {
 	}
 	land_morale_modifier = 0.1
 	discipline = 0.05
+	army_light_cavalry_power = 0.0.5
 	global_manpower_modifier = 0.25
 	global_levy_size_modifier = 0.5
 	levy_combat_efficiency_modifier = 0.5
 	army_tradition_from_battle = 1
 	army_maintenance_efficiency = 0.5
 	global_integration_speed_modifier = 0.5
-	monthly_legitimacy = 0.5
-	stability_investment = 0.25
+	monthly_horde_unity = 1
+	stability_investment = 0.5
 	monthly_rebel_growth = -0.005
 	expected_army_size = 2
 }
@@ -253,11 +279,10 @@ MR_mongol_historical_modifier_2 = {
 	global_defensive = 0.5
 	fort_maintenance_efficiency = 0.25
 	global_hostile_attrition = 0.5
-	monthly_legitimacy = 0.5
+	monthly_horde_unity = 0.5
 	stability_investment = 0.25
 	monthly_rebel_growth = -0.0025
 	character_mil_child_education = 0.75
-	reasons_to_elect = -500
 }
 
 # Historical Phase 2 Buff
@@ -272,7 +297,6 @@ MR_imperial_historical_modifier = {
 	land_morale_modifier = 0.05
 	discipline = 0.05
 	siege_ability = 0.1
-	reasons_to_elect = -1000
 	blocks_country_formation = yes
 	blocked_from_conversion = yes
 }
@@ -288,4 +312,5 @@ MR_dominance_historical_modifier = {
 	global_monthly_prosperity = 0.002
 	subject_loyalty = 15
 	monthly_rebel_growth = -0.0025
+	blocked_from_conversion = yes
 }

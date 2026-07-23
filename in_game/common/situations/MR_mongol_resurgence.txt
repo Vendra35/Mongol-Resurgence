@@ -72,15 +72,18 @@ mongol_resurgence = {
 					has_culture_group = culture_group:mongolian_group
 				}
 				government_type = government_type:steppe_horde
-				any_owned_location = {
-					region = region:mongolia_region
+				capital ?= {
+					OR = {
+						sub_continent = sub_continent:east_asia
+						sub_continent = sub_continent:north_asia
+					}
 				}
 			}
 			save_scope_as = mr_first_claimant
 		}
 		if = {
 			limit = {
-				exists = scope:mr_first_claimant
+				country_exists = scope:mr_first_claimant
 			}
 			set_variable = {
 				name = mr_leading_country
@@ -96,12 +99,18 @@ mongol_resurgence = {
 				NOT = {
 					this = scope:mr_first_claimant
 				}
+				capital ?= {
+					OR = {
+						sub_continent = sub_continent:east_asia
+						sub_continent = sub_continent:north_asia
+					}
+				}
 			}
 			save_scope_as = mr_first_rival
 		}
 		if = {
 			limit = {
-				exists = scope:mr_first_rival
+				country_exists = scope:mr_first_rival
 			}
 			set_variable = {
 				name = mr_rival_country
@@ -115,6 +124,12 @@ mongol_resurgence = {
 					has_culture_group = culture_group:mongolian_group
 				}
 				government_type = government_type:steppe_horde
+				capital ?= {
+					OR = {
+						sub_continent = sub_continent:east_asia
+						sub_continent = sub_continent:north_asia
+					}
+				}
 			}
 			trigger_event_non_silently = mr_dominance.10
 			# Phase buff per the buff rule, PD-style (brandenburg_rise
@@ -176,14 +191,14 @@ mongol_resurgence = {
 		# MR_mgo_score / MR_rival_score off the situation scope.
 		if = {
 			limit = {
-				exists = var:mr_leading_country
+				country_exists = var:mr_leading_country
 			}
 			var:mr_leading_country = {
 				save_scope_as = mr_leading_scope
 			}
 			if = {
 				limit = {
-					exists = scope:mr_leading_scope
+					country_exists = scope:mr_leading_scope
 				}
 				set_variable = {
 					name = MR_mgo_score
@@ -211,14 +226,14 @@ mongol_resurgence = {
 		}
 		if = {
 			limit = {
-				exists = var:mr_rival_country
+				country_exists = var:mr_rival_country
 			}
 			var:mr_rival_country = {
 				save_scope_as = mr_rival_scope
 			}
 			if = {
 				limit = {
-					exists = scope:mr_rival_scope
+					country_exists = scope:mr_rival_scope
 				}
 				set_variable = {
 					name = MR_rival_score
@@ -362,7 +377,7 @@ mongol_resurgence = {
 				country_exists = c:MGO
 				OR = {
 					NOT = {
-						exists = var:mr_conquest_target_country
+						country_exists = var:mr_conquest_target_country
 					}
 					var:mr_conquest_target_country = {
 						OR = {
@@ -379,10 +394,6 @@ mongol_resurgence = {
 			}
 			set_variable = {
 				name = mr_conquest_target
-				value = 0
-			}
-			set_variable = {
-				name = mr_conquest_cooldown
 				value = 0
 			}
 		}
@@ -776,6 +787,12 @@ mongol_resurgence = {
 						has_culture_group = culture_group:mongolian_group
 					}
 					government_type = government_type:steppe_horde
+					capital ?= {
+						OR = {
+							sub_continent = sub_continent:east_asia
+							sub_continent = sub_continent:north_asia
+						}
+					}
 				}
 			}
 			value = this.owner.country_color

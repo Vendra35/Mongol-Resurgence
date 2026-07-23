@@ -160,9 +160,12 @@
  STATIC_MODIFIER_NAME_MR_dominance_historical_modifier: "Mongol Hegemony"
  STATIC_MODIFIER_DESC_MR_dominance_historical_modifier: "The Mongol Empire dominates the world stage. #color_red (This effect will be removed upon the completion of the current Situation.)#!"
 
- # --- The Great Khan (character modifier, Timur-style) ---
+ # --- The Great Khan (character modifier, Timur-style, Immortality Modifier) ---
  STATIC_MODIFIER_NAME_MR_great_khan: "The Scourge of the Steppe"
  STATIC_MODIFIER_DESC_MR_great_khan: "This ruler carries the Borjigin blood and the will of Chinggis. The clans follow wherever the horsetail standard points."
+ STATIC_MODIFIER_NAME_MR_historically_needed: "Historically Needed"
+ STATIC_MODIFIER_DESC_MR_historically_needed: "This ruler is essential for the historical progression of the Mongol Resurgence."
+
 
  # ==============================================================================
  # ----------------- GAME RULES -----------------
