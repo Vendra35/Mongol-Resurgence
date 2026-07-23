@@ -21,11 +21,17 @@ not "other Paradox games do this", not "MR already uses it" — MR is not eviden
 
 ## Reference paths
 
-From the repo root (`Mongol Resurgence/`), the read-only reference is one level up:
+From the repo root, the read-only reference is one level up. The repo is
+shared between two machines with different layouts — DETECT, never assume
+(same snippet as CLAUDE.md and `tools/verify_mod.py`):
 
-```
-VANILLA="../EU5-Vanilla/game"
-PD="../The Prussian Destiny"
+```bash
+if [ -d "../EU5-Vanilla/game" ]; then
+	VANILLA="../EU5-Vanilla/game"; PD="../The Prussian Destiny"
+else
+	VANILLA="../Reference EU5 vanilla and Prussian Destiny/Europa Universalis V/game"
+	PD="../Reference EU5 vanilla and Prussian Destiny/The Prussian Destiny"
+fi
 ```
 
 Never write anything under `$VANILLA` or `$PD` — `$VANILLA` is a junction to the real game install, 

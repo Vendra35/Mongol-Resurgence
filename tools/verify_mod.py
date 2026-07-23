@@ -4,10 +4,27 @@ Every check prints its item count; a check that finds nothing to scan FAILS."""
 import re, sys, glob, os
 
 MOD = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# The read-only reference tree sits one level above this repo (see CLAUDE.md).
-VAN = os.path.join(os.path.dirname(MOD), "Reference EU5 vanilla and Prussian Destiny", "Europa Universalis V", "game")
-if not os.path.isdir(VAN):
-    sys.exit(f"vanilla reference tree not found at {VAN} — recreate it before running (CLAUDE.md, REQUIRED SETUP)")
+# The read-only reference tree sits one level above this repo (see CLAUDE.md,
+# REQUIRED SETUP). The repo is shared between two machines whose layouts
+# differ, so VAN is resolved by DETECTION — env override first, then both
+# known layouts — never by assuming one machine's path.
+_parent = os.path.dirname(MOD)
+if os.environ.get("MR_VANILLA"):
+    # An explicit override must be honoured or fail LOUD — silently falling
+    # back to another tree is exactly the vacuous-pass class this harness
+    # exists to prevent.
+    VAN = os.environ["MR_VANILLA"]
+    if not os.path.isdir(VAN):
+        sys.exit(f"MR_VANILLA is set but is not a directory: {VAN}")
+else:
+    _candidates = [
+        os.path.join(_parent, "EU5-Vanilla", "game"),  # Windows layout (junction)
+        os.path.join(_parent, "Reference EU5 vanilla and Prussian Destiny", "Europa Universalis V", "game"),  # macOS layout
+    ]
+    VAN = next((p for p in _candidates if os.path.isdir(p)), None)
+    if not VAN:
+        sys.exit("vanilla reference tree not found — tried:\n  " + "\n  ".join(_candidates)
+                 + "\nrecreate it before running (CLAUDE.md, REQUIRED SETUP), or set the MR_VANILLA env var")
 fails = []
 
 def check(name, count, problems, min_count=1):
@@ -97,13 +114,15 @@ for p, s in code.items():
 check("event title/desc/option loc keys exist", count, sorted(set(probs)), min_count=50)
 
 # ---- custom_tooltip text keys ----
+# Keys may be dotted (PD-style event tooltip keys like
+# mr_dominance_dhe.9.a.tt1), so the pattern must include '.'.
 probs, count = [], 0
 for p, s in code.items():
     body = strip_comments(s)
-    for m in re.finditer(r"text = ([a-z_0-9]+)", body):
+    for m in re.finditer(r"text = ([a-z_0-9.]+)", body):
         count += 1
         if m.group(1) not in loc_keys: probs.append(f"{m.group(1)} ({os.path.relpath(p, MOD)})")
-    for m in re.finditer(r"custom_tooltip = ([a-z_0-9]+)\s*$", body, re.M):
+    for m in re.finditer(r"custom_tooltip = ([a-z_0-9.]+)\s*$", body, re.M):
         count += 1
         if m.group(1) not in loc_keys: probs.append(f"{m.group(1)} ({os.path.relpath(p, MOD)})")
 check("custom_tooltip/text loc keys exist", count, sorted(set(probs)), min_count=10)

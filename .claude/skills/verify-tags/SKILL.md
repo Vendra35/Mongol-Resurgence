@@ -23,8 +23,15 @@ silently never fires.
 
 ## Reference paths
 
-```
-VANILLA="../EU5-Vanilla/game"
+The repo is shared between two machines with different layouts — DETECT,
+never assume (same snippet as CLAUDE.md and `tools/verify_mod.py`):
+
+```bash
+if [ -d "../EU5-Vanilla/game" ]; then
+	VANILLA="../EU5-Vanilla/game"
+else
+	VANILLA="../Reference EU5 vanilla and Prussian Destiny/Europa Universalis V/game"
+fi
 ```
 
 ## Procedure

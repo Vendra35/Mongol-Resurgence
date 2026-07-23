@@ -1,18 +1,21 @@
 ﻿situation_panel = {
 
     ##################################### TOP HEADER (SINGLE PORTRAIT - ONE EMPIRE) #####################################
-    # Context comes from the situation's mr_leading_country variable —
-    # the same pattern as the (working) mongol_resurgence panel.
-    # GetCountry('MGO') never resolved and left the portrait black with
-    # "No context supplied ... Character" log spam.
+    # one_country_header_template receives its country via a block
+    # named "CountryContext" and its anchor via
+    # "character_portrait_anchor" (country_header.gui:156/:160) — the
+    # First*/first_* names belong to the TWO-country template only.
+    # Overriding the wrong names left the portrait black with
+    # "No context supplied ... Character" log spam. Exact vanilla
+    # pattern for variable-driven context: rise_of_the_ottomans.gui:13.
     blockoverride "situation_panel_image" {
         using = one_country_header_template
 
-        blockoverride "FirstCountryContext" {
+        blockoverride "CountryContext" {
             datacontext = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('mr_leading_country').GetCountry]"
         }
 
-        blockoverride "first_character_portrait_anchor" {
+        blockoverride "character_portrait_anchor" {
             parentanchor = bottom|left
         }
 
@@ -112,18 +115,25 @@
                         margin = { 15 10 }
                         spacing = 5
                         layoutpolicy_horizontal = expanding
-                        
-                        textbox_single = {
+
+                        # text_single (3926 vanilla uses), not the
+                        # nonexistent textbox_single; a progressbar's
+                        # fill property is value (the_revolution.gui:
+                        # 112-116), min/max as in italian_wars.gui:
+                        # 316-326 — "progress" is not a property.
+                        text_single = {
                             name = "score_label"
-                            fontsize = 14
+                            layoutpolicy_horizontal = expanding
                             text = "MR_MGE_SCORE_TT"
                         }
 
                         progressbar = {
                             name = "imperial_progress"
                             size = { 380 24 }
-                            progress = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('MR_mge_score').GetValue|0]"
+                            using = morale_progressbar_bar
+                            min = 0
                             max = 100
+                            value = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('MR_mge_score').GetValue]"
                             tooltip = "mongol_imperial_progress_tooltip"
                         }
                     }

@@ -15,16 +15,18 @@
 # corridor is khorasan_region (transoxiana, khwarazm, zhetysu,
 # badakhshan, desht_kipchak).
 #
-# Where MGE_f's nine required locations actually live:
+# Where the Phase 3 four-khanate seats actually live (MGE_f's own
+# formable list is no longer the goal — MGE is proclaimed at Phase
+# 2's close and this phase demands the historical empire instead):
 #   karakorum      upper_selenga_area   mongolia_region
 #   dadu           beiping_area         north_china_region
-#   sarai_al_jadid lower_don_area       steppes_region
 #   samarkand      transoxiana_area     khorasan_region
+#   sarai_al_jadid lower_don_area       steppes_region
 #   kazan          kazan_area           ural_region
-#   kaffa          crimea_area          steppes_region
-#   shangyuan      jiangnan_area        east_china_region
-#   baxian         chuandong_area       west_china_region
-#   guangzhou      guangdong_area       south_china_region
+#   tabriz         azerbaijan_area      persia_region
+#   baghdad        iraq_arabi_area      crescent_region
+# plus persia_region cleared, a russian_region foothold and a
+# cappadocia_area (anatolia_region) presence.
 #
 # End triggers wrap their clauses in custom_tooltip so the situation
 # panel can render them as readable end requirements, the way PD's
@@ -83,7 +85,13 @@ mr_can_start_dominance = {
 	NOT = {
 		has_global_variable = mr_railroad_failed
 	}
-	country_exists = c:MGO
+	# MGE is proclaimed in Phase 2's on_ending now, so the Phase 3
+	# claimant is normally MGE from day one; MGO is the fallback for
+	# the pathological path where the proclamation failed.
+	OR = {
+		country_exists = c:MGE
+		country_exists = c:MGO
+	}
 }
 
 # --- Visibility ---------------------------------------------------
@@ -197,12 +205,20 @@ mr_resurgence_end_trigger = {
 }
 
 # Phase 2: the whole Silk Road corridor — Khorasan, Xinjiang and
-# North China — answers to the claimant or its subjects.
+# North China — answers to the claimant or its subjects. DUAL-TAG
+# like Phase 3's trigger: under the Vanilla buff rule nothing
+# blocks country formation, so a HUMAN claimant can legally form
+# MGE mid-phase via the formable — a c:MGO-only trigger then made
+# the phase unwinnable for the very player who mastered the
+# corridor.
 mr_imperial_end_trigger = {
 	custom_tooltip = {
 		text = mr_imperial_end_tt
-		country_exists = c:MGO
-		c:MGO = {
+		any_country = {
+			OR = {
+				tag = MGO
+				tag = MGE
+			}
 			owns = location:samarkand
 			owns = location:dadu
 		}
@@ -210,7 +226,15 @@ mr_imperial_end_trigger = {
 			any_country = {
 				NOR = {
 					tag = MGO
-					is_subject_of = c:MGO
+					tag = MGE
+					AND = {
+						country_exists = c:MGO
+						is_subject_of = c:MGO
+					}
+					AND = {
+						country_exists = c:MGE
+						is_subject_of = c:MGE
+					}
 				}
 				OR = {
 					any_owned_location = {
@@ -228,12 +252,21 @@ mr_imperial_end_trigger = {
 	}
 }
 
-# Phase 3: the empire is actually formable. These are MGE_f's own
-# nine required locations from vanilla's 00_formable_countries.txt,
-# not an invented list — otherwise the phase can complete while the
-# player still cannot form the Mongol Empire. On top of the nine
-# seats, the westward advance must be real: the claimant needs a
-# foothold in the Russian lands.
+# Phase 3: the four khanates restored. MGE itself is proclaimed at
+# Phase 2's close (form_country ignores the formable's allow block,
+# the same way PD forms PRU_f in pd_brandenburg_dhe.4), so this
+# phase no longer chases MGE_f's formable requirements. Instead it
+# demands the historical empire at its height:
+#   Yuan          karakorum + dadu           (heartland + China seat)
+#   Chagatai      samarkand                  (Transoxiana seat)
+#   Golden Horde  sarai_al_jadid + kazan     (Volga seats)
+#   Ilkhanate     tabriz + baghdad + ALL of persia_region cleared
+#   plus the westward advance made real: a foothold in the Russian
+#   lands and one in Cappadocia (Kose Dag country — the deepest the
+#   historical Mongols ever rode into Anatolia).
+# Geography verified against definitions.txt: tabriz is
+# azerbaijan_area/persia_region:2315, baghdad is iraq_arabi_area/
+# crescent_region:2136, cappadocia_area is anatolia_region:2054.
 mr_dominance_end_trigger = {
 	custom_tooltip = {
 		text = mr_dominance_end_tt
@@ -243,16 +276,37 @@ mr_dominance_end_trigger = {
 				tag = MGO
 			}
 			owns = location:karakorum
+			owns = location:dadu
+			owns = location:samarkand
 			owns = location:sarai_al_jadid
 			owns = location:kazan
-			owns = location:samarkand
-			owns = location:kaffa
-			owns = location:dadu
-			owns = location:shangyuan
-			owns = location:baxian
-			owns = location:guangzhou
+			owns = location:tabriz
+			owns = location:baghdad
 			any_owned_location = {
 				region = region:russian_region
+			}
+			has_presence_in = area:cappadocia_area
+		}
+		# The Ilkhanate clause: no power outside the claimant's realm
+		# holds a single location in the Persia region. c:TAG links sit
+		# behind country_exists guards in the same AND, as everywhere.
+		NOT = {
+			any_country = {
+				NOR = {
+					tag = MGE
+					tag = MGO
+					AND = {
+						country_exists = c:MGE
+						is_subject_of = c:MGE
+					}
+					AND = {
+						country_exists = c:MGO
+						is_subject_of = c:MGO
+					}
+				}
+				any_owned_location = {
+					region = region:persia_region
+				}
 			}
 		}
 	}

@@ -10,23 +10,50 @@ actually happened historically.
 
 Full design spec: `docs/MOD-DESIGN-IDEA.md`. How-to and methodology:
 `docs/EU5-MODDING-GUIDE.md`. Historical audit record: `docs/AUDIT-2026-07-21.md`.
-In-game test plan: `docs/TESTING-GUIDE.md`. Static verification harness:
+In-game test plan: `docs/TESTING-GUIDE.md`. Extension roadmap and cookbooks:
+`docs/FUTURE-DEVELOPMENT.md`. Static verification harness:
 `tools/verify_mod.py` (run after every change; every check prints its count).
 
 ## REQUIRED SETUP on a new machine
-The workflow depends on a read-only reference tree **one level above this repo**:
+The workflow depends on a read-only reference tree **one level above this repo**.
+**This repo is shared between TWO machines whose layouts DIFFER** — neither is
+canonical. Always DETECT which one exists before using any reference path;
+never assume, and never "fix" one layout's paths to the other's.
+
+Windows machine (junctions directly under the parent):
 
 ```
 <parent>/
-├── Mongol Resurgence/       ← this repo (write here only)
-├── The Prussian Destiny/      ← READ ONLY, a working, tested reference mod
-└── EU5-Vanilla/               ← READ ONLY, junction → E:\SteamLibrary\steamapps\common\Europa Universalis V
+├── <this repo>/               ← write here only
+├── The Prussian Destiny/      ← READ ONLY, working, tested reference mod
+└── EU5-Vanilla/               ← READ ONLY, junction → the Steam install
     └── game/                   ← full vanilla install (~51k files)
 ```
 
-On this machine these are two separate junctions (EU5-Vanilla → the Steam install, 
-The Prussian Destiny → its own mod folder). 
-If either is missing, recreate it before doing any mod work — **every rule below depends
+macOS machine (one wrapper folder under the parent):
+
+```
+<parent>/
+├── <this repo>/                                   ← write here only
+└── Reference EU5 vanilla and Prussian Destiny/    ← READ ONLY
+    ├── Europa Universalis V/game/                 ← full vanilla install
+    └── The Prussian Destiny/                      ← reference mod
+```
+
+Detection snippet (bash; the skills use the same one):
+
+```bash
+if [ -d "../EU5-Vanilla/game" ]; then
+	VANILLA="../EU5-Vanilla/game"; PD="../The Prussian Destiny"
+else
+	VANILLA="../Reference EU5 vanilla and Prussian Destiny/Europa Universalis V/game"
+	PD="../Reference EU5 vanilla and Prussian Destiny/The Prussian Destiny"
+fi
+```
+
+`tools/verify_mod.py` auto-detects the same two layouts (env var `MR_VANILLA`
+overrides both). If neither tree exists, recreate one before doing any mod
+work — **every rule below depends
 on being able to grep vanilla**. Key vanilla paths used constantly:
 `game/in_game/common/situations/readme.txt` (authoritative situation docs),
 `game/in_game/map_data/definitions.txt` (region → area → province → location
@@ -34,35 +61,44 @@ hierarchy), `game/in_game/setup/countries/` (tags), `game/main_menu/common/`
 (script values, modifier types, game rules).
 
 ## Architecture (as built)
-Six situations, four namespaces, one state machine. End goals are the
+Six situations, five namespaces, one state machine. End goals are the
 situations' red-lined REGIONS (PD-style): the phase completes when no country
 outside the claimant's realm (itself or subjects) holds the goal regions.
 
 | Situation key | File | Window | Ends when |
 |---|---|---|---|
 | `mongol_resurgence` | MR_mongol_resurgence.txt | 1368–1420 | MGO holds Karakorum + Gobi + ALL of mongolia_region |
-| `mongol_imperial` | MR_mongol_imperial.txt | 1420–1550 | MGO holds Samarkand + Dadu + ALL of khorasan/xinjiang/north_china regions |
-| `mongol_dominance` | MR_mongol_dominance.txt | 1550–1650 | claimant holds MGE_f's nine locations + a russian_region foothold → forms MGE |
+| `mongol_imperial` | MR_mongol_imperial.txt | 1420–1550 | MGO holds Samarkand + Dadu + ALL of khorasan/xinjiang/north_china regions → **MGE (Yeke Mongol Ulus) is PROCLAIMED in on_ending** (form_country bypasses MGE_f's allow; its form_effect grants empire rank + vanilla's 50y restoration modifier) |
+| `mongol_dominance` | MR_mongol_dominance.txt | 1550–1650 | "The Four Khanates": MGE owns the khanate seats (karakorum, dadu, samarkand, sarai_al_jadid, kazan, tabriz, baghdad) + persia_region cleared + russian_region foothold + cappadocia_area presence |
 | `mr_chahar_reunification` | MR_late_steppe.txt | 1604–1634 | one banner over the heartland |
 | `mr_torghut_migration` | MR_late_steppe.txt | 1616–1630 | a horde reaches the Volga (post-trek) |
 | `mr_dzungar_khanate` | MR_late_steppe.txt | 1634–1650 | consolidated + Dzungaria/Tarim/Zhetysu |
 
-- Event namespaces: `mr_dominance` (lifecycle + AI events 995–999),
-  `mr_imperial` (campaign arc), `mr_history` (historical DHEs, 1335–1530),
-  `mr_dominance_dhe` (horde-institutions DHEs), `mr_steppe` (late-steppe).
+- Event namespaces: `mr_dominance` (lifecycle + AI events 992–999),
+  `mr_imperial` (campaign arc), `mr_history` (historical DHEs, 1337–1526,
+  all firing ON their real dates via `monthly_chance = 100`; `.9` is Delhi's
+  fired-only mirror of the 1398 sack), `mr_dominance_dhe` (horde-institutions
+  DHEs 1–12; 9/10 are the heavy AI catch-up events mongolized from PD's
+  pd_brandenburg_dhe.1/2, 11 the Ulugh Beg observatory, 12 the Yassa census —
+  P2-window ones carry `tag = MGE` too so an early proclamation cannot orphan
+  them), `mr_steppe` (late-steppe; `.2`, the Tumu reaction, is watched
+  PRIMARILY by Phase 2's on_monthly — the crisis is ~1449 — with the Chahar
+  watcher kept as fallback).
 - Phase chaining via globals: `mr_phase_one_complete` → `mr_phase_two_complete` →
   `mr_railroad_complete`, with `mr_railroad_failed` set on **every** failure path
   (on_ending sets terminals directly; events set them redundantly).
 - Every situation `can_end`s on **goal OR time expiry**; `on_ending` branches on the
   goal trigger, never on side-signals.
-- **Game rules** (PD_config shape, `main_menu/common/game_rules/`): master switch
-  `mr_railroad` (on/off — all content checks `NOT mr_railroad_off`);
-  `MR_mongol_resurgence_auto_conquest` (gates the P1 completion failsafe);
-  `MR_imperial_auto_conquest` (gates P2 + P3 failsafes); `MR_mongol_buff_rule`
-  (`MR_buff_disabled`/`_historical`/`_enabled`=Terminator — selects which phase
-  buff AND the reward tier AND the P1 war pace); `MR_timeline_pacing_rule`
-  (`MR_timeline_frontloaded`/`_strict_historical` — P1 war cadence 48 vs 120
-  months). The birth failsafe is deliberately NOT rule-gated.
+- **Game rules** (PD_config shape, `main_menu/common/game_rules/`), FOUR rules:
+  master switch `mr_railroad` (on/off — all content checks
+  `NOT mr_railroad_off`); `MR_mongol_resurgence_auto_conquest` (gates the P1
+  completion failsafe); `MR_imperial_auto_conquest` (gates P2 + P3 failsafes);
+  `MR_mongol_buff_rule` (`MR_buff_disabled`/`_historical`/`_enabled`=Terminator
+  — selects the phase buff AND the reward tier AND the railroad war pace).
+  The old `MR_timeline_pacing_rule` was REMOVED (the Mongol window IS the
+  historical timeline); every buff tier has its own pacing branch — a tier
+  without one silently kills the railroad. The birth failsafe is deliberately
+  NOT rule-gated.
 - AI railroad in **all three phases** (P1 the brandenburg_rise shape, P2/P3 the
   Ascension shape): cooldown + `ordered_neighbor_country` target selection
   (weakest first, holding goal-region land) → a war event in **PD-103/203
@@ -70,48 +106,87 @@ outside the claimant's realm (itself or subjects) holds the goal regions.
   (player choice), `after` resets the slot and re-seeds the target variable
   with the claimant. No `is_ai` gate — human claimants get the events too.
   Fallbacks clear invalidated targets. Events: `mr_dominance.997` (P1,
-  steppe-unification CB), `.993` (P2, silk-road CB), `.992` (P3 — picks
-  westward vs silk-road CB by where the target's land lies). Pacing: P1
-  48/120/24 months (frontloaded/strict/Terminator), P2-P3 60/12 (PD Ascension).
+  steppe-unification CB), `.993` (P2, silk-road CB), `.992` (P3 — westward CB
+  if the target holds russian/steppes/ural/persia/anatolia land or
+  iraq_arabi/armenian_highlands presence, silk-road CB otherwise). Pacing by
+  buff rule alone: P1 6/12/24 months (Terminator/Historical/Vanilla) with
+  matching months_since_war gates, P2 12/36, P3 12/60 (PD Ascension shape).
   Variables: `mr_conquest_*` (P1), `mr_imp_conquest_*` (P2),
-  `mr_dom_conquest_*` (P3) — P2/P3 seed `target_country = c:MGO` in on_start
-  (MGO exists there; P1 cannot, it seeds at Beat 104). P3 scopes its claimant
-  dynamically (`random_country` over tag MGO/MGE — a player can form MGE
-  mid-phase); its find-target uses
-  `scope:mr_dom_claimant.offensive_alliance_strength`, the one construct
-  without an exact PD twin — if P3 railroad wars never fire in testing, that
-  line is suspect #1.
-- The moment MGO first exists (Beat 104 / `mr_dominance.104`): a new **Borjigin
-  Great Khan** is created and enthroned (create_character + `set_new_ruler` +
-  `MR_great_khan` character modifier + conqueror trait — the vanilla Timur
-  treatment from rise_of_timur.txt), the AI claimant gets
-  `MR_mongol_preparing_for_conquest` (blocked_from_declaring_war), and the
-  railroad's target variable is seeded. The preparing lock is re-granted to the
-  AI claimant at P2 and P3 `on_start` and removed in every phase's `on_ending`
-  — safe now because every phase has a declare loop fighting for it.
+  `mr_dom_conquest_*` (P3) — P2 seeds `target_country = c:MGO` in on_start;
+  P3 seeds the claimant via if/else (c:MGE normally, c:MGO on the
+  failed-proclamation fallback); P1 cannot seed early, it seeds at Beat 104.
+  P3 scopes its claimant dynamically (`random_country` over tag MGE/MGO); its
+  find-target uses `scope:mr_dom_claimant.offensive_alliance_strength`, the
+  one construct without an exact PD twin — if P3 railroad wars never fire in
+  testing, that line is suspect #1.
+- **The succession of Great Khans**: Beat 104 (`mr_dominance.104`) creates and
+  enthrones the first Borjigin Great Khan the moment MGO exists ("Batu",
+  create_character + `set_new_ruler` + `MR_great_khan` +
+  `MR_historically_needed` (is_immortal, 65y) character modifiers + four
+  traits — the vanilla Timur treatment; multi-trait create_character per
+  hussite_wars.txt:478). P2 on_start (`mr_dominance.120`) enthrones the
+  second generation ("Adai"), P3 on_start (`mr_dominance.130`) the third
+  ("Altan") — same shape, era-appropriate names, human and AI alike. The AI
+  claimant gets `MR_mongol_preparing_for_conquest` (blocked_from_declaring_war)
+  at Beat 104 and again at P2/P3 `on_start`, removed in every phase's
+  `on_ending` — safe because every phase has a declare loop fighting for it.
+- **MGO's birth has TWO paths**: organic (a free Mongol steppe horde that
+  takes Karakorum, any time 1368+ — an AI converts on the spot, a HUMAN is
+  offered the banner via `mr_dominance.11` and may decline, once) and the
+  1375 failsafe, which picks the STRONGEST candidate in quality tiers — free
+  AI horde at peace → free AI horde → anyone as absolute last resort (a
+  subject is first released via `cancel_subject`, run by the overlord:
+  _hardcoded.txt:4808). RULE: the mod never force-converts, locks or robs a
+  human player — every conversion is offered, every railroad war postponable,
+  every failsafe is_ai-gated on both claimant and victim.
+- **Both P2 and P3 end machinery is dual-tag** (any_country over MGO/MGE +
+  guarded is_subject_of pairs): under the Vanilla buff rule nothing carries
+  `blocks_country_formation`, so a human claimant can legally form MGE
+  mid-Phase-2 — a c:MGO-only end trigger made the phase unwinnable for
+  exactly that player.
 - Failsafes force completion, PD-style: birth failsafe (~1375,
   `form_country = formable_country:MGO_f`); per-phase completion failsafes
   (`mr_failsafe_p1/p2/p3_fired`, 5 years before each deadline) that
   `change_location_owner` + `add_core` the FULL goal territory (P2: khorasan +
-  xinjiang + north_china regions; P3: the nine seat areas + ryazan_area as the
-  Russian foothold). Guards: gated by the auto-conquest rules; claimant
-  `is_ai = yes` + `at_war = no`; locations taken only from AI owners.
+  xinjiang + north_china regions; P3: the seat areas upper_selenga/beiping/
+  transoxiana/lower_don/kazan + iraq_arabi + cappadocia + ryazan + ALL of
+  persia_region). Guards: gated by the auto-conquest rules; claimant
+  `is_ai = yes` (P1's `at_war = no` gate was deliberately removed — an AI
+  stuck in an endless war must not stall the handover; P2/P3 keep it);
+  locations taken only from AI owners, always via `owner ?=` — the bare
+  `owner =` link errors on ownerless locations.
 - CBs are situation-granted (`create_enabled = no`; grant years cover each full
   phase window — 130/100): each wargoal's `allowed_locations` **covers every
   location its phase's end trigger demands**. The silk-road wargoal also covers
   `xinjiang_region` (P2 goal) and `mongolia_region` (so a Karakorum lost after
-  P1 stays legally retakable — neither P3 CB covered it before).
-- 18 modifiers in `main_menu/common/static_modifiers/MR_modifiers.txt`, all wired:
+  P1 stays legally retakable). The westward wargoal covers russian + steppes +
+  ural + **persia + anatolia regions** plus the **iraq_arabi and
+  armenian_highlands areas** (`scope:location.area = area:X` — the same
+  location→area link PD's find-target uses) for the P3 four-khanates goal.
+- 24 modifiers in `main_menu/common/static_modifiers/MR_modifiers.txt`, all wired:
   phase buffs (granted per buff rule, removed in `on_ending`), historical-mode
   variants, phase rewards (removed at the NEXT phase's `on_start`, as their
   tooltips promise), success/failure (AI vs player), transition
-  (`MR_the_sleeping_horde` — AI-only, it blocks war declarations), and the
-  `MR_great_khan` **character** modifier.
+  (`MR_the_sleeping_horde` — AI-only, it blocks war declarations), the
+  `MR_great_khan` + `MR_historically_needed` **character** modifiers, and six
+  event-specific rewards (Forge of Warriors, Kurultai's Mandate, Western Ulus
+  Restored, Seal of Chinggis, Volga Pastures, Dzungar Legacy). RULE: flavour
+  events grant their OWN modifier — phase buffs/rewards belong to the
+  situations and the buff rule alone, never re-granted by events.
 - Situation panels read live variables the situations compute monthly:
   `MR_mgo_score`/`MR_rival_score` (P1, PD-style strength scores) and
   `MR_mge_score`/`MR_dominance_score` (P2/P3, 0–100 goal progress). Headers use
-  `GetVariable('mr_leading_country').GetCountry` — never `GetCountry('TAG')`,
-  which does not resolve and leaves the portrait black.
+  `GetVariable('mr_leading_country').GetCountry` — never `GetCountry('TAG')`
+  for tags that can be off-map. **GUI template block names are exact**:
+  `one_country_header_template` exposes `CountryContext` +
+  `character_portrait_anchor` (country_header.gui:156/:160);
+  `two_countries_header_template` exposes `FirstCountryContext`/
+  `SecondCountryContext` + `first_/second_character_portrait_anchor`. Overriding
+  a block name the template doesn't have is silently dropped — the P2/P3
+  panels overrode the two-country names on the one-country template and got
+  black portraits + Character-context log spam. Widgets: `text_single` (not
+  `textbox_single`), `progressbar` with `value`/`min`/`max` (`progress` is not
+  a property) — vanilla refs the_revolution.gui:112, italian_wars.gui:316.
 - Read-only vanilla hook: Chahar reacts to a live Tumu Crisis via
   `any_country = { has_variable = lost_emperor }`. Never write vanilla state.
 - Deliberately NOT implemented (vanilla already has them): Tumu Crisis
@@ -159,11 +234,27 @@ outside the claimant's realm (itself or subjects) holds the goal regions.
 
 ### Known EU5 specifics (each was a real bug here once)
 - `country_exists = c:TAG`, never `exists = c:TAG`. `set_variable` takes
-  `name` + `value`. `has_game_rule = option_name` (scalar).
+  `name` + `value`. `has_game_rule = option_name` (scalar). For saved
+  scopes/variables BOTH forms are vanilla-attested: `exists = scope:x` is the
+  canonical existence check (1950 vanilla uses) and `country_exists = scope:x`
+  / `= var:x` adds the resolves-to-a-live-country guarantee (31+5 vanilla uses;
+  PD's brandenburg_rise.txt:449 uses it on the railroad target var).
 - Events: block key IS the id (`ns.1 = {`), `namespace =` per file; no `picture`/
   `mean_time_to_happen`/`pre_trigger`/`scope`/`is_triggered_only`; use
   `dynamic_historical_event { tag from to monthly_chance }`, `image`/
-  `illustration_tags`, `fire_only_once`, `hidden = yes`.
+  `illustration_tags`, `fire_only_once`, `hidden = yes`. DHE `monthly_chance`
+  is a PERCENT (float ok, max 100 = fires the month the window opens + trigger
+  passes; 80 vanilla uses at 100). Every DHE event wants a
+  `<ns>.<id>.entry` loc key (terse headline) for the DHE timeline.
+- **Country tag names must not contain "Empire"** — no vanilla tag name does
+  (MGE is vanilla-named "Mongolia"); country_database.cpp warns because rank
+  titles compose as "The Great <name> Empire". Hence MGE = "Yeke Mongol Ulus".
+- Selection idiom: `ordered_country` / `ordered_neighbor_country` with
+  `order_by = military_strength`, `max = 1`, `check_range_bounds = no`
+  (war_of_religions.txt:54-59). Breaking vassalage: `cancel_subject`, run by
+  the OVERLORD with the subject as argument (`overlord ?= { cancel_subject =
+  prev }`, _hardcoded.txt:4808); `make_independent`/`release_subject` do not
+  exist as effects.
 - Firing: `trigger_event_silently` / `_non_silently` only; on_action `events = {}`.
 - Effects take **named script values** (`prestige_mild_bonus`,
   `government_power_ultimate_bonus`… defined in
@@ -177,10 +268,13 @@ outside the claimant's realm (itself or subjects) holds the goal regions.
 - `owns` vs `controls`: events overwhelmingly use `owns` (ownership), `controls` is
   military occupation. Phase goals use `owns`.
 - **`c:TAG` on the right side of any comparison errors every tick while the tag
-  is off-map** (`Invalid right side during comparison 'c'` — MGO 1368–75, MGE
-  for nearly all of Phase 3). Identity → `tag = MGO`; map modes →
-  `owner ?= { tag = MGO }`; relations (`is_subject_of`/`is_neighbor_of = c:X`)
-  → precede with `country_exists = c:X` in the SAME AND (short-circuit).
+  is off-map** (`Invalid right side during comparison 'c'` — MGO 1368–75; MGE
+  only until Phase 2 completes, now that the proclamation moved there).
+  Identity → `tag = MGO`; map modes → `owner ?= { tag = MGO }`; relations
+  (`is_subject_of`/`is_neighbor_of = c:X`) → precede with
+  `country_exists = c:X` in the SAME AND (short-circuit). Same family:
+  `owner = { ... }` in a location limit errors on OWNERLESS locations — always
+  `owner ?= {` (the failsafe handover blocks all hit this).
 - War-declaring railroad events are visible with the declaration in **option A**
   and a postpone **option B** (PD 103 shape), never `hidden` with the war in
   `immediate` — a human claimant must be able to refuse.

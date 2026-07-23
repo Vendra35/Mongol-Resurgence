@@ -59,6 +59,11 @@ mr_steppe.2 = {
 			factor = 100
 		}
 		add_army_tradition = army_tradition_mild_bonus
+		# The Son of Heaven in a felt tent: every clan sends riders.
+		add_manpower = {
+			value = root.monthly_manpower
+			multiply = 6
+		}
 	}
 }
 
@@ -81,6 +86,12 @@ mr_steppe.3 = {
 			factor = 100
 		}
 		add_prestige = prestige_severe_bonus
+		# Whoever holds the heartland holds the seal of Chinggis.
+		add_country_modifier = {
+			modifier = MR_seal_of_chinggis
+			years = 25
+			mode = add_and_extend
+		}
 	}
 }
 
@@ -107,6 +118,8 @@ mr_steppe.10 = {
 		culture:mongolian_culture = {
 			add_cultural_influence = cultural_influence_mild_bonus
 		}
+		# The clans that ride together bind together.
+		add_tribal_cohesion = tribal_cohesion_mild_bonus
 	}
 	option = {
 		name = mr_steppe.10.b
@@ -135,6 +148,8 @@ mr_steppe.11 = {
 			factor = 100
 		}
 		add_government_power = government_power_mild_bonus
+		# The stone belt is behind; the horde holds together.
+		add_horde_unity = horde_unity_mild_bonus
 	}
 }
 
@@ -189,6 +204,13 @@ mr_steppe.13 = {
 			factor = 100
 		}
 		add_prestige = prestige_severe_bonus
+		# A Mongol power camped on a European river for the first time
+		# since Sarai burned.
+		add_country_modifier = {
+			modifier = MR_volga_pastures
+			years = -1
+			mode = replace
+		}
 	}
 }
 
@@ -213,6 +235,9 @@ mr_steppe.20 = {
 			factor = 100
 		}
 		add_army_tradition = army_tradition_mild_bonus
+		# Fixed towns, written law, standing garrisons: the khanate
+		# studies what the settled world knows.
+		add_research_progress = research_progress_mild_bonus
 	}
 }
 
@@ -234,6 +259,8 @@ mr_steppe.21 = {
 			factor = 100
 		}
 		add_government_power = government_power_mild_bonus
+		# The foundries at Kobdo run day and night.
+		add_research_progress = research_progress_mild_bonus
 	}
 }
 
@@ -256,8 +283,10 @@ mr_steppe.22 = {
 			factor = 100
 		}
 		add_prestige = prestige_severe_bonus
+		# The Dzungar consolidation earns its OWN legacy — guns, law
+		# and standing garrisons — not the Phase 1 unification banner.
 		add_country_modifier = {
-			modifier = MR_unified_mongol_banner
+			modifier = MR_dzungar_legacy
 			years = -1
 			mode = replace
 		}

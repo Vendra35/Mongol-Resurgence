@@ -1,22 +1,26 @@
 ﻿# =================================================================
-# PHASE 3 - THE SILK EMPIRE (1550-1650)
+# PHASE 3 - THE FOUR KHANATES (1550-1650)
 # =================================================================
-# The westward advance against Russia and the final formable. The
-# phase closes when one claimant holds all nine of MGE_f's required
-# locations AND has planted its banner in the Russian lands.
+# The westward finale. The Yeke Mongol Ulus (MGE) is proclaimed at
+# Phase 2's close now, so this phase opens WITH the empire on the
+# map and asks it to restore the old ulus in full: the Yuan seats
+# (Karakorum, Dadu), the Chagatai seat (Samarkand), the Golden
+# Horde seats (Sarai, Kazan), and the whole Ilkhanate — Tabriz,
+# Baghdad, Persia cleared of every outside power — plus a foothold
+# in the Russian lands and one in Cappadocia (Kose Dag country).
 #
-# NOTE ON c:MGE: MGE does not exist for almost this entire phase —
-# it is formed in on_ending. Identity checks therefore use tag =
-# (string comparison, never errors) and every c:MGE link sits
-# behind a country_exists guard; this = c:MGE comparisons were the
-# mod's biggest source of "Invalid right side" error-log spam.
+# NOTE ON c:MGE: MGE exists from on_start on the normal path, which
+# retires the error-spam problem this file used to fight — but the
+# MGO fallback (a failed proclamation) is still tolerated, so
+# identity checks keep using tag = (string comparison, never
+# errors) and every c:MGE / c:MGO link still sits behind a
+# country_exists guard in the same AND.
 #
 # AI railroad: same machine as Phases 1-2 (PD Ascension pattern).
-# The claimant is scoped dynamically (random_country over tag MGO /
-# MGE) because a player can form MGE mid-phase; wars are declared
-# by mr_dominance.992, which picks the westward or silk-road CB by
-# where the target's land lies. The AI claimant carries
-# MR_mongol_preparing_for_conquest for the whole phase.
+# The claimant is scoped dynamically (random_country over tag MGE /
+# MGO); wars are declared by mr_dominance.992, which picks the
+# westward or silk-road CB by where the target's land lies. The AI
+# claimant carries MR_mongol_preparing_for_conquest all phase.
 # =================================================================
 mongol_dominance = {
 	monthly_spawn_chance = monthly_spawn_chance_unique
@@ -46,9 +50,11 @@ mongol_dominance = {
 			value = 0
 		}
 		# --- AI RAILROAD BOOKKEEPING (PD ascension shape) ---
-		# MGO is guaranteed to exist here (can_start requires it), so
-		# seeding the target variable with c:MGO is safe. The event's
-		# after block re-seeds with root, which handles the MGE case.
+		# The claimant is normally MGE now (proclaimed at Phase 2's
+		# close), with MGO as the failed-proclamation fallback —
+		# can_start guarantees one of the two exists. The seed target
+		# is the claimant itself, PD's "no target" sentinel; the
+		# event's after block re-seeds with root.
 		set_variable = {
 			name = mr_dom_conquest_cooldown
 			value = 48
@@ -57,14 +63,27 @@ mongol_dominance = {
 			name = mr_dom_conquest_target
 			value = 0
 		}
-		set_variable = {
-			name = mr_dom_conquest_target_country
-			value = c:MGO
-		}
-		# Values the .gui panel reads off the situation scope.
 		if = {
 			limit = {
+				country_exists = c:MGE
+			}
+			set_variable = {
+				name = mr_dom_conquest_target_country
+				value = c:MGE
+			}
+			# Values the .gui panel reads off the situation scope.
+			set_variable = {
+				name = mr_leading_country
+				value = c:MGE
+			}
+		}
+		else_if = {
+			limit = {
 				country_exists = c:MGO
+			}
+			set_variable = {
+				name = mr_dom_conquest_target_country
+				value = c:MGO
 			}
 			set_variable = {
 				name = mr_leading_country
@@ -148,11 +167,30 @@ mongol_dominance = {
 				}
 			}
 		}
-		# The claimant gets a CB against the Russian principalities.
+		# The claimant gets the westward CB against every power holding
+		# the western goal theatres: the Russian lands, the Pontic and
+		# Ural steppes, Persia, Mesopotamia and Anatolia — the Golden
+		# Horde and Ilkhanate domains this phase demands.
 		every_country = {
 			limit = {
-				any_owned_location = {
-					region = region:russian_region
+				OR = {
+					any_owned_location = {
+						region = region:russian_region
+					}
+					any_owned_location = {
+						region = region:steppes_region
+					}
+					any_owned_location = {
+						region = region:ural_region
+					}
+					any_owned_location = {
+						region = region:persia_region
+					}
+					any_owned_location = {
+						region = region:anatolia_region
+					}
+					has_presence_in = area:iraq_arabi_area
+					has_presence_in = area:armenian_highlands_area
 				}
 				NOR = {
 					tag = MGO
@@ -175,9 +213,10 @@ mongol_dominance = {
 				}
 			}
 		}
-		# The China and Transoxiana seats MGE_f still demands are covered
-		# by re-granting the Silk Road CB — the Phase 2 grant expired
-		# decades before this phase begins.
+		# The eastern seats (Karakorum, Dadu, Samarkand) stay covered by
+		# re-granting the Silk Road CB — the Phase 2 grant expired
+		# decades before this phase begins, and a seat lost after Phase
+		# 2 must stay legally retakable.
 		every_country = {
 			limit = {
 				OR = {
@@ -185,13 +224,10 @@ mongol_dominance = {
 						region = region:north_china_region
 					}
 					any_owned_location = {
-						region = region:east_china_region
+						region = region:mongolia_region
 					}
 					any_owned_location = {
-						region = region:west_china_region
-					}
-					any_owned_location = {
-						region = region:south_china_region
+						region = region:xinjiang_region
 					}
 					any_owned_location = {
 						region = region:khorasan_region
@@ -240,9 +276,10 @@ mongol_dominance = {
 			set_global_variable = mr_mge_seen
 		}
 		# ========== PANEL PROGRESS (0-100) ==========
-		# The .gui progressbar reads MR_dominance_score: ten points per
-		# imperial seat held by the claimant, ten for the Russian
-		# foothold. 100 = the end trigger is satisfied.
+		# The .gui reads MR_dominance_score: ten points per goal met.
+		# The ten milestones mirror mr_dominance_end_trigger exactly —
+		# seven khanate seats, Persia cleared, the Russian foothold and
+		# the Cappadocian foothold. 100 = the end trigger is satisfied.
 		set_variable = {
 			name = MR_dominance_score
 			value = 0
@@ -255,6 +292,36 @@ mongol_dominance = {
 						tag = MGE
 					}
 					owns = location:karakorum
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:dadu
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:samarkand
 				}
 			}
 			change_variable = {
@@ -299,7 +366,7 @@ mongol_dominance = {
 						tag = MGO
 						tag = MGE
 					}
-					owns = location:samarkand
+					owns = location:tabriz
 				}
 			}
 			change_variable = {
@@ -314,7 +381,7 @@ mongol_dominance = {
 						tag = MGO
 						tag = MGE
 					}
-					owns = location:kaffa
+					owns = location:baghdad
 				}
 			}
 			change_variable = {
@@ -322,59 +389,27 @@ mongol_dominance = {
 				add = 10
 			}
 		}
+		# The Ilkhanate clause: Persia cleared of every outside power.
 		if = {
 			limit = {
-				any_country = {
-					OR = {
-						tag = MGO
-						tag = MGE
+				NOT = {
+					any_country = {
+						NOR = {
+							tag = MGE
+							tag = MGO
+							AND = {
+								country_exists = c:MGE
+								is_subject_of = c:MGE
+							}
+							AND = {
+								country_exists = c:MGO
+								is_subject_of = c:MGO
+							}
+						}
+						any_owned_location = {
+							region = region:persia_region
+						}
 					}
-					owns = location:dadu
-				}
-			}
-			change_variable = {
-				name = MR_dominance_score
-				add = 10
-			}
-		}
-		if = {
-			limit = {
-				any_country = {
-					OR = {
-						tag = MGO
-						tag = MGE
-					}
-					owns = location:shangyuan
-				}
-			}
-			change_variable = {
-				name = MR_dominance_score
-				add = 10
-			}
-		}
-		if = {
-			limit = {
-				any_country = {
-					OR = {
-						tag = MGO
-						tag = MGE
-					}
-					owns = location:baxian
-				}
-			}
-			change_variable = {
-				name = MR_dominance_score
-				add = 10
-			}
-		}
-		if = {
-			limit = {
-				any_country = {
-					OR = {
-						tag = MGO
-						tag = MGE
-					}
-					owns = location:guangzhou
 				}
 			}
 			change_variable = {
@@ -392,6 +427,21 @@ mongol_dominance = {
 					any_owned_location = {
 						region = region:russian_region
 					}
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					has_presence_in = area:cappadocia_area
 				}
 			}
 			change_variable = {
@@ -446,6 +496,12 @@ mongol_dominance = {
 								region = region:ural_region
 							}
 							any_owned_location = {
+								region = region:persia_region
+							}
+							any_owned_location = {
+								region = region:anatolia_region
+							}
+							any_owned_location = {
 								region = region:mongolia_region
 							}
 							any_owned_location = {
@@ -457,15 +513,8 @@ mongol_dominance = {
 							any_owned_location = {
 								region = region:north_china_region
 							}
-							any_owned_location = {
-								region = region:east_china_region
-							}
-							any_owned_location = {
-								region = region:west_china_region
-							}
-							any_owned_location = {
-								region = region:south_china_region
-							}
+							has_presence_in = area:iraq_arabi_area
+							has_presence_in = area:armenian_highlands_area
 						}
 					}
 					max = 1
@@ -517,6 +566,12 @@ mongol_dominance = {
 										region = region:ural_region
 									}
 									any_owned_location = {
+										region = region:persia_region
+									}
+									any_owned_location = {
+										region = region:anatolia_region
+									}
+									any_owned_location = {
 										region = region:mongolia_region
 									}
 									any_owned_location = {
@@ -528,15 +583,8 @@ mongol_dominance = {
 									any_owned_location = {
 										region = region:north_china_region
 									}
-									any_owned_location = {
-										region = region:east_china_region
-									}
-									any_owned_location = {
-										region = region:west_china_region
-									}
-									any_owned_location = {
-										region = region:south_china_region
-									}
+									has_presence_in = area:iraq_arabi_area
+									has_presence_in = area:armenian_highlands_area
 								}
 							}
 						}
@@ -627,6 +675,36 @@ mongol_dominance = {
 				trigger_event_non_silently = mr_dominance.131
 			}
 			set_global_variable = mr_beat_131_fired
+		}
+		# --- The Four Corners: all four khanate capitals held ---
+		# Not momentum-timed — this one fires the month it becomes
+		# TRUE: Karakorum, Dadu, Samarkand and Sarai under one banner.
+		if = {
+			limit = {
+				NOT = {
+					has_global_variable = mr_beat_135_fired
+				}
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:karakorum
+					owns = location:dadu
+					owns = location:samarkand
+					owns = location:sarai_al_jadid
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+				}
+				trigger_event_non_silently = mr_dominance.135
+			}
+			set_global_variable = mr_beat_135_fired
 		}
 		# --- The westward campaign against Russia (~18 years) ---
 		if = {
@@ -735,15 +813,18 @@ mongol_dominance = {
 				}
 				save_scope_as = mr_claimant
 			}
-			# The areas holding MGE_f's nine required locations, plus the
-			# Ryazan foothold. Iterating areas rather than naming
-			# locations one by one keeps this readable and hands over the
-			# surrounding land too — the same shape as PD's
-			# every_ownable_location_in_area blocks.
+			# The areas holding every seat the end trigger demands, the
+			# two footholds, and the whole Persia region for the
+			# Ilkhanate clause. Iterating areas/regions rather than
+			# naming locations one by one keeps this readable and hands
+			# over the surrounding land too — the same shape as PD's
+			# every_ownable_location_in_area blocks. Tabriz rides in
+			# with the persia_region loop (azerbaijan_area is inside
+			# persia_region).
 			area:upper_selenga_area = {
 				every_ownable_location_in_area = {
 					limit = {
-						owner = {
+						owner ?= {
 							is_ai = yes
 							NOR = {
 								this = scope:mr_claimant
@@ -758,7 +839,7 @@ mongol_dominance = {
 			area:lower_don_area = {
 				every_ownable_location_in_area = {
 					limit = {
-						owner = {
+						owner ?= {
 							is_ai = yes
 							NOR = {
 								this = scope:mr_claimant
@@ -773,7 +854,7 @@ mongol_dominance = {
 			area:kazan_area = {
 				every_ownable_location_in_area = {
 					limit = {
-						owner = {
+						owner ?= {
 							is_ai = yes
 							NOR = {
 								this = scope:mr_claimant
@@ -788,7 +869,7 @@ mongol_dominance = {
 			area:transoxiana_area = {
 				every_ownable_location_in_area = {
 					limit = {
-						owner = {
+						owner ?= {
 							is_ai = yes
 							NOR = {
 								this = scope:mr_claimant
@@ -800,10 +881,40 @@ mongol_dominance = {
 					add_core = scope:mr_claimant
 				}
 			}
-			area:crimea_area = {
+			area:iraq_arabi_area = {
 				every_ownable_location_in_area = {
 					limit = {
-						owner = {
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			area:cappadocia_area = {
+				every_ownable_location_in_area = {
+					limit = {
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			region:persia_region = {
+				every_ownable_location_in_region = {
+					limit = {
+						owner ?= {
 							is_ai = yes
 							NOR = {
 								this = scope:mr_claimant
@@ -818,52 +929,7 @@ mongol_dominance = {
 			area:beiping_area = {
 				every_ownable_location_in_area = {
 					limit = {
-						owner = {
-							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
-							}
-						}
-					}
-					change_location_owner = scope:mr_claimant
-					add_core = scope:mr_claimant
-				}
-			}
-			area:jiangnan_area = {
-				every_ownable_location_in_area = {
-					limit = {
-						owner = {
-							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
-							}
-						}
-					}
-					change_location_owner = scope:mr_claimant
-					add_core = scope:mr_claimant
-				}
-			}
-			area:chuandong_area = {
-				every_ownable_location_in_area = {
-					limit = {
-						owner = {
-							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
-							}
-						}
-					}
-					change_location_owner = scope:mr_claimant
-					add_core = scope:mr_claimant
-				}
-			}
-			area:guangdong_area = {
-				every_ownable_location_in_area = {
-					limit = {
-						owner = {
+						owner ?= {
 							is_ai = yes
 							NOR = {
 								this = scope:mr_claimant
@@ -878,7 +944,7 @@ mongol_dominance = {
 			area:ryazan_area = {
 				every_ownable_location_in_area = {
 					limit = {
-						owner = {
+						owner ?= {
 							is_ai = yes
 							NOR = {
 								this = scope:mr_claimant
@@ -913,9 +979,10 @@ mongol_dominance = {
 			limit = {
 				mr_dominance_end_trigger = yes
 			}
-			# Form the Mongol Empire. The phase's end trigger includes
-			# MGE_f's own nine required locations, so by this point the
-			# formable is genuinely available rather than merely thematic.
+			# Belt-and-braces: MGE is normally proclaimed at Phase 2's
+			# close now. This fallback only fires on the pathological
+			# path where the claimant somehow reached the finale still
+			# wearing the MGO tag.
 			every_country = {
 				limit = {
 					tag = MGO
@@ -952,6 +1019,7 @@ mongol_dominance = {
 	on_ended = {
 		remove_variable = mr_dominance_momentum
 		remove_global_variable = mr_beat_131_fired
+		remove_global_variable = mr_beat_135_fired
 		remove_global_variable = mr_beat_201i_fired
 		remove_global_variable = mr_beat_202i_fired
 		remove_global_variable = mr_beat_211i_fired
@@ -972,6 +1040,7 @@ mongol_dominance = {
 					region = region:russian_region
 					region = region:steppes_region
 					region = region:persia_region
+					region = region:anatolia_region
 				}
 			}
 			custom_tooltip = mr_dominance_map_tt
@@ -1014,7 +1083,11 @@ mongol_dominance = {
 		}
 		else_if = {
 			limit = {
-				region = region:russian_region
+				OR = {
+					region = region:russian_region
+					region = region:steppes_region
+					region = region:persia_region
+				}
 				NOT = {
 					owner ?= {
 						OR = {

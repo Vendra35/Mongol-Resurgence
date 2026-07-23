@@ -48,11 +48,10 @@ YourMod/
 │   │   ├── scriptable_hints/  on_action/            ← singular! not on_actions
 │   │   └── ...
 │   ├── events/<any_subfolders>/
-│   ├── gui/panels/situation/<situation_key>.gui
-│   └── localization/english/X_l_english.yml
+│   └── gui/panels/situation/<situation_key>.gui
 └── main_menu/                         ← loaded before the menu
     ├── common/game_rules/  static_modifiers/  script_values/
-    └── localization/english/X_l_english.yml
+    └── localization/english/X_l_english.yml   ← ALL loc lives here (see §8)
 ```
 
 Rules that cost us real bugs:
@@ -61,10 +60,11 @@ Rules that cost us real bugs:
   creating any folder, confirm it exists in the vanilla tree at that level.
 - **Every file: UTF-8 with BOM** (`efbbbf`). Vanilla and working mods have it on
   every single file. `printf '\xEF\xBB\xBF' | cat - file > tmp && mv tmp file`.
-- **The two localisation trees are not interchangeable.** Whatever renders in the
-  main menu (game rule names: `rule_<key>`, `setting_<option>`,
-  `setting_<option>_desc`) must be in `main_menu/localization`; everything else in
-  `in_game/localization`. A key in the wrong tree displays as its raw name.
+- **One localisation tree, one file** — everything in
+  `main_menu/localization/<language>/`. Vanilla's `in_game/localization` holds
+  only the jomini engine fallback, and a mod file there with the same filename
+  SHADOWS the main_menu one (this happened — see §8). Never create
+  `in_game/localization/` in a mod.
 - metadata.json: `name, id, version, supported_game_version, short_description,
   tags, relationships, game_custom_data` — not EU4's `short_desc`/`dependencies`.
 
@@ -240,9 +240,12 @@ An AI will not conquer on theme without help. Three cooperating layers:
 3. **Failsafes**: a *birth* failsafe (force-create the actor if nobody qualifies
    organically) and *completion* failsafes ~5 years before each deadline that hand
    the goal over outright — `every_ownable_location_in_area/_region` +
-   `change_location_owner` + `add_core`, subjects via `make_subject_of`. Buffs are
-   not a failsafe; territory is. Guards: only for an **AI** claimant **at peace**,
-   only taking from **AI** owners, one-shot flag **per phase**.
+   `change_location_owner` + `add_core` (always `owner ?=` in the limit — the
+   bare `owner` link errors on ownerless locations), subjects via
+   `make_subject_of`. Buffs are not a failsafe; territory is. Guards: only for
+   an **AI** claimant, only taking from **AI** owners, one-shot flag **per
+   phase**. An at-peace gate on the claimant is optional — we dropped it where
+   an endless AI war could stall the handover forever.
 
 ## 8. Localisation, GUI, hints
 
@@ -291,8 +294,10 @@ loc key exists in the *correct* tree · every fired event defined · every defin
 event reachable (fired or dhe) · scripted triggers / modifiers / hints resolve ·
 no orphan modifiers · globals set↔read symmetric · situation vars cleaned in
 on_ended · regions/areas exist in definitions.txt · wargoal coverage ⊇ goal
-regions · no duplicate event ids / loc keys · BOM on every file. ~19 checks,
-one python script, seconds to run.
+regions · no duplicate event ids / loc keys · BOM on every file · advances/
+buildings/units exist in vanilla · no unguarded c:TAG comparison patterns.
+22 checks, one python script (`tools/verify_mod.py`, auto-detects the
+reference-tree layout), seconds to run.
 
 Beyond static checks, walk the **state machine** by hand: every failure path sets
 its terminal state; nothing depends on an event having a recipient; no end

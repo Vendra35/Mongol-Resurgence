@@ -142,10 +142,14 @@ mr_imperial.201 = {
 			factor = 100
 		}
 		add_prestige = prestige_extreme_bonus
+		# Its own reward: this beat fires mid-Phase-3, when the horde
+		# first stands in the Russian lands. Re-granting the Phase 2
+		# reward here made it permanent and defeated the Phase 3
+		# on_start cleanup.
 		add_country_modifier = {
-			modifier = MR_empire_fulfilled
-			years = -1
-			mode = replace
+			modifier = MR_western_ulus_restored
+			years = 25
+			mode = add_and_extend
 		}
 	}
 }

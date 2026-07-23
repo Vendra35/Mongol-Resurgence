@@ -7,10 +7,11 @@
 #
 # COVERAGE RULE: each wargoal's allowed_locations must cover every
 # location its phase's end trigger demands, or the war can be won
-# while the goal stays legally untakeable. Phase 3's end trigger is
-# MGE_f's nine locations, which span nine regions — split across
-# the westward CB (Volga/Rus theatre) and the silk-road CB (China/
-# Transoxiana theatre), both granted at Phase 3 start.
+# while the goal stays legally untakeable. Phase 3's goal is the
+# four khanates (seats + Persia + the two footholds) — split across
+# the westward CB (Rus/Volga/Persia/Anatolia theatre) and the
+# silk-road CB (China/Transoxiana theatre), both granted at Phase 3
+# start.
 #
 # Costs are cut so the AI can actually complete a railroad phase,
 # following PD's PD_war_goal_prussian_ambition.
@@ -39,12 +40,12 @@ MR_war_goal_steppe_unification = {
 }
 
 # --- Phase 2/3: the Silk Road and the Ming hegemony war ----------
-# Covers samarkand (khorasan), dadu (north_china), the three
-# southern seats MGE_f demands — shangyuan (east_china), baxian
-# (west_china), guangzhou (south_china) — plus xinjiang_region
+# Covers samarkand (khorasan), dadu (north_china), xinjiang_region
 # (a Phase 2 goal region since the corridor was made contiguous)
 # and mongolia_region (so a Karakorum lost after Phase 1 stays
-# legally retakable: neither Phase 3 CB covered it before).
+# legally retakable). The three southern China regions stay in
+# scope as conquest freedom for the Ming hegemony war, though the
+# Phase 3 goal no longer demands the old southern seats.
 MR_war_goal_silk_road = {
 	type = superiority
 	attacker = {
@@ -82,8 +83,15 @@ MR_war_goal_silk_road = {
 }
 
 # --- Phase 3: the westward advance -------------------------------
-# Covers sarai_al_jadid and kaffa (steppes = the Pontic theatre)
-# and kazan (ural_region).
+# COVERAGE (must span everything mr_dominance_end_trigger demands
+# in the west): sarai_al_jadid (steppes/lower_don), kazan (ural),
+# the Russian foothold (russian_region), the whole Ilkhanate —
+# tabriz (persia/azerbaijan), baghdad (crescent/iraq_arabi_area,
+# taken as an area so the rest of the Levant stays out of scope) —
+# and the Anatolian foothold (cappadocia, plus the Armenian
+# highlands corridor between Tabriz and Anatolia). The
+# location-to-area link is the same one PD's find-target uses
+# (brandenburg_rise.txt:400, this.area = area:X).
 MR_war_goal_westward_advance = {
 	type = superiority
 	attacker = {
@@ -95,6 +103,10 @@ MR_war_goal_westward_advance = {
 				scope:location.region = region:russian_region
 				scope:location.region = region:steppes_region
 				scope:location.region = region:ural_region
+				scope:location.region = region:persia_region
+				scope:location.region = region:anatolia_region
+				scope:location.area = area:iraq_arabi_area
+				scope:location.area = area:armenian_highlands_area
 			}
 		}
 		allowed_subjugation = {
@@ -102,6 +114,10 @@ MR_war_goal_westward_advance = {
 				scope:loser.capital.region = region:russian_region
 				scope:loser.capital.region = region:steppes_region
 				scope:loser.capital.region = region:ural_region
+				scope:loser.capital.region = region:persia_region
+				scope:loser.capital.region = region:anatolia_region
+				scope:loser.capital.area = area:iraq_arabi_area
+				scope:loser.capital.area = area:armenian_highlands_area
 			}
 		}
 	}

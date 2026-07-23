@@ -184,6 +184,32 @@ mongol_imperial = {
 			name = mr_imperial_momentum
 			add = 1
 		}
+		# --- READ-ONLY VANILLA HOOK: the Tumu Crisis (~1449) ---
+		# Vanilla's flavor_chi_mon sets lost_emperor while the emperor
+		# is captive. The reaction event used to be watched only by the
+		# Chahar situation (1604-1634) and was therefore UNREACHABLE —
+		# the crisis belongs to THIS phase's window (1420-1550), so the
+		# watch lives here now; the Chahar copy stays as a fallback for
+		# exotic runs. mr_steppe.2 is fire_only_once, so the two
+		# watchers can never double-deliver.
+		if = {
+			limit = {
+				mr_vanilla_tumu_crisis_active = yes
+				NOT = {
+					has_global_variable = mr_tumu_reaction_seen
+				}
+			}
+			every_country = {
+				limit = {
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
+					government_type = government_type:steppe_horde
+				}
+				trigger_event_non_silently = mr_steppe.2
+			}
+			set_global_variable = mr_tumu_reaction_seen
+		}
 		# ========== PANEL PROGRESS (0-100) ==========
 		# The .gui progressbar reads MR_mge_score. Four milestones worth
 		# 25 each: the two great seats, then each half of the corridor
@@ -541,7 +567,9 @@ mongol_imperial = {
 			region:khorasan_region = {
 				every_ownable_location_in_region = {
 					limit = {
-						owner = {
+						# owner ?= not owner =: an ownerless location made
+						# the bare link error at :559 in testing.
+						owner ?= {
 							is_ai = yes
 							NOR = {
 								tag = MGO
@@ -556,7 +584,9 @@ mongol_imperial = {
 			region:xinjiang_region = {
 				every_ownable_location_in_region = {
 					limit = {
-						owner = {
+						# owner ?= not owner =: an ownerless location made
+						# the bare link error at :559 in testing.
+						owner ?= {
 							is_ai = yes
 							NOR = {
 								tag = MGO
@@ -571,7 +601,9 @@ mongol_imperial = {
 			region:north_china_region = {
 				every_ownable_location_in_region = {
 					limit = {
-						owner = {
+						# owner ?= not owner =: an ownerless location made
+						# the bare link error at :559 in testing.
+						owner ?= {
 							is_ai = yes
 							NOR = {
 								tag = MGO
@@ -589,33 +621,84 @@ mongol_imperial = {
 		}
 	}
 	on_ending = {
-		# 1. Strip the phase modifiers, PD-style.
-		if = {
+		# 1. Strip the phase modifiers, PD-style. every_country over
+		# the tag pair, not c:MGO — a human claimant can legally have
+		# formed MGE mid-phase under the Vanilla buff rule.
+		every_country = {
 			limit = {
-				country_exists = c:MGO
+				OR = {
+					tag = MGO
+					tag = MGE
+				}
 			}
-			c:MGO = {
-				remove_country_modifier = MR_imperial_conquest
-				remove_country_modifier = MR_imperial_historical_modifier
-				remove_country_modifier = MR_mongol_preparing_for_conquest
-			}
+			remove_country_modifier = MR_imperial_conquest
+			remove_country_modifier = MR_imperial_historical_modifier
+			remove_country_modifier = MR_mongol_preparing_for_conquest
 		}
-		# 2. Branch on the goal.
+		# 2. Branch on the goal (the trigger is dual-tag too).
 		if = {
 			limit = {
 				mr_imperial_end_trigger = yes
-				country_exists = c:MGO
 			}
-			c:MGO = {
+			# THE PROCLAMATION: the Yeke Mongol Ulus rises the moment
+			# the Silk Road is mastered, not a century later.
+			# form_country ignores MGE_f's own allow block (PD forms
+			# PRU_f the same way in pd_brandenburg_dhe.4), and MGE_f's
+			# form_effect raises the country to empire rank and grants
+			# vanilla's restoration_of_the_mongol_empire modifier
+			# (00_formable_countries.txt:3575).
+			if = {
+				limit = {
+					NOT = {
+						country_exists = c:MGE
+					}
+					country_exists = c:MGO
+				}
+				c:MGO = {
+					form_country = formable_country:MGE_f
+				}
+			}
+			# THE HAND-OFF LIVES HERE, not in on_ended: the end trigger
+			# requires country_exists = c:MGO, and the proclamation just
+			# retired that tag — re-evaluating the trigger in on_ended
+			# would silently return false and Phase 3 would never start.
+			# This branch already proved the trigger true while MGO was
+			# alive, so the global is set directly (the "on_ending sets
+			# terminals directly" doctrine; mr_dominance.125 sets it
+			# redundantly, like mr_dominance.1 does for Phase 1).
+			set_global_variable = mr_phase_two_complete
+			# The tag just changed, so the resolution events go to
+			# whichever of the two the claimant now is — tag = is a
+			# string comparison and never errors.
+			every_country = {
+				limit = {
+					OR = {
+						tag = MGE
+						tag = MGO
+					}
+				}
 				trigger_event_non_silently = mr_dominance.125
 				trigger_event_non_silently = mr_imperial.200
 			}
 		}
 		else_if = {
 			limit = {
-				country_exists = c:MGO
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+				}
 			}
-			c:MGO = {
+			# Dual-tag: a self-formed MGE that failed the corridor goal
+			# still gets its failure resolution.
+			every_country = {
+				limit = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+				}
 				trigger_event_non_silently = mr_dominance.127
 				trigger_event_non_silently = mr_imperial.210
 			}
@@ -624,13 +707,14 @@ mongol_imperial = {
 			set_global_variable = mr_railroad_failed
 		}
 		else = {
-			# MGO no longer exists at all — still record the failure so the
-			# railroad terminates instead of hanging in a zombie state.
+			# Neither claimant tag exists at all — still record the
+			# failure so the railroad terminates instead of hanging.
 			set_global_variable = mr_railroad_failed
 		}
 	}
 	on_ended = {
 		remove_variable = mr_imperial_momentum
+		remove_global_variable = mr_tumu_reaction_seen
 		remove_global_variable = mr_beat_121_fired
 		remove_global_variable = mr_beat_122_fired
 		remove_global_variable = mr_beat_123_fired
@@ -638,12 +722,11 @@ mongol_imperial = {
 		remove_global_variable = mr_beat_101i_fired
 		remove_global_variable = mr_beat_102i_fired
 		remove_global_variable = mr_beat_103i_fired
-		if = {
-			limit = {
-				mr_imperial_end_trigger = yes
-			}
-			set_global_variable = mr_phase_two_complete
-		}
+		# NOTE: the mr_phase_two_complete hand-off was MOVED to
+		# on_ending's success branch. It cannot live here: the end
+		# trigger requires country_exists = c:MGO, and by on_ended the
+		# proclamation has already turned MGO into MGE, so the trigger
+		# re-evaluates false on the very path where it just succeeded.
 		# The wiki recommends clearing situation variables in on_ended
 		# to keep them out of the savefile.
 		remove_variable = mr_leading_country

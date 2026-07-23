@@ -4,8 +4,11 @@
 # Option names are global identifiers and are what `has_game_rule`
 # takes, so they carry the MR_/mr_ prefix rather than bare words.
 # Structure mirrors PD's PD_config.txt: per-phase conquest
-# automation, a three-tier military buff rule and a timeline pacing
-# rule, plus a master switch so the whole mod can be disabled.
+# automation and a three-tier military buff rule, plus a master
+# switch so the whole mod can be disabled. The buff rule also sets
+# the AI railroad's war pace (Terminator / Historical / Vanilla);
+# the old separate timeline-pacing rule was removed — unlike
+# Prussia, the Mongol window IS the historical timeline.
 # Reference: vanilla main_menu/common/game_rules (player_normal_difficulty).
 
 # --- Master switch: all MR content on or off ---
@@ -50,8 +53,9 @@ MR_imperial_auto_conquest = {
 
 # --- Military Buffs and Conquest Speed ---
 # Which phase buff the claimant receives, and (like PD's
-# BRA_buff_enabled) how aggressively the Phase 1 AI railroad paces
-# its unification wars.
+# BRA_buff_enabled) how aggressively the AI railroad paces its
+# wars: Terminator ~6 months, Historical ~1 year, Vanilla ~2 years
+# between Phase 1 unification wars.
 MR_mongol_buff_rule = {
 	default = MR_buff_historical
 	MR_buff_disabled = {
@@ -61,17 +65,6 @@ MR_mongol_buff_rule = {
 		flag = general_rule
 	}
 	MR_buff_enabled = {
-		flag = general_rule
-	}
-}
-
-# --- Timeline & Pacing ---
-MR_timeline_pacing_rule = {
-	default = MR_timeline_frontloaded
-	MR_timeline_frontloaded = {
-		flag = general_rule
-	}
-	MR_timeline_strict_historical = {
 		flag = general_rule
 	}
 }

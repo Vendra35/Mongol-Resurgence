@@ -4,15 +4,22 @@
 # =================================================================
 # The institutions a reunified horde builds as it turns from a
 # tribal confederation into an empire: drilled armies, siege craft,
-# the Kurultai, the Silk Road, the Yam relay.
+# the Kurultai, the Silk Road, the Yam relay — plus the two heavy
+# AI catch-up events (9-10) mongolized from PD's tested
+# pd_brandenburg_dhe.1/2 templates.
 #
-# Localisation for these already exists (mr_dominance_dhe.1-8,
+# Localisation lives in MR_l_english.yml (mr_dominance_dhe.1-12,
 # including the .entry keys used by the DHE timeline).
 #
-# All but the Kurultai are AI-only flavour, per the .entry text.
-# Phase assignment follows the three-situation timeline:
-#   Phase 1 (1368-1420, MGO): 1 Forge, 4 Kurultai, 5 Absorption
-#   Phase 2 (1420-1550, MGO): 3 Wall Breakers, 6 Silk Road, 2 Encampment
+# The heavy AI catch-up events are AI-only per the .entry text; the
+# Kurultai (4), Observatory (11) and Census (12) reach players too.
+# Each event grants its OWN reward — the phase buffs
+# (MR_mongol_warrior_spirit etc.) are granted by the situations
+# under the buff rule alone, never re-granted here.
+# Phase assignment follows the three-situation timeline (P2-window
+# events also carry tag = MGE, in case of an early proclamation):
+#   Phase 1 (1368-1420, MGO): 1 Forge, 4 Kurultai, 5 Absorption, 9 Tumen, 12 Census
+#   Phase 2 (1420-1550, MGO/MGE): 3 Wall Breakers, 6 Silk Road, 2 Encampment, 10 Karakorum, 11 Observatory
 #   Phase 3 (1550-1650, MGE): 7 Melting Pot, 8 Yam
 # =================================================================
 # --- The Forge of Warriors --------------------------------------
@@ -45,8 +52,10 @@ mr_dominance_dhe.1 = {
 		}
 		add_army_tradition = army_tradition_severe_bonus
 		add_tribal_cohesion = tribal_cohesion_mild_bonus
+		# Its own reward — NOT the Phase 1 situation buff, which the
+		# buff rule alone controls.
 		add_country_modifier = {
-			modifier = MR_mongol_warrior_spirit
+			modifier = MR_forge_of_warriors
 			years = 30
 			mode = add_and_extend
 		}
@@ -86,8 +95,10 @@ mr_dominance_dhe.4 = {
 		}
 		add_prestige = prestige_extreme_bonus
 		add_horde_unity = horde_unity_extreme_bonus
+		# Its own reward — the Phase 1 reward banner stays with the
+		# situation resolution events.
 		add_country_modifier = {
-			modifier = MR_unified_mongol_banner
+			modifier = MR_kurultai_mandate
 			years = -1
 			mode = replace
 		}
@@ -144,7 +155,10 @@ mr_dominance_dhe.3 = {
 		10 = exterior
 	}
 	dynamic_historical_event = {
+		# tag = MGE as well: the proclamation can land before this
+		# window closes, and an unfired event must survive the switch.
 		tag = MGO
+		tag = MGE
 		from = 1420.1.1
 		to = 1550.1.1
 		monthly_chance = 100
@@ -177,7 +191,10 @@ mr_dominance_dhe.6 = {
 		10 = regular
 	}
 	dynamic_historical_event = {
+		# tag = MGE as well: the proclamation can land before this
+		# window closes, and an unfired event must survive the switch.
 		tag = MGO
+		tag = MGE
 		from = 1420.1.1
 		to = 1550.1.1
 		monthly_chance = 100
@@ -214,7 +231,10 @@ mr_dominance_dhe.2 = {
 		10 = regular
 	}
 	dynamic_historical_event = {
+		# tag = MGE as well: the proclamation can land before this
+		# window closes, and an unfired event must survive the switch.
 		tag = MGO
+		tag = MGE
 		from = 1420.1.1
 		to = 1550.1.1
 		monthly_chance = 100
@@ -237,179 +257,301 @@ mr_dominance_dhe.2 = {
 	}
 }
 
-# --- NEED NAME AND REWORK/MIRRORING -- SPAWNING UNITS FOR EASIER AI CONQUEST, CULTURE CONVERSION AND ETC MIRROR FOR pd_brandenburg_dhe.1 and pd_brandenburg_dhe.2 ... ---------------------------------------
-pd_brandenburg_dhe.1 = {
+# --- The Reforged Tumen (AI catch-up, Phase 1) -------------------
+# Mongolized from PD's pd_brandenburg_dhe.1 (the tested template all
+# constructs here come from): the AI claimant that holds Karakorum
+# gets the decimal tumen system rebuilt for it — the steppe advance,
+# free military buildings at the sacred capital, horse archers in
+# the field, and the camps turned Mongol.
+mr_dominance_dhe.9 = {
 	type = country_event
-	title = pd_brandenburg_dhe.1.title
-	desc = pd_brandenburg_dhe.1.desc
-	#image = "gfx/interface/illustrations/situation/placeholder.dds"
+	title = mr_dominance_dhe.9.title
+	desc = mr_dominance_dhe.9.desc
+	outcome = positive
 	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = exterior
+	}
 	dynamic_historical_event = {
-		tag = BRA
-		tag = PRU
+		# tag = MGE as well: the proclamation can land before 1480.
+		tag = MGO
+		tag = MGE
 		from = 1380.1.1
-		to = 1500.1.1
+		to = 1480.1.1
 		monthly_chance = 100
 	}
 	trigger = {
-		owns = location:brandenburg
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 		is_ai = yes
-		has_global_variable = prussian_ambition_active
-	}
-	immediate = {
+		owns = location:karakorum
 	}
 	option = {
-		name = pd_brandenburg_dhe.1.a
+		name = mr_dominance_dhe.9.a
+		ai_chance = {
+			factor = 100
+		}
 		if = {
 			limit = {
 				NOT = {
-					has_advance = landsknechte
+					has_advance = horse_lords
 				}
 			}
 			custom_tooltip = {
-				text = pd_brandenburg_dhe.1.a.tt1
-				research_advance = advance_type:landsknechte
+				text = mr_dominance_dhe.9.a.tt1
+				research_advance = advance_type:horse_lords
 			}
 		}
-		custom_tooltip = pd_brandenburg_dhe.1.a.tt2
+		custom_tooltip = mr_dominance_dhe.9.a.tt2
 		custom_tooltip = {
-			text = pd_brandenburg_dhe.1.a.tt3
-			location:brandenburg = {
+			text = mr_dominance_dhe.9.a.tt3
+			location:karakorum = {
 				while = {
 					count = 5
 					construct_building = {
-						building_type = building_type:armory
+						building_type = building_type:kurultai
 						cost_multiplier = 0
-						cost_multiplier_reason = "PD_brandenburg_dhe_free_buildings"
+						cost_multiplier_reason = "MR_dhe_free_buildings"
 						instant = yes
 					}
 					construct_building = {
-						building_type = building_type:gun_smith
+						building_type = building_type:armory
 						cost_multiplier = 0
-						cost_multiplier_reason = "PD_brandenburg_dhe_free_buildings"
+						cost_multiplier_reason = "MR_dhe_free_buildings"
 						instant = yes
 					}
 				}
 				while = {
-					count = 2
+					count = 4
 					create_sub_unit_with_owner = {
-						type = a_landsknechte
-						owner = c:BRA
+						# owner = root, not c:MGO: this event can fire
+						# under the MGE tag after an early proclamation,
+						# and a dead c:MGO link would break the spawn
+						# (root is the firing country either way — the
+						# same shape as mr_dominance.996).
+						type = a_steppe_horse_archers
+						owner = root
 					}
 				}
 				every_pop = {
 					limit = {
-						culture != culture:brandenburgish
+						culture != culture:mongolian_culture
 					}
 					split_pop = {
 						fraction = 0.9
-						culture = culture:brandenburgish
+						culture = culture:mongolian_culture
 					}
 				}
 			}
 		}
-		custom_tooltip = pd_brandenburg_dhe.1.a.tt4
+		custom_tooltip = mr_dominance_dhe.9.a.tt4
 	}
 }
 
-pd_brandenburg_dhe.2 = {
+# --- Karakorum Restored (AI catch-up, Phase 2) -------------------
+# Mongolized from PD's pd_brandenburg_dhe.2: Ogedei's capital rises
+# again — city rank, walls, barracks, a market on the caravan road,
+# and the horde's kin peoples accepted at court.
+mr_dominance_dhe.10 = {
 	type = country_event
-	title = pd_brandenburg_dhe.2.title
-	desc = pd_brandenburg_dhe.2.desc
-	#image = "gfx/interface/illustrations/situation/placeholder.dds"
+	title = mr_dominance_dhe.10.title
+	desc = mr_dominance_dhe.10.desc
+	outcome = positive
 	fire_only_once = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
 	dynamic_historical_event = {
-		tag = BRA
-		tag = PRU
-		from = 1365.1.1
-		to = 1500.1.1
+		# tag = MGE as well: the proclamation can land before this
+		# window closes, and an unfired event must survive the switch.
+		tag = MGO
+		tag = MGE
+		from = 1420.1.1
+		to = 1550.1.1
 		monthly_chance = 100
 	}
 	trigger = {
-		owns = location:berlin
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 		is_ai = yes
-		has_global_variable = prussian_ambition_active
-	}
-	immediate = {
+		owns = location:karakorum
 	}
 	option = {
-		name = pd_brandenburg_dhe.2.a
-		add_accepted_culture = culture:markish
-		add_accepted_culture = culture:eastern_pomeranian
-		add_accepted_culture = culture:prussian
+		name = mr_dominance_dhe.10.a
+		ai_chance = {
+			factor = 100
+		}
+		add_accepted_culture = culture:oirat_culture
+		add_accepted_culture = culture:buryat_culture
+		add_accepted_culture = culture:khamag_culture
 		if = {
 			limit = {
 				NOT = {
-					has_advance = unlock_men_at_arms_advance
+					has_advance = barracks_advance
 				}
 			}
 			custom_tooltip = {
-				text = pd_brandenburg_dhe.2.a.tt1
-				research_advance = advance_type:unlock_men_at_arms_advance
+				text = mr_dominance_dhe.10.a.tt1
+				research_advance = advance_type:barracks_advance
 			}
 		}
-		custom_tooltip = pd_brandenburg_dhe.2.a.tt2
+		custom_tooltip = mr_dominance_dhe.10.a.tt2
 		custom_tooltip = {
-			text = pd_brandenburg_dhe.2.a.tt3
-			location:berlin = {
-				# --- YENİ EKLENTİ 2: KASABAYI ŞEHRE (CITY) ÇEVİR) ---
+			text = mr_dominance_dhe.10.a.tt3
+			location:karakorum = {
 				change_location_rank = location_rank:city
 				while = {
 					count = 5
 					construct_building = {
-						building_type = building_type:armory
+						building_type = building_type:barracks
 						cost_multiplier = 0
-						cost_multiplier_reason = "PD_brandenburg_dhe_free_buildings"
+						cost_multiplier_reason = "MR_dhe_free_buildings"
 						instant = yes
 					}
 					construct_building = {
-						building_type = building_type:gun_smith
+						building_type = building_type:armory
 						cost_multiplier = 0
-						cost_multiplier_reason = "PD_brandenburg_dhe_free_buildings"
+						cost_multiplier_reason = "MR_dhe_free_buildings"
 						instant = yes
 					}
 				}
-				# YENİ EKLENTİ: BAŞKENTE BEDAVA KALE (BASTION) DİK!
 				construct_building = {
 					building_type = building_type:castle
 					cost_multiplier = 0
-					cost_multiplier_reason = "PD_brandenburg_dhe_free_buildings"
+					cost_multiplier_reason = "MR_dhe_free_buildings"
 					instant = yes
 				}
 				while = {
-					count = 2
+					count = 4
 					create_sub_unit_with_owner = {
-						type = a_men_at_arms
-						owner = c:BRA
+						# owner = root, not c:MGO — see mr_dominance_dhe.9.
+						type = a_a_urughs
+						owner = root
 					}
 				}
 				every_pop = {
 					limit = {
-						culture != culture:brandenburgish
+						culture != culture:mongolian_culture
 					}
 					split_pop = {
 						fraction = 0.9
-						culture = culture:brandenburgish
+						culture = culture:mongolian_culture
 					}
 				}
 			}
 		}
+		# A market on the caravan road. No owner check needed — the
+		# event's own trigger just proved root owns Karakorum this
+		# tick (and a c:MGO comparison would break under the MGE tag).
 		if = {
 			limit = {
-				location:berlin = {
+				location:karakorum = {
 					is_market_center = no
-					owner = c:BRA
 				}
 			}
-			# --- VANİLYA FORMATINDA HATASIZ MARKET KODU --- BRA için.
 			create_market = {
 				builder = root
-				location = location:berlin
+				location = location:karakorum
 				instant = yes
 				price = price:create_market
 			}
 		}
-		custom_tooltip = pd_brandenburg_dhe.2.a.tt4
+		custom_tooltip = mr_dominance_dhe.10.a.tt4
+	}
+}
+
+# --- The Observatory of Samarkand -------------------------------
+# Historical anchor: Ulugh Beg's observatory, built 1424-1429, the
+# finest of its age. In this world the Khan of the reunified horde
+# is its patron. Not AI-gated — this one is player flavour too.
+mr_dominance_dhe.11 = {
+	type = country_event
+	title = mr_dominance_dhe.11.title
+	desc = mr_dominance_dhe.11.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+	dynamic_historical_event = {
+		tag = MGO
+		tag = MGE
+		from = 1424.1.1
+		to = 1550.1.1
+		monthly_chance = 100
+	}
+	trigger = {
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
+		owns = location:samarkand
+	}
+	option = {
+		name = mr_dominance_dhe.11.a
+		ai_chance = {
+			factor = 100
+		}
+		add_research_progress = research_progress_severe_bonus
+		add_prestige = prestige_mild_bonus
+		culture:mongolian_culture = {
+			add_cultural_influence = cultural_influence_mild_bonus
+		}
+	}
+}
+
+# --- The Count of the Herds --------------------------------------
+# Historical anchor: the Chinggisid census. The Yassa counted every
+# man and every animal on the steppe — that count was the tumen
+# system's foundation and the tax rolls' spine. The player (or AI)
+# picks which count comes first.
+mr_dominance_dhe.12 = {
+	type = country_event
+	title = mr_dominance_dhe.12.title
+	desc = mr_dominance_dhe.12.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+	dynamic_historical_event = {
+		tag = MGO
+		from = 1378.1.1
+		to = 1420.1.1
+		monthly_chance = 100
+	}
+	trigger = {
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
+		owns = location:karakorum
+	}
+	option = {
+		name = mr_dominance_dhe.12.a
+		historical_option = yes
+		ai_chance = {
+			factor = 60
+		}
+		# The men are counted: the muster rolls fill.
+		add_manpower = {
+			value = root.monthly_manpower
+			multiply = 6
+		}
+		add_tribal_cohesion = tribal_cohesion_mild_bonus
+	}
+	option = {
+		name = mr_dominance_dhe.12.b
+		ai_chance = {
+			factor = 40
+		}
+		# The herds are counted: the tax rolls fill.
+		add_gold = 1000
+		add_horde_unity = horde_unity_mild_bonus
 	}
 }
 

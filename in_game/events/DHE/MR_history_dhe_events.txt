@@ -30,7 +30,12 @@
 # Events targeting TIM/OIR are conditional by design: they fire only
 # if vanilla spawned those countries, which is the historical path.
 # =================================================================
-# --- The Last Stand of the Yuan (1335-1368) ----------------------
+# --- The Last Stand of the Yuan (1351-1368) ----------------------
+# Dated to the outbreak of the Red Turban Rebellion (1351), not the
+# 1337 start — the event's own text is about Red Turban banners, so
+# firing it before the rebellion existed read as nonsense in game.
+# monthly_chance = 100: fires the month the window opens (percent
+# semantics, 80 vanilla uses at 100).
 mr_history.1 = {
 	type = country_event
 	title = mr_history.1.title
@@ -44,9 +49,9 @@ mr_history.1 = {
 	}
 	dynamic_historical_event = {
 		tag = CHI
-		from = 1335.1.1
+		from = 1351.6.1
 		to = 1368.1.1
-		monthly_chance = 1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {
@@ -58,8 +63,21 @@ mr_history.1 = {
 		name = mr_history.1.a
 		historical_option = yes
 		ai_chance = {
-			factor = 100
+			factor = 70
 		}
+		# Accept that the Mandate is slipping: the dynasty turns its
+		# eyes back to the steppe it came from.
+		add_prestige = prestige_mild_penalty
+		add_stability = stability_weak_penalty
+	}
+	option = {
+		name = mr_history.1.b
+		ai_chance = {
+			factor = 30
+		}
+		# Fight for every province — costly, but the army remembers.
+		add_army_tradition = army_tradition_mild_bonus
+		add_stability = stability_weak_penalty
 	}
 }
 
@@ -85,9 +103,9 @@ mr_history.2 = {
 		tag = MZF
 		tag = INJ
 		tag = GRG
-		from = 1337.1.1
+		from = 1337.6.1
 		to = 1357.1.1
-		monthly_chance = 1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {
@@ -105,9 +123,11 @@ mr_history.2 = {
 	}
 }
 
-# --- The Chagatai Schism (1334-1368) -----------------------------
+# --- The Chagatai Schism (1347-1365) -----------------------------
 # The east/west split that eventually produces Moghulistan and,
-# through it, Timur's launching ground.
+# through it, Timur's launching ground. Dated to the historical
+# break: Tughlugh Timur in the east and Qazaghan's emirs in the
+# west, c. 1347.
 mr_history.3 = {
 	type = country_event
 	title = mr_history.3.title
@@ -121,9 +141,9 @@ mr_history.3 = {
 	}
 	dynamic_historical_event = {
 		tag = CHG
-		from = 1334.1.1
-		to = 1368.1.1
-		monthly_chance = 1
+		from = 1347.1.1
+		to = 1365.1.1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {
@@ -139,6 +159,7 @@ mr_history.3 = {
 			factor = 50
 		}
 		change_religion = religion:sunni
+		add_legitimacy = legitimacy_mild_bonus
 	}
 	option = {
 		name = mr_history.3.b
@@ -146,10 +167,13 @@ mr_history.3 = {
 			factor = 50
 		}
 		change_religion = religion:tengri
+		add_horde_unity = horde_unity_mild_bonus
 	}
 }
 
-# --- Tokhtamysh and the Golden Horde (1370-1406) -----------------
+# --- Tokhtamysh and the Golden Horde (1380-1396) -----------------
+# Dated to Tokhtamysh actually reuniting the White and Blue Hordes
+# (c. 1380); the window closes with Timur's devastation of Sarai.
 mr_history.5 = {
 	type = country_event
 	title = mr_history.5.title
@@ -163,9 +187,9 @@ mr_history.5 = {
 	}
 	dynamic_historical_event = {
 		tag = GLH
-		from = 1370.1.1
-		to = 1406.1.1
-		monthly_chance = 1
+		from = 1380.1.1
+		to = 1396.1.1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {
@@ -180,6 +204,7 @@ mr_history.5 = {
 			factor = 70
 		}
 		add_prestige = prestige_mild_bonus
+		add_legitimacy = legitimacy_mild_bonus
 	}
 	option = {
 		name = mr_history.5.b
@@ -191,6 +216,8 @@ mr_history.5 = {
 }
 
 # --- The Looting of Delhi (1398) ---------------------------------
+# Dated to the sack itself (December 1398). Both sides feel it: the
+# Timurid gets the plunder, and Delhi gets mr_history.9 — the ruin.
 mr_history.6 = {
 	type = country_event
 	title = mr_history.6.title
@@ -204,9 +231,9 @@ mr_history.6 = {
 	}
 	dynamic_historical_event = {
 		tag = TIM
-		from = 1395.1.1
-		to = 1405.1.1
-		monthly_chance = 2
+		from = 1398.10.1
+		to = 1404.1.1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {
@@ -222,13 +249,46 @@ mr_history.6 = {
 			factor = 100
 		}
 		add_prestige = prestige_severe_bonus
+		# The wealth of the richest city in the world rides north.
+		add_gold = 1000
+		if = {
+			limit = {
+				country_exists = c:DLH
+			}
+			c:DLH = {
+				trigger_event_non_silently = mr_history.9
+			}
+		}
 	}
 }
 
-# --- The Oirat Challenge (1400-1450) -----------------------------
-# The western Mongols contest the Borjigin claim. Fires for whoever
-# currently carries the steppe mantle, which by this point may
-# already be MGO.
+# --- The City of Ashes (Delhi's side of 1398) --------------------
+# Fired by mr_history.6 — never by a date window of its own.
+mr_history.9 = {
+	type = country_event
+	title = mr_history.9.title
+	desc = mr_history.9.desc
+	historical_info = mr_history.9.historical_info
+	outcome = negative
+	fire_only_once = yes
+	illustration_tags = {
+		10 = exterior
+		10 = angry
+	}
+	option = {
+		name = mr_history.9.a
+		ai_chance = {
+			factor = 100
+		}
+		add_prestige = prestige_severe_penalty
+		add_stability = stability_weak_penalty
+	}
+}
+
+# --- The Oirat Challenge (1435-1455) -----------------------------
+# The western Mongols contest the Borjigin claim, dated to Esen
+# Taishi's actual ascendancy. Fires for whoever currently carries
+# the steppe mantle, which by this point may already be MGO.
 mr_history.7 = {
 	type = country_event
 	title = mr_history.7.title
@@ -242,9 +302,9 @@ mr_history.7 = {
 	}
 	dynamic_historical_event = {
 		tag = OIR
-		from = 1400.1.1
-		to = 1450.1.1
-		monthly_chance = 1
+		from = 1435.1.1
+		to = 1455.1.1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {
@@ -259,6 +319,7 @@ mr_history.7 = {
 			factor = 60
 		}
 		add_army_tradition = army_tradition_mild_bonus
+		add_horde_unity = horde_unity_mild_bonus
 	}
 	option = {
 		name = mr_history.7.b
@@ -266,10 +327,12 @@ mr_history.7 = {
 			factor = 40
 		}
 		add_prestige = prestige_mild_bonus
+		add_legitimacy = legitimacy_mild_bonus
 	}
 }
 
-# --- The Mughal Precursor: Babur (1494-1530) ---------------------
+# --- The Mughal Precursor: Babur (1500-1526) ---------------------
+# Dated from Babur's final loss of Samarkand to Panipat.
 mr_history.8 = {
 	type = country_event
 	title = mr_history.8.title
@@ -283,9 +346,9 @@ mr_history.8 = {
 	}
 	dynamic_historical_event = {
 		tag = TIM
-		from = 1494.1.1
-		to = 1530.1.1
-		monthly_chance = 1
+		from = 1500.1.1
+		to = 1526.1.1
+		monthly_chance = 100
 	}
 	trigger = {
 		NOT = {

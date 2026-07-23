@@ -256,7 +256,7 @@ MR_mongol_historical_modifier = {
 	}
 	land_morale_modifier = 0.1
 	discipline = 0.05
-	army_light_cavalry_power = 0.0.5
+	army_light_cavalry_power = 0.1
 	global_manpower_modifier = 0.25
 	global_levy_size_modifier = 0.5
 	levy_combat_efficiency_modifier = 0.5
@@ -314,4 +314,72 @@ MR_dominance_historical_modifier = {
 	subject_loyalty = 15
 	monthly_rebel_growth = -0.0025
 	blocked_from_conversion = yes
+}
+
+# =================================================================
+# EVENT-SPECIFIC REWARDS
+# =================================================================
+# Each flavour event grants its own modifier — the phase buffs and
+# phase rewards above belong to the situations and the buff rule
+# alone. Every type below already appears in this file's verified
+# set.
+# --- The Forge of Warriors (mr_dominance_dhe.1, 30 years) ---
+MR_forge_of_warriors = {
+	game_data = {
+		category = country
+	}
+	land_morale_modifier = 0.05
+	levy_combat_efficiency_modifier = 0.25
+	army_tradition_from_battle = 0.5
+}
+
+# --- The Kurultai's Mandate (mr_dominance_dhe.4, permanent) ---
+MR_kurultai_mandate = {
+	game_data = {
+		category = country
+	}
+	monthly_horde_unity = 0.5
+	monthly_legitimacy = 0.5
+	monthly_prestige = 0.1
+}
+
+# --- The Western Ulus Restored (mr_imperial.201, 25 years) ---
+MR_western_ulus_restored = {
+	game_data = {
+		category = country
+	}
+	army_light_cavalry_power = 0.1
+	monthly_prestige = 0.25
+	subject_loyalty = 15
+}
+
+# --- The Seal of Chinggis (mr_steppe.3, 25 years) ---
+MR_seal_of_chinggis = {
+	game_data = {
+		category = country
+	}
+	monthly_legitimacy = 1
+	monthly_horde_unity = 0.5
+	monthly_prestige = 0.25
+}
+
+# --- The Volga Pastures (mr_steppe.13, permanent) ---
+MR_volga_pastures = {
+	game_data = {
+		category = country
+	}
+	global_manpower_modifier = 0.1
+	army_light_cavalry_power = 0.1
+	global_population_growth = 0.005
+}
+
+# --- The Dzungar Legacy (mr_steppe.22, permanent) ---
+MR_dzungar_legacy = {
+	game_data = {
+		category = country
+	}
+	discipline = 0.05
+	siege_ability = 0.2
+	tax_income_efficiency = 0.1
+	monthly_rebel_growth = -0.0025
 }

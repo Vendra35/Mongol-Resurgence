@@ -18,9 +18,16 @@ subject of the audit, not a source.
 
 ## Reference paths
 
-```
-VANILLA="../EU5-Vanilla/game"
-PD="../The Prussian Destiny"
+The repo is shared between two machines with different layouts — DETECT,
+never assume (same snippet as CLAUDE.md and `tools/verify_mod.py`):
+
+```bash
+if [ -d "../EU5-Vanilla/game" ]; then
+	VANILLA="../EU5-Vanilla/game"; PD="../The Prussian Destiny"
+else
+	VANILLA="../Reference EU5 vanilla and Prussian Destiny/Europa Universalis V/game"
+	PD="../Reference EU5 vanilla and Prussian Destiny/The Prussian Destiny"
+fi
 ```
 
 Read-only. Never write under `$VANILLA` or `$PD`.
@@ -138,10 +145,13 @@ across phases that should be per-phase (`mr_failsafe_pN_fired`)? Can an end
 trigger already be true at `can_start` (instant-end)? Is any `on_ending` branch
 keyed on a side-signal (`country_exists`) instead of the goal trigger?
 
-### 13. Loader-split localisation
-Game-rule names/settings must live in `main_menu/localization`
-(`rule_<key>` / `setting_<option>` / `_desc`); in-game strings in
-`in_game/localization`. A key in the wrong tree shows raw in the UI.
+### 13. Localisation tree (UPDATED after the shadowing incident)
+ALL mod localisation lives in ONE file:
+`main_menu/localization/english/MR_l_english.yml`. Vanilla's
+`in_game/localization` holds only the jomini engine fallback — a second mod
+loc file with the same filename there SHADOWS the main_menu one and every
+main_menu-only key (rules, settings, modifier names) renders raw. Flag ANY
+`in_game/localization` file in the mod as a finding.
 
 ### 14. Vacuous verification
 BSD grep `\b` and line-grep on multi-line constructs both produced false "clean"

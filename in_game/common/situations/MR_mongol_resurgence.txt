@@ -66,17 +66,16 @@ mongol_resurgence = {
 		}
 		# The .gui panel reads these two off the situation scope to
 		# draw its dual-portrait header. Without them it renders blank.
+		# The claimant must actually hold Mongolian ground — the claim
+		# is to the heartland, not to steppe-horde government in general.
 		random_country = {
 			limit = {
 				culture = {
 					has_culture_group = culture_group:mongolian_group
 				}
 				government_type = government_type:steppe_horde
-				capital ?= {
-					OR = {
-						sub_continent = sub_continent:east_asia
-						sub_continent = sub_continent:north_asia
-					}
+				any_owned_location = {
+					region = region:mongolia_region
 				}
 			}
 			save_scope_as = mr_first_claimant
@@ -90,7 +89,13 @@ mongol_resurgence = {
 				value = scope:mr_first_claimant
 			}
 		}
-		random_country = {
+		# The rival is the STRONGEST other steppe power, not a random
+		# one — a Persian-fringe horde rivalling the Mongolian claimant
+		# looked absurd in testing. order_by = military_strength with
+		# max = 1 is the vanilla selection idiom
+		# (war_of_religions.txt:54-59); the sub-continent cap keeps the
+		# theatre to the eastern steppe.
+		ordered_country = {
 			limit = {
 				culture = {
 					has_culture_group = culture_group:mongolian_group
@@ -106,6 +111,9 @@ mongol_resurgence = {
 					}
 				}
 			}
+			order_by = military_strength
+			max = 1
+			check_range_bounds = no
 			save_scope_as = mr_first_rival
 		}
 		if = {
@@ -307,10 +315,12 @@ mongol_resurgence = {
 			}
 		}
 		# ========== AI RAILROAD: DECLARE ==========
-		# Pacing follows the rules, PD-style (brandenburg_rise ties pace
-		# to BRA_buff_enabled): Terminator declares roughly every six months
-		# years; otherwise Strict Historical paces at one war per decade
-		# and (MR_buff_historical): at every one years.
+		# Pacing follows the buff rule alone, PD-style (brandenburg_rise
+		# ties pace to BRA_buff_enabled). The old timeline-pacing rule is
+		# gone: Terminator declares roughly every 6 months, Historical
+		# roughly yearly, Vanilla roughly every two years. Every tier has
+		# a branch — with none, a buff-disabled campaign would simply
+		# never declare its unification wars.
 		if = {
 			limit = {
 				var:mr_conquest_target = 1
@@ -320,21 +330,12 @@ mongol_resurgence = {
 						var:mr_conquest_cooldown > 6
 					}
 					AND = {
-						NOT = {
-							has_game_rule = MR_buff_enabled
-						}
-						has_game_rule = MR_timeline_strict_historical
-						var:mr_conquest_cooldown > 120
-					}
-					AND = {
-						NOT = {
-							has_game_rule = MR_buff_enabled
-						}
-						NOT = {
-							has_game_rule = MR_timeline_strict_historical
-						}
 						has_game_rule = MR_buff_historical
 						var:mr_conquest_cooldown > 12
+					}
+					AND = {
+						has_game_rule = MR_buff_disabled
+						var:mr_conquest_cooldown > 24
 					}
 				}
 				country_exists = c:MGO
@@ -348,10 +349,12 @@ mongol_resurgence = {
 								months_since_war >= 6
 							}
 							AND = {
-								NOT = {
-									has_game_rule = MR_buff_enabled
-								}
+								has_game_rule = MR_buff_historical
 								months_since_war >= 12
+							}
+							AND = {
+								has_game_rule = MR_buff_disabled
+								months_since_war >= 24
 							}
 						}
 						situation:mongol_resurgence = {
@@ -560,11 +563,72 @@ mongol_resurgence = {
 			}
 			set_global_variable = mr_beat_107_fired
 		}
+		# --- ORGANIC BIRTH (design doc, flavor_tim.8 shape) ---
+		# The dynamic path the design doc always intended: a free
+		# Mongol steppe horde that takes Karakorum between 1368 and
+		# 1375 takes up the Chinggisid claim without waiting for the
+		# failsafe. form_country ignores MGO_f's own 85%-of-Mongolia
+		# allow block (the same way PD forms PRU_f in
+		# pd_brandenburg_dhe.4), so holding the sacred capital is
+		# enough. AI converts on the spot; a HUMAN is OFFERED the
+		# banner instead (mr_dominance.11) — this mod never converts
+		# a player who has not said yes, the same philosophy as the
+		# postponable war events and the is_ai-gated locks.
+		if = {
+			limit = {
+				NOT = {
+					country_exists = c:MGO
+				}
+				NOT = {
+					has_global_variable = mr_birth_failsafe_fired
+				}
+			}
+			random_country = {
+				limit = {
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
+					government_type = government_type:steppe_horde
+					owns = location:karakorum
+					is_subject = no
+					is_ai = yes
+				}
+				save_scope_as = mr_emergence_candidate
+				form_country = formable_country:MGO_f
+				trigger_event_silently = mr_dominance.998
+			}
+			random_country = {
+				limit = {
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
+					government_type = government_type:steppe_horde
+					owns = location:karakorum
+					is_subject = no
+					is_ai = no
+					NOT = {
+						has_global_variable = mr_organic_offer_made
+					}
+				}
+				trigger_event_non_silently = mr_dominance.11
+				set_global_variable = mr_organic_offer_made
+			}
+		}
 		# --- BIRTH FAILSAFE (design doc, layer a) ---
 		# If nobody has organically taken up the claim by ~1375,
 		# convert the best-placed steppe power by force. Not gated by
 		# the auto-conquest rule: without MGO the railroad has no actor
 		# and every later phase is unreachable.
+		#
+		# Candidate quality tiers: the STRONGEST free AI horde at
+		# peace, else the strongest free AI horde even at war, else
+		# anyone at all. Tiers 1-2 are AI-only — a human who declined
+		# the organic offer must not be conscripted while any AI
+		# candidate exists; tier 3 remains the absolute last resort
+		# (no AI mongol horde left on the steppe), where a vassal khan
+		# is first released by its overlord (cancel_subject, the
+		# overlord-run release effect: subject_types/readme.txt:50,
+		# on_action/_hardcoded.txt:4808).
 		if = {
 			limit = {
 				current_date > 1375.1.1
@@ -574,29 +638,106 @@ mongol_resurgence = {
 				NOT = {
 					has_global_variable = mr_birth_failsafe_fired
 				}
-				any_country = {
-					culture = {
-						has_culture_group = culture_group:mongolian_group
+			}
+			if = {
+				limit = {
+					any_country = {
+						culture = {
+							has_culture_group = culture_group:mongolian_group
+						}
+						government_type = government_type:steppe_horde
+						any_owned_location = {
+							region = region:mongolia_region
+						}
+						is_subject = no
+						at_war = no
+						is_ai = yes
 					}
-					government_type = government_type:steppe_horde
-					any_owned_location = {
-						region = region:mongolia_region
+				}
+				ordered_country = {
+					limit = {
+						culture = {
+							has_culture_group = culture_group:mongolian_group
+						}
+						government_type = government_type:steppe_horde
+						any_owned_location = {
+							region = region:mongolia_region
+						}
+						is_subject = no
+						at_war = no
+						is_ai = yes
 					}
+					order_by = military_strength
+					max = 1
+					check_range_bounds = no
+					save_scope_as = mr_emergence_candidate
+					form_country = formable_country:MGO_f
+					trigger_event_silently = mr_dominance.998
 				}
 			}
-			random_country = {
+			else_if = {
 				limit = {
-					culture = {
-						has_culture_group = culture_group:mongolian_group
-					}
-					government_type = government_type:steppe_horde
-					any_owned_location = {
-						region = region:mongolia_region
+					any_country = {
+						culture = {
+							has_culture_group = culture_group:mongolian_group
+						}
+						government_type = government_type:steppe_horde
+						any_owned_location = {
+							region = region:mongolia_region
+						}
+						is_subject = no
+						is_ai = yes
 					}
 				}
-				save_scope_as = mr_emergence_candidate
-				form_country = formable_country:MGO_f
-				trigger_event_silently = mr_dominance.998
+				ordered_country = {
+					limit = {
+						culture = {
+							has_culture_group = culture_group:mongolian_group
+						}
+						government_type = government_type:steppe_horde
+						any_owned_location = {
+							region = region:mongolia_region
+						}
+						is_subject = no
+						is_ai = yes
+					}
+					order_by = military_strength
+					max = 1
+					check_range_bounds = no
+					save_scope_as = mr_emergence_candidate
+					form_country = formable_country:MGO_f
+					trigger_event_silently = mr_dominance.998
+				}
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						culture = {
+							has_culture_group = culture_group:mongolian_group
+						}
+						government_type = government_type:steppe_horde
+						any_owned_location = {
+							region = region:mongolia_region
+						}
+					}
+				}
+				random_country = {
+					limit = {
+						culture = {
+							has_culture_group = culture_group:mongolian_group
+						}
+						government_type = government_type:steppe_horde
+						any_owned_location = {
+							region = region:mongolia_region
+						}
+					}
+					save_scope_as = mr_emergence_candidate
+					overlord ?= {
+						cancel_subject = prev
+					}
+					form_country = formable_country:MGO_f
+					trigger_event_silently = mr_dominance.998
+				}
 			}
 		}
 		# --- COMPLETION FAILSAFE (design doc, layer b) ---
@@ -630,7 +771,10 @@ mongol_resurgence = {
 			region:mongolia_region = {
 				every_ownable_location_in_region = {
 					limit = {
-						owner = {
+						# owner ?= not owner =: an ownerless location made
+						# the bare link error ("Event target link 'owner'
+						# returned an invalid object").
+						owner ?= {
 							is_ai = yes
 							NOR = {
 								tag = MGO
@@ -719,8 +863,14 @@ mongol_resurgence = {
 		# dormant interval between Phase 1 and Phase 2. AI only, like
 		# PD_the_sleeping_giant: it carries blocked_from_declaring_war,
 		# which must never be forced onto a human player.
+		# SUCCESS ONLY: Phase 2 is what lifts this lock, and Phase 2
+		# never starts after a failed Phase 1 (mr_railroad_failed) —
+		# granting it on the failure path war-locked the AI claimant
+		# for the rest of the campaign. The trigger is still evaluable
+		# here because Phase 1 ends with no tag switch.
 		if = {
 			limit = {
+				mr_resurgence_end_trigger = yes
 				country_exists = c:MGO
 				c:MGO = {
 					is_ai = yes
