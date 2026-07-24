@@ -128,7 +128,7 @@ mongol_dominance = {
 			}
 			# The Phase 2 reward expires here, as its tooltip promises
 			# ("removed upon the start of the 3rd Situation").
-			remove_country_modifier = MR_empire_fulfilled
+			remove_country_modifier = MR_empire_fulfilled			## !!!!!!!!!!!!!Might be problem because it should ne permanent modifier no? LOOK LATER!!!!!!!!!!!!!!!
 			# The war-preparation lock, PD Ascension style: the AI
 			# claimant must not freelance-declare — the railroad event
 			# declares for it. Never applied to a human player.

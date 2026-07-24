@@ -1,4 +1,4 @@
-﻿situation_panel = {
+situation_panel = {
 
     ##################################### TOP HEADER (DUAL PORTRAIT) #####################################
     blockoverride "situation_panel_image" {

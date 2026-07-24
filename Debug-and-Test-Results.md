@@ -301,19 +301,22 @@ Denetim turlarinda 6 gercek bug daha bulunup duzeltildi (hepsi statik dogrulamad
 - (YENI ICERIK) mr_dominance_dhe.11 "The Observatory of Samarkand" (Ulug Bey rasathanesi, 1424+, oyuncuya da gelir), mr_dominance_dhe.12 "The Count of the Herds" (Yasa sayimi, iki secenekli: asker vs vergi), mr_dominance.135 "The Four Corners" (dort hanlik baskenti ayni anda tutulunca atan P3 kilometre tasi), mr_dominance.11 "The Banner Offered" (insan organik dogus teklifi).
 - (MD GUNCELLEMESI) EU5-MODDING-GUIDE'daki eski iki-loc-agaci kurali tek-dosya kuralina cekildi, harness sayisi 22 oldu; README duzgun Ingilizce tanitim + dokuman haritasi yapildi; YENI docs/FUTURE-DEVELOPMENT.md eklendi (Ingilizce, detayli: genisletme yollari, tarif kitaplari, bilinen borclar, done-tanimi).
 
+
+
+
 ##### 24.07.2026 TEST RESULTS #####
 
 ### 1. GUI bilgilendirmesi daha açıklayıcı yapalım:
 
 - Mongol resurgence situationın da Mongol Horde yani MGO ülkesinin nasıl çıktığını falan guiye bence bilgilendirme olarak yazalım ayrıca onuda görsün oyuncular bakarlarken.
 
-- Ayrıca unknow formatting [cw] [error] [pdx_text_formatter.cpp:807] Unknown formatting tag 'l' hatası hala geliyor situaton guisini açtığım an her situatonda acaba bu şeyden olabilirmi: Vanilla gui formatlarına baktım hepsi sadece UTF-8. BOM yapmamışlar ondan olabilir mi bizimkilerin hepsi UTF-8 with BOM.
+- Ayrıca unknow formatting [cw] [error] [pdx_text_formatter.cpp:807] Unknown formatting tag 'l' hatası hala geliyor situation guisini açtığım an her situaton da, acaba bu şeyden olabilir mi: Vanilla gui formatlarına baktım hepsi sadece UTF-8. BOM yapmamışlar ondan olabilir mi bizimkilerin hepsi UTF-8 with BOM. Bence sorun o.
 
 ### 2. Region,area,subcontinent ve Situation Fetih bölge değişiklikleri:
 
 - steppes_region bölgesi yeni eklediğim docs/maps dosyasından da bakarsın taa kırımın oraları kapsıyor ama sen resurgence visible kısımlarına falan steppes_region eklemişsin zaten ilk situation oralarla alakası yok ki, ben onu değiştirdim oralar subcontinent'e göre yaptım güzel oldu, ve docs/maps/ içine de subcontinentslerin tüm mapi kapsayan resmini koydum ordan da bakıp doğrulamasını yapabilirsin istersen ve başka bu tarz güncellenecek yer varsa güncelleyebilirsin.
 
-- biz neden sadece north_china'yı fetih ediyoruz situationlarımızda neden bütün China regionını(north_china_region,west_china_region ve east_china_region dışarda kalıyor) almıyoruz. Tarihte olduğu gibi, tarihsel gidelim dedik ya, sence onu tüm chinayı almayı 2. situationamı yoksa 3. situationamı eklemeliyiz ve sonrasın da ona göre her şeyi günceller misin mantık hatası olmaması için. Ayrıca şimdi farkettim tibet_region'nınıda da eklememişiz tarihte moğollar orayıda almıştı cengiz han zamanın da diye biliyorum orayı da ekleyelim China bölgesi gibi. Bnen Wargoals ksıımlarını biraz düzeltmiştim ama sen yine bak bu son yapacaklarımıza göre düzenle.
+- biz neden sadece north_china'yı fetih ediyoruz situationlarımızda neden bütün China regionını(north_china_region,west_china_region ve east_china_region dışarda kalıyor) almıyoruz. Tarihte olduğu gibi, tarihsel gidelim dedik ya, sence onu tüm chinayı almayı 2. situationamı yoksa 3. situationamı eklemeliyiz ve sonrasın da ona göre her şeyi günceller misin mantık hatası olmaması için. Ayrıca şimdi farkettim tibet_region'nınıda da eklememişiz tarihte moğollar orayıda almıştı cengiz han zamanın da diye biliyorum orayı da ekleyelim China bölgesi gibi. Ben Wargoals ksıımlarını biraz düzeltmiştim ama sen yine bak bu son yapacaklarımıza göre düzenle.
 
 
 #### 3. Diğer ülkere event ile haber gönderimi bilgilendirme ve immersion için:
@@ -325,7 +328,7 @@ Denetim turlarinda 6 gercek bug daha bulunup duzeltildi (hepsi statik dogrulamad
 #### 4. Mongol Horde ilk situation gui hatası:
 
 - Mongol resurgence guisinde Mongol Horde MGO hem mr_first_claimant hem de mr_first_rival olarak 2 sindede gözüküyor yani hem first claimant hem de kendisinin rakibi olarak 2 tane ayrı mgo bayrağı gözüküyor guide :D
-Bu sanırım tahmini şundan dolayı oldu MGO 1375te spawnlanmadan önce MGO olacak ülke mr_first_rivaldı. Rival olan en güçlü diye MGO oldu, o MGO olunca hem claimant hem rivalda kaldı buglandı.
+Bu sanırım tahmini(artık tahmin değil kesin öyle test ettim) şundan dolayı oldu: MGO 1375te spawnlanmadan önce MGO olacak ülke mr_first_rivaldı. Rival olan en güçlü diye MGO oldu, o MGO olunca mr_first_claimanta atandı ve hem mr_first_claimantta hem de mr_first_rivalda kaldı buglandı.
 
 #### 5. MR_the_sleeping_horde Modifier'ının Gereksizliği ve Mantık Hatası:
 
@@ -335,5 +338,58 @@ Bu sanırım tahmini şundan dolayı oldu MGO 1375te spawnlanmadan önce MGO ola
 
 - Rise of Timur situationın da Select Core Region diye bir seçenek var situation guisinde main actions kısmında. Onu seçince o the scourge from central asia character modifierı varken timurda, o auto conquer at war ile aldığı yerleri direk o main acitons ile core yapıp, Core Regions adında buff veriyor topraklara. Bizde Mongol Horde için ilk situation da öyle yapabilir miyiz? Eğer yapamazsak olmadı ilk situationda alacağı yerleri direk situation da MGO çıktığı gibi MGO ya core ekleyelim olmadı öylede yapabiliriz hangisini yapabilirsek onu seçelim.
 
-#### 7. 
+#### 7. Hala 2. Situationdaki guiyi açınca hata spamlıyor ancak resim portre gelmiş siyah değil artık:
+
+- Hatırlarsan son 2 sessiondır bunu (22.07 #10. maddesi) fixlemeye çalışıyoruz: Bu sefer güzel haberlerim var artık eskisi gibi situation guisini açınca karakter portresi siyah olmuyor o düzelmiş ama hala loga guiyi açtığım an sürekli bu hataları arka arkaya spamlıyor:
+- Edit: Aynı şekilde 3. situationda da aynı 2. situation da olduğu gibi bu error loglarını spamlıyor ama portre 3. s3ituationda da düzgün düzelmiş siyah değil yani:
+
+[cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Government.GetRegencyInfo'
+[cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetchLocalized Data failed for '[Government.GetRegencyInfo]'
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.GetRuler' 
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.HasRuler' 
+[cw] [error] [pdx_gui_data_manager.cpp:233] FetchData failed for 'Government.HasRuler' - gui/character_header.gui:281
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetReligion' 
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.GetActiveRegent' 
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.HasActiveRegent' 
+[cw] [error] [pdx_gui_data_manager.cpp:233] FetchData failed for 'Government.HasActiveRegent' - gui/character_header.gui:291
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetReligion' 
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.GetRegencyInfo' 
+[cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Government.GetRegencyInfo'
+[cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetchLocalized Data failed for '[Government.GetRegencyInfo]'
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.GetRuler' 
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.HasRuler' 
+[cw] [error] [pdx_gui_data_manager.cpp:233] FetchData failed for 'Government.HasRuler' - gui/character_header.gui:281
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetReligion' 
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.GetActiveRegent' 
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.HasActiveRegent' 
+[cw] [error] [pdx_gui_data_manager.cpp:233] FetchData failed for 'Government.HasActiveRegent' - gui/character_header.gui:291
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Character' for 'Character.GetReligion'
+[cw] [error] [pdx_data_callstack.cpp:17] No context supplied (Use SetDataContext), wanted context of type 'Government' for 'Government.GetRegencyInfo' 
+[cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Government.GetRegencyInfo'
+[cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetchLocalizedData failed for '[Government.GetRegencyInfo]'
+
+- Nedense bu error log spam artık 1. situation da gui açınca olmuyor, ama 2. situation da guiyi açınca oluyor.
+
+#### 8. Mongol Empire Fulfilled ismi ve Modifierın gereksizliği:
+
+- Bu modifierı 3. situation başlayana kadar veriyorsun ama zaten 2. situation bittiği gibi 3. situation başlıyor, bi anlamı yok bence komple kaldıralım. Veya 2. situation bittiğin de mongol empire formladığımız için farklı isimle bir modifier da verebilirsin bi kaç yıllığına 25 olur 50 yıl olur farketmez.
+
+#### 9. MR_empire_fulfilled Modifierın da mantık hatası mı var?:
+
+- Modifierı permanent demişiz modifierı dosyasında # --- Situation 2 Permanent Reward --- mongol empire formladığımız için. Ama 3. situation yani dominance situationın on_startında kaldırıyoruz # The Phase 2 reward expires here, as its tooltip promises # ("removed upon the start of the 3rd Situation"). remove_country_modifier = MR_empire_fulfilled diyerek neden onu anlamadım.
+
+#### 10. MGE_f formlanınca harita da çıkan garip ülke ismi:
+
+- MGE_f formlanınca Mongol Empire, Great Mongol Empire veya Yeke Mongol Ulus falan yazmıyor haritada ülke isminde, onun yerine Great Mongol Horde yazıyor dünya haritasında. Sanırım sıkıntı oldu biz MGOya mongol horde demiştik ama mge_f ye ismi taşındı nedense.
+
+#### 11. Benim eklediklerim:
+
+1. MGO formlanınca ülke county kalıyordu onun altına ekledim artık MGO formlanınca kingdom oluyor ve ai personalitysini de agresif yapıyor. Aynısı MGE içinde geçerli MGE formlanınca ülkesini empire değilse empire yapıyor level 4 ile ve ai personalitysini de agresif yapıyor yine.
+2. Modifierları biraz düzenledim terminator olanları daha güçlü yaptım historical olanları da biraz güçlendirdim ve khanlara gelen monthly gold income'ı arttırdım ve 2. situationda gelen bufflara army_maintenance_efficiency modifierı ekledim çünkü eğer o bizim eklediğimiz güçlü özel khanlar ölünc eülke bankrupt oluyordu bi anda income'ı düştüğü için.
+
+
+#### FİNAL NOT: Evet şuan gözüme çarpan ve oyun içinde debug logda ortaya çıkan hatalar bu şekildeydi bunları düzelttikten sonra tekrar bizim ana CLAUDE.md, diğer tüm .md dosyalarımızı ve bu yaptığımız değişikliklerle ilgili bir içerik, mantık hatası, bug ve rehber falan varsa onları da güncelleyip elden geçirir misin detaylı bir şekilde. MD dosyalarımız güncel kalsın ki ilerde bu modu kullanıcaksam veya başka sıfırdan bir mod yapacaksam işimize yarasın.
+
+
+
 

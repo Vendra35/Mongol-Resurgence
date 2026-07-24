@@ -1,4 +1,4 @@
-﻿situation_panel = {
+situation_panel = {
 
     ##################################### TOP HEADER (SINGLE PORTRAIT - ONE EMPIRE) #####################################
     # one_country_header_template receives its country via a block
