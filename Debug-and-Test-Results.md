@@ -368,7 +368,7 @@ Bu sanırım tahmini(artık tahmin değil kesin öyle test ettim) şundan dolay�
 [cw] [error] [pdx_data_localize_helper.cpp:290] FetchData failed for 'Government.GetRegencyInfo'
 [cw] [error] [pdx_gui_localize.cpp:140] PdxDataFetchLocalizedData failed for '[Government.GetRegencyInfo]'
 
-- Nedense bu error log spam artık 1. situation da gui açınca olmuyor, ama 2. situation da guiyi açınca oluyor.
+- Nedense bu error log spam artık 1. situation da gui açınca olmuyor, ama 2. ve 3. situation da guiyi açınca oluyor.
 
 #### 8. Mongol Empire Fulfilled ismi ve Modifierın gereksizliği:
 
