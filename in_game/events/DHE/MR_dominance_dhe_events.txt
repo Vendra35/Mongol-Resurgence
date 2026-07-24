@@ -94,6 +94,7 @@ mr_dominance_dhe.4 = {
 			factor = 100
 		}
 		add_prestige = prestige_extreme_bonus
+		add_stability = stability_severe_bonus
 		add_horde_unity = horde_unity_extreme_bonus
 		# Its own reward — the Phase 1 reward banner stays with the
 		# situation resolution events.
@@ -135,10 +136,10 @@ mr_dominance_dhe.5 = {
 			factor = 100
 		}
 		add_horde_unity = horde_unity_mild_bonus
-		add_tribal_cohesion = tribal_cohesion_severe_bonus
+		add_stability = stability_severe_bonus
 		add_manpower = {
 			value = root.monthly_manpower
-			multiply = 6
+			multiply = 12
 		}
 	}
 }
@@ -174,8 +175,8 @@ mr_dominance_dhe.3 = {
 		ai_chance = {
 			factor = 100
 		}
-		add_army_tradition = army_tradition_severe_bonus
-		add_research_progress = research_progress_mild_bonus
+		add_army_tradition = army_tradition_extreme_bonus
+		add_research_progress = research_progress_extreme_bonus
 	}
 }
 
@@ -211,7 +212,7 @@ mr_dominance_dhe.6 = {
 		ai_chance = {
 			factor = 100
 		}
-		add_gold = 1000
+		add_gold = 2000
 		culture:mongolian_culture = {
 			add_cultural_influence = cultural_influence_severe_bonus
 		}
@@ -277,7 +278,7 @@ mr_dominance_dhe.9 = {
 		# tag = MGE as well: the proclamation can land before 1480.
 		tag = MGO
 		tag = MGE
-		from = 1380.1.1
+		from = 1368.1.1
 		to = 1480.1.1
 		monthly_chance = 100
 	}
@@ -286,12 +287,56 @@ mr_dominance_dhe.9 = {
 			has_game_rule = mr_railroad_off
 		}
 		is_ai = yes
-		owns = location:karakorum
 	}
 	option = {
 		name = mr_dominance_dhe.9.a
 		ai_chance = {
 			factor = 100
+		}
+		# If the country is not already Mongolian culture, this will make it so.
+		if = {
+			limit = {
+				NOT = {
+					culture = culture:mongolian_culture
+				}
+			}
+			change_culture = culture:mongolian_culture
+		}
+		# If the country does not already have Oirat culture accepted, this will make it so.
+		if = {
+			limit = {
+				NOT = {
+					has_primary_or_accepted_culture = culture:oirat_culture
+				}
+			}
+			add_accepted_culture = culture:oirat_culture
+		}
+		# If the country does not already have Daur culture accepted, this will make it so.
+		if = {
+			limit = {
+				NOT = {
+					has_primary_or_accepted_culture = culture:daur_culture
+				}
+			}
+			add_accepted_culture = culture:daur_culture
+		}
+		# If the country does not already have Tumed culture accepted, this will make it so.
+		if = {
+			limit = {
+				NOT = {
+					has_primary_or_accepted_culture = culture:tumed_culture
+				}
+			}
+			add_accepted_culture = culture:tumed_culture
+		}
+		# If the country does not already have Buryat culture accepted, this will make it so.
+		if = {
+			limit = {
+				NOT = {
+					has_primary_or_accepted_culture = culture:buryat_culture
+				}
+			}
+			add_accepted_culture = culture:buryat_culture
 		}
 		if = {
 			limit = {
@@ -307,7 +352,8 @@ mr_dominance_dhe.9 = {
 		custom_tooltip = mr_dominance_dhe.9.a.tt2
 		custom_tooltip = {
 			text = mr_dominance_dhe.9.a.tt3
-			location:karakorum = {
+			# Instead of checking location:karakorum, we check MGO's capital, because the MGO country may not own Karakorum on the map when it is born, but it still needs to get these troops for wars to succeed.
+			capital ?= {
 				while = {
 					count = 5
 					construct_building = {
@@ -324,7 +370,7 @@ mr_dominance_dhe.9 = {
 					}
 				}
 				while = {
-					count = 4
+					count = 20
 					create_sub_unit_with_owner = {
 						# owner = root, not c:MGO: this event can fire
 						# under the MGE tag after an early proclamation,
@@ -385,9 +431,13 @@ mr_dominance_dhe.10 = {
 		ai_chance = {
 			factor = 100
 		}
-		add_accepted_culture = culture:oirat_culture
-		add_accepted_culture = culture:buryat_culture
-		add_accepted_culture = culture:khamag_culture
+		# If the capital is not Karakorum, we can set it to Karakorum (if possible).
+		if = {
+			limit = {
+				capital != location:karakorum
+			}
+			set_capital = location:karakorum
+		}
 		if = {
 			limit = {
 				NOT = {
@@ -426,10 +476,10 @@ mr_dominance_dhe.10 = {
 					instant = yes
 				}
 				while = {
-					count = 4
+					count = 40
 					create_sub_unit_with_owner = {
 						# owner = root, not c:MGO — see mr_dominance_dhe.9.
-						type = a_a_urughs
+						type = a_steppe_horse_archers
 						owner = root
 					}
 				}
@@ -540,7 +590,7 @@ mr_dominance_dhe.12 = {
 		# The men are counted: the muster rolls fill.
 		add_manpower = {
 			value = root.monthly_manpower
-			multiply = 6
+			multiply = 20
 		}
 		add_tribal_cohesion = tribal_cohesion_mild_bonus
 	}
@@ -550,7 +600,7 @@ mr_dominance_dhe.12 = {
 			factor = 40
 		}
 		# The herds are counted: the tax rolls fill.
-		add_gold = 1000
+		add_gold = 1500
 		add_horde_unity = horde_unity_mild_bonus
 	}
 }

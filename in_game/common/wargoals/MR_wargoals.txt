@@ -30,7 +30,10 @@ MR_war_goal_steppe_unification = {
 		allowed_subjugation = {
 			OR = {
 				scope:loser.capital.region = region:mongolia_region
-				scope:loser.capital.region = region:steppes_region
+				scope:loser.capital.region = region:xinjiang_region
+				scope:loser.capital.region = region:north_china_region
+				scope:loser.capital.region = region:manchuria_region
+				# scope:loser.capital.region = region:steppes_region // Too far away for situaton 1.
 			}
 		}
 	}
@@ -62,6 +65,7 @@ MR_war_goal_silk_road = {
 				scope:location.region = region:east_china_region
 				scope:location.region = region:west_china_region
 				scope:location.region = region:south_china_region
+				scope:location.region = region:tibet_region				## New addition for immersion
 			}
 		}
 		allowed_subjugation = {
@@ -74,6 +78,7 @@ MR_war_goal_silk_road = {
 				scope:loser.capital.region = region:east_china_region
 				scope:loser.capital.region = region:west_china_region
 				scope:loser.capital.region = region:south_china_region
+				scope:loser.capital.region = region:tibet_region				## New addition for immersion
 			}
 		}
 	}

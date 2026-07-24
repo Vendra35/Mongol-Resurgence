@@ -1,4 +1,4 @@
-##### 22.07.2026 TEST RESULTS FIXED ALL #####
+﻿##### 22.07.2026 TEST RESULTS FIXED ALL #####
 
 #### 1. Variables set but never used: MR_dominance_events.txt in game error logs (FIXED)
 
@@ -257,7 +257,7 @@ Script location: common/situations/MR_mongol_imperial.txt:559
 - 3.Situation (Mongol Dominance) da MR_late_steppe.txt ek situationlarının yapısı ve amacı nedir? Daha iyi, özgün ve mantıklı olabilir. Daha önce de sana söylediğim o situationdaki eventler (MR_late_steppe_events.txt) içindeki ödüller falan hep eski ve aynı modifierlar, yaratıcılıktan yoksun basit ödüller var. Lütfen o kısımları daha önce de 9. madde de belirttiğim gibi özgün, yaratıcı ve tarihsel yapalım.
 
 #### 13. Son isteğim:
-
+ 
 - MGE_F yani Mongol Empire'ı bence direk formlatabiliriz. form_country kodunu kullanınca formable country requirementlarına gerek olmadan direk onları ezip formlatabiliyoruz. Onu sen yanlış anlamışsın sanırım. O sebeple benim isteğim çok geç formlatmaktansa mesela 2. situation bitince formlatmak daha mantıklı ve tarihsel olmaz mı? Sende karar verebilirsin formlatma zamanı için. Ama tabi böyle yapacaksak ona göre tagların MGE veya MGO yazan yerleri ve diğer tüm kodları bu değişikliğe göre güncellememiz gerekicek çünkü erken formlatıcaz ya, hata veya loop bug falan çıkmasın. Bu nedenle o Mongol Empire formlama için istenilen topraklara gerek olmayabilir çüğnkü onlar kodsuz normal oynarken formlayacaksan gereken zorunluluklar. 3. situation yapısını toprak isteklerini de falan komple değiştirebilirisn bu konuştuklarımıza göre ve mesela iran kısımları, anadoluya kadar benim bildiğim moğollar gitmişti/fetih etmişti. Tarihsel olarak oraları atladık oraların situationları falan yok ayrı bir situation da yapabilirsin veya başka situation ile birleştirme de yapabilirsin. Sana bırakıyorum ve güveniyorum.
 
 
@@ -300,3 +300,40 @@ Denetim turlarinda 6 gercek bug daha bulunup duzeltildi (hepsi statik dogrulamad
 
 - (YENI ICERIK) mr_dominance_dhe.11 "The Observatory of Samarkand" (Ulug Bey rasathanesi, 1424+, oyuncuya da gelir), mr_dominance_dhe.12 "The Count of the Herds" (Yasa sayimi, iki secenekli: asker vs vergi), mr_dominance.135 "The Four Corners" (dort hanlik baskenti ayni anda tutulunca atan P3 kilometre tasi), mr_dominance.11 "The Banner Offered" (insan organik dogus teklifi).
 - (MD GUNCELLEMESI) EU5-MODDING-GUIDE'daki eski iki-loc-agaci kurali tek-dosya kuralina cekildi, harness sayisi 22 oldu; README duzgun Ingilizce tanitim + dokuman haritasi yapildi; YENI docs/FUTURE-DEVELOPMENT.md eklendi (Ingilizce, detayli: genisletme yollari, tarif kitaplari, bilinen borclar, done-tanimi).
+
+##### 24.07.2026 TEST RESULTS #####
+
+### 1. GUI bilgilendirmesi daha açıklayıcı yapalım:
+
+- Mongol resurgence situationın da Mongol Horde yani MGO ülkesinin nasıl çıktığını falan guiye bence bilgilendirme olarak yazalım ayrıca onuda görsün oyuncular bakarlarken.
+
+- Ayrıca unknow formatting [cw] [error] [pdx_text_formatter.cpp:807] Unknown formatting tag 'l' hatası hala geliyor situaton guisini açtığım an her situatonda acaba bu şeyden olabilirmi: Vanilla gui formatlarına baktım hepsi sadece UTF-8. BOM yapmamışlar ondan olabilir mi bizimkilerin hepsi UTF-8 with BOM.
+
+### 2. Region,area,subcontinent ve Situation Fetih bölge değişiklikleri:
+
+- steppes_region bölgesi yeni eklediğim docs/maps dosyasından da bakarsın taa kırımın oraları kapsıyor ama sen resurgence visible kısımlarına falan steppes_region eklemişsin zaten ilk situation oralarla alakası yok ki, ben onu değiştirdim oralar subcontinent'e göre yaptım güzel oldu, ve docs/maps/ içine de subcontinentslerin tüm mapi kapsayan resmini koydum ordan da bakıp doğrulamasını yapabilirsin istersen ve başka bu tarz güncellenecek yer varsa güncelleyebilirsin.
+
+- biz neden sadece north_china'yı fetih ediyoruz situationlarımızda neden bütün China regionını(north_china_region,west_china_region ve east_china_region dışarda kalıyor) almıyoruz. Tarihte olduğu gibi, tarihsel gidelim dedik ya, sence onu tüm chinayı almayı 2. situationamı yoksa 3. situationamı eklemeliyiz ve sonrasın da ona göre her şeyi günceller misin mantık hatası olmaması için. Ayrıca şimdi farkettim tibet_region'nınıda da eklememişiz tarihte moğollar orayıda almıştı cengiz han zamanın da diye biliyorum orayı da ekleyelim China bölgesi gibi. Bnen Wargoals ksıımlarını biraz düzeltmiştim ama sen yine bak bu son yapacaklarımıza göre düzenle.
+
+
+#### 3. Diğer ülkere event ile haber gönderimi bilgilendirme ve immersion için:
+
+- Ben bunu Prussian Destiny modumda da yapmıştım immersiokn için çok güzel oluyor. Mantığı şu mesela örnek veriyorum mongol oyuncu veya AI fark etmez situaton başlattı zaman belli yerleri aldığı zaman falan o bölgedekilere o bölgenin bitişinde yakın olan ülkelere de uzakta oklsa da bilgilendirme eventleri gidicek. Mesela o situation bölgesinde olan ve mongolun onu hedefleyeceği kurban ülkelere mesela korku eventi gidecek mesela gibi giib bu tarz immersion için çok güzel eventler ekleyebilirsin her situation için ve çoğu yere bunlara iyice bak ve mantık hatası olmadan bug olmadan ekle. Prussian Destiny Event Örneği: pd_brandenburg.101, pd_brandenburg.102, pd_brandenburg.201 ve pd_brandenburg.202 gibi eventlere bakabilirsin fikir için. 
+
+- Ayrıca şimdi aklıma geldi bu tarz pd_brandenburg.200 gibi ally bozma eventide ekleyebiliriz AI sıkışmasın etrafındakiler için eklemiştim ben situation başlarken PD moduma. Sen bak lazımsa ekle analiz et.
+
+#### 4. Mongol Horde ilk situation gui hatası:
+
+- Mongol resurgence guisinde Mongol Horde MGO hem mr_first_claimant hem de mr_first_rival olarak 2 sindede gözüküyor yani hem first claimant hem de kendisinin rakibi olarak 2 tane ayrı mgo bayrağı gözüküyor guide :D
+Bu sanırım tahmini şundan dolayı oldu MGO 1375te spawnlanmadan önce MGO olacak ülke mr_first_rivaldı. Rival olan en güçlü diye MGO oldu, o MGO olunca hem claimant hem rivalda kaldı buglandı.
+
+#### 5. MR_the_sleeping_horde Modifier'ının Gereksizliği ve Mantık Hatası:
+
+- Bu modifier situation 1 ile situaton 2 arasında ki geçişte savaş olmasın diye var yazmışsın ama zaten situation 1 bitti zaman situation 2 direk başlıyor çünkü situation 2 nin mr_can_start_imperial kodunda bu var: has_global_variable = mr_phase_one_complete o sebeple bu modifier'ı kaldırabiliriz zaten bence tarihsel olarak moğollara uymuyor ben PD için yapmıştım onu.
+
+#### 6. Rise of Timur situationdaki mantığı yapalım:
+
+- Rise of Timur situationın da Select Core Region diye bir seçenek var situation guisinde main actions kısmında. Onu seçince o the scourge from central asia character modifierı varken timurda, o auto conquer at war ile aldığı yerleri direk o main acitons ile core yapıp, Core Regions adında buff veriyor topraklara. Bizde Mongol Horde için ilk situation da öyle yapabilir miyiz? Eğer yapamazsak olmadı ilk situationda alacağı yerleri direk situation da MGO çıktığı gibi MGO ya core ekleyelim olmadı öylede yapabiliriz hangisini yapabilirsek onu seçelim.
+
+#### 7. 
+

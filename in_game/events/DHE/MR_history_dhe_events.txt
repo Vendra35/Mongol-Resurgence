@@ -250,7 +250,7 @@ mr_history.6 = {
 		}
 		add_prestige = prestige_severe_bonus
 		# The wealth of the richest city in the world rides north.
-		add_gold = 1000
+		add_gold = 5000
 		if = {
 			limit = {
 				country_exists = c:DLH

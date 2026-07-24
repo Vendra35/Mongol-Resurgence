@@ -48,7 +48,7 @@
  hint_mongol_imperial: "The Pax Mongolica"
  hint_mongol_imperial_hint_text: "The unified horde turns outward. The Silk Road corridor — #Y Khorasan, Xinjiang and North China#! — must answer to the Khan before #Y 1550#!.\n\nThe situation grants the claimant the #Y Mastery of the Silk Road#! casus belli against the powers holding the corridor. The moment the corridor is mastered, the #Y Yeke Mongol Ulus#! — the Mongol Empire — is proclaimed."
  hint_mongol_dominance: "The Four Khanates"
- hint_mongol_dominance_hint_text: "The final act: the empire is proclaimed, and now it must be made whole. Before #Y 1650#! the Yeke Mongol Ulus must hold the #Y seats of the four khanates#! — Karakorum and Dadu for the Yuan, Samarkand for the Chagatai, Sarai and Kazan for the Golden Horde, Tabriz and Baghdad for the Ilkhanate — clear #Y Persia#! of every foreign power, and plant its banner in the #Y Russian lands#! and in #Y Cappadocia#!."
+ hint_mongol_dominance_hint_text: "The final act: the empire is proclaimed, and now it must be made whole. Before #Y 1650#! the Yeke Mongol Ulus must hold the #Y seats of the four khanates#! — Karakorum and Dadu/Khanbaliq for the Yuan, Samarkand for the Chagatai, Sarai and Kazan for the Golden Horde, Tabriz and Baghdad for the Ilkhanate — clear #Y Persia#! of every foreign power, and plant its banner in the #Y Russian lands#! and in #Y Cappadocia#!."
  hint_mr_chahar: "Ligdan Khan and the Chahar"
  hint_mr_chahar_hint_text: "The last Chinggisid Great Khan is trying to reunify the Mongol clans by force. The situation ends when one Mongol power holds #Y Karakorum#! and a foothold in North China — or when Ligdan's claim dies with him in #Y 1634#!."
  hint_mr_torghut: "The Torghut Migration"
@@ -329,7 +329,7 @@
  mr_dominance.131.a: "The world will never be the same."
 
  mr_dominance.135.title: "The Four Corners"
- mr_dominance.135.desc: "A rider can now leave the walls of Karakorum and change horses at imperial yams all the way to Dadu, to Samarkand, to Sarai — and never once cross a border. The four capitals of the old ulus answer to one standard for the first time since the empire broke apart.\n\nThe skeleton of the world empire stands. What remains is to give it flesh: the Persian cities, the Russian tribute, the roads beyond."
+ mr_dominance.135.desc: "A rider can now leave the walls of Karakorum and change horses at imperial yams all the way to Dadu/Khanbaliq, to Samarkand, to Sarai — and never once cross a border. The four capitals of the old ulus answer to one standard for the first time since the empire broke apart.\n\nThe skeleton of the world empire stands. What remains is to give it flesh: the Persian cities, the Russian tribute, the roads beyond."
  mr_dominance.135.a: "Four corners, one sky, one Khan."
 
  mr_dominance.132.title: "The Eternal Empire"
@@ -454,8 +454,8 @@
  mr_dominance_dhe.9.desc: "The old army of the Great Khans was not a mob of riders but a machine: ten men to an arban, ten arbans to a zuun, ten zuuns to a mingghan, ten mingghans to a tumen. Every man knew his place in it, and the world learned to fear what that order could do.\n\nAt Karakorum the war camps are rising again. The smiths are at their forges, the drillmasters count in tens, and the clans that came to the sacred capital as rivals are learning to ride as one people."
  mr_dominance_dhe.9.a: "Ten, a hundred, a thousand, ten thousand!"
  mr_dominance_dhe.9.a.tt1: "Research the [ShowAdvanceName('horse_lords')] advance"
- mr_dominance_dhe.9.a.tt2: "The Khan's decree rebuilds the war camps of [ShowLocationName('karakorum')]:"
- mr_dominance_dhe.9.a.tt3: "Five free [ShowBuildingTypeName('kurultai')] and [ShowBuildingTypeName('armory')] buildings, four regiments of [ShowUnitDefinitionName('a_steppe_horse_archers')], and the camps turn Mongol"
+ mr_dominance_dhe.9.a.tt2: "The Khan's decree rebuilds the war camps of our capital:"
+ mr_dominance_dhe.9.a.tt3: "Five free [ShowBuildingTypeName('kurultai')] and [ShowBuildingTypeName('armory')] buildings, twenty regiments of [ShowUnitDefinitionName('a_steppe_horse_archers')], and the camps turn Mongol"
  mr_dominance_dhe.9.a.tt4: "The tumen system is restored."
 
  mr_dominance_dhe.10.title: "Karakorum Restored"
@@ -464,7 +464,7 @@
  mr_dominance_dhe.10.a: "Raise the city of the Khans!"
  mr_dominance_dhe.10.a.tt1: "Research the [ShowAdvanceName('barracks_advance')] advance"
  mr_dominance_dhe.10.a.tt2: "The Khan's decree raises [ShowLocationName('karakorum')] to a city:"
- mr_dominance_dhe.10.a.tt3: "City rank, a free [ShowBuildingTypeName('castle')], five free [ShowBuildingTypeName('barracks')] and [ShowBuildingTypeName('armory')] buildings, four regiments of [ShowUnitDefinitionName('a_a_urughs')], and the camps turn Mongol"
+ mr_dominance_dhe.10.a.tt3: "City rank, a free [ShowBuildingTypeName('castle')], five free [ShowBuildingTypeName('barracks')] and [ShowBuildingTypeName('armory')] buildings, forty regiments of [ShowUnitDefinitionName('a_steppe_horse_archers')], and the camps turn Mongol"
  mr_dominance_dhe.10.a.tt4: "A market rises on the caravan road, and the kin peoples are accepted at court."
 
  mr_dominance_dhe.11.title: "The Observatory of Samarkand"
@@ -493,7 +493,7 @@
  mr_history.8.entry: "Babur Turns South"
 
  mr_history.1.title: "The Last Stand of the Yuan"
- mr_history.1.desc: "The Mandate of Heaven slips from our grasp. Red Turban banners rise across the southern provinces, the granaries stand empty, and the Yellow River has broken its banks once more. Our ancestors rode from the steppe and took the greatest empire on earth in a single lifetime; their descendants now sit in Dadu counting the provinces they have lost this season.\n\nThe court speaks of restoration. The generals speak of retreat to the grasslands. Both may be right, and neither will save the dynasty."
+ mr_history.1.desc: "The Mandate of Heaven slips from our grasp. Red Turban banners rise across the southern provinces, the granaries stand empty, and the Yellow River has broken its banks once more. Our ancestors rode from the steppe and took the greatest empire on earth in a single lifetime; their descendants now sit in Dadu/Khanbaliq counting the provinces they have lost this season.\n\nThe court speaks of restoration. The generals speak of retreat to the grasslands. Both may be right, and neither will save the dynasty."
  mr_history.1.a: "China is lost. The steppe remains."
  mr_history.1.b: "The Mandate can still be held!"
 
@@ -530,7 +530,7 @@
  mr_history.9.a: "We will rebuild. We have no other choice."
 
  # --- Historical context boxes ---
- mr_history.1.historical_info: "The Yuan were driven from Dadu in 1368 by the Ming founder Zhu Yuanzhang. The court withdrew to the steppe and continued to claim the Mandate of Heaven for another two centuries as the Northern Yuan."
+ mr_history.1.historical_info: "The Yuan were driven from Dadu/Khanbaliq in 1368 by the Ming founder Zhu Yuanzhang. The court withdrew to the steppe and continued to claim the Mandate of Heaven for another two centuries as the Northern Yuan."
  mr_history.2.historical_info: "Abu Sa'id Bahadur Khan died in 1335 without a successor. Within twenty years the Ilkhanate had dissolved into the Jalayirid, Chobanid, Muzaffarid and Sarbadar successor states."
  mr_history.3.historical_info: "The Chagatai Khanate split in the 1340s. Transoxiana in the west Islamised and settled; Moghulistan in the east kept to nomadic tradition. It was from the western half that Timur emerged in 1370."
  mr_history.5.historical_info: "Tokhtamysh reunited the White and Blue Hordes around 1380 with Timur's backing, then turned on his patron. Timur's campaigns of 1391 and 1395 broke the Golden Horde's power permanently."

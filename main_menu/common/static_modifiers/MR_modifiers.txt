@@ -19,7 +19,7 @@ MR_mongol_warrior_spirit = {
 	stability_investment = 1
 	monthly_rebel_growth = -0.0025
 	character_mil_child_education = 0.75
-	expected_army_size = 8
+	expected_army_size = 20
 }
 
 # --- Situation 1 Permanent Reward ---
@@ -35,7 +35,7 @@ MR_unified_mongol_banner = {
 	levy_recovery_modifier = 0.25
 	monthly_rebel_growth = -0.001
 	character_mil_child_education = 0.75
-	expected_army_size_modifier = 2
+	expected_army_size_modifier = 4
 }
 
 # --- Situation 1 Failure (AI) ---
@@ -90,7 +90,7 @@ MR_empire_fulfilled = {
 	subject_loyalty = 25
 	monthly_rebel_growth = -0.0025
 	character_mil_child_education = 0.75
-	expected_army_size_modifier = 2
+	expected_army_size_modifier = 4
 }
 
 # --- Situation 2 Failure (AI) ---
@@ -173,7 +173,7 @@ MR_mongol_world_order = {
 	diplomatic_reputation = -2
 	character_mil_child_education = 0.75
 	monthly_rebel_growth = -0.0025
-	expected_army_size_modifier = 1
+	expected_army_size_modifier = 2
 	manpower_importance_modifier = 25
 	global_max_bureaucracy_slots = 3
 	cultures_capacity = 5
@@ -266,7 +266,7 @@ MR_mongol_historical_modifier = {
 	monthly_horde_unity = 1
 	stability_investment = 0.5
 	monthly_rebel_growth = -0.005
-	expected_army_size = 2
+	expected_army_size = 10
 }
 
 # Historical Phase 1 Permanent Reward
@@ -284,6 +284,7 @@ MR_mongol_historical_modifier_2 = {
 	stability_investment = 0.25
 	monthly_rebel_growth = -0.0025
 	character_mil_child_education = 0.75
+	expected_army_size = 2
 }
 
 # Historical Phase 2 Buff
@@ -298,6 +299,7 @@ MR_imperial_historical_modifier = {
 	land_morale_modifier = 0.05
 	discipline = 0.05
 	siege_ability = 0.2
+	expected_army_size = 12
 	blocks_country_formation = yes
 	blocked_from_conversion = yes
 }
@@ -313,6 +315,7 @@ MR_dominance_historical_modifier = {
 	global_monthly_prosperity = 0.002
 	subject_loyalty = 15
 	monthly_rebel_growth = -0.0025
+	expected_army_size = 15
 	blocked_from_conversion = yes
 }
 
@@ -341,6 +344,7 @@ MR_kurultai_mandate = {
 	monthly_horde_unity = 0.5
 	monthly_legitimacy = 0.5
 	monthly_prestige = 0.1
+	cultures_capacity = 5
 }
 
 # --- The Western Ulus Restored (mr_imperial.201, 25 years) ---
@@ -359,7 +363,7 @@ MR_seal_of_chinggis = {
 		category = country
 	}
 	monthly_legitimacy = 1
-	monthly_horde_unity = 0.5
+	monthly_horde_unity = 1
 	monthly_prestige = 0.25
 }
 

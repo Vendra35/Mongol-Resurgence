@@ -108,13 +108,13 @@ mr_resurgence_visible = {
 			government_type = government_type:steppe_horde
 		}
 		any_owned_location = {
-			region = region:mongolia_region
+			sub_continent = sub_continent:east_asia
 		}
 		any_owned_location = {
-			region = region:steppes_region
+			sub_continent = sub_continent:north_asia
 		}
 		any_owned_location = {
-			region = region:north_china_region
+			sub_continent = sub_continent:central_asia
 		}
 	}
 }
@@ -132,16 +132,17 @@ mr_imperial_visible = {
 			is_neighbor_of = c:MGO
 		}
 		any_owned_location = {
-			region = region:khorasan_region
+			sub_continent = sub_continent:east_asia
 		}
 		any_owned_location = {
-			region = region:xinjiang_region
+			sub_continent = sub_continent:north_asia
 		}
 		any_owned_location = {
-			region = region:north_china_region
+			sub_continent = sub_continent:central_asia
 		}
+		## Includes Persia, Crescent and Anatolia.
 		any_owned_location = {
-			region = region:persia_region
+			sub_continent = sub_continent:middle_east
 		}
 	}
 }
@@ -159,13 +160,26 @@ mr_dominance_visible = {
 			is_neighbor_of = c:MGE
 		}
 		any_owned_location = {
-			region = region:russian_region
+			sub_continent = sub_continent:east_asia
 		}
 		any_owned_location = {
-			region = region:steppes_region
+			sub_continent = sub_continent:north_asia
 		}
 		any_owned_location = {
-			region = region:persia_region
+			sub_continent = sub_continent:central_asia
+		}
+		any_owned_location = {
+			sub_continent = sub_continent:south_asia
+		}
+		any_owned_location = {
+			sub_continent = sub_continent:south_east_asia
+		}
+		## Includes Russia, Steppes region, Poland etc.
+		any_owned_location = {
+			sub_continent = sub_continent:eastern_europe
+		}
+		any_owned_location = {
+			sub_continent = sub_continent:middle_east
 		}
 	}
 }
