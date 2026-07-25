@@ -821,9 +821,12 @@ mongol_dominance = {
 			# every_ownable_location_in_area blocks. Tabriz rides in
 			# with the persia_region loop (azerbaijan_area is inside
 			# persia_region).
-			area:upper_selenga_area = {
-				every_ownable_location_in_area = {
+			## Includes Karakorum.
+			region:mongolia_region = {
+				every_ownable_location_in_region = {
 					limit = {
+						# owner ?= not owner =: an ownerless location made
+						# the bare link error at :559 in testing.
 						owner ?= {
 							is_ai = yes
 							NOR = {
@@ -836,9 +839,12 @@ mongol_dominance = {
 					add_core = scope:mr_claimant
 				}
 			}
-			area:lower_don_area = {
-				every_ownable_location_in_area = {
+			## Includes Sarai.
+			region:steppes_region = {
+				every_ownable_location_in_region = {
 					limit = {
+						# owner ?= not owner =: an ownerless location made
+						# the bare link error at :559 in testing.
 						owner ?= {
 							is_ai = yes
 							NOR = {
@@ -848,9 +854,10 @@ mongol_dominance = {
 						}
 					}
 					change_location_owner = scope:mr_claimant
-					add_core = scope:mr_claimant
+					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
 				}
 			}
+			## Includes Kazan.
 			area:kazan_area = {
 				every_ownable_location_in_area = {
 					limit = {
@@ -863,10 +870,11 @@ mongol_dominance = {
 						}
 					}
 					change_location_owner = scope:mr_claimant
-					add_core = scope:mr_claimant
+					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
 				}
 			}
-			area:transoxiana_area = {
+			## To prevent bordergore to kazan corridor.
+			area:bolghar_area = {
 				every_ownable_location_in_area = {
 					limit = {
 						owner ?= {
@@ -878,10 +886,11 @@ mongol_dominance = {
 						}
 					}
 					change_location_owner = scope:mr_claimant
-					add_core = scope:mr_claimant
+					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
 				}
 			}
-			area:iraq_arabi_area = {
+			## To prevent bordergore to kazan corridor.
+			area:bashkiria_area = {
 				every_ownable_location_in_area = {
 					limit = {
 						owner ?= {
@@ -893,10 +902,11 @@ mongol_dominance = {
 						}
 					}
 					change_location_owner = scope:mr_claimant
-					add_core = scope:mr_claimant
+					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
 				}
 			}
-			area:cappadocia_area = {
+			## We give this area in russia region to prevent bordergore and complete the end requirement for the russian foothold.
+			area:samara_area = {
 				every_ownable_location_in_area = {
 					limit = {
 						owner ?= {
@@ -908,10 +918,43 @@ mongol_dominance = {
 						}
 					}
 					change_location_owner = scope:mr_claimant
-					add_core = scope:mr_claimant
+					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
 				}
 			}
-			region:persia_region = {
+			## We give this area in russia region to prevent bordergore and complete the end requirement for the russian foothold.
+			area:ryazan_area = {
+				every_ownable_location_in_area = {
+					limit = {
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
+				}
+			}
+			## We give this area in russia region to prevent bordergore and complete the end requirement for the russian foothold.
+			area:tambov_area = {
+				every_ownable_location_in_area = {
+					limit = {
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
+				}
+			}
+			## Includes Transoxiana area (Samarkand location).
+			region:khorasan_region = {
 				every_ownable_location_in_region = {
 					limit = {
 						owner ?= {
@@ -926,7 +969,8 @@ mongol_dominance = {
 					add_core = scope:mr_claimant
 				}
 			}
-			area:beiping_area = {
+			## Includes Baghdad location.
+			area:iraq_arabi_area = {
 				every_ownable_location_in_area = {
 					limit = {
 						owner ?= {
@@ -938,11 +982,58 @@ mongol_dominance = {
 						}
 					}
 					change_location_owner = scope:mr_claimant
-					add_core = scope:mr_claimant
+					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
 				}
 			}
-			area:ryazan_area = {
+			area:cappadocia_area = {
 				every_ownable_location_in_area = {
+					limit = {
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
+				}
+			}
+			## Includes Armenian Highlands area.
+			region:caucasus_region = {
+				every_ownable_location_in_region = {
+					limit = {
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
+				}
+			}
+			region:persia_region = {
+				every_ownable_location_in_region = {
+					limit = {
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
+				}
+			}
+			## Includes Khanbaliq.
+			region:north_china_region = {
+				every_ownable_location_in_region = {
 					limit = {
 						owner ?= {
 							is_ai = yes
@@ -1037,10 +1128,16 @@ mongol_dominance = {
 		if = {
 			limit = {
 				OR = {
-					region = region:russian_region
-					region = region:steppes_region
-					region = region:persia_region
-					region = region:anatolia_region
+					this.region = region:russian_region
+					this.region = region:steppes_region
+					this.region = region:persia_region
+					this.region = region:anatolia_region
+					this.region = region:ural_region
+					this.region = region:caucasus_region
+				}
+				NOR = {
+					owner = c:MGE
+					owner = c:MGO
 				}
 			}
 			custom_tooltip = mr_dominance_map_tt
@@ -1087,6 +1184,12 @@ mongol_dominance = {
 					region = region:russian_region
 					region = region:steppes_region
 					region = region:persia_region
+					region = region:caucasus_region
+					area = area:cappadocia_area
+					area = area:iraq_arabi_area
+					area = area:kazan_area
+					area = area:bolghar_area
+					area = area:bashkiria_area
 				}
 				NOT = {
 					owner ?= {

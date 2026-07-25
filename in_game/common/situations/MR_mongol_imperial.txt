@@ -564,7 +564,7 @@ mongol_imperial = {
 				}
 			}
 			set_global_variable = mr_failsafe_p2_fired
-			region:khorasan_region = {
+			region:mongolia_region = {
 				every_ownable_location_in_region = {
 					limit = {
 						# owner ?= not owner =: an ownerless location made
@@ -579,6 +579,23 @@ mongol_imperial = {
 					}
 					change_location_owner = c:MGO
 					add_core = c:MGO
+				}
+			}
+			region:khorasan_region = {
+				every_ownable_location_in_region = {
+					limit = {
+						# owner ?= not owner =: an ownerless location made
+						# the bare link error at :559 in testing.
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
+					change_location_owner = c:MGO
+					# add_core = c:MGO // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
 				}
 			}
 			region:xinjiang_region = {

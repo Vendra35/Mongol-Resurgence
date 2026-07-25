@@ -37,6 +37,7 @@ MR_unified_mongol_banner = {
 	levy_recovery_modifier = 0.5
 	monthly_rebel_growth = -0.001
 	character_mil_child_education = 0.75
+	num_local_governors = 1
 	expected_army_size_modifier = 4
 }
 
@@ -93,6 +94,7 @@ MR_empire_fulfilled = {
 	monthly_rebel_growth = -0.0025
 	character_mil_child_education = 0.75
 	expected_army_size_modifier = 4
+	num_local_governors = 1
 }
 
 # --- Situation 2 Failure (AI) ---
@@ -179,6 +181,7 @@ MR_mongol_world_order = {
 	manpower_importance_modifier = 25
 	global_max_bureaucracy_slots = 3
 	cultures_capacity = 5
+	num_local_governors = 1
 	allow_bureaucracy = yes
 }
 
@@ -286,6 +289,7 @@ MR_mongol_historical_modifier_2 = {
 	stability_investment = 0.25
 	monthly_rebel_growth = -0.0025
 	character_mil_child_education = 0.75
+	num_local_governors = 1
 	expected_army_size = 2
 }
 
@@ -352,6 +356,7 @@ MR_kurultai_mandate = {
 	monthly_horde_unity = 0.5
 	monthly_legitimacy = 0.5
 	monthly_prestige = 0.1
+	num_local_governors = 1
 	cultures_capacity = 5
 }
 
@@ -383,6 +388,7 @@ MR_volga_pastures = {
 	global_manpower_modifier = 0.1
 	army_light_cavalry_power = 0.1
 	global_population_growth = 0.005
+	num_local_governors = 1
 }
 
 # --- The Dzungar Legacy (mr_steppe.22, permanent) ---
@@ -394,4 +400,5 @@ MR_dzungar_legacy = {
 	siege_ability = 0.2
 	tax_income_efficiency = 0.1
 	monthly_rebel_growth = -0.0025
+	num_local_governors = 1
 }

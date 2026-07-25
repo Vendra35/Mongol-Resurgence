@@ -107,15 +107,10 @@ mr_resurgence_visible = {
 			}
 			government_type = government_type:steppe_horde
 		}
-		any_owned_location = {
-			sub_continent = sub_continent:east_asia
-		}
-		any_owned_location = {
-			sub_continent = sub_continent:north_asia
-		}
-		any_owned_location = {
-			sub_continent = sub_continent:central_asia
-		}
+		## We use has_presence_in rather than any_owned_location because the latter is a very expensive check and we don't need to know who owns the locations, just that a country has a presence in the subcontinent.
+		has_presence_in = sub_continent:east_asia
+		has_presence_in = sub_continent:north_asia
+		has_presence_in = sub_continent:central_asia
 	}
 }
 
@@ -131,19 +126,11 @@ mr_imperial_visible = {
 			country_exists = c:MGO
 			is_neighbor_of = c:MGO
 		}
-		any_owned_location = {
-			sub_continent = sub_continent:east_asia
-		}
-		any_owned_location = {
-			sub_continent = sub_continent:north_asia
-		}
-		any_owned_location = {
-			sub_continent = sub_continent:central_asia
-		}
-		## Includes Persia, Crescent and Anatolia.
-		any_owned_location = {
-			sub_continent = sub_continent:middle_east
-		}
+		## We use has_presence_in rather than any_owned_location because the latter is a very expensive check and we don't need to know who owns the locations, just that a country has a presence in the subcontinent.
+		has_presence_in = sub_continent:east_asia
+		has_presence_in = sub_continent:north_asia
+		has_presence_in = sub_continent:central_asia
+		has_presence_in = sub_continent:middle_east		## Includes Persia, Crescent and Anatolia.
 	}
 }
 
@@ -159,28 +146,14 @@ mr_dominance_visible = {
 			country_exists = c:MGE
 			is_neighbor_of = c:MGE
 		}
-		any_owned_location = {
-			sub_continent = sub_continent:east_asia
-		}
-		any_owned_location = {
-			sub_continent = sub_continent:north_asia
-		}
-		any_owned_location = {
-			sub_continent = sub_continent:central_asia
-		}
-		any_owned_location = {
-			sub_continent = sub_continent:south_asia
-		}
-		any_owned_location = {
-			sub_continent = sub_continent:south_east_asia
-		}
-		## Includes Russia, Steppes region, Poland etc.
-		any_owned_location = {
-			sub_continent = sub_continent:eastern_europe
-		}
-		any_owned_location = {
-			sub_continent = sub_continent:middle_east
-		}
+		## We use has_presence_in rather than any_owned_location because the latter is a very expensive check and we don't need to know who owns the locations, just that a country has a presence in the subcontinent.
+		has_presence_in = sub_continent:east_asia
+		has_presence_in = sub_continent:north_asia
+		has_presence_in = sub_continent:central_asia
+		has_presence_in = sub_continent:south_asia
+		has_presence_in = sub_continent:south_east_asia
+		has_presence_in = sub_continent:eastern_europe		## Includes Russia, Steppes region, Poland etc.
+		has_presence_in = sub_continent:middle_east		## Includes Persia, Crescent and Anatolia.
 	}
 }
 
@@ -204,14 +177,28 @@ mr_resurgence_end_trigger = {
 			has_presence_in = area:eastern_gobi_area
 			has_presence_in = area:western_gobi_area
 		}
+		## This code is not good so i commented it. I explain it in the Debug-and-test_results.md. "12. any_owned_location veya any-ownable_location kullanımı çok kötü:"
+		# NOT = {
+		# 	any_country = {
+		# 		NOR = {
+		# 			tag = MGO
+		# 			is_subject_of = c:MGO
+		# 		}
+		# 		any_owned_location = {
+		# 			region = region:mongolia_region
+		# 		}
+		# 	}
+		# }
+		## Better to use the following code, as it is more readable and less error-prone.
 		NOT = {
-			any_country = {
-				NOR = {
-					tag = MGO
-					is_subject_of = c:MGO
-				}
-				any_owned_location = {
-					region = region:mongolia_region
+			region:mongolia_region = {
+				any_ownable_location_in_region = {
+					owner ?= {
+						NOR = {
+							tag = MGO
+							is_subject_of = c:MGO
+						}
+					}
 				}
 			}
 		}
@@ -236,29 +223,91 @@ mr_imperial_end_trigger = {
 			owns = location:samarkand
 			owns = location:dadu
 		}
+		## This code is not good so i commented it. I explain it in the Debug-and-test_results.md. "12. any_owned_location veya any-ownable_location kullanımı çok kötü:"
+		# NOT = {
+		# 	any_country = {
+		# 		NOR = {
+		# 			tag = MGO
+		# 			tag = MGE
+		# 			AND = {
+		# 				country_exists = c:MGO
+		# 				is_subject_of = c:MGO
+		# 			}
+		# 			AND = {
+		# 				country_exists = c:MGE
+		# 				is_subject_of = c:MGE
+		# 			}
+		# 		}
+		# 		OR = {
+		# 			any_owned_location = {
+		# 				region = region:khorasan_region
+		# 			}
+		# 			any_owned_location = {
+		# 				region = region:xinjiang_region
+		# 			}
+		# 			any_owned_location = {
+		# 				region = region:north_china_region
+		# 			}
+		# 		}
+		# 	}
+		# }
+		## Better to use the following code, as it is more readable and less error-prone.
 		NOT = {
-			any_country = {
-				NOR = {
-					tag = MGO
-					tag = MGE
-					AND = {
-						country_exists = c:MGO
-						is_subject_of = c:MGO
-					}
-					AND = {
-						country_exists = c:MGE
-						is_subject_of = c:MGE
+			region:khorasan_region = {
+				any_ownable_location_in_region = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								tag = MGE
+								is_subject_of = c:MGE
+							}
+						}
 					}
 				}
-				OR = {
-					any_owned_location = {
-						region = region:khorasan_region
+			}
+		}
+		NOT = {
+			region:xinjiang_region = {
+				any_ownable_location_in_region = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								tag = MGE
+								is_subject_of = c:MGE
+							}
+						}
 					}
-					any_owned_location = {
-						region = region:xinjiang_region
-					}
-					any_owned_location = {
-						region = region:north_china_region
+				}
+			}
+		}
+		NOT = {
+			region:north_china_region = {
+				any_ownable_location_in_region = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								tag = MGE
+								is_subject_of = c:MGE
+							}
+						}
 					}
 				}
 			}
@@ -296,30 +345,170 @@ mr_dominance_end_trigger = {
 			owns = location:kazan
 			owns = location:tabriz
 			owns = location:baghdad
-			any_owned_location = {
-				region = region:russian_region
-			}
+			has_presence_in = region:russian_region
 			has_presence_in = area:cappadocia_area
 		}
 		# The Ilkhanate clause: no power outside the claimant's realm
 		# holds a single location in the Persia region. c:TAG links sit
 		# behind country_exists guards in the same AND, as everywhere.
+		## This code is not good so i commented it. I explain it in the Debug-and-test_results.md. "12. any_owned_location veya any-ownable_location kullanımı çok kötü:"
+		# NOT = {
+		# 	any_country = {
+		# 		NOR = {
+		# 			tag = MGE
+		# 			tag = MGO
+		# 			AND = {
+		# 				country_exists = c:MGE
+		# 				is_subject_of = c:MGE
+		# 			}
+		# 			AND = {
+		# 				country_exists = c:MGO
+		# 				is_subject_of = c:MGO
+		# 			}
+		# 		}
+		# 		any_owned_location = {
+		# 			region = region:persia_region
+		# 		}
+		# 	}
+		# }
+		## Better to use the following code, as it is more readable and less error-prone.
 		NOT = {
-			any_country = {
-				NOR = {
-					tag = MGE
-					tag = MGO
-					AND = {
-						country_exists = c:MGE
-						is_subject_of = c:MGE
-					}
-					AND = {
-						country_exists = c:MGO
-						is_subject_of = c:MGO
+			region:persia_region = {
+				any_ownable_location_in_region = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGE
+								tag = MGE
+								is_subject_of = c:MGE
+							}
+							AND = {
+								country_exists = c:MGO
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+						}
 					}
 				}
-				any_owned_location = {
-					region = region:persia_region
+			}
+		}
+		NOT = {
+			region:steppes_region = {
+				any_ownable_location_in_region = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGE
+								tag = MGE
+								is_subject_of = c:MGE
+							}
+							AND = {
+								country_exists = c:MGO
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
+				}
+			}
+		}
+		NOT = {
+			region:caucasus_region = {
+				any_ownable_location_in_region = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGE
+								tag = MGE
+								is_subject_of = c:MGE
+							}
+							AND = {
+								country_exists = c:MGO
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
+				}
+			}
+		}
+		NOT = {
+			area:kazan_area = {
+				any_ownable_location_in_area = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGE
+								tag = MGE
+								is_subject_of = c:MGE
+							}
+							AND = {
+								country_exists = c:MGO
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
+				}
+			}
+		}
+		NOT = {
+			area:bolghar_area = {
+				any_ownable_location_in_area = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGE
+								tag = MGE
+								is_subject_of = c:MGE
+							}
+							AND = {
+								country_exists = c:MGO
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
+				}
+			}
+		}
+		NOT = {
+			area:bashkiria_area = {
+				any_ownable_location_in_area = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGE
+								tag = MGE
+								is_subject_of = c:MGE
+							}
+							AND = {
+								country_exists = c:MGO
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
+				}
+			}
+		}
+		NOT = {
+			area:iraq_arabi_area = {
+				any_ownable_location_in_area = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGE
+								tag = MGE
+								is_subject_of = c:MGE
+							}
+							AND = {
+								country_exists = c:MGO
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
 				}
 			}
 		}
@@ -377,12 +566,9 @@ mr_chahar_visible = {
 	OR = {
 		tag = MGO
 		tag = MGE
-		any_owned_location = {
-			region = region:mongolia_region
-		}
-		any_owned_location = {
-			region = region:north_china_region
-		}
+		# We use has_presence_in rather than any_owned_location because the latter is a very expensive check and we don't need to know who owns the locations, just that a country has a presence in the subcontinent.
+		has_presence_in = region:mongolia_region
+		has_presence_in = region:north_china_region
 	}
 }
 
@@ -444,15 +630,10 @@ mr_torghut_visible = {
 		tag = OIR
 		tag = MGO
 		tag = MGE
-		any_owned_location = {
-			region = region:steppes_region
-		}
-		any_owned_location = {
-			region = region:russian_region
-		}
-		any_owned_location = {
-			region = region:ural_region
-		}
+		# We use has_presence_in rather than any_owned_location because the latter is a very expensive check and we don't need to know who owns the locations, just that a country has a presence in the subcontinent.
+		has_presence_in = region:steppes_region
+		has_presence_in = region:russian_region
+		has_presence_in = region:ural_region
 	}
 }
 
@@ -497,12 +678,9 @@ mr_dzungar_visible = {
 		tag = OIR
 		tag = MGO
 		tag = MGE
-		any_owned_location = {
-			region = region:xinjiang_region
-		}
-		any_owned_location = {
-			region = region:khorasan_region
-		}
+		# We use has_presence_in rather than any_owned_location because the latter is a very expensive check and we don't need to know who owns the locations, just that a country has a presence in the subcontinent.
+		has_presence_in = region:xinjiang_region
+		has_presence_in = region:khorasan_region
 	}
 }
 

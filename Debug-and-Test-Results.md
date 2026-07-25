@@ -304,7 +304,7 @@ Denetim turlarinda 6 gercek bug daha bulunup duzeltildi (hepsi statik dogrulamad
 
 
 
-##### 24.07.2026 TEST RESULTS #####
+##### 24.07.2026 AND 25.07.2026 TEST RESULTS #####
 
 ### 1. GUI bilgilendirmesi daha açıklayıcı yapalım:
 
@@ -336,7 +336,7 @@ Bu sanırım tahmini(artık tahmin değil kesin öyle test ettim) şundan dolay�
 
 #### 6. Rise of Timur situationdaki mantığı yapalım:
 
-- Rise of Timur situationın da Select Core Region diye bir seçenek var situation guisinde main actions kısmında. Onu seçince o the scourge from central asia character modifierı varken timurda, o auto conquer at war ile aldığı yerleri direk o main acitons ile core yapıp, Core Regions adında buff veriyor topraklara. Bizde Mongol Horde için ilk situation da öyle yapabilir miyiz? Eğer yapamazsak olmadı ilk situationda alacağı yerleri direk situation da MGO çıktığı gibi MGO ya core ekleyelim olmadı öylede yapabiliriz hangisini yapabilirsek onu seçelim.
+- Rise of Timur situationın da Select Core Region diye bir seçenek var situation guisinde main actions kısmında. Onu seçince o the scourge from central asia character modifierı varken timurda, o auto conquer at war ile aldığı yerleri direk o main acitons ile core yapıp, Core Regions adında buff veriyor topraklara. Bizde Mongol Horde için ilk situation da öyle yapabilir miyiz? Eğer yapamazsak olmadı ilk situationda alacağı yerleri direk situation da MGO çıktığı gibi MGO ya core ekleyelim olmadı öylede yapabiliriz hangisini yapabilirsek onu seçelim. 2. situation içinde ekleyebiliriz bu mantığı olmadı.
 
 #### 7. Hala 2. Situationdaki guiyi açınca hata spamlıyor ancak resim portre gelmiş siyah değil artık:
 
@@ -370,25 +370,89 @@ Bu sanırım tahmini(artık tahmin değil kesin öyle test ettim) şundan dolay�
 
 - Nedense bu error log spam artık 1. situation da gui açınca olmuyor, ama 2. ve 3. situation da guiyi açınca oluyor.
 
-#### 8. Mongol Empire Fulfilled ismi ve Modifierın gereksizliği:
+#### 8. Mongol Empire Fulfilled ismi ve Kalıcı Modifierların mantık hatası:
 
-- Bu modifierı 3. situation başlayana kadar veriyorsun ama zaten 2. situation bittiği gibi 3. situation başlıyor, bi anlamı yok bence komple kaldıralım. Veya 2. situation bittiğin de mongol empire formladığımız için farklı isimle bir modifier da verebilirsin bi kaç yıllığına 25 olur 50 yıl olur farketmez.
+- Bu modifierı 3. situation başlayana kadar veriyorsun ama zaten 2. situation bittiği gibi 3. situation başlıyor, bi anlamı yok bence ya komple kaldıralım ya da 2. situation bittiğin de mongol empire formladığımız için farklı isimle bir modifier da verebilirsin kalıcı olcak şekilde farketmez.
 
-#### 9. MR_empire_fulfilled Modifierın da mantık hatası mı var?:
+- Ayrıca Modifierı permanent demişiz modifier dosyasında # --- Situation 2 Permanent Reward --- mongol empire formladığımız için. Ama 3. situation yani dominance situationın on_startında kaldırıyoruz # The Phase 2 reward expires here, as its tooltip promises # ("removed upon the start of the 3rd Situation"). remove_country_modifier = MR_empire_fulfilled diyerek neden onu anlamadım.
 
-- Modifierı permanent demişiz modifierı dosyasında # --- Situation 2 Permanent Reward --- mongol empire formladığımız için. Ama 3. situation yani dominance situationın on_startında kaldırıyoruz # The Phase 2 reward expires here, as its tooltip promises # ("removed upon the start of the 3rd Situation"). remove_country_modifier = MR_empire_fulfilled diyerek neden onu anlamadım.
+-  Ayrıca mesela MR_mongol_historical_modifier_2 modifierı vs de permanent olması gerekiyor normalde 1. situation bittiğinde kazanınca ama oda 2. situation başlarken kaldırılıyor bizim situationlar hemen diğeri bitince başladığı için her situation başında kalıcı olanları remove yapmaya gerek yok prussian destiny modundaki gib o sebeple localization dosyasında ki removed upon the start of the 2nd Situation loclarını temizleyip ona göre düzenler misin. Kalıcı olması gerken modifierlar kalıcı kalsın.
 
-#### 10. MGE_f formlanınca harita da çıkan garip ülke ismi:
+#### 9. MGE_f formlanınca harita da çıkan garip ülke ismi:
 
-- MGE_f formlanınca Mongol Empire, Great Mongol Empire veya Yeke Mongol Ulus falan yazmıyor haritada ülke isminde, onun yerine Great Mongol Horde yazıyor dünya haritasında. Sanırım sıkıntı oldu biz MGOya mongol horde demiştik ama mge_f ye ismi taşındı nedense.
+- MGE_f formlanınca Mongol Empire, Great Mongol Empire veya Yeke Mongol Ulus falan yazmıyor haritada ülke isminde, onun yerine Great Mongol Horde yazıyor dünya haritasında. Sanırım sıkıntı oldu biz MGOya mongol horde demiştik ama mge_f ye ismi taşındı galiba. Ama reqiureiments kısımlarında ya da ülkeyi seçerken ismi Yeke Mongol Ulus olarka gözüküyor ama dünya haritasından direk gözüken ismi Great Mongol Horde olarak gözüküyor.
 
-#### 11. Benim eklediklerim:
+#### 10. Benim eklediklerim:
 
-1. MGO formlanınca ülke county kalıyordu onun altına ekledim artık MGO formlanınca kingdom oluyor ve ai personalitysini de agresif yapıyor. Aynısı MGE içinde geçerli MGE formlanınca ülkesini empire değilse empire yapıyor level 4 ile ve ai personalitysini de agresif yapıyor yine.
-2. Modifierları biraz düzenledim terminator olanları daha güçlü yaptım historical olanları da biraz güçlendirdim ve khanlara gelen monthly gold income'ı arttırdım ve 2. situationda gelen bufflara army_maintenance_efficiency modifierı ekledim çünkü eğer o bizim eklediğimiz güçlü özel khanlar ölünc eülke bankrupt oluyordu bi anda income'ı düştüğü için.
+1. MGO formlanınca ülke kontluk ve düklük kalabiliyordu onun altına ekledim artık MGO formlanınca kingdom oluyor ve ülkesinin ai personalitysini de agresif yapıyor. Aynısı MGE içinde geçerli MGE formlanınca ülkesini empire değilse empire yapıyor level 4 ile ve ai personalitysini de agresif yapıyor yine.
+
+2. Modifierları biraz düzenledim terminator olanları daha güçlü yaptım historical olanları da biraz güçlendirdim ve khanlara gelen monthly gold income'ı arttırdım ve 2. situationda gelen bufflara army_maintenance_efficiency modifierı ekledim çünkü eğer o bizim eklediğimiz güçlü özel khanlar ölünce ülke bankrupt oluyordu bi anda income'ı düştüğü için.
+
+#### 11. Tarihsellik için isteklerim:
+
+- Benim baktığım kadarıyla moğollar tarihte perslere veya avrupaya gitmeden çinin hepsini veya manchuria korelerin oralarıda girmişlper yani benim senden istediğim TAMAMEN TARİHSEL bir genişleme yapalım ve situationlardaki end requirementları onlara göre düzeltelim olmadı. 24.07:### 2. Region,area,subcontinent ve Situation Fetih bölge değişiklikleri maddesinde de bundan biraz bahsetmiştim, yani lütfen tarihsel yapalım istersen moığollar tarihte nereleri fetih etmiş sıra sıra araştır öyle entegre de edebiliriz fark etmez.
+- Ayrıca west_siberia_regionında kalan bursol_area, omsk_area ve kulykol_area bölgelerini de 2. situationda aldırabiliriz borderlar daha güzel gözüksün diye.
+- Son olarak 2. situation başarılı bir şekilde bittiğinde ya da 3. situation başladığına bence başkenti akrakorumdan khanbaliqe taşımalıyız tarihsellik olarak düye düşündüm sen ne dersin?
+
+#### 12. any_owned_location veya any-ownable_location kullanımı çok kötü:
+
+- anw_owned_location veya any-ownable_location kullanımı tüm dünyada ki ülkeleri tarıyo toprakları performasnı kötü ve hatalı oluyor çoğu zaman onlar yerine benim prussian destiny modumdaki gibi any_ownable_location_in_area veya region çok daha güvenli ve çalışır durumda onları kullan.
+
+- # MR_scripted_trigger.txt dosyasından Örnek: bu kodu kullanma:
+
+	# The Ilkhanate clause: no power outside the claimant's realm
+	# holds a single location in the Persia region. c:TAG links sit
+	# behind country_exists guards in the same AND, as everywhere.
+	NOT = {
+	 	any_country = {
+	 		NOR = {
+	 			tag = MGE
+	 			tag = MGO
+	 			AND = {
+	 				country_exists = c:MGE
+					is_subject_of = c:MGE
+				}
+	 			AND = {
+					country_exists = c:MGO
+	 				is_subject_of = c:MGO
+	 			}
+	 		}
+	 		any_ownable_location = {
+	 			this.region = region:persia_region
+	 		}
+	 	}
+	 }
+
+	# Bu kodu bu şekilde kullan her zaman daha güvenli ve performans dostu:
+	NOT = { 
+		region:persia_region = {
+			any_ownable_location_in_region = {
+				owner ?= {
+					NOR = {
+						AND = {
+							country_exists = c:MGE
+							this = c:MGE
+							is_subject_of = c:MGE
+						}
+						AND = {
+							country_exists = c:MGO
+							this = c:MGO
+							is_subject_of = c:MGO
+						}
+					}
+				}
+			}
+		}
+	}
 
 
-#### FİNAL NOT: Evet şuan gözüme çarpan ve oyun içinde debug logda ortaya çıkan hatalar bu şekildeydi bunları düzelttikten sonra tekrar bizim ana CLAUDE.md, diğer tüm .md dosyalarımızı ve bu yaptığımız değişikliklerle ilgili bir içerik, mantık hatası, bug ve rehber falan varsa onları da güncelleyip elden geçirir misin detaylı bir şekilde. MD dosyalarımız güncel kalsın ki ilerde bu modu kullanıcaksam veya başka sıfırdan bir mod yapacaksam işimize yarasın.
+#### 13. ÇOK ÖNEMLİ DÜRÜST CEVAP VER MODUMUN BAŞARIISIYLA VE GELECEĞİYLE İLGİLİ BİR SORU:
+
+- Bildiğin gibi eu5 1337 tarihinde başlıyor. Ben moğolları sevdiğim için Prussian Destiny gibi Mongol railroad modu yaptım senle, modu nerdeyse bitirdik ama şimdi düşündüm mesela bu modda yine taaa irana anadoluya kadar giriyoruz ya bu diğer tarihsel unsurların mesela osmanlı, timur, rusya gibi çıkacak tarihsel ülkelerin gelişimini bozacak bu sefer bu modu kullanan insanlar kendi oynamasa bile diğer ülkelerin tarihselliği de bozulacak. Bizim Mongol Resgurgence modumuz alternatif tarih olsa bile acaba bu modumuzu çıkartmayıp bekletip, ilerde yapmayı planladığım ama çok zor olan total overhaul moduna mı bekletsem?
+- Benim amacım Crusader Kings 3 oyunundaki başlangıç tarihlerinden bir EU5 total overhaul'u yapmak çünkü vikingleri ve moğolları çok seviyorum. 867 yılında başlarsak vikingler ile başlıyor 1066 veya 1178 ile başlarsak moğollar var. Crusader Kings'in böyle 3 tane başlangıç tarihi var: 867, 1066 ve 1178 diye 3 tane. Bunlardan birini total overhaul yapmak istiyorum acaba oraya mı saklasam bu mongol modumu yoksa hem EU5'in vanilla 1337 hali için bu modu yayınlayıp, hem de o yapmayı planladığım diğer total overhaul modunda gerçek moğollar için değiştirip 2 tane benzer ama farklı Moğol modumu yapsam, sence ne yapalım ve nasıl ilerlemeliyim?
+
+
+#### FİNAL NOT: Evet şuan gözüme çarpan ve oyun içinde debug logda ortaya çıkan hatalar bu şekildeydi bunları düzelttikten sonra tekrar bizim ana CLAUDE.md, diğer tüm .md dosyalarımızı ve tüm localization vs. gibi bütün ana mod dosyalarımız da yaptığımız değişikliklerle ve modumuzla ilgili bir içerikte vs. bir mantık hatası ve bug falan olmaması için hepsini güncelleyip elden geçirir misin detaylı bir şekilde. MD dosyalarımız güncel kalsın ki ilerde bu modu kullanıcaksam veya başka sıfırdan bir mod yapacaksam işimize yarasın.
 
 
 
