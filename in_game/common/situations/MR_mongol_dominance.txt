@@ -93,9 +93,9 @@ mongol_dominance = {
 		random_country = {
 			limit = {
 				OR = {
-					has_presence_in = region:russian_region
-					has_presence_in = region:steppes_region
-					has_presence_in = region:ural_region
+					has_presence_in = scripted_geography:MR_geo_russian_lands
+					has_presence_in = scripted_geography:MR_geo_western_reach
+					has_presence_in = scripted_geography:MR_geo_pontic
 				}
 				NOR = {
 					tag = MGO
@@ -197,14 +197,11 @@ mongol_dominance = {
 		every_country = {
 			limit = {
 				OR = {
-					has_presence_in = region:russian_region
-					has_presence_in = region:steppes_region
-					has_presence_in = region:ural_region
-					has_presence_in = region:persia_region
-					has_presence_in = region:anatolia_region
-					has_presence_in = region:caucasus_region
-					has_presence_in = area:iraq_arabi_area
-					has_presence_in = area:armenian_highlands_area
+					has_presence_in = scripted_geography:MR_geo_russian_lands
+					has_presence_in = scripted_geography:MR_geo_western_reach
+					has_presence_in = scripted_geography:MR_geo_pontic
+					has_presence_in = scripted_geography:MR_geo_persia
+					has_presence_in = scripted_geography:MR_geo_mesopotamia
 				}
 				NOR = {
 					tag = MGO
@@ -234,14 +231,12 @@ mongol_dominance = {
 		every_country = {
 			limit = {
 				OR = {
-					has_presence_in = region:north_china_region
-					has_presence_in = region:mongolia_region
-					has_presence_in = region:xinjiang_region
-					has_presence_in = region:khorasan_region
-					has_presence_in = region:east_china_region
-					has_presence_in = region:west_china_region
-					has_presence_in = region:south_china_region
-					has_presence_in = region:korea_region
+					has_presence_in = scripted_geography:MR_geo_north_china
+					has_presence_in = scripted_geography:MR_geo_heartland
+					has_presence_in = scripted_geography:MR_geo_xinjiang
+					has_presence_in = scripted_geography:MR_geo_khorasan
+					has_presence_in = scripted_geography:MR_geo_song_china
+					has_presence_in = scripted_geography:MR_geo_korea
 				}
 				NOR = {
 					tag = MGO
@@ -278,15 +273,11 @@ mongol_dominance = {
 				}
 				NOT = {
 					OR = {
-						has_presence_in = region:russian_region
-						has_presence_in = region:steppes_region
-						has_presence_in = region:ural_region
-						has_presence_in = region:persia_region
-						has_presence_in = region:anatolia_region
-						has_presence_in = region:caucasus_region
-						has_presence_in = region:east_china_region
-						has_presence_in = region:west_china_region
-						has_presence_in = region:south_china_region
+						has_presence_in = scripted_geography:MR_geo_russian_lands
+						has_presence_in = scripted_geography:MR_geo_western_reach
+						has_presence_in = scripted_geography:MR_geo_pontic
+						has_presence_in = scripted_geography:MR_geo_persia
+						has_presence_in = scripted_geography:MR_geo_song_china
 					}
 				}
 				NOR = {
@@ -300,15 +291,11 @@ mongol_dominance = {
 		every_country = {
 			limit = {
 				OR = {
-					has_presence_in = region:russian_region
-					has_presence_in = region:steppes_region
-					has_presence_in = region:ural_region
-					has_presence_in = region:persia_region
-					has_presence_in = region:anatolia_region
-					has_presence_in = region:caucasus_region
-					has_presence_in = region:east_china_region
-					has_presence_in = region:west_china_region
-					has_presence_in = region:south_china_region
+					has_presence_in = scripted_geography:MR_geo_russian_lands
+					has_presence_in = scripted_geography:MR_geo_western_reach
+					has_presence_in = scripted_geography:MR_geo_pontic
+					has_presence_in = scripted_geography:MR_geo_persia
+					has_presence_in = scripted_geography:MR_geo_song_china
 				}
 				NOR = {
 					tag = MGO
@@ -472,26 +459,21 @@ mongol_dominance = {
 							has_truce_with = prev
 						}
 						NOT = {
-							is_subject_of = prev
+							top_overlord_or_this ?= prev
 						}
 						defensive_alliance_strength < scope:mr_dom_claimant.offensive_alliance_strength
 						OR = {
-							has_presence_in = region:russian_region
-							has_presence_in = region:steppes_region
-							has_presence_in = region:ural_region
-							has_presence_in = region:persia_region
-							has_presence_in = region:anatolia_region
-							has_presence_in = region:caucasus_region
-							has_presence_in = region:mongolia_region
-							has_presence_in = region:khorasan_region
-							has_presence_in = region:xinjiang_region
-							has_presence_in = region:north_china_region
-							has_presence_in = region:east_china_region
-							has_presence_in = region:west_china_region
-							has_presence_in = region:south_china_region
-							has_presence_in = region:korea_region
-							has_presence_in = area:iraq_arabi_area
-							has_presence_in = area:armenian_highlands_area
+							has_presence_in = scripted_geography:MR_geo_russian_lands
+							has_presence_in = scripted_geography:MR_geo_western_reach
+							has_presence_in = scripted_geography:MR_geo_pontic
+							has_presence_in = scripted_geography:MR_geo_persia
+							has_presence_in = scripted_geography:MR_geo_mesopotamia
+							has_presence_in = scripted_geography:MR_geo_heartland
+							has_presence_in = scripted_geography:MR_geo_khorasan
+							has_presence_in = scripted_geography:MR_geo_xinjiang
+							has_presence_in = scripted_geography:MR_geo_north_china
+							has_presence_in = scripted_geography:MR_geo_song_china
+							has_presence_in = scripted_geography:MR_geo_korea
 						}
 					}
 					max = 1
@@ -533,22 +515,17 @@ mongol_dominance = {
 							tag = MGE
 							NOT = {
 								OR = {
-									has_presence_in = region:russian_region
-									has_presence_in = region:steppes_region
-									has_presence_in = region:ural_region
-									has_presence_in = region:persia_region
-									has_presence_in = region:anatolia_region
-									has_presence_in = region:caucasus_region
-									has_presence_in = region:mongolia_region
-									has_presence_in = region:khorasan_region
-									has_presence_in = region:xinjiang_region
-									has_presence_in = region:north_china_region
-									has_presence_in = region:east_china_region
-									has_presence_in = region:west_china_region
-									has_presence_in = region:south_china_region
-									has_presence_in = region:korea_region
-									has_presence_in = area:iraq_arabi_area
-									has_presence_in = area:armenian_highlands_area
+									has_presence_in = scripted_geography:MR_geo_russian_lands
+									has_presence_in = scripted_geography:MR_geo_western_reach
+									has_presence_in = scripted_geography:MR_geo_pontic
+									has_presence_in = scripted_geography:MR_geo_persia
+									has_presence_in = scripted_geography:MR_geo_mesopotamia
+									has_presence_in = scripted_geography:MR_geo_heartland
+									has_presence_in = scripted_geography:MR_geo_khorasan
+									has_presence_in = scripted_geography:MR_geo_xinjiang
+									has_presence_in = scripted_geography:MR_geo_north_china
+									has_presence_in = scripted_geography:MR_geo_song_china
+									has_presence_in = scripted_geography:MR_geo_korea
 								}
 							}
 						}
@@ -609,7 +586,7 @@ mongol_dominance = {
 						situation:mongol_dominance = {
 							var:mr_dom_conquest_target_country = {
 								NOT = {
-									is_subject_of = prev
+									top_overlord_or_this ?= prev
 								}
 								NOT = {
 									has_truce_with = prev
@@ -682,7 +659,7 @@ mongol_dominance = {
 						tag = MGO
 						tag = MGE
 					}
-					has_presence_in = region:russian_region
+					has_presence_in = scripted_geography:MR_geo_russian_lands
 				}
 			}
 			every_country = {
@@ -784,16 +761,15 @@ mongol_dominance = {
 			# with the persia_region loop (azerbaijan_area is inside
 			# persia_region).
 			## Includes Karakorum.
-			region:mongolia_region = {
-				every_ownable_location_in_region = {
+			scripted_geography:MR_geo_heartland = {
+				every_location_in_scripted_geography = {
 					limit = {
 						# owner ?= not owner =: an ownerless location made
 						# the bare link error at :559 in testing.
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
 							}
 						}
 					}
@@ -802,16 +778,15 @@ mongol_dominance = {
 				}
 			}
 			## Includes Sarai.
-			region:steppes_region = {
-				every_ownable_location_in_region = {
+			scripted_geography:MR_geo_pontic = {
+				every_location_in_scripted_geography = {
 					limit = {
 						# owner ?= not owner =: an ownerless location made
 						# the bare link error at :559 in testing.
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
 							}
 						}
 					}
@@ -820,14 +795,13 @@ mongol_dominance = {
 				}
 			}
 			## Includes Kazan.
-			area:kazan_area = {
-				every_ownable_location_in_area = {
+			scripted_geography:MR_geo_volga = {
+				every_location_in_scripted_geography = {
 					limit = {
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
 							}
 						}
 					}
@@ -836,30 +810,15 @@ mongol_dominance = {
 				}
 			}
 			## To prevent bordergore to kazan corridor.
-			area:bolghar_area = {
-				every_ownable_location_in_area = {
-					limit = {
-						owner ?= {
-							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
-							}
-						}
-					}
-					change_location_owner = scope:mr_claimant
-					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
-				}
-			}
 			## To prevent bordergore to kazan corridor.
-			area:bashkiria_area = {
-				every_ownable_location_in_area = {
+			## We give this area in russia region to prevent bordergore and complete the end requirement for the russian foothold.
+			scripted_geography:MR_geo_russian_foothold = {
+				every_location_in_scripted_geography = {
 					limit = {
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
 							}
 						}
 					}
@@ -868,62 +827,15 @@ mongol_dominance = {
 				}
 			}
 			## We give this area in russia region to prevent bordergore and complete the end requirement for the russian foothold.
-			area:samara_area = {
-				every_ownable_location_in_area = {
-					limit = {
-						owner ?= {
-							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
-							}
-						}
-					}
-					change_location_owner = scope:mr_claimant
-					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
-				}
-			}
 			## We give this area in russia region to prevent bordergore and complete the end requirement for the russian foothold.
-			area:ryazan_area = {
-				every_ownable_location_in_area = {
-					limit = {
-						owner ?= {
-							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
-							}
-						}
-					}
-					change_location_owner = scope:mr_claimant
-					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
-				}
-			}
-			## We give this area in russia region to prevent bordergore and complete the end requirement for the russian foothold.
-			area:tambov_area = {
-				every_ownable_location_in_area = {
-					limit = {
-						owner ?= {
-							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
-							}
-						}
-					}
-					change_location_owner = scope:mr_claimant
-					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
-				}
-			}
 			## Includes Transoxiana area (Samarkand location).
-			region:khorasan_region = {
-				every_ownable_location_in_region = {
+			scripted_geography:MR_geo_khorasan = {
+				every_location_in_scripted_geography = {
 					limit = {
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
 							}
 						}
 					}
@@ -931,15 +843,83 @@ mongol_dominance = {
 					add_core = scope:mr_claimant
 				}
 			}
-			## Includes Baghdad location.
-			area:iraq_arabi_area = {
-				every_ownable_location_in_area = {
+			# --- PHASE 2 GROUND THE CLAIMANT HAS SINCE LOST ---
+			# These are not Phase 3 goals and no end condition asks for
+			# them, so strictly the failsafe could ignore them. It does
+			# not, because an AI that lost a war in 1600 would otherwise
+			# reach 1650 as a restored empire with holes in the middle of
+			# it. Costs nothing when Phase 2 held: the limit only matches
+			# land owned by an AI that is neither the claimant nor its
+			# subject, so ground already held simply does not match.
+			# Core policy is copied from Phase 2's handover, not invented
+			# here — steppe and frontier are cored, settled ground is not.
+			scripted_geography:MR_geo_xinjiang = {
+				every_location_in_scripted_geography = {
 					limit = {
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			scripted_geography:MR_geo_siberian_marches = {
+				every_location_in_scripted_geography = {
+					limit = {
+						owner ?= {
+							is_ai = yes
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			scripted_geography:MR_geo_manchuria = {
+				every_location_in_scripted_geography = {
+					limit = {
+						owner ?= {
+							is_ai = yes
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					# No add_core, matching Phase 2's own policy for this
+					# ground: Manchuria was ruled by the horde, never
+					# settled by it, and free cores over-feed the AI.
+				}
+			}
+			scripted_geography:MR_geo_tibet = {
+				every_location_in_scripted_geography = {
+					limit = {
+						owner ?= {
+							is_ai = yes
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					# No add_core, matching Phase 2: Tibet was a Yuan
+					# protectorate, never Mongol home ground.
+				}
+			}
+			## Includes Baghdad location.
+			scripted_geography:MR_geo_mesopotamia = {
+				every_location_in_scripted_geography = {
+					limit = {
+						owner ?= {
+							is_ai = yes
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
 							}
 						}
 					}
@@ -947,14 +927,13 @@ mongol_dominance = {
 					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
 				}
 			}
-			area:cappadocia_area = {
-				every_ownable_location_in_area = {
+			scripted_geography:MR_geo_cappadocian_reach = {
+				every_location_in_scripted_geography = {
 					limit = {
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
 							}
 						}
 					}
@@ -963,29 +942,13 @@ mongol_dominance = {
 				}
 			}
 			## Includes Armenian Highlands area.
-			region:caucasus_region = {
-				every_ownable_location_in_region = {
+			scripted_geography:MR_geo_persia = {
+				every_location_in_scripted_geography = {
 					limit = {
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
-							}
-						}
-					}
-					change_location_owner = scope:mr_claimant
-					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
-				}
-			}
-			region:persia_region = {
-				every_ownable_location_in_region = {
-					limit = {
-						owner ?= {
-							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
 							}
 						}
 					}
@@ -994,14 +957,13 @@ mongol_dominance = {
 				}
 			}
 			## Includes Khanbaliq.
-			region:north_china_region = {
-				every_ownable_location_in_region = {
+			scripted_geography:MR_geo_north_china = {
+				every_location_in_scripted_geography = {
 					limit = {
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
 							}
 						}
 					}
@@ -1009,14 +971,13 @@ mongol_dominance = {
 					add_core = scope:mr_claimant
 				}
 			}
-			region:east_china_region = {
-				every_ownable_location_in_region = {
+			scripted_geography:MR_geo_song_china = {
+				every_location_in_scripted_geography = {
 					limit = {
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
 							}
 						}
 					}
@@ -1024,44 +985,13 @@ mongol_dominance = {
 					add_core = scope:mr_claimant
 				}
 			}
-			region:west_china_region = {
-				every_ownable_location_in_region = {
+			scripted_geography:MR_geo_korea = {
+				every_location_in_scripted_geography = {
 					limit = {
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
-							}
-						}
-					}
-					change_location_owner = scope:mr_claimant
-					add_core = scope:mr_claimant
-				}
-			}
-			region:south_china_region = {
-				every_ownable_location_in_region = {
-					limit = {
-						owner ?= {
-							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
-							}
-						}
-					}
-					change_location_owner = scope:mr_claimant
-					add_core = scope:mr_claimant
-				}
-			}
-			region:korea_region = {
-				every_ownable_location_in_region = {
-					limit = {
-						owner ?= {
-							is_ai = yes
-							NOR = {
-								this = scope:mr_claimant
-								is_subject_of = scope:mr_claimant
+							NOT = {
+								top_overlord_or_this ?= scope:mr_claimant
 							}
 						}
 					}
@@ -1215,7 +1145,7 @@ mongol_dominance = {
 						tag = MGO
 						tag = MGE
 					}
-					has_presence_in = region:russian_region
+					has_presence_in = scripted_geography:MR_geo_russian_lands
 				}
 			}
 			change_variable = {
@@ -1230,7 +1160,7 @@ mongol_dominance = {
 						tag = MGO
 						tag = MGE
 					}
-					has_presence_in = area:cappadocia_area
+					has_presence_in = scripted_geography:MR_geo_cappadocian_reach
 				}
 			}
 			change_variable = {
@@ -1344,16 +1274,13 @@ mongol_dominance = {
 		if = {
 			limit = {
 				OR = {
-					this.region = region:russian_region
-					this.region = region:steppes_region
-					this.region = region:persia_region
-					this.region = region:anatolia_region
-					this.region = region:ural_region
-					this.region = region:caucasus_region
-					this.region = region:east_china_region
-					this.region = region:west_china_region
-					this.region = region:south_china_region
-					this.region = region:korea_region
+					is_in_scripted_geography = scripted_geography:MR_geo_russian_lands
+					is_in_scripted_geography = scripted_geography:MR_geo_pontic
+					is_in_scripted_geography = scripted_geography:MR_geo_persia
+					is_in_scripted_geography = scripted_geography:MR_geo_western_reach
+					is_in_scripted_geography = scripted_geography:MR_geo_ural
+					is_in_scripted_geography = scripted_geography:MR_geo_song_china
+					is_in_scripted_geography = scripted_geography:MR_geo_korea
 				}
 				# owner ?= { tag = ... }, not owner = c:TAG: the bare link
 				# errors on ownerless locations AND on a tag that is off
@@ -1391,7 +1318,10 @@ mongol_dominance = {
 			limit = {
 				country_exists = c:MGO
 				owner ?= {
-					is_subject_of = c:MGO
+					top_overlord_or_this ?= c:MGO
+					NOT = {
+						tag = MGO
+					}
 				}
 			}
 			value = dark_grey
@@ -1400,7 +1330,10 @@ mongol_dominance = {
 			limit = {
 				country_exists = c:MGE
 				owner ?= {
-					is_subject_of = c:MGE
+					top_overlord_or_this ?= c:MGE
+					NOT = {
+						tag = MGE
+					}
 				}
 			}
 			value = dark_grey
@@ -1408,19 +1341,14 @@ mongol_dominance = {
 		else_if = {
 			limit = {
 				OR = {
-					region = region:russian_region
-					region = region:steppes_region
-					region = region:persia_region
-					region = region:caucasus_region
-					region = region:east_china_region
-					region = region:west_china_region
-					region = region:south_china_region
-					region = region:korea_region
-					area = area:cappadocia_area
-					area = area:iraq_arabi_area
-					area = area:kazan_area
-					area = area:bolghar_area
-					area = area:bashkiria_area
+					is_in_scripted_geography = scripted_geography:MR_geo_russian_lands
+					is_in_scripted_geography = scripted_geography:MR_geo_pontic
+					is_in_scripted_geography = scripted_geography:MR_geo_persia
+					is_in_scripted_geography = scripted_geography:MR_geo_song_china
+					is_in_scripted_geography = scripted_geography:MR_geo_korea
+					is_in_scripted_geography = scripted_geography:MR_geo_cappadocian_reach
+					is_in_scripted_geography = scripted_geography:MR_geo_mesopotamia
+					is_in_scripted_geography = scripted_geography:MR_geo_volga
 				}
 				NOT = {
 					owner ?= {

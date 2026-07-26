@@ -45,7 +45,7 @@ mr_can_start_resurgence = {
 			has_culture_group = culture_group:mongolian_group
 		}
 		government_type = government_type:steppe_horde
-		has_presence_in = region:mongolia_region
+		has_presence_in = scripted_geography:MR_geo_heartland
 	}
 	NOT = {
 		has_global_variable = mr_railroad_complete
@@ -158,6 +158,33 @@ mr_dominance_visible = {
 	}
 }
 
+# --- Is this ground inside the claimant's realm? -----------------
+# LOCATION scope. The seat checks used to ask `c:MGO = { owns =
+# location:samarkand }`, which is true only when the claimant holds
+# the seat ITSELF. A vassal holding Samarkand or Khanbaliq deadlocked
+# the phase — and the completion failsafe could not break the
+# deadlock either, because it deliberately never takes land from the
+# claimant's own subjects. The goal was unreachable and nothing said
+# so.
+#
+# top_owner walks the ownership chain to the top overlord in one link
+# (156 vanilla uses; `conquistadors.txt:64` guards it with
+# has_owner = yes exactly like this). country_exists still guards the
+# c:TAG link, which errors every tick while the tag is off the map.
+mr_in_claimant_realm = {
+	has_owner = yes
+	OR = {
+		AND = {
+			country_exists = c:MGO
+			top_owner ?= c:MGO
+		}
+		AND = {
+			country_exists = c:MGE
+			top_owner ?= c:MGE
+		}
+	}
+}
+
 # --- End conditions ----------------------------------------------
 # Each phase ends when its territorial goal is met. Ownership, not
 # occupation: a phase should not complete off the back of a siege
@@ -179,49 +206,61 @@ mr_dominance_visible = {
 #     an ownerless location simply not match, which is what we want.
 #   * two tags to clear instead of one, so FOUR NOR members.
 #
-# KEEP THE NOR FLAT. Every member must be independently satisfiable:
-# an owner is disqualified if it is MGO, or MGE, or a subject of
-# either. Folding a tag test and its is_subject_of test into one AND
-#   AND = { country_exists = c:MGO  tag = MGO  is_subject_of = c:MGO }
-# asks for a country that is its own vassal — never true, so the NOR
-# is always true, every owned location matches, the NOT is always
-# false and the phase CAN NEVER COMPLETE (not even after a failsafe
-# hands over the whole goal territory). That shipped once in Phases 2
-# and 3; it is silent, since nothing errors and nothing logs.
-# country_exists guards only the is_subject_of link (c:TAG on the
-# right side errors while the tag is off-map); tag = MGO is a plain
-# string test and stands alone.
+# ONE custom_tooltip PER REQUIREMENT, and each text on ONE line. The
+# situation panel renders end conditions as a CHECKLIST — one tick per
+# custom_tooltip — so a single tooltip wrapped around every clause
+# fights the widget: Phase 3 showed its text AND the raw clause-by-
+# clause breakdown underneath. Vanilla's eight situation end-condition
+# tooltips are all one compact sentence and not one of them contains a
+# newline. Each mr_p2_*/mr_p3_* goal trigger therefore carries its own
+# tooltip internally, and the end triggers are just a list of them.
+#
+# The region scans below use owner ?= rather than owner =: khorasan,
+# xinjiang and west China contain unowned locations and the bare link
+# errors on them, while ?= makes an ownerless location simply not
+# match — which is what "nobody outside our realm holds it" means.
+#
+# WALK THE WHOLE SUBJECT CHAIN. `is_subject_of = c:MGO` is true only
+# for a DIRECT vassal, so a vassal's vassal counted as a foreign power
+# and its ground blocked the goal — found in Phase 2 testing, where
+# the phase simply refused to end over land the claimant effectively
+# ruled. `top_overlord_or_this ?= c:MGO` is vanilla's idiom for
+# "MGO, or anything anywhere under MGO" (situation_triggers.txt:80,
+# hundred_years_war.txt:185) and it also returns the country itself
+# when it has no overlord — which is why the separate `tag = MGO`
+# member is gone: it is subsumed.
+# country_exists still guards the link, because c:TAG on the right
+# side errors every tick while the tag is off the map.
 # Phase 1: the entire Mongolian heartland is under one banner.
 mr_resurgence_end_trigger = {
 	custom_tooltip = {
-		text = mr_resurgence_end_tt
+		text = mr_resurgence_seats_tt
 		country_exists = c:MGO
-		c:MGO = {
-			owns = location:karakorum
-			has_presence_in = area:eastern_gobi_area
-			has_presence_in = area:western_gobi_area
+		location:karakorum = {
+			mr_in_claimant_realm = yes
 		}
-		# The clause below replaced an any_country sweep that asked each
-		# country in the world whether it owned anything in Mongolia.
-		# Scanning the REGION instead asks the same question of one
-		# region's locations, and it is the shape PD uses
-		# (prussian_ascension_*_tt, area:silesia_area). Two details
-		# matter and are easy to get wrong:
-		#   owner ?=   not owner =  — Mongolia contains unowned
-		#              locations and the bare link errors on them; with
-		#              ?= an ownerless location simply does not match,
-		#              which is what "nobody outside our realm holds it"
-		#              should mean.
-		#   flat NOR   see the block comment above this section. Phase 1
-		#              has one tag so it has two members; Phases 2 and 3
-		#              have two tags and therefore four.
+		scripted_geography:MR_geo_eastern_gobi = {
+			any_location_in_scripted_geography = {
+				mr_in_claimant_realm = yes
+			}
+		}
+		scripted_geography:MR_geo_western_gobi = {
+			any_location_in_scripted_geography = {
+				mr_in_claimant_realm = yes
+			}
+		}
+	}
+	custom_tooltip = {
+		text = mr_p1_heartland_cleared_tt
 		NOT = {
-			region:mongolia_region = {
-				any_ownable_location_in_region = {
+			scripted_geography:MR_geo_heartland = {
+				any_location_in_scripted_geography = {
 					owner ?= {
-						NOR = {
-							tag = MGO
-							is_subject_of = c:MGO
+						NOT = {
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
 						}
 					}
 				}
@@ -246,43 +285,41 @@ mr_resurgence_end_trigger = {
 # "Cleared" = no location in the group is owned by a country outside
 # the claimant's realm. Ownerless locations do not count, which is
 # why the link is owner ?= and not owner =.
-
 # The Silk Road corridor proper: Khorasan and Xinjiang.
 mr_p2_corridor_cleared = {
-	NOT = {
-		region:khorasan_region = {
-			any_ownable_location_in_region = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
+	custom_tooltip = {
+		text = mr_p2_corridor_cleared_tt
+		NOT = {
+			scripted_geography:MR_geo_khorasan = {
+				any_location_in_scripted_geography = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								top_overlord_or_this ?= c:MGE
+							}
 						}
 					}
 				}
 			}
 		}
-	}
-	NOT = {
-		region:xinjiang_region = {
-			any_ownable_location_in_region = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
+		NOT = {
+			scripted_geography:MR_geo_xinjiang = {
+				any_location_in_scripted_geography = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								top_overlord_or_this ?= c:MGE
+							}
 						}
 					}
 				}
@@ -293,20 +330,21 @@ mr_p2_corridor_cleared = {
 
 # The Yuan seat: North China, Dadu's own region.
 mr_p2_north_china_cleared = {
-	NOT = {
-		region:north_china_region = {
-			any_ownable_location_in_region = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
+	custom_tooltip = {
+		text = mr_p2_north_china_cleared_tt
+		NOT = {
+			scripted_geography:MR_geo_north_china = {
+				any_location_in_scripted_geography = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								top_overlord_or_this ?= c:MGE
+							}
 						}
 					}
 				}
@@ -318,100 +356,57 @@ mr_p2_north_china_cleared = {
 # Manchuria (Jin, 1234), Tibet (Yuan protectorate, 1240s) and the
 # Siberian border areas that square off the northern frontier.
 mr_p2_northern_marches_cleared = {
-	NOT = {
-		region:manchuria_region = {
-			any_ownable_location_in_region = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
-						}
-					}
-				}
-			}
-		}
-	}
-	NOT = {
-		region:tibet_region = {
-			any_ownable_location_in_region = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
+	custom_tooltip = {
+		text = mr_p2_northern_marches_cleared_tt
+		NOT = {
+			scripted_geography:MR_geo_manchuria = {
+				any_location_in_scripted_geography = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								top_overlord_or_this ?= c:MGE
+							}
 						}
 					}
 				}
 			}
 		}
-	}
-	NOT = {
-		area:bursol_area = {
-			any_ownable_location_in_area = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
+		NOT = {
+			scripted_geography:MR_geo_tibet = {
+				any_location_in_scripted_geography = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								top_overlord_or_this ?= c:MGE
+							}
 						}
 					}
 				}
 			}
 		}
-	}
-	NOT = {
-		area:omsk_area = {
-			any_ownable_location_in_area = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
-						}
-					}
-				}
-			}
-		}
-	}
-	NOT = {
-		area:kulykol_area = {
-			any_ownable_location_in_area = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
+		NOT = {
+			scripted_geography:MR_geo_siberian_marches = {
+				any_location_in_scripted_geography = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								top_overlord_or_this ?= c:MGE
+							}
 						}
 					}
 				}
@@ -422,19 +417,17 @@ mr_p2_northern_marches_cleared = {
 
 mr_imperial_end_trigger = {
 	custom_tooltip = {
-		text = mr_imperial_end_tt
-		any_country = {
-			OR = {
-				tag = MGO
-				tag = MGE
-			}
-			owns = location:samarkand
-			owns = location:dadu
+		text = mr_imperial_seats_tt
+		location:samarkand = {
+			mr_in_claimant_realm = yes
 		}
-		mr_p2_corridor_cleared = yes
-		mr_p2_north_china_cleared = yes
-		mr_p2_northern_marches_cleared = yes
+		location:dadu = {
+			mr_in_claimant_realm = yes
+		}
 	}
+	mr_p2_corridor_cleared = yes
+	mr_p2_north_china_cleared = yes
+	mr_p2_northern_marches_cleared = yes
 }
 
 # Phase 3: the four khanates restored. MGE itself is proclaimed at
@@ -457,24 +450,24 @@ mr_imperial_end_trigger = {
 # definition used by BOTH mr_dominance_end_trigger and the
 # situation's monthly MR_dominance_score, so the panel and the end
 # requirement cannot drift apart.
-
 # The Ilkhanate: no power outside the claimant's realm holds a
 # single location in Persia.
 mr_p3_persia_cleared = {
-	NOT = {
-		region:persia_region = {
-			any_ownable_location_in_region = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
+	custom_tooltip = {
+		text = mr_p3_persia_cleared_tt
+		NOT = {
+			scripted_geography:MR_geo_persia = {
+				any_location_in_scripted_geography = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								top_overlord_or_this ?= c:MGE
+							}
 						}
 					}
 				}
@@ -486,40 +479,21 @@ mr_p3_persia_cleared = {
 # The Pontic steppe and the Caucasus, the Golden Horde's western
 # march.
 mr_p3_pontic_cleared = {
-	NOT = {
-		region:steppes_region = {
-			any_ownable_location_in_region = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
-						}
-					}
-				}
-			}
-		}
-	}
-	NOT = {
-		region:caucasus_region = {
-			any_ownable_location_in_region = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
+	custom_tooltip = {
+		text = mr_p3_pontic_cleared_tt
+		NOT = {
+			scripted_geography:MR_geo_pontic = {
+				any_location_in_scripted_geography = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								top_overlord_or_this ?= c:MGE
+							}
 						}
 					}
 				}
@@ -530,60 +504,21 @@ mr_p3_pontic_cleared = {
 
 # The middle Volga: Kazan, Bolghar and Bashkiria.
 mr_p3_volga_cleared = {
-	NOT = {
-		area:kazan_area = {
-			any_ownable_location_in_area = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
-						}
-					}
-				}
-			}
-		}
-	}
-	NOT = {
-		area:bolghar_area = {
-			any_ownable_location_in_area = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
-						}
-					}
-				}
-			}
-		}
-	}
-	NOT = {
-		area:bashkiria_area = {
-			any_ownable_location_in_area = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
+	custom_tooltip = {
+		text = mr_p3_volga_cleared_tt
+		NOT = {
+			scripted_geography:MR_geo_volga = {
+				any_location_in_scripted_geography = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								top_overlord_or_this ?= c:MGE
+							}
 						}
 					}
 				}
@@ -594,20 +529,21 @@ mr_p3_volga_cleared = {
 
 # Mesopotamia: Baghdad's own area, sacked in 1258.
 mr_p3_mesopotamia_cleared = {
-	NOT = {
-		area:iraq_arabi_area = {
-			any_ownable_location_in_area = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
+	custom_tooltip = {
+		text = mr_p3_mesopotamia_cleared_tt
+		NOT = {
+			scripted_geography:MR_geo_mesopotamia = {
+				any_location_in_scripted_geography = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								top_overlord_or_this ?= c:MGE
+							}
 						}
 					}
 				}
@@ -619,60 +555,21 @@ mr_p3_mesopotamia_cleared = {
 # Song China, which fell in 1279 and completed the conquest the
 # Jin war began. Phase 2 takes the north; this is the south.
 mr_p3_song_china_cleared = {
-	NOT = {
-		region:east_china_region = {
-			any_ownable_location_in_region = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
-						}
-					}
-				}
-			}
-		}
-	}
-	NOT = {
-		region:west_china_region = {
-			any_ownable_location_in_region = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
-						}
-					}
-				}
-			}
-		}
-	}
-	NOT = {
-		region:south_china_region = {
-			any_ownable_location_in_region = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
+	custom_tooltip = {
+		text = mr_p3_song_china_cleared_tt
+		NOT = {
+			scripted_geography:MR_geo_song_china = {
+				any_location_in_scripted_geography = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								top_overlord_or_this ?= c:MGE
+							}
 						}
 					}
 				}
@@ -686,20 +583,21 @@ mr_p3_song_china_cleared = {
 # the shared clause accepts subject owners, which is exactly the
 # vassal relationship the history describes.
 mr_p3_korea_in_the_fold = {
-	NOT = {
-		region:korea_region = {
-			any_ownable_location_in_region = {
-				owner ?= {
-					NOR = {
-						tag = MGO
-						tag = MGE
-						AND = {
-							country_exists = c:MGO
-							is_subject_of = c:MGO
-						}
-						AND = {
-							country_exists = c:MGE
-							is_subject_of = c:MGE
+	custom_tooltip = {
+		text = mr_p3_korea_in_the_fold_tt
+		NOT = {
+			scripted_geography:MR_geo_korea = {
+				any_location_in_scripted_geography = {
+					owner ?= {
+						NOR = {
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
+							AND = {
+								country_exists = c:MGE
+								top_overlord_or_this ?= c:MGE
+							}
 						}
 					}
 				}
@@ -710,29 +608,51 @@ mr_p3_korea_in_the_fold = {
 
 mr_dominance_end_trigger = {
 	custom_tooltip = {
-		text = mr_dominance_end_tt
-		any_country = {
-			OR = {
-				tag = MGE
-				tag = MGO
-			}
-			owns = location:karakorum
-			owns = location:dadu
-			owns = location:samarkand
-			owns = location:sarai_al_jadid
-			owns = location:kazan
-			owns = location:tabriz
-			owns = location:baghdad
-			has_presence_in = region:russian_region
-			has_presence_in = area:cappadocia_area
+		text = mr_dominance_seats_tt
+		location:karakorum = {
+			mr_in_claimant_realm = yes
 		}
-		mr_p3_persia_cleared = yes
-		mr_p3_pontic_cleared = yes
-		mr_p3_volga_cleared = yes
-		mr_p3_mesopotamia_cleared = yes
-		mr_p3_song_china_cleared = yes
-		mr_p3_korea_in_the_fold = yes
+		location:dadu = {
+			mr_in_claimant_realm = yes
+		}
+		location:samarkand = {
+			mr_in_claimant_realm = yes
+		}
+		location:sarai_al_jadid = {
+			mr_in_claimant_realm = yes
+		}
+		location:kazan = {
+			mr_in_claimant_realm = yes
+		}
+		location:tabriz = {
+			mr_in_claimant_realm = yes
+		}
+		location:baghdad = {
+			mr_in_claimant_realm = yes
+		}
 	}
+	custom_tooltip = {
+		text = mr_dominance_russian_foothold_tt
+		scripted_geography:MR_geo_russian_lands = {
+			any_location_in_scripted_geography = {
+				mr_in_claimant_realm = yes
+			}
+		}
+	}
+	custom_tooltip = {
+		text = mr_dominance_cappadocia_tt
+		scripted_geography:MR_geo_cappadocian_reach = {
+			any_location_in_scripted_geography = {
+				mr_in_claimant_realm = yes
+			}
+		}
+	}
+	mr_p3_persia_cleared = yes
+	mr_p3_pontic_cleared = yes
+	mr_p3_volga_cleared = yes
+	mr_p3_mesopotamia_cleared = yes
+	mr_p3_song_china_cleared = yes
+	mr_p3_korea_in_the_fold = yes
 }
 
 # =================================================================
@@ -766,7 +686,7 @@ mr_can_start_chahar = {
 				tag = MGO
 				tag = MGE
 			}
-			has_presence_in = region:mongolia_region
+			has_presence_in = scripted_geography:MR_geo_heartland
 		}
 	}
 	any_country = {
@@ -774,7 +694,7 @@ mr_can_start_chahar = {
 			has_culture_group = culture_group:mongolian_group
 		}
 		government_type = government_type:steppe_horde
-		has_presence_in = region:mongolia_region
+		has_presence_in = scripted_geography:MR_geo_heartland
 	}
 }
 
@@ -783,8 +703,8 @@ mr_chahar_visible = {
 		tag = MGO
 		tag = MGE
 		# We use has_presence_in rather than any_owned_location because the latter is a very expensive check and we don't need to know who owns the locations, just that a country has a presence in the subcontinent.
-		has_presence_in = region:mongolia_region
-		has_presence_in = region:north_china_region
+		has_presence_in = scripted_geography:MR_geo_heartland
+		has_presence_in = scripted_geography:MR_geo_north_china
 	}
 }
 
@@ -795,7 +715,7 @@ mr_chahar_end_trigger = {
 			has_culture_group = culture_group:mongolian_group
 		}
 		owns = location:karakorum
-		has_presence_in = region:north_china_region
+		has_presence_in = scripted_geography:MR_geo_north_china
 	}
 }
 
@@ -829,8 +749,8 @@ mr_can_start_torghut = {
 		}
 		government_type = government_type:steppe_horde
 		OR = {
-			has_presence_in = region:xinjiang_region
-			has_presence_in = region:khorasan_region
+			has_presence_in = scripted_geography:MR_geo_xinjiang
+			has_presence_in = scripted_geography:MR_geo_khorasan
 		}
 	}
 }
@@ -841,9 +761,9 @@ mr_torghut_visible = {
 		tag = MGO
 		tag = MGE
 		# We use has_presence_in rather than any_owned_location because the latter is a very expensive check and we don't need to know who owns the locations, just that a country has a presence in the subcontinent.
-		has_presence_in = region:steppes_region
-		has_presence_in = region:russian_region
-		has_presence_in = region:ural_region
+		has_presence_in = scripted_geography:MR_geo_pontic
+		has_presence_in = scripted_geography:MR_geo_russian_lands
+		has_presence_in = scripted_geography:MR_geo_ural
 	}
 }
 
@@ -877,7 +797,7 @@ mr_can_start_dzungar = {
 			has_culture_group = culture_group:mongolian_group
 		}
 		government_type = government_type:steppe_horde
-		has_presence_in = region:xinjiang_region
+		has_presence_in = scripted_geography:MR_geo_xinjiang
 	}
 }
 
@@ -887,8 +807,8 @@ mr_dzungar_visible = {
 		tag = MGO
 		tag = MGE
 		# We use has_presence_in rather than any_owned_location because the latter is a very expensive check and we don't need to know who owns the locations, just that a country has a presence in the subcontinent.
-		has_presence_in = region:xinjiang_region
-		has_presence_in = region:khorasan_region
+		has_presence_in = scripted_geography:MR_geo_xinjiang
+		has_presence_in = scripted_geography:MR_geo_khorasan
 	}
 }
 
@@ -903,9 +823,9 @@ mr_dzungar_end_trigger = {
 			has_culture_group = culture_group:mongolian_group
 		}
 		government_type = government_type:steppe_horde
-		has_presence_in = area:dzungaria_area
-		has_presence_in = area:tarim_area
-		has_presence_in = area:zhetysu_area
+		has_presence_in = scripted_geography:MR_geo_dzungaria
+		has_presence_in = scripted_geography:MR_geo_tarim
+		has_presence_in = scripted_geography:MR_geo_zhetysu
 	}
 }
 

@@ -82,16 +82,34 @@ Xinjiang, Khorasan), Phase 3 finishes it (Song China, 1279; Korea, which
 submitted in 1259 and was NEVER annexed, so a Korean SUBJECT satisfies the
 goal) alongside the western khanates.
 
+**Goal territory is named ONCE, in `in_game/common/scripted_geography/`**
+(`MR_geo_*`). Before that file the same region lists were written out 259 times
+across seven files, and changing a goal meant editing six places correctly —
+only one of which had a check. Now it is one list. Usage:
+`has_presence_in = scripted_geography:X` (country),
+`is_in_scripted_geography = scripted_geography:X` (location, area, region, and
+via `scope:X.capital ?= { … }` a country's seat), and
+`scripted_geography:X = { every_location_in_scripted_geography = { … } }` to
+iterate. See vanilla `scripted_geography.info`.
+
+THE RULE FOR THAT FILE: **atoms only, never a union.** Geographies do not nest
+(zero vanilla definitions reference another), so a union would rewrite its
+members and reintroduce the duplication. Callers `OR` the atoms they need. An
+atom exists per distinct BOUNDARY, not per pretty name — khorasan and xinjiang
+are separate because Phase 3's failsafe wants khorasan alone; manchuria, tibet
+and the Siberian marches are separate because the Phase 2 failsafe cores the
+steppe but deliberately not the settled ground; russian_lands and ural are
+separate from western_reach because they are goals in their own right.
+
 **Each goal group is ONE scripted trigger** (`mr_p2_*_cleared`,
 `mr_p3_*_cleared`), called by both the end trigger and the situation's monthly
 panel score. They were once written out twice in two different shapes — the
 panel sweeping every country for its owned locations, the end trigger scanning
 the regions — so the progress bar could read 100 on a phase that refused to
-close. One definition, two callers, no drift. When a goal region changes, six
-places must change with it: the goal trigger, the wargoal `allowed_locations`
-(+`allowed_subjugation`), the situation's CB-grant recipient net, the AI
-railroad find-target and fallback lists, the completion failsafe's handover,
-and the `tooltip`/`secondary_map_color` red-lining.
+close. One definition, two callers, no drift. When a goal changes, edit the geography atom — every one of the six consumers
+(goal trigger, wargoal `allowed_locations`/`allowed_subjugation`, CB-grant net,
+AI find-target and fallback, failsafe handover, `tooltip`/
+`secondary_map_color`) follows automatically.
 
 | Situation key | File | Window | Ends when |
 |---|---|---|---|
@@ -180,11 +198,16 @@ and the `tooltip`/`secondary_map_color` red-lining.
 - Failsafes force completion, PD-style: birth failsafe (~1375,
   `form_country = formable_country:MGO_f`); per-phase completion failsafes
   (`mr_failsafe_p1/p2/p3_fired`, 5 years before each deadline) that
-  `change_location_owner` (+ `add_core`, except where instant cores would
-  over-feed the AI: khorasan and tibet) the FULL goal territory — P2: mongolia,
-  khorasan, xinjiang, north_china, manchuria, tibet + bursol/omsk/kulykol
-  areas; P3: the seat areas + iraq_arabi + cappadocia + ryazan + caucasus +
-  ALL of persia_region + east/west/south china + korea. Guards: gated by the auto-conquest rules; claimant
+  `change_location_owner` the FULL goal territory, named by geography atom.
+  `add_core` follows one policy in both phases: steppe and frontier are cored
+  (heartland, xinjiang, the Siberian marches, north_china, and in P3 khorasan
+  and Song China), settled ground the horde ruled but never lived in is NOT
+  (manchuria, tibet, and in P2 khorasan) — free cores there over-feed the AI.
+  **Phase 3 deliberately hands over the Phase 2 ground too**, not just its own
+  goals: an AI that lost a war in 1600 would otherwise reach 1650 as a restored
+  empire with holes in it. That costs nothing when Phase 2 held, because the
+  limit only matches land owned by an AI that is neither the claimant nor its
+  subject. Guards: gated by the auto-conquest rules; claimant
   `is_ai = yes` (P1's `at_war = no` gate was deliberately removed — an AI
   stuck in an endless war must not stall the handover; P2/P3 keep it);
   locations taken only from AI owners, always via `owner ?=` — the bare
@@ -239,6 +262,14 @@ and the `tooltip`/`secondary_map_color` red-lining.
   conversion (`buddhism_events.13`).
 
 ## Hard rules
+> **PORTABLE TO A NEW EU5 REPO:** everything from here to the end of
+> `### Known EU5 specifics`, plus `## Workflow` and `## Language`, is
+> general EU5 knowledge with nothing Mongol-specific in it. Lift those
+> sections wholesale, together with `docs/EU5-MODDING-GUIDE.md`,
+> `docs/EU5-ERROR-DECODER.md` and `tools/verify_mod.py`, as the seed for
+> the next project. `## What this is`, `## REQUIRED SETUP` and
+> `## Architecture` are specific to THIS mod and do not travel.
+
 
 ### Verification
 - **Citation rule:** no field/effect/trigger enters a file without a vanilla or PD
@@ -261,6 +292,10 @@ and the `tooltip`/`secondary_map_color` red-lining.
 - Do not port syntax from other Paradox games. EU5 is its own thing.
 
 ### Silent-failure rules (no error, no log, mechanic just doesn't exist)
+> When the game DOES report something, decode it with
+> `docs/EU5-ERROR-DECODER.md` before investigating from scratch — every
+> signature there cost a real investigation once.
+
 - Verify directory names in vanilla before creating files (`on_action` not
   `on_actions`; `game_rules`/`static_modifiers` are **main_menu-only**).
 - Every cross-reference must resolve: loc keys, rule options, hook names, gfx keys,
@@ -272,15 +307,22 @@ and the `tooltip`/`secondary_map_color` red-lining.
   engine fallback; a second mod loc file with the same filename SHADOWS the
   main_menu one and every main_menu-only key renders raw (this happened: rules,
   settings, modifier names all showed as keys in game).
-- **A `generic_action` needs THREE side registries**, or the engine errors:
+- **A `generic_action` needs side registries.** Two a mod can satisfy:
   `in_game/common/generic_action_ai_lists/` (else
-  `generic_action_ai_list.cpp:82`, and the AI re-evaluates it constantly);
-  a `PERFORM_<key>_ACTION` entry in a `main_menu/gui/` message-types file
-  (else `message_handler.cpp:421` — 149 of vanilla's 155 situation-type
-  actions carry one; never name the file `messagetypes.txt`, that would
-  replace vanilla's 1348 entries); and, for its `price`, a
-  `<price_key>_cost_modifier` in `main_menu/common/modifier_type_definitions/`
-  (else `price_database.cpp:117`). All three were missed the first time.
+  `generic_action_ai_list.cpp:82`, and the AI re-evaluates the action
+  constantly), and for its `price` a `<price_key>_cost_modifier` in
+  `main_menu/common/modifier_type_definitions/` (else
+  `price_database.cpp:117`).
+  One it CANNOT: the `PERFORM_<key>_ACTION` message type
+  (`message_handler.cpp:421`). The engine reads exactly one file for those,
+  `main_menu/gui/messagetypes.txt` with 1348 vanilla entries — a mod file with
+  any other name in that folder is silently ignored (a popular published mod
+  ships one that is dead), and a file with that name replaces all 1348.
+  Accepted cost: one log line when the action fires and no popup. The action
+  works. Same class: modifier-type ICONS are looked up by convention from
+  `main_menu/gfx/interface/icons/modifier_types/<key>.dds` — there is no
+  `icon` field. Vanilla omits some of its own, so `modifier_type.cpp:1294` is
+  a tolerated cosmetic line too.
 - **Loc values must live on ONE physical line.** A literal `
 ` that becomes a
   real newline splits the value and the game logs `Missing colon (:)
@@ -335,6 +377,39 @@ and the `tooltip`/`secondary_map_color` red-lining.
   `every_country` (the whole map — only when the ANSWER must be a country).
 - `owns` vs `controls`: events overwhelmingly use `owns` (ownership), `controls` is
   military occupation. Phase goals use `owns`.
+- **End conditions are a CHECKLIST: one `custom_tooltip` per requirement, each
+  text ONE line.** The situation panel renders one tick per custom_tooltip, so
+  a single tooltip wrapped around every clause fights the widget — Phase 3
+  displayed its text *and* the raw clause-by-clause breakdown underneath.
+  Vanilla's eight situation end-condition tooltips are each one compact
+  sentence and none contains a newline. Each `mr_p2_*`/`mr_p3_*` goal trigger
+  carries its own tooltip internally; the end triggers are just a list of
+  them (P1 2 lines, P2 4, P3 9).
+- **A "we hold X" goal must mean the REALM holds X.** `c:MGO = { owns =
+  location:samarkand }` is true only when the claimant holds the seat itself,
+  so a vassal holding Samarkand or Khanbaliq deadlocked the phase — and the
+  failsafe could not break it, because it deliberately never takes land from
+  the claimant's own subjects. Every seat and foothold now goes through the
+  location-scope trigger `mr_in_claimant_realm` (`has_owner = yes` +
+  `top_owner ?= c:MGO/MGE` behind `country_exists`). Note `top_owner` is a
+  different trigger from `owner` and is legitimate; the harness knows.
+- **One atom per separately-true condition.** Collapsing eastern + western
+  Gobi into one geography turned a goal that wanted BOTH halves into one that
+  accepted either; the same happened to Dzungaria + Tarim + Zhetysu. If two
+  names sit in the same atom they can only ever be ORed.
+- **`is_subject_of` matches only a DIRECT vassal.** Every question this mod asks
+  about subjecthood is really "is this inside our realm", which must include a
+  vassal's vassal — use `top_overlord_or_this ?= c:MGO`, vanilla's idiom for
+  "MGO or anything under it" (`hundred_years_war.txt:185`,
+  `situation_triggers.txt:80`). It also returns the country itself when it has
+  no overlord, so a separate `tag = MGO` member is redundant. Shipped wrong in
+  46 places: goal clauses refused to count a sub-vassal's ground (the phase
+  would not end), the failsafe SEIZED a sub-vassal's land, and the AI targeted
+  its own sub-vassal. On a LOCATION, the one-link form is `top_owner ?= c:MGO`
+  (156 vanilla uses; guard ownerless with `has_owner = yes`, per
+  `conquistadors.txt:64`). Avoid `any_country_in_hierarchy` /
+  `every_country_in_hierarchy` — a popular published mod uses them but vanilla
+  has ZERO uses anywhere, so they are unattested.
 - **`c:TAG` on the right side of any comparison errors every tick while the tag
   is off-map** (`Invalid right side during comparison 'c'` — MGO 1368–75; MGE
   only until Phase 2 completes, now that the proclamation moved there).

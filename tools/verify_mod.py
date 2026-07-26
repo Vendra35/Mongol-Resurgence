@@ -106,21 +106,27 @@ for i, line in enumerate(loc_src.split(chr(10)), 1):
         probs.append(f"line {i}: value opens a quote it never closes -> {t[:60]}")
 check("loc lines are well formed", len(loc_src.split(chr(10))), probs, min_count=100)
 
-# ---- generic actions: the three side registries the engine demands ----
-# Declaring the action is not enough. Miss any of these and the engine logs an
-# error at load or at use: generic_action_ai_list.cpp:82,
-# message_handler.cpp:421, price_database.cpp:117. All three were missed the
-# first time this mod shipped an action.
+# ---- generic actions: the registries a MOD can actually satisfy ----
+# Declaring the action is not enough. Two of the three registries are moddable
+# and are checked here (generic_action_ai_list.cpp:82,
+# price_database.cpp:117).
+#
+# The third is NOT satisfiable and is deliberately not checked:
+# message_handler.cpp:421 wants a PERFORM_<key>_ACTION entry, and the engine
+# reads exactly one file for those — main_menu/gui/messagetypes.txt, 1348
+# vanilla entries. A mod file with any OTHER name in that folder is ignored
+# (verified: vanilla ships no second .txt there, and a popular published mod
+# ships one that is silently dead), and a mod file with THAT name replaces all
+# 1348. So the cost of an action is one log line at use and no popup. The
+# action itself works.
 acts = set()
 for p_ in glob.glob(MOD + "/in_game/common/generic_actions/*.txt"):
     acts |= set(re.findall(r"^([A-Za-z_0-9]+) = \{", strip_comments(read(_np(p_))), re.M))
-ai_listed, msg_typed = set(), set()
+ai_listed = set()
 for p_ in glob.glob(MOD + "/in_game/common/generic_action_ai_lists/*.txt"):
     body = strip_comments(read(_np(p_)))
     m = re.search(r"actions = \{([^}]*)\}", body)
     if m: ai_listed |= set(m.group(1).split())
-for p_ in glob.glob(MOD + "/main_menu/gui/*.txt"):
-    msg_typed |= set(re.findall(r"PERFORM_([A-Za-z_0-9]+)_ACTION\s*=", read(_np(p_))))
 prices, price_mods = set(), set()
 for p_ in glob.glob(MOD + "/in_game/common/prices/*.txt"):
     prices |= set(re.findall(r"^([A-Za-z_0-9]+) = \{", strip_comments(read(_np(p_))), re.M))
@@ -129,12 +135,10 @@ for p_ in glob.glob(MOD + "/main_menu/common/modifier_type_definitions/*.txt"):
 probs = []
 for a in sorted(acts):
     if a not in ai_listed: probs.append(f"{a}: not in any generic_action_ai_lists actions block")
-    if a not in msg_typed: probs.append(f"{a}: no PERFORM_{a}_ACTION message type")
-    if f"PERFORM_{a}_ACTION" not in loc_keys: probs.append(f"{a}: PERFORM_{a}_ACTION loc missing")
 for pr in sorted(prices):
     if pr + "_cost_modifier" not in price_mods:
         probs.append(f"{pr}: no {pr}_cost_modifier modifier type defined")
-check("generic actions: ai list + message type + price modifier", len(acts) + len(prices), probs, min_count=2)
+check("generic actions: ai list + price cost modifier", len(acts) + len(prices), probs, min_count=2)
 
 # no stray in_game localization tree
 stray = glob.glob(MOD + "/in_game/localization/**/*.yml", recursive=True)
@@ -281,27 +285,68 @@ check("no any_owned_location with a bare geo predicate", len(code), sorted(set(p
 defs = read(VAN + "/in_game/map_data/definitions.txt")
 
 # ---- goal territory must be legally takeable ----
-# Every region/area a phase's goal trigger demands must be inside some
-# wargoal's allowed_locations, directly or via its parent region. Otherwise
-# the war is won while the goal stays untakeable and the phase can never
-# close. caucasus_region sat in the Phase 3 goal, reachable by no wargoal at
-# all, until this check was written.
-_area_region, _cur = {}, None
-for _line in defs.split("\n"):
-    m = re.match(r"\s*([a-z_]+_region)\s*=\s*\{", _line)
-    if m: _cur = m.group(1)
-    m = re.match(r"\s*([a-z_]+_area)\s*=\s*\{", _line)
-    if m and _cur: _area_region[m.group(1)] = _cur
+# Every location a phase's goal trigger demands must be inside some wargoal's
+# allowed_locations, or the war is won while the goal stays untakeable and the
+# phase can never close. caucasus_region sat in the Phase 3 goal, reachable by
+# no wargoal at all, until this check was written.
+#
+# Both sides now speak scripted_geography, so the comparison expands each named
+# geography down to LOCATIONS and compares sets. That also catches the case a
+# name-only check never could: a wargoal covering a region while the goal wants
+# an area inside a different one.
+_geo_src = ""
+for p_ in glob.glob(MOD + "/in_game/common/scripted_geography/*.txt"):
+    _geo_src += strip_comments(read(_np(p_)))
+
+_region_locs, _area_locs, _prov_locs = {}, {}, {}
+_cur_r = _cur_a = None
+for _line in defs.split(chr(10)):
+    m = re.match(r"\s*([a-z_0-9]+_region)\s*=\s*\{", _line)
+    if m: _cur_r = m.group(1); _region_locs.setdefault(_cur_r, set()); _cur_a = None; continue
+    m = re.match(r"\s*([a-z_0-9]+_area)\s*=\s*\{", _line)
+    if m: _cur_a = m.group(1); _area_locs.setdefault(_cur_a, set()); continue
+    m = re.match(r"\s*([a-z_0-9]+_province)\s*=\s*\{([^}]*)\}", _line)
+    if m:
+        _l = set(m.group(2).split())
+        _prov_locs.setdefault(m.group(1), set()).update(_l)
+        if _cur_a: _area_locs[_cur_a] |= _l
+        if _cur_r: _region_locs[_cur_r] |= _l
+
+def _expand(names):
+    out = set()
+    for n in names:
+        if n in _region_locs: out |= _region_locs[n]
+        elif n in _area_locs: out |= _area_locs[n]
+        elif n in _prov_locs: out |= _prov_locs[n]
+        else: out.add(n)
+    return out
+
+_geos = {}
+for m in re.finditer(r"^([A-Za-z_0-9]+) = \{(.*?)^\}", _geo_src, re.M | re.S):
+    _names = []
+    for bm in re.finditer(r"(?:region|area|province_definition|location) = \{([^}]*)\}", m.group(2)):
+        _names += bm.group(1).split()
+    _geos[m.group(1)] = _expand(_names)
 
 trg_src = strip_comments(read(MOD + "/in_game/common/scripted_triggers/MR_scripted_triggers.txt"))
 wg_src = strip_comments(read(MOD + "/in_game/common/wargoals/MR_wargoals.txt"))
-cb_cover = set(re.findall(r"scope:location\.(?:region|area) = (?:region|area):([a-z_]+)", wg_src))
+
+# what the wargoals can take, as locations
+_cb = set()
+_ALLOWED = "allowed_locations = " + chr(123) + "(.*?)" + chr(10) + chr(9)*2 + chr(125)
+for _m in re.finditer(_ALLOWED, wg_src, re.S):
+    _b = _m.group(1)
+    for g in re.findall(r"scripted_geography:([A-Za-z_0-9]+)", _b):
+        _cb |= _geos.get(g, set())
+    _cb |= _expand(re.findall(r"scope:location\.(?:region|area) = (?:region|area):([a-z_0-9]+)", _b))
+
 probs, count = [], 0
-for _m in re.finditer(r"^(mr_p[23]_[a-z_]+) = \{(.*?)^\}", trg_src, re.M | re.S):
-    for geo in sorted(set(re.findall(r"(?:region|area):([a-z_]+) = \{", _m.group(2)))):
+for _m in re.finditer(r"^(mr_p[23]_[a-z_]+|mr_resurgence_end_trigger) = \{(.*?)^\}", trg_src, re.M | re.S):
+    for g in sorted(set(re.findall(r"scripted_geography:([A-Za-z_0-9]+)", _m.group(2)))):
         count += 1
-        if geo not in cb_cover and _area_region.get(geo) not in cb_cover:
-            probs.append(f"{geo} demanded by {_m.group(1)} but no wargoal allows it")
+        missing = _geos.get(g, set()) - _cb
+        if missing:
+            probs.append(f"{g} demanded by {_m.group(1)}: {len(missing)} locations no wargoal allows, e.g. {sorted(missing)[:4]}")
 check("goal territory covered by a wargoal", count, probs, min_count=8)
 probs, count = [], 0
 geo_refs = set()
@@ -310,12 +355,86 @@ for p, s in code.items():
     geo_refs |= {("region", x) for x in re.findall(r"region:([a-z_0-9]+)", b)}
     geo_refs |= {("area", x) for x in re.findall(r"area:([a-z_0-9]+)", b)}
     geo_refs |= {("location", x) for x in re.findall(r"location:([a-z_0-9]+)", b)}
+# Almost every geography name now lives inside the scripted_geography file as
+# a BARE name in a region/area/province_definition/location block, which the
+# prefix patterns above cannot see. Without this the check quietly fell from
+# 40 items to 11 and a typo in that one file would have been unguarded — the
+# exact vacuous-scan failure this harness exists to prevent.
+for _kind, _members in re.findall(r"(region|area|province_definition|location) = \{([^}]*)\}", _geo_src):
+    for _n in _members.split():
+        geo_refs.add(("province" if _kind == "province_definition" else _kind, _n))
 for kind, name in sorted(geo_refs):
     count += 1
     if not re.search(r"\b" + re.escape(name) + r"\b", defs):
         probs.append(f"{kind}:{name} not in definitions.txt")
 assert ("region", "mongolia_region") in geo_refs  # known positive
-check("regions/areas/locations exist", count, probs, min_count=15)
+check("regions/areas/locations exist", count, probs, min_count=25)
+
+# ---- subjecthood must walk the whole chain ----
+# is_subject_of is true only for a DIRECT vassal. Every question this mod asks
+# about subjecthood is really "is this inside our realm", which must include a
+# vassal's vassal — found in Phase 2 testing, where a sub-vassal's ground
+# blocked the goal and the phase would not end. The same bug had the failsafe
+# seizing a sub-vassal's land and the AI targeting its own sub-vassal.
+# top_overlord_or_this (vanilla: hundred_years_war.txt:185) walks the chain and
+# returns the country itself when it has no overlord.
+# If a genuinely direct-vassal-only test is ever needed, say so in a comment on
+# the same line and this check will let it through.
+probs, count = [], 0
+for p_, s_ in code.items():
+    for _i, _l in enumerate(s_.split(chr(10)), 1):
+        if "is_subject_of" not in _l: continue
+        _code = _l.split("#")[0]
+        if "is_subject_of" not in _code: continue          # a comment, fine
+        count += 1
+        if "direct" not in _l.lower():
+            probs.append(f"{os.path.relpath(p_, MOD)}:{_i}: is_subject_of only "
+                         f"matches a DIRECT vassal — use top_overlord_or_this, or "
+                         f"note 'direct' in a comment if that is really the intent")
+check("subjecthood walks the whole chain", len(code), probs, min_count=5)
+
+# ---- geography trigger matches the scope it sits in ----
+# is_in_scripted_geography is a LOCATION trigger; has_presence_in is the
+# COUNTRY one. Swapping them is silent in the harness and loud in game:
+# "Inconsistent trigger scopes (country vs. location...)". 120 sites shipped
+# the wrong one when the geography refactor landed.
+_LOC_CTX = {"every_location_in_scripted_geography", "any_location_in_scripted_geography",
+            "every_ownable_location_in_region", "any_ownable_location_in_region",
+            "every_location_in_region", "any_location_in_region",
+            "tooltip", "map_color", "secondary_map_color"}
+
+def _is_loc_ctx(name):
+    return name in _LOC_CTX or name.startswith("scope:location") or "capital" in name
+
+probs, count = [], 0
+for p_, s_ in code.items():
+    stack = []
+    for _i, _l in enumerate(s_.split(chr(10)), 1):
+        _b = _l.split("#")[0]
+        if " = scripted_geography:" in _b:
+            count += 1
+            _loc = any(_is_loc_ctx(x) for x in stack)
+            _trig = _b.strip().split(" = ")[0]
+            _want = "is_in_scripted_geography" if _loc else "has_presence_in"
+            if _trig != _want:
+                probs.append(f"{os.path.relpath(p_, MOD)}:{_i}: {_trig} in a "
+                             f"{'location' if _loc else 'country'} scope, want {_want}")
+        for _ in range(_b.count(chr(123))): stack.append(_b.strip().split("=")[0].strip())
+        for _ in range(_b.count(chr(125))):
+            if stack: stack.pop()
+check("geography trigger matches its scope", count, probs, min_count=50)
+
+# ---- every scripted geography is actually used ----
+# A geography nobody references is either a leftover or a call site that was
+# meant to use it and does not. Both are silent.
+_defined = set(re.findall(r"^([A-Za-z_0-9]+) = \{", _geo_src, re.M))
+_used = set()
+for p, s in code.items():
+    if "/scripted_geography/" in p: continue
+    _used |= set(re.findall(r"scripted_geography:([A-Za-z_0-9]+)", strip_comments(s)))
+probs = [f"{g} defined but never referenced" for g in sorted(_defined - _used)]
+probs += [f"{g} referenced but not defined" for g in sorted(_used - _defined)]
+check("scripted geographies defined <-> used", len(_defined), probs, min_count=5)
 
 # ---- globals set<->read ----
 gset, gread = set(), set()
@@ -371,8 +490,18 @@ for p, s in code.items():
         count += 1
         if re.search(r"\bthis = c:(MGO|MGE|OIR)\b", line):
             probs.append(f"this = c:TAG at {rel}:{i}")
-        if re.search(r"owner \?= c:", line):
+        # `owner ?= c:TAG` is the banned bare link. `top_owner ?= c:TAG` is a
+        # DIFFERENT trigger and is legitimate when a country_exists guard for
+        # the same tag sits in the same AND — the realm test uses it.
+        m2 = re.search(r"(?<!top_)owner \?= c:([A-Z]{3})", line)
+        if m2:
             probs.append(f"owner ?= c:TAG at {rel}:{i}")
+        m2 = re.search(r"top_owner \?= c:([A-Z]{3})", line)
+        if m2:
+            _lines = strip_comments(s).splitlines()
+            _win = chr(10).join(_lines[max(0, i - 3):i - 1])
+            if f"country_exists = c:{m2.group(1)}" not in _win:
+                probs.append(f"UNGUARDED top_owner ?= c:{m2.group(1)} at {rel}:{i}")
         m = re.search(r"is_neighbor_of = c:(MGO|MGE)", line)
         if m:
             # allowed only when a country_exists guard for the same tag

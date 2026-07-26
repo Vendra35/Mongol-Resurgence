@@ -1,0 +1,259 @@
+﻿# =================================================================
+# MONGOL RESURGENCE - SCRIPTED GEOGRAPHY
+# =================================================================
+# Every stretch of ground this mod cares about, named once. Before
+# this file the same region lists were written out 259 times across
+# seven files, and a goal change meant editing six places correctly:
+# the goal trigger, the wargoal's allowed_locations AND
+# allowed_subjugation, the CB-grant recipient net, the AI railroad's
+# find-target and fallback lists, the completion failsafe's handover,
+# and the tooltip/secondary_map_color red-lining. Only ONE of those
+# six had an automated check.
+#
+# HOW TO USE (vanilla scripted_geography.info):
+#   country scope   has_presence_in = scripted_geography:X
+#   location scope  is_in_scripted_geography = scripted_geography:X
+#   iteration       scripted_geography:X = {
+#                       every_location_in_scripted_geography = { … }
+#                       any_location_in_scripted_geography   = { … }
+#                       every_present_country                = { … }
+#                   }
+#   localisation    [ShowScriptedGeographyName( … )], needs <key> loc
+#
+# THE ONE RULE FOR THIS FILE: **these are ATOMS. Never define a union
+# geography.** Scripted geographies do not nest (verified: zero
+# vanilla definitions reference another), so a union would mean
+# writing its members a second time — which is the duplication this
+# file exists to delete. Callers that need several atoms OR them
+# together at the call site:
+#
+#   OR = {
+#       is_in_scripted_geography = scripted_geography:MR_geo_khorasan
+#       is_in_scripted_geography = scripted_geography:MR_geo_xinjiang
+#       is_in_scripted_geography = scripted_geography:MR_geo_north_china
+#   }
+#
+# Consequence: every region and area name below appears exactly once
+# in the entire mod. Adding one to a phase goal is a one-line edit
+# here, and every consumer follows automatically.
+# =================================================================
+# --- PHASE 1 -----------------------------------------------------
+# The Mongolian heartland. The Phase 1 goal, and still the Phase 1
+# wargoal, CB net, failsafe and red line. Karakorum lives here, which
+# is why Phases 2 and 3 keep reaching back into it.
+MR_geo_heartland = {
+	region = {
+		mongolia_region
+	}
+}
+
+# The Gobi, in TWO atoms. Phase 1's goal is presence in BOTH halves,
+# and an atom holding both could only ever express "either half" —
+# which is how the goal was accidentally weakened once. One atom per
+# thing that must be separately true.
+MR_geo_eastern_gobi = {
+	area = {
+		eastern_gobi_area
+	}
+}
+
+MR_geo_western_gobi = {
+	area = {
+		western_gobi_area
+	}
+}
+
+# --- PHASE 2 -----------------------------------------------------
+# Four atoms. Phase 2 scores three GROUPS (20 points each) and
+# mr_p2_*_cleared checks them separately; the corridor group is two
+# atoms for the reason given below. Their union is the Phase 2 goal.
+# The Silk Road proper, deliberately TWO atoms rather than one.
+# Phase 2 wants both halves and always ORs them. Phase 3 wants
+# khorasan ALONE — its failsafe reaches here only for the Samarkand
+# seat (transoxiana_area, inside khorasan_region), and handing over
+# Xinjiang as well would gift a claimant 136 locations no Phase 3 end
+# condition asks for. A single combined atom made that impossible to
+# express, so the atom is split and the callers that want both say so.
+MR_geo_khorasan = {
+	region = {
+		khorasan_region
+	}
+}
+
+MR_geo_xinjiang = {
+	region = {
+		xinjiang_region
+	}
+}
+
+# The Yuan seat. Dadu's own region.
+MR_geo_north_china = {
+	region = {
+		north_china_region
+	}
+}
+
+# The northern marches, in THREE atoms. They form one scoring group
+# (mr_p2_northern_marches_cleared ORs all three), but the Phase 2
+# failsafe treats them differently when it hands territory over:
+# the Siberian frontier is steppe and is cored on handover, while
+# Manchuria and Tibet are settled ground the horde ruled but never
+# lived in, and free cores there over-feed the AI claimant — the same
+# reasoning khorasan already carried. An atom cannot be half-cored,
+# so the geography follows the policy.
+MR_geo_manchuria = {
+	region = {
+		manchuria_region
+	}
+}
+
+MR_geo_tibet = {
+	region = {
+		tibet_region
+	}
+}
+
+MR_geo_siberian_marches = {
+	area = {
+		bursol_area
+		omsk_area
+		kulykol_area
+	}
+}
+
+# --- PHASE 3 -----------------------------------------------------
+# Six atoms, one per goal group, for the same reason as Phase 2.
+# The Ilkhanate. Tabriz sits in azerbaijan_area, inside this region.
+MR_geo_persia = {
+	region = {
+		persia_region
+	}
+}
+
+# The Golden Horde's western march. steppes_region is the PONTIC
+# steppe — not the Silk Road corridor, a mistake this mod made once.
+# Sarai al-Jadid sits in lower_don_area, inside it.
+MR_geo_pontic = {
+	region = {
+		steppes_region
+		caucasus_region
+	}
+}
+
+# The middle Volga. Kazan the location sits in kazan_area, whose
+# parent is ural_region — so this is an AREA list, not a region one.
+MR_geo_volga = {
+	area = {
+		kazan_area
+		bolghar_area
+		bashkiria_area
+	}
+}
+
+# Mesopotamia. Baghdad's own area, sacked in 1258. Taken as an area
+# so the rest of the Levant stays out of scope.
+MR_geo_mesopotamia = {
+	area = {
+		iraq_arabi_area
+	}
+}
+
+# Song China, which fell in 1279 and completed what the Jin war began.
+# Phase 2 takes the north; this is the south.
+MR_geo_song_china = {
+	region = {
+		east_china_region
+		west_china_region
+		south_china_region
+	}
+}
+
+# Korea. Goryeo submitted in 1259 and was never annexed, so the goal
+# clause accepts a Korean state that is the claimant's SUBJECT.
+MR_geo_korea = {
+	region = {
+		korea_region
+	}
+}
+
+# --- REACH, NOT GOALS --------------------------------------------
+# Ground the westward CB and wargoal must cover so the war is legal,
+# but which no end trigger demands be cleared. Kept separate from the
+# goal atoms precisely so the two never get confused.
+# The Russian lands. Its own atom because russian_region plays TWO
+# roles: Phase 3's end trigger wants mere PRESENCE here (a foothold),
+# while the westward CB and wargoal need the whole thing in reach.
+# Folding it into MR_geo_western_reach would have made the foothold
+# goal impossible to express without widening it.
+MR_geo_russian_lands = {
+	region = {
+		russian_region
+	}
+}
+
+# The Urals. Split out for the same dual-role reason as the Russian
+# lands: the westward CB needs the whole corridor between the Volga
+# and Siberia, while the Torghut migration wants this region ALONE as
+# the waypoint of its trek. The Volga AREAS inside it are a Phase 3
+# goal and live in MR_geo_volga.
+MR_geo_ural = {
+	region = {
+		ural_region
+	}
+}
+
+# The rest of the westward theatre. armenian_highlands is the land
+# bridge between Tabriz and Anatolia.
+MR_geo_western_reach = {
+	region = {
+		anatolia_region
+	}
+	area = {
+		armenian_highlands_area
+	}
+}
+
+# --- LATE-STEPPE (the three standalone 1600s situations) ----------
+# The Dzungar heartland, in TWO atoms for the same reason as the Gobi:
+# the Dzungar goal wants Dzungaria AND the Tarim AND Zhetysu, three
+# separately-true conditions, so they cannot share an atom.
+MR_geo_dzungaria = {
+	area = {
+		dzungaria_area
+	}
+}
+
+MR_geo_tarim = {
+	area = {
+		tarim_area
+	}
+}
+
+# The KAZAKH steppe, inside khorasan_region — not the Pontic one, and
+# not the Silk Road corridor.
+MR_geo_zhetysu = {
+	area = {
+		zhetysu_area
+	}
+}
+
+# Kose Dag country — the deepest the historical Mongols ever rode into
+# Anatolia, and the Phase 3 foothold goal. Its own atom because the
+# goal is PRESENCE here, not a cleared region.
+MR_geo_cappadocian_reach = {
+	area = {
+		cappadocia_area
+	}
+}
+
+# What the Phase 3 failsafe hands over to satisfy the Russian
+# foothold. Deliberately three areas and not the whole russian_region:
+# the goal is a foothold, and the failsafe should not gift a claimant
+# all of Russia.
+MR_geo_russian_foothold = {
+	area = {
+		ryazan_area
+		samara_area
+		tambov_area
+	}
+}

@@ -87,12 +87,9 @@ MR_empire_fulfilled = {
 	}
 	global_manpower_modifier = 0.15
 	monthly_prestige = 0.15
-	land_morale_modifier = 0.05
-	discipline = 0.05
 	global_integration_speed_modifier = 1
 	subject_loyalty = 25
 	monthly_rebel_growth = -0.0025
-	character_mil_child_education = 0.75
 	expected_army_size_modifier = 4
 	num_local_governors = 1
 }
@@ -158,16 +155,10 @@ MR_mongol_world_order = {
 	game_data = {
 		category = country
 	}
-	global_manpower_modifier = 0.1
+	global_manpower_modifier = 0.2
 	monthly_prestige = 0.1
 	diplomatic_reputation = -2
-	character_mil_child_education = 0.75
-	monthly_rebel_growth = -0.0025
-	expected_army_size_modifier = 2
-	manpower_importance_modifier = 25
 	global_max_bureaucracy_slots = 3
-	cultures_capacity = 5
-	num_local_governors = 1
 	allow_bureaucracy = yes
 }
 
@@ -274,8 +265,7 @@ MR_mongol_historical_modifier_2 = {
 	monthly_horde_unity = 0.5
 	stability_investment = 0.25
 	monthly_rebel_growth = -0.0025
-	character_mil_child_education = 0.75
-	num_local_governors = 1
+	character_mil_child_education = 1
 	expected_army_size = 2
 }
 
@@ -386,7 +376,6 @@ MR_dzungar_legacy = {
 	siege_ability = 0.2
 	tax_income_efficiency = 0.1
 	monthly_rebel_growth = -0.0025
-	num_local_governors = 1
 }
 
 # --- The Khan's Own Pasture (LOCATION modifier) -------------------

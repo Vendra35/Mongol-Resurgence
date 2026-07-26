@@ -19,7 +19,7 @@ full in `CLAUDE.md`; this is the checklist form:
 2. **The harness is the gate.** `python3 tools/verify_mod.py` after every
    change; it auto-detects the reference tree on both machines. A red check
    blocks the change. If you add a new *class* of content, extend the harness
-   so it covers that class too (it grew from 19 to 26 checks this way), and
+   so it covers that class too (it grew from 19 to 29 checks this way), and
    prove the new check on a known positive before believing its green.
 3. **Silent failure is the default failure.** New folder names, loc keys,
    hint tags, gfx keys — verify each against vanilla before creating.
@@ -288,7 +288,10 @@ the fallback everyone sees).
 
 Carried from the 2026-07-23 and 2026-07-26 audit rounds; none block release,
 all are documented in TESTING-GUIDE Track 8 / the tracks above:
-1. `Unknown formatting tag 'l'` log spam — believed vanilla-side; watch-only.
+1. RESOLVED 27.07: `Unknown formatting tag 'l'` is **vanilla-side, confirmed in
+   game** — it appears with vanilla situation panels too. Not our text; nothing
+   to fix. Original investigation kept below for the method.
+1z. (historical) `Unknown formatting tag 'l'` log spam — believed vanilla-side; watch-only.
    Re-verified 2026-07-26 at byte level: the mod's `.yml` and `.gui` files
    contain no `#l`, no `|l]` and no unrecognised `#` tag at all, and none of
    the six `.gui` files carries a BOM (they match vanilla). **Decisive test:**
@@ -340,12 +343,42 @@ all are documented in TESTING-GUIDE Track 8 / the tracks above:
    ("Great Mongol Horde") and never uses this name. Drop-in alternative if the
    warning becomes annoying: "Great Mongol State", the literal English of Yeke
    Mongol Ulus, which carries no trigger word.
-9. `main_menu/gui/MR_messagetypes.txt` assumes the engine reads that folder
-   rather than only `gui/messagetypes.txt`. Unverified. If
-   `message_handler.cpp:421` survives the next test the assumption is wrong;
-   the file is then inert (it cannot do harm) and the cost is one log line
-   plus no popup when the action fires. Do NOT "fix" it by naming the file
-   `messagetypes.txt` — that replaces vanilla's 1348 entries.
+9. RESOLVED 27.07, as unfixable. The engine reads only
+   `main_menu/gui/messagetypes.txt`; a differently-named mod file there is
+   ignored (our `MR_messagetypes.txt` was deleted, and a popular published mod
+   ships an equally dead one). Adding `PERFORM_MR_select_core_region_ACTION`
+   would mean shipping that exact filename and replacing vanilla's 1348
+   entries. Accepted: one `message_handler.cpp:421` line when the action
+   fires, and no popup. The action itself works.
+10. `modifier_type.cpp:1294 Missing Icon for MR_select_core_region_price_cost_modifier`.
+    Modifier-type icons are resolved by filename from
+    `main_menu/gfx/interface/icons/modifier_types/<key>.dds`; there is no
+    `icon` field to set. Vanilla ships one for
+    `rot_select_core_region_price_cost_modifier` but NOT for
+    `rot_plan_invasion_price_cost_modifier`, so the line is tolerated even
+    upstream. Fixable any time by dropping a 5-6 KB .dds at that path.
+
+## 5b. Techniques worth stealing from other mods
+
+Read from *Legacy of Timur: An Age of Gunpowder*, a large published railroad
+mod, on 2026-07-26. Analysis only — nothing copied.
+
+| Thing | Why it matters | Status here |
+|---|---|---|
+| `scripted_geography` | Name goal territory once instead of 259 times | **Adopted 27.07** |
+| `top_owner` on a location | One link to the top of the ownership chain | **Adopted 27.07** |
+| `auto_modifiers` (`potential_trigger` + `scales_with`) | A modifier that applies itself while a condition holds — no grant/remove bookkeeping. 149 vanilla definitions | Not adopted; would replace much of our modifier plumbing |
+| Custom `peace_treaties` with `ai_desire` | Hands the goal territory over **at the peace table** instead of by decree. A far better railroad primitive than a failsafe | Not adopted; strong candidate for the overhaul |
+| `area_preferences` (`preference_type = conquest`) | Steers AI appetite toward a theatre without scripting a single war. Also `TRY_REPLACE:` to override a vanilla entry | Not adopted |
+| `scripted_effects` | The DRY tool we never used | Not adopted |
+| `disasters` | Country-scope crisis with an inline `modifier` block and a 0-100 meter whose extremes end it three different ways | Not used at all |
+| on_action family: `monthly_country_pulse`, `biyearly_country_pulse`, `on_winning_war`, `on_ending_war` (`scope:winner`/`loser`/`war`), weighted `random_events` | Event-driven instead of monthly polling | Only `yearly_country_pulse` used |
+| `situation:X.var:Y` read from outside; variables on the `scope:war` object | One-shot guards that die with the war instead of polluting globals | Not adopted |
+
+**Counter-lesson:** that mod uses `any_country_in_hierarchy` /
+`every_country_in_hierarchy` in 14 places and vanilla has **zero** uses of
+either, anywhere. Popular and published is not attested. The citation rule
+holds regardless of the source.
 
 ## 6. Idea parking lot (unscoped one-liners)
 
@@ -360,7 +393,7 @@ claimant loses Karakorum for 10+ years.
 ## 7. Definition of done (any extension)
 
 - [ ] Every new construct carries a vanilla/PD citation (comment it in-file)
-- [ ] `tools/verify_mod.py` fully green on BOTH machine layouts (26 checks)
+- [ ] `tools/verify_mod.py` fully green on BOTH machine layouts (29 checks)
 - [ ] **A new invariant gets a new harness check, proven on a known positive**
       — break the fix, watch the check fail, restore. Two of the current
       checks exist because a manual review missed exactly what they catch

@@ -74,7 +74,7 @@ mongol_resurgence = {
 					has_culture_group = culture_group:mongolian_group
 				}
 				government_type = government_type:steppe_horde
-				has_presence_in = region:mongolia_region
+				has_presence_in = scripted_geography:MR_geo_heartland
 			}
 			save_scope_as = mr_first_claimant
 		}
@@ -192,7 +192,7 @@ mongol_resurgence = {
 					has_presence_in = sub_continent:central_asia
 				}
 				NOT = {
-					has_presence_in = region:mongolia_region
+					has_presence_in = scripted_geography:MR_geo_heartland
 				}
 				# Mirrors the mr_dominance.10 recipient set ABOVE exactly,
 				# capital filter included. Without the capital clause a
@@ -221,7 +221,7 @@ mongol_resurgence = {
 		# gets told twice about the same news.
 		every_country = {
 			limit = {
-				has_presence_in = region:mongolia_region
+				has_presence_in = scripted_geography:MR_geo_heartland
 				# Mirrors the mr_dominance.10 recipient set ABOVE exactly,
 				# capital filter included. Without the capital clause a
 				# Mongol horde seated outside the eastern steppe was
@@ -352,10 +352,10 @@ mongol_resurgence = {
 							has_truce_with = prev
 						}
 						NOT = {
-							is_subject_of = prev
+							top_overlord_or_this ?= prev
 						}
 						defensive_alliance_strength < c:MGO.offensive_alliance_strength
-						has_presence_in = region:mongolia_region
+						has_presence_in = scripted_geography:MR_geo_heartland
 					}
 					max = 1
 					order_by = {
@@ -421,7 +421,7 @@ mongol_resurgence = {
 						situation:mongol_resurgence = {
 							var:mr_conquest_target_country = {
 								NOT = {
-									is_subject_of = prev
+									top_overlord_or_this ?= prev
 								}
 								NOT = {
 									has_truce_with = prev
@@ -446,10 +446,12 @@ mongol_resurgence = {
 					}
 					var:mr_conquest_target_country = {
 						OR = {
-							tag = MGO
-							is_subject_of = c:MGO
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
 							NOT = {
-								has_presence_in = region:mongolia_region
+								has_presence_in = scripted_geography:MR_geo_heartland
 							}
 						}
 					}
@@ -489,7 +491,7 @@ mongol_resurgence = {
 			}
 			every_country = {
 				limit = {
-					has_presence_in = region:mongolia_region
+					has_presence_in = scripted_geography:MR_geo_heartland
 				}
 				trigger_event_non_silently = mr_dominance.101
 			}
@@ -505,7 +507,7 @@ mongol_resurgence = {
 			}
 			every_country = {
 				limit = {
-					has_presence_in = region:mongolia_region
+					has_presence_in = scripted_geography:MR_geo_heartland
 				}
 				trigger_event_non_silently = mr_dominance.102
 			}
@@ -714,7 +716,7 @@ mongol_resurgence = {
 							has_culture_group = culture_group:mongolian_group
 						}
 						government_type = government_type:steppe_horde
-						has_presence_in = region:mongolia_region
+						has_presence_in = scripted_geography:MR_geo_heartland
 						is_subject = no
 						at_war = no
 						is_ai = yes
@@ -726,7 +728,7 @@ mongol_resurgence = {
 							has_culture_group = culture_group:mongolian_group
 						}
 						government_type = government_type:steppe_horde
-						has_presence_in = region:mongolia_region
+						has_presence_in = scripted_geography:MR_geo_heartland
 						is_subject = no
 						at_war = no
 						is_ai = yes
@@ -746,7 +748,7 @@ mongol_resurgence = {
 							has_culture_group = culture_group:mongolian_group
 						}
 						government_type = government_type:steppe_horde
-						has_presence_in = region:mongolia_region
+						has_presence_in = scripted_geography:MR_geo_heartland
 						is_subject = no
 						is_ai = yes
 					}
@@ -757,7 +759,7 @@ mongol_resurgence = {
 							has_culture_group = culture_group:mongolian_group
 						}
 						government_type = government_type:steppe_horde
-						has_presence_in = region:mongolia_region
+						has_presence_in = scripted_geography:MR_geo_heartland
 						is_subject = no
 						is_ai = yes
 					}
@@ -776,7 +778,7 @@ mongol_resurgence = {
 							has_culture_group = culture_group:mongolian_group
 						}
 						government_type = government_type:steppe_horde
-						has_presence_in = region:mongolia_region
+						has_presence_in = scripted_geography:MR_geo_heartland
 					}
 				}
 				random_country = {
@@ -785,7 +787,7 @@ mongol_resurgence = {
 							has_culture_group = culture_group:mongolian_group
 						}
 						government_type = government_type:steppe_horde
-						has_presence_in = region:mongolia_region
+						has_presence_in = scripted_geography:MR_geo_heartland
 					}
 					save_scope_as = mr_emergence_candidate
 					overlord ?= {
@@ -824,17 +826,16 @@ mongol_resurgence = {
 			}
 			set_global_variable = mr_failsafe_p1_fired
 			# 1. Hand MGO the Mongolian heartland outright.
-			region:mongolia_region = {
-				every_ownable_location_in_region = {
+			scripted_geography:MR_geo_heartland = {
+				every_location_in_scripted_geography = {
 					limit = {
 						# owner ?= not owner =: an ownerless location made
 						# the bare link error ("Event target link 'owner'
 						# returned an invalid object").
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								tag = MGO
-								is_subject_of = c:MGO
+							NOT = {
+								top_overlord_or_this ?= c:MGO
 							}
 						}
 					}
@@ -850,11 +851,10 @@ mongol_resurgence = {
 						has_culture_group = culture_group:mongolian_group
 					}
 					government_type = government_type:steppe_horde
-					NOR = {
-						tag = MGO
-						is_subject_of = c:MGO
+					NOT = {
+						top_overlord_or_this ?= c:MGO
 					}
-					has_presence_in = region:mongolia_region
+					has_presence_in = scripted_geography:MR_geo_heartland
 				}
 				make_subject_of = {
 					target = c:MGO
@@ -1117,7 +1117,7 @@ mongol_resurgence = {
 	tooltip = {
 		if = {
 			limit = {
-				region = region:mongolia_region
+				is_in_scripted_geography = scripted_geography:MR_geo_heartland
 			}
 			custom_tooltip = mr_resurgence_map_tt
 		}
@@ -1161,14 +1161,17 @@ mongol_resurgence = {
 			limit = {
 				country_exists = c:MGO
 				owner ?= {
-					is_subject_of = c:MGO
+					top_overlord_or_this ?= c:MGO
+					NOT = {
+						tag = MGO
+					}
 				}
 			}
 			value = dark_grey
 		}
 		else_if = {
 			limit = {
-				region = region:mongolia_region
+				is_in_scripted_geography = scripted_geography:MR_geo_heartland
 				NOT = {
 					owner ?= {
 						tag = MGO

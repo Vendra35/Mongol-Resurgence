@@ -256,11 +256,12 @@ mr_dominance.24 = {
 			type = alliance
 			limit = {
 				OR = {
-						has_presence_in = region:khorasan_region
-						has_presence_in = region:xinjiang_region
-						has_presence_in = region:north_china_region
-						has_presence_in = region:manchuria_region
-						has_presence_in = region:tibet_region
+					has_presence_in = scripted_geography:MR_geo_khorasan
+					has_presence_in = scripted_geography:MR_geo_xinjiang
+					has_presence_in = scripted_geography:MR_geo_north_china
+					has_presence_in = scripted_geography:MR_geo_manchuria
+					has_presence_in = scripted_geography:MR_geo_tibet
+					has_presence_in = scripted_geography:MR_geo_siberian_marches
 				}
 			}
 			scope:mr_break_claimant = {
@@ -303,16 +304,13 @@ mr_dominance.27 = {
 			type = alliance
 			limit = {
 				OR = {
-						has_presence_in = region:russian_region
-						has_presence_in = region:steppes_region
-						has_presence_in = region:ural_region
-						has_presence_in = region:persia_region
-						has_presence_in = region:anatolia_region
-						has_presence_in = region:caucasus_region
-						has_presence_in = region:east_china_region
-						has_presence_in = region:west_china_region
-						has_presence_in = region:south_china_region
-						has_presence_in = area:iraq_arabi_area
+					has_presence_in = scripted_geography:MR_geo_russian_lands
+					has_presence_in = scripted_geography:MR_geo_pontic
+					has_presence_in = scripted_geography:MR_geo_ural
+					has_presence_in = scripted_geography:MR_geo_persia
+					has_presence_in = scripted_geography:MR_geo_western_reach
+					has_presence_in = scripted_geography:MR_geo_song_china
+					has_presence_in = scripted_geography:MR_geo_mesopotamia
 				}
 			}
 			scope:mr_break_claimant = {
@@ -356,7 +354,7 @@ mr_dominance.28 = {
 			type = alliance
 			limit = {
 				OR = {
-						has_presence_in = region:mongolia_region
+					has_presence_in = scripted_geography:MR_geo_heartland
 				}
 			}
 			scope:mr_break_claimant = {
@@ -1579,13 +1577,12 @@ mr_dominance.992 = {
 			limit = {
 				scope:mr_war_target = {
 					OR = {
-						has_presence_in = region:russian_region
-						has_presence_in = region:steppes_region
-						has_presence_in = region:ural_region
-						has_presence_in = region:persia_region
-						has_presence_in = region:anatolia_region
-						has_presence_in = area:iraq_arabi_area
-						has_presence_in = area:armenian_highlands_area
+						has_presence_in = scripted_geography:MR_geo_russian_lands
+						has_presence_in = scripted_geography:MR_geo_pontic
+						has_presence_in = scripted_geography:MR_geo_ural
+						has_presence_in = scripted_geography:MR_geo_persia
+						has_presence_in = scripted_geography:MR_geo_western_reach
+						has_presence_in = scripted_geography:MR_geo_mesopotamia
 					}
 				}
 			}

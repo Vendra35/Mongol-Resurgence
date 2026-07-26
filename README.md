@@ -22,11 +22,12 @@ every conquest war a human claimant is asked to declare can be postponed.
 | `CLAUDE.md` | The standing rules: setup, architecture, hard rules, known EU5 specifics. **Read first.** |
 | `docs/MOD-DESIGN-IDEA.md` | The design as built — phases, goals, failsafes, tag table |
 | `docs/EU5-MODDING-GUIDE.md` | General EU5 modding field guide distilled from building this |
+| `docs/EU5-ERROR-DECODER.md` | **error.log signature -> cause -> fix.** Check here before investigating any log line |
 | `docs/TESTING-GUIDE.md` | Phase-by-phase in-game test plan (Windows machine) |
 | `docs/FUTURE-DEVELOPMENT.md` | How to extend the mod: cookbooks, expansion tracks, known debt |
 | `docs/AUDIT-2026-07-21.md` | Historical audit record of the original broken codebase |
 | `Debug-and-Test-Results.md` | The living test log and fix journal (Turkish) |
-| `tools/verify_mod.py` | 26-check static verification harness — run after every change |
+| `tools/verify_mod.py` | 29-check static verification harness — run after every change |
 
 The repo is shared between two machines with different reference-tree layouts;
 `CLAUDE.md` → REQUIRED SETUP explains the detection convention. Run the harness

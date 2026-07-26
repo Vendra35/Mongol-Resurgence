@@ -71,7 +71,7 @@ mongol_imperial = {
 		}
 		random_country = {
 			limit = {
-				has_presence_in = region:north_china_region
+				has_presence_in = scripted_geography:MR_geo_north_china
 				NOR = {
 					tag = MGO
 					tag = MGE
@@ -141,10 +141,13 @@ mongol_imperial = {
 				every_country = {
 					limit = {
 						OR = {
-							has_presence_in = region:north_china_region
-							has_presence_in = region:xinjiang_region
-							has_presence_in = region:khorasan_region
-							has_presence_in = region:persia_region
+							has_presence_in = scripted_geography:MR_geo_north_china
+							has_presence_in = scripted_geography:MR_geo_xinjiang
+							has_presence_in = scripted_geography:MR_geo_khorasan
+							has_presence_in = scripted_geography:MR_geo_manchuria
+							has_presence_in = scripted_geography:MR_geo_tibet
+							has_presence_in = scripted_geography:MR_geo_siberian_marches
+							has_presence_in = scripted_geography:MR_geo_persia
 						}
 						NOT = {
 							tag = MGO
@@ -176,11 +179,12 @@ mongol_imperial = {
 				}
 				NOT = {
 					OR = {
-						has_presence_in = region:khorasan_region
-						has_presence_in = region:xinjiang_region
-						has_presence_in = region:north_china_region
-						has_presence_in = region:manchuria_region
-						has_presence_in = region:tibet_region
+						has_presence_in = scripted_geography:MR_geo_khorasan
+						has_presence_in = scripted_geography:MR_geo_xinjiang
+						has_presence_in = scripted_geography:MR_geo_north_china
+						has_presence_in = scripted_geography:MR_geo_manchuria
+						has_presence_in = scripted_geography:MR_geo_tibet
+						has_presence_in = scripted_geography:MR_geo_siberian_marches
 					}
 				}
 				NOR = {
@@ -194,11 +198,12 @@ mongol_imperial = {
 		every_country = {
 			limit = {
 				OR = {
-					has_presence_in = region:khorasan_region
-					has_presence_in = region:xinjiang_region
-					has_presence_in = region:north_china_region
-					has_presence_in = region:manchuria_region
-					has_presence_in = region:tibet_region
+					has_presence_in = scripted_geography:MR_geo_khorasan
+					has_presence_in = scripted_geography:MR_geo_xinjiang
+					has_presence_in = scripted_geography:MR_geo_north_china
+					has_presence_in = scripted_geography:MR_geo_manchuria
+					has_presence_in = scripted_geography:MR_geo_tibet
+					has_presence_in = scripted_geography:MR_geo_siberian_marches
 				}
 				NOR = {
 					tag = MGO
@@ -354,15 +359,16 @@ mongol_imperial = {
 							has_truce_with = prev
 						}
 						NOT = {
-							is_subject_of = prev
+							top_overlord_or_this ?= prev
 						}
 						defensive_alliance_strength < c:MGO.offensive_alliance_strength
 						OR = {
-							has_presence_in = region:khorasan_region
-							has_presence_in = region:xinjiang_region
-							has_presence_in = region:north_china_region
-							has_presence_in = region:manchuria_region
-							has_presence_in = region:tibet_region
+							has_presence_in = scripted_geography:MR_geo_khorasan
+							has_presence_in = scripted_geography:MR_geo_xinjiang
+							has_presence_in = scripted_geography:MR_geo_north_china
+							has_presence_in = scripted_geography:MR_geo_manchuria
+							has_presence_in = scripted_geography:MR_geo_tibet
+							has_presence_in = scripted_geography:MR_geo_siberian_marches
 						}
 					}
 					max = 1
@@ -398,15 +404,18 @@ mongol_imperial = {
 					}
 					var:mr_imp_conquest_target_country = {
 						OR = {
-							tag = MGO
-							is_subject_of = c:MGO
+							AND = {
+								country_exists = c:MGO
+								top_overlord_or_this ?= c:MGO
+							}
 							NOT = {
 								OR = {
-									has_presence_in = region:khorasan_region
-									has_presence_in = region:xinjiang_region
-									has_presence_in = region:north_china_region
-									has_presence_in = region:manchuria_region
-									has_presence_in = region:tibet_region
+									has_presence_in = scripted_geography:MR_geo_khorasan
+									has_presence_in = scripted_geography:MR_geo_xinjiang
+									has_presence_in = scripted_geography:MR_geo_north_china
+									has_presence_in = scripted_geography:MR_geo_manchuria
+									has_presence_in = scripted_geography:MR_geo_tibet
+									has_presence_in = scripted_geography:MR_geo_siberian_marches
 								}
 							}
 						}
@@ -457,7 +466,7 @@ mongol_imperial = {
 						situation:mongol_imperial = {
 							var:mr_imp_conquest_target_country = {
 								NOT = {
-									is_subject_of = prev
+									top_overlord_or_this ?= prev
 								}
 								NOT = {
 									has_truce_with = prev
@@ -507,7 +516,7 @@ mongol_imperial = {
 			}
 			every_country = {
 				limit = {
-					has_presence_in = region:north_china_region
+					has_presence_in = scripted_geography:MR_geo_north_china
 				}
 				trigger_event_non_silently = mr_dominance.122
 			}
@@ -600,16 +609,15 @@ mongol_imperial = {
 				}
 			}
 			set_global_variable = mr_failsafe_p2_fired
-			region:mongolia_region = {
-				every_ownable_location_in_region = {
+			scripted_geography:MR_geo_heartland = {
+				every_location_in_scripted_geography = {
 					limit = {
 						# owner ?= not owner =: an ownerless location made
 						# the bare link error at :559 in testing.
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								tag = MGO
-								is_subject_of = c:MGO
+							NOT = {
+								top_overlord_or_this ?= c:MGO
 							}
 						}
 					}
@@ -617,16 +625,15 @@ mongol_imperial = {
 					add_core = c:MGO
 				}
 			}
-			region:khorasan_region = {
-				every_ownable_location_in_region = {
+			scripted_geography:MR_geo_khorasan = {
+				every_location_in_scripted_geography = {
 					limit = {
 						# owner ?= not owner =: an ownerless location made
 						# the bare link error at :559 in testing.
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								tag = MGO
-								is_subject_of = c:MGO
+							NOT = {
+								top_overlord_or_this ?= c:MGO
 							}
 						}
 					}
@@ -634,16 +641,15 @@ mongol_imperial = {
 					# add_core = c:MGO // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
 				}
 			}
-			region:xinjiang_region = {
-				every_ownable_location_in_region = {
+			scripted_geography:MR_geo_xinjiang = {
+				every_location_in_scripted_geography = {
 					limit = {
 						# owner ?= not owner =: an ownerless location made
 						# the bare link error at :559 in testing.
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								tag = MGO
-								is_subject_of = c:MGO
+							NOT = {
+								top_overlord_or_this ?= c:MGO
 							}
 						}
 					}
@@ -651,16 +657,15 @@ mongol_imperial = {
 					add_core = c:MGO
 				}
 			}
-			region:north_china_region = {
-				every_ownable_location_in_region = {
+			scripted_geography:MR_geo_north_china = {
+				every_location_in_scripted_geography = {
 					limit = {
 						# owner ?= not owner =: an ownerless location made
 						# the bare link error at :559 in testing.
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								tag = MGO
-								is_subject_of = c:MGO
+							NOT = {
+								top_overlord_or_this ?= c:MGO
 							}
 						}
 					}
@@ -668,16 +673,15 @@ mongol_imperial = {
 					add_core = c:MGO
 				}
 			}
-			region:manchuria_region = {
-				every_ownable_location_in_region = {
+			scripted_geography:MR_geo_manchuria = {
+				every_location_in_scripted_geography = {
 					limit = {
 						# owner ?= not owner =: the bare link errors on
 						# ownerless locations.
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								tag = MGO
-								is_subject_of = c:MGO
+							NOT = {
+								top_overlord_or_this ?= c:MGO
 							}
 						}
 					}
@@ -685,16 +689,15 @@ mongol_imperial = {
 					# add_core = c:MGO // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
 				}
 			}
-			region:tibet_region = {
-				every_ownable_location_in_region = {
+			scripted_geography:MR_geo_tibet = {
+				every_location_in_scripted_geography = {
 					limit = {
 						# owner ?= not owner =: the bare link errors on
 						# ownerless locations.
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								tag = MGO
-								is_subject_of = c:MGO
+							NOT = {
+								top_overlord_or_this ?= c:MGO
 							}
 						}
 					}
@@ -704,50 +707,15 @@ mongol_imperial = {
 					# cores here would over-feed the AI claimant.
 				}
 			}
-			area:bursol_area = {
-				every_ownable_location_in_area = {
+			scripted_geography:MR_geo_siberian_marches = {
+				every_location_in_scripted_geography = {
 					limit = {
 						# owner ?= not owner =: the bare link errors on
 						# ownerless locations.
 						owner ?= {
 							is_ai = yes
-							NOR = {
-								tag = MGO
-								is_subject_of = c:MGO
-							}
-						}
-					}
-					change_location_owner = c:MGO
-					add_core = c:MGO
-				}
-			}
-			area:omsk_area = {
-				every_ownable_location_in_area = {
-					limit = {
-						# owner ?= not owner =: the bare link errors on
-						# ownerless locations.
-						owner ?= {
-							is_ai = yes
-							NOR = {
-								tag = MGO
-								is_subject_of = c:MGO
-							}
-						}
-					}
-					change_location_owner = c:MGO
-					add_core = c:MGO
-				}
-			}
-			area:kulykol_area = {
-				every_ownable_location_in_area = {
-					limit = {
-						# owner ?= not owner =: the bare link errors on
-						# ownerless locations.
-						owner ?= {
-							is_ai = yes
-							NOR = {
-								tag = MGO
-								is_subject_of = c:MGO
+							NOT = {
+								top_overlord_or_this ?= c:MGO
 							}
 						}
 					}
@@ -967,14 +935,12 @@ mongol_imperial = {
 		if = {
 			limit = {
 				OR = {
-					region = region:khorasan_region
-					region = region:xinjiang_region
-					region = region:north_china_region
-					region = region:manchuria_region
-					region = region:tibet_region
-					area = area:bursol_area
-					area = area:omsk_area
-					area = area:kulykol_area
+					is_in_scripted_geography = scripted_geography:MR_geo_khorasan
+					is_in_scripted_geography = scripted_geography:MR_geo_xinjiang
+					is_in_scripted_geography = scripted_geography:MR_geo_north_china
+					is_in_scripted_geography = scripted_geography:MR_geo_manchuria
+					is_in_scripted_geography = scripted_geography:MR_geo_tibet
+					is_in_scripted_geography = scripted_geography:MR_geo_siberian_marches
 				}
 			}
 			custom_tooltip = mr_imperial_map_tt
@@ -998,7 +964,10 @@ mongol_imperial = {
 			limit = {
 				country_exists = c:MGO
 				owner ?= {
-					is_subject_of = c:MGO
+					top_overlord_or_this ?= c:MGO
+					NOT = {
+						tag = MGO
+					}
 				}
 			}
 			value = dark_grey
@@ -1006,14 +975,12 @@ mongol_imperial = {
 		else_if = {
 			limit = {
 				OR = {
-					region = region:khorasan_region
-					region = region:xinjiang_region
-					region = region:north_china_region
-					region = region:manchuria_region
-					region = region:tibet_region
-					area = area:bursol_area
-					area = area:omsk_area
-					area = area:kulykol_area
+					is_in_scripted_geography = scripted_geography:MR_geo_khorasan
+					is_in_scripted_geography = scripted_geography:MR_geo_xinjiang
+					is_in_scripted_geography = scripted_geography:MR_geo_north_china
+					is_in_scripted_geography = scripted_geography:MR_geo_manchuria
+					is_in_scripted_geography = scripted_geography:MR_geo_tibet
+					is_in_scripted_geography = scripted_geography:MR_geo_siberian_marches
 				}
 				NOT = {
 					owner ?= {

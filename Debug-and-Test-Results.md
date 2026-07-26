@@ -577,3 +577,61 @@ Ilk gercek oyun ici test turu. Dort gercek hata cikti, dordu de duzeltildi. Harn
 - messagetypes.txt klasor-birlestirme varsayimi (yukarida).
 - has_presence_in â‰¡ any_owned_location { region } esdegerligi: End Requirements satirlari toprak durumuyla uyumlu gorunuyor, yani pratikte dogrulanmis sayilir.
 
+
+
+##### 27.07.2026 SCRIPTED GEOGRAPHY REFACTOR + IN-GAME TEST ROUNDS #####
+
+Baska bir yayinlanmis railroad modunu (Legacy of Timur) analiz ettik, oradan ogrendigimiz scripted_geography'yi entegre ettik, ve arka arkaya uc oyun ici test turunda dort gercek hata daha bulundu. Harness 26 -> 29 kontrol, hepsi yesil.
+
+## SCRIPTED GEOGRAPHY (vanilla ozelligi, tamamen kacirmisiz)
+
+Hedef cografya modda 7 dosyada 259 kez yaziliydi; bir hedef degisince ALTI yerin birden dogru degismesi gerekiyordu ve bunlardan sadece BIRININ kontrolu vardi. Artik `in_game/common/scripted_geography/MR_geography.txt` icinde 21 atom var, her bolge adi modda TAM OLARAK BIR KEZ yazili.
+
+Kullanim: ulke scope'unda `has_presence_in = scripted_geography:X`, lokasyon scope'unda `is_in_scripted_geography = scripted_geography:X`, ulkenin baskenti icin `scope:C.capital ?= { is_in_scripted_geography = ... }`, iterasyon icin `scripted_geography:X = { every_location_in_scripted_geography = { ... } }`. Vanilla'nin kendi `scripted_geography.info` dosyasinda belgeli.
+
+IKI KURAL (ikisini de once yanlis yapip ogrendik):
+- ATOM ONLY, ASLA BIRLESIM TANIMLAMA. Cografyalar ic ice gecmiyor (vanilla'da sifir ornek), yani "birlesim" tanimi uyelerini ikinci kez yazmak demek â€” kaldirdigin tekrari geri getirir. Cagrilan yerler atomlari OR'lar.
+- AYRI AYRI DOGRU OLMASI GEREKEN HER KOSUL ICIN AYRI ATOM, ve her farkli SINIR icin ayri atom. Dogu+bati Gobi'yi tek atoma koymak "ikisi de" hedefini sessizce "ikisinden biri"ne cevirdi. Khorasan xinjiang'dan ayri, cunku P3 failsafe'i khorasan'i TEK BASINA istiyor. Manchuria/tibet Sibirya'dan ayri, cunku biri core aliyor digeri bilerek almiyor. Bir atom yari-bir-sey olamaz.
+
+Her adimda esdegerlik kanitlandi: her atomu definitions.txt'ye gore lokasyon kumesine acan bir dogrulayici yazip eski liste ile yeni cografyayi karsilastirdim. Hepsi EXACT, iki bilincli istisna disinda:
+- steppe_unification allowed_subjugation ACIK LISTE KALDI â€” atomlara cevirmek 949 lokasyon eklerdi ve Faz 1'in Horasan/Tibet'i vassallastirmasina izin verirdi ("Too far away for situation 1" yorumun bilincliydi).
+- P2 CB dagitimi ve AI hedef secimi GENISLEDI â€” manchuria/tibet/Sibirya alanlarini tutan ulkeye silk-road CB'si hic verilmiyordu, oysa wargoal orayi alinabilir kiliyordu. Caucasus'un aynisi, canli bir acikti; genisleme duzeltme oldu.
+
+## P3 FAILSAFE GENISLETILDI (senin karar verdigin B secenegi)
+
+P3 failsafe'i artik Faz 2 topragini da geri aliyor (xinjiang, manchuria, tibet, Sibirya alanlari). Gerekce: AI 1600'de kotu bir savas kaybederse 1650'de imparatorlugun ortasinda delik kalirdi. Faz 2 iyi gittiyse bedeli SIFIR â€” devir kosulu sadece "sahibi AI, claimant degil, claimant'in tebaasi degil" olan topraga uyuyor. Oyuncunun topragina dokunmuyor. Core politikasi uydurulmadi, Faz 2'den kopyalandi ve programli dogrulandi.
+
+## OYUN ICI TEST TURLARINDA BULUNAN DORT HATA
+
+- (BENIM HATAM, 1a) `is_in_scripted_geography` bir LOKASYON trigger'i; ulke scope'unda `has_presence_in` kullanilmali. 120 cagri yerinde yanlis trigger vardi. Kapsami tahminle degil, her satirin cevresindeki blok yiginini cozerek belirleyip duzelttim. Harness kontrolu eklendi (209 cagri yerini tariyor).
+- (BENIM HATAM, 1b/1c) northern_marches'i uce bolerken kullandigim regex `is_in_scripted_geography = ` onekini yutmus, geriye ciplak `scripted_geography:MR_geo_tibet` satirlari kalmisti. 12 satir, uc dosya. Brace sayisi tuttugu icin harness gormedi. DERS: re.sub'da `\S*` bosluk sinirinda kesiliyor ve sonuc sessizce bozuk cikiyor.
+- (ESKI HATA) `is_subject_of` sadece DOGRUDAN vassali sayiyor. Uc yerde birden yanlisti: hedef trigger'lari alt-vassalin topragini yabanci sayiyordu (faz uzuyordu â€” senin buldugun), FAILSAFE alt-vassalin topragini ELINDEN ALIYORDU, ve AI kendi alt-vassalina savas acabiliyordu. 46 cagri yeri `top_overlord_or_this` ile duzeltildi (vanilla hundred_years_war.txt:185). Bagimsiz bir ulke icin kendisini dondurdugu icin ayri `tag = MGO` kontrolu de gereksizlesti.
+- (ESKI HATA) Koltuk kontrolleri `c:MGO = { owns = location:samarkand }` seklindeydi â€” sadece claimant KENDISI tuttugunda dogru. Vassal Samarkand veya Khanbaliq'i tutunca faz KILITLENIYORDU, ve failsafe de kurtaramiyordu cunku bilerek kendi tebaasinin topragina dokunmuyor. Butun koltuklar ve ayak izleri artik ortak `mr_in_claimant_realm` trigger'indan geciyor (`has_owner = yes` + `top_owner ?= c:MGO/MGE`). Test edildi: Samarkand vassaldayken situation bitiyor.
+
+## GUI: END REQUIREMENTS ARTIK KONTROL LISTESI
+
+P3'un end requirement'i hem tooltip metnini hem altinda ham clause dokumunu gosteriyordu. Sebep: panelin widget'i her `custom_tooltip` icin BIR TIK ciziyor, biz ise 17 clause'un hepsini tek dev tooltip'e sarmistik. Vanilla'nin sekiz situation end-condition tooltip'inin hepsi tek kisa cumle ve HICBIRINDE satir sonu yok (ben P3'unkini yedi paragraf yapmistim).
+Artik her gereksinim kendi tooltip'inde: P1 2 tik, P2 4 tik, P3 9 tik. Dokuz hedef trigger'i tooltip'ini kendi icinde tasiyor, end trigger'lar sadece onlarin listesi. Hangi maddenin eksik oldugunu tek bakista goruyorsun.
+
+## MOTOR KAYITLARI: IKISI COZULDU, IKISI KABUL EDILDI
+
+- `generic_action_ai_list.cpp:82` -> COZULDU, ai list dosyasi eklendi.
+- `price_database.cpp:117` -> COZULDU, `<price>_cost_modifier` tipi eklendi.
+- `message_handler.cpp:421` -> COZULEMEZ, KABUL EDILDI. Motor SADECE `main_menu/gui/messagetypes.txt` dosyasini okuyor (vanilla'nin o klasorunde baska .txt yok). Farkli isimli mod dosyasi sessizce yok sayiliyor â€” Timur modununki de olu, onlar da fark etmemis. Ayni isimli dosya vanilla'nin 1348 girdisini siler. Olu dosyamizi sildim. Bedel: aksiyon kullanilinca bir log satiri ve popup cikmamasi. Aksiyon calisiyor.
+- `modifier_type.cpp:1294 Missing Icon` -> KABUL EDILDI. Ikon dosya adiyla araniyor (`gfx/interface/icons/modifier_types/<key>.dds`), tanimda `icon` alani yok. Vanilla kendi `rot_plan_invasion_price_cost_modifier`'i icin de gondermiyor. Istersen 5-6 KB'lik bir .dds koyarsan gider.
+- `Unknown formatting tag 'l'` -> KAPANDI. Vanilla situation panellerinde de cikiyor, bizimle alakasi yok (oyun ici dogrulandi).
+
+## TIMUR MODUNDAN OGRENDIKLERIMIZ (analiz, kopyalama yok)
+
+Aldigimiz: `scripted_geography`, `top_owner`.
+Almadigimiz ama total overhaul icin kaydedilenler (FUTURE-DEVELOPMENT 5b): `auto_modifiers` (potential_trigger + scales_with â€” kosul dogruyken kendiliginden uygulanan modifier, defter tutma yok, vanilla'da 149 tanim), custom `peace_treaties` + `ai_desire` (hedef topragi BARIS MASASINDA devreden sart â€” failsafe'ten cok daha iyi bir railroad primitifi), `area_preferences` (AI istahini yonlendirme, `TRY_REPLACE:` ile vanilla girdisini ezme), `scripted_effects`, `disasters` (inline modifier + 0-100 sayac + uc farkli son), on_action ailesi (`monthly_country_pulse`, `on_winning_war`/`on_ending_war` + scope:winner/loser/war, agirlikli `random_events`), `situation:X.var:Y`, savas nesnesine baglanan degiskenler.
+
+KARSI DERS: o mod `any_country_in_hierarchy` / `every_country_in_hierarchy` kullaniyor (14 yer) ve vanilla'da bu ikisinin SIFIR kullanimi var â€” hicbir yerde. Populer ve yayinlanmis olmak "attested" demek degil. Citation kurali kaynaktan bagimsiz gecerli.
+
+## HARNESS 26 -> 29
+
+Yeni: `geography trigger matches its scope` (209 cagri yeri), `scripted geographies defined <-> used`, `subjecthood walks the whole chain`.
+Yukseltilen: `goal territory covered by a wargoal` artik LOKASYON seviyesinde karsilastiriyor; `regions/areas/locations exist` refactor sirasinda 40'tan 11'e dustu (adlar cografya dosyasina tasindi, kontrol o sozdizimini bilmiyordu) â€” yakalandi ve cografya dosyasini da tarayacak sekilde duzeltildi; `no unguarded c:TAG` artik `owner` ile `top_owner`'i ayiriyor.
+Kaldirilan: generic action mesaj-tipi sarti (cozulemez oldugu icin, gerekcesiyle).
+Yeni kontrollerin HEPSI known positive'de kanitlandi: cografya adina yazim hatasi, sahipsiz atom, ters cevrilmis trigger, korumasiz top_owner, wargoal'dan cikarilmis atom.
+

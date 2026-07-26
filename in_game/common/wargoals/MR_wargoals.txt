@@ -25,8 +25,18 @@ MR_war_goal_steppe_unification = {
 		subjugate_cost = 1
 		antagonism = 0.25
 		allowed_locations = {
-			scope:location.region = region:mongolia_region
+			scope:location ?= {
+				OR = {
+					is_in_scripted_geography = scripted_geography:MR_geo_heartland
+				}
+			}
 		}
+		# DELIBERATELY EXPLICIT, not the geography atoms. This is a
+		# capital-region test that names a hand-picked set; expressing it
+		# as OR(heartland, khorasan, xinjiang, north_china,
+		# northern_marches) would widen it by 949 locations and let
+		# Phase 1 vassalise Khorasan and Tibet. The steppes line below
+		# was cut for the same reason.
 		allowed_subjugation = {
 			OR = {
 				scope:loser.capital.region = region:mongolia_region
@@ -63,45 +73,38 @@ MR_war_goal_silk_road = {
 		subjugate_cost = 1
 		antagonism = 0.25
 		allowed_locations = {
-			OR = {
-				scope:location.region = region:khorasan_region
-				scope:location.region = region:xinjiang_region
-				scope:location.region = region:mongolia_region
-				scope:location.region = region:north_china_region
-				scope:location.region = region:persia_region
-				scope:location.region = region:east_china_region
-				scope:location.region = region:west_china_region
-				scope:location.region = region:south_china_region
-				scope:location.region = region:tibet_region				## New addition for immersion
-				# Phase 2 goal regions: Manchuria (Jin, 1234) and the
-				# Siberian border areas that square off the northern
-				# frontier. Tibet above is a Phase 2 goal too.
-				scope:location.region = region:manchuria_region
-				scope:location.area = area:bursol_area
-				scope:location.area = area:omsk_area
-				scope:location.area = area:kulykol_area
-				# Phase 3 goal: Korea, which the end trigger accepts as
-				# a SUBJECT — hence subjugation below matters more than
-				# conquest here, but both stay legal.
-				scope:location.region = region:korea_region
+			scope:location ?= {
+				OR = {
+					is_in_scripted_geography = scripted_geography:MR_geo_heartland
+					is_in_scripted_geography = scripted_geography:MR_geo_khorasan
+					is_in_scripted_geography = scripted_geography:MR_geo_xinjiang
+					is_in_scripted_geography = scripted_geography:MR_geo_north_china
+					is_in_scripted_geography = scripted_geography:MR_geo_manchuria
+					is_in_scripted_geography = scripted_geography:MR_geo_tibet
+					is_in_scripted_geography = scripted_geography:MR_geo_siberian_marches
+					is_in_scripted_geography = scripted_geography:MR_geo_song_china
+					is_in_scripted_geography = scripted_geography:MR_geo_korea
+					is_in_scripted_geography = scripted_geography:MR_geo_persia
+				}
 			}
 		}
 		allowed_subjugation = {
-			OR = {
-				scope:loser.capital.region = region:khorasan_region
-				scope:loser.capital.region = region:xinjiang_region
-				scope:loser.capital.region = region:mongolia_region
-				scope:loser.capital.region = region:north_china_region
-				scope:loser.capital.region = region:persia_region
-				scope:loser.capital.region = region:east_china_region
-				scope:loser.capital.region = region:west_china_region
-				scope:loser.capital.region = region:south_china_region
-				scope:loser.capital.region = region:tibet_region				## New addition for immersion
-				scope:loser.capital.region = region:manchuria_region
-				scope:loser.capital.area = area:bursol_area
-				scope:loser.capital.area = area:omsk_area
-				scope:loser.capital.area = area:kulykol_area
-				scope:loser.capital.region = region:korea_region
+			# scope:X.capital = { is_in_scripted_geography = … } is the
+			# attested way to ask where a country is seated
+			# (hre.txt:899, :981).
+			scope:loser.capital ?= {
+				OR = {
+					is_in_scripted_geography = scripted_geography:MR_geo_heartland
+					is_in_scripted_geography = scripted_geography:MR_geo_khorasan
+					is_in_scripted_geography = scripted_geography:MR_geo_xinjiang
+					is_in_scripted_geography = scripted_geography:MR_geo_north_china
+					is_in_scripted_geography = scripted_geography:MR_geo_manchuria
+					is_in_scripted_geography = scripted_geography:MR_geo_tibet
+					is_in_scripted_geography = scripted_geography:MR_geo_siberian_marches
+					is_in_scripted_geography = scripted_geography:MR_geo_song_china
+					is_in_scripted_geography = scripted_geography:MR_geo_korea
+					is_in_scripted_geography = scripted_geography:MR_geo_persia
+				}
 			}
 		}
 	}
@@ -127,30 +130,30 @@ MR_war_goal_westward_advance = {
 		subjugate_cost = 1
 		antagonism = 0.25
 		allowed_locations = {
-			OR = {
-				scope:location.region = region:russian_region
-				scope:location.region = region:steppes_region
-				scope:location.region = region:ural_region
-				scope:location.region = region:persia_region
-				scope:location.region = region:anatolia_region
-				# The Caucasus is a Phase 3 goal (mr_p3_pontic_cleared) and
-				# was reachable by no wargoal at all — the exact coverage
-				# failure the rule at the top of this file warns about.
-				scope:location.region = region:caucasus_region
-				scope:location.area = area:iraq_arabi_area
-				scope:location.area = area:armenian_highlands_area
+			scope:location ?= {
+				OR = {
+					is_in_scripted_geography = scripted_geography:MR_geo_russian_lands
+					is_in_scripted_geography = scripted_geography:MR_geo_ural
+					is_in_scripted_geography = scripted_geography:MR_geo_western_reach
+					is_in_scripted_geography = scripted_geography:MR_geo_pontic
+					is_in_scripted_geography = scripted_geography:MR_geo_persia
+					is_in_scripted_geography = scripted_geography:MR_geo_mesopotamia
+				}
 			}
 		}
 		allowed_subjugation = {
-			OR = {
-				scope:loser.capital.region = region:russian_region
-				scope:loser.capital.region = region:steppes_region
-				scope:loser.capital.region = region:ural_region
-				scope:loser.capital.region = region:persia_region
-				scope:loser.capital.region = region:anatolia_region
-				scope:loser.capital.region = region:caucasus_region
-				scope:loser.capital.area = area:iraq_arabi_area
-				scope:loser.capital.area = area:armenian_highlands_area
+			# scope:X.capital = { is_in_scripted_geography = … } is the
+			# attested way to ask where a country is seated
+			# (hre.txt:899, :981).
+			scope:loser.capital ?= {
+				OR = {
+					is_in_scripted_geography = scripted_geography:MR_geo_russian_lands
+					is_in_scripted_geography = scripted_geography:MR_geo_ural
+					is_in_scripted_geography = scripted_geography:MR_geo_western_reach
+					is_in_scripted_geography = scripted_geography:MR_geo_pontic
+					is_in_scripted_geography = scripted_geography:MR_geo_persia
+					is_in_scripted_geography = scripted_geography:MR_geo_mesopotamia
+				}
 			}
 		}
 	}

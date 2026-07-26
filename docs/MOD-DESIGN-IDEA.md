@@ -119,6 +119,26 @@ sends three kinds of message — `mr_dominance.20/21/28` (Phase 1),
 Nobody is told the same news twice: the steppe powers that receive the opening
 `mr_dominance.10` are excluded from the Phase 1 spectator and victim nets.
 
+## Geography, named once
+Every stretch of ground the mod cares about is a `scripted_geography` atom in
+`in_game/common/scripted_geography/MR_geography.txt` (21 of them). The goal
+triggers, the wargoals, the CB-grant nets, the AI's find-target and fallback
+lists, the failsafe handovers and the map red-lining all reference the same
+names, so a goal change is a one-line edit. Atoms only — geographies do not
+nest, so callers `OR` what they need, and an atom exists per distinct BOUNDARY
+rather than per pretty name (khorasan apart from xinjiang because one failsafe
+wants it alone; manchuria and tibet apart from the Siberian marches because
+one is cored on handover and the others deliberately are not).
+
+## What counts as "ours"
+Every goal that says "we hold X" means the claimant's whole REALM holds X,
+subjects of subjects included. A seat held by a vassal satisfies the goal
+(`mr_in_claimant_realm`: `has_owner = yes` + `top_owner ?= c:MGO/MGE`), and a
+sub-vassal's ground counts as cleared (`top_overlord_or_this`). This matters
+more than it sounds: `is_subject_of` alone deadlocked Phase 2 whenever a vassal
+took Samarkand or Khanbaliq, and the failsafe could not break the deadlock
+because it never takes land from the claimant's own subjects.
+
 ## Two-layer failsafe system (as implemented)
 **(a) Birth failsafe** (Phase 1 only): if no country organically takes the claim by
 1375, the best-placed steppe horde is force-converted with
@@ -129,7 +149,13 @@ Nobody is told the same news twice: the steppe powers that receive the opening
 `change_location_owner` + `add_core` by area/region iteration, rival hordes made
 tributaries in Phase 1 — mirroring PD's `every_ownable_location_in_area` pattern.
 Phase 3 hands over the four-khanate seats' areas, both foothold areas, the whole
-persia_region, the caucasus, and Song China + Korea. `add_core` is withheld where
+persia_region, the caucasus, Song China + Korea — **and the Phase 2 ground as
+well**. The earlier phase's territory is not a Phase 3 goal and nothing checks
+it, but a claimant that lost Xinjiang or Manchuria in a bad war would otherwise
+finish the railroad as an empire full of holes. It is free when Phase 2 held:
+the handover only matches land owned by an AI that is neither the claimant nor
+its subject, so ground already held does not match, and a human player's
+territory is never touched. `add_core` is withheld where
 free cores would over-feed the AI claimant: khorasan and tibet get ownership
 only. Guards: fires only for an **AI** claimant (the Phase 1
 at-war gate was deliberately removed — an AI stuck in an endless war must not

@@ -180,6 +180,40 @@ deceive:
     `country_exists = c:X` **in the same AND** — trigger ANDs short-circuit, so
     the link is never touched when the tag is absent.
 
+### Name your geography once: `common/scripted_geography/`
+A named bundle of regions, areas, province_definitions and bare locations,
+documented in vanilla's own `scripted_geography.info`. It is the single most
+valuable thing we found late:
+
+```
+MR_geo_northern_marches = {
+	region = { manchuria_region  tibet_region }
+	area   = { bursol_area  omsk_area  kulykol_area }
+}
+```
+
+| Ask it from | With |
+|---|---|
+| a country | `has_presence_in = scripted_geography:X` |
+| a location / area / region | `is_in_scripted_geography = scripted_geography:X` |
+| a country's seat | `scope:C.capital ?= { is_in_scripted_geography = … }` |
+| iteration | `scripted_geography:X = { every_location_in_scripted_geography = { … } }` |
+| the players | `[ShowScriptedGeographyName( … )]`, needs `<key>` loc |
+
+Two rules learned by getting them wrong:
+- **Atoms only, never a union.** Geographies do not nest (zero vanilla
+  definitions reference another), so a "union" definition rewrites its members
+  and reintroduces the duplication you are deleting. Callers `OR` the atoms.
+- **One atom per separately-true condition, and per distinct boundary.**
+  Putting eastern and western Gobi in one atom silently turned a goal that
+  wanted BOTH into one that accepted either. Splitting khorasan from xinjiang
+  was needed because one failsafe wants khorasan alone; splitting manchuria and
+  tibet from the Siberian marches was needed because one cores and the other
+  deliberately does not. An atom cannot be half-anything.
+
+Before this the same region lists were written out 259 times across seven
+files here, and changing a goal meant editing six places correctly.
+
 ### Choosing the cheapest construct that answers the question
 `any_owned_location = { region = region:X }` walks a country's entire holdings
 list. `has_presence_in = region:X` answers the same question directly (108
@@ -193,23 +227,53 @@ first form and none of the second. Cheapest first:
 | `ordered_neighbor_country` | neighbours | picking a war target |
 | `any_country` / `every_country` | the whole map | only when the ANSWER must be a country |
 
+**Subjecthood must walk the chain.** `is_subject_of = c:X` is true only for a
+DIRECT vassal. Almost every question a mod asks is really "is this inside X's
+realm", which includes a vassal's vassal:
+
+| Scope | Use |
+|---|---|
+| country | `top_overlord_or_this ?= c:X` (19 vanilla uses) — also returns the country itself when it is independent, so a separate `tag = X` test is redundant |
+| location | `has_owner = yes` + `top_owner ?= c:X` (156 vanilla uses, `conquistadors.txt:64`) |
+
+Avoid `any_country_in_hierarchy` / `every_country_in_hierarchy`: a popular
+published mod uses them but vanilla has **zero** uses anywhere, so they are
+unattested. Getting this wrong is expensive and quiet — here it made goal
+clauses ignore a sub-vassal's ground, had a failsafe seize its own
+sub-vassal's land, and let the AI declare war on its own sub-vassal.
+
+**A "we hold X" goal must mean the REALM holds X.** `c:X = { owns =
+location:Y }` is true only when X holds Y *itself*, so a vassal holding the
+prize deadlocks the goal — and a failsafe cannot rescue it, because a
+well-written failsafe never takes land from its own subjects. Route every seat
+check through one location-scope trigger instead.
+
 Two details on the region-scan form. Use `owner ?=`, never `owner =`: regions
 like khorasan and west China contain **unowned** locations, and the bare link
 errors on them — with `?=` an ownerless location simply does not match, which is
 what you want. And keep the `NOR` **flat**:
 
 ```
-owner ?= { NOR = { tag = MGO                                    ← 4 independent
-                   tag = MGE                                       members
-                   AND = { country_exists = c:MGO  is_subject_of = c:MGO }
-                   AND = { country_exists = c:MGE  is_subject_of = c:MGE } } }
+owner ?= { NOR = { AND = { country_exists = c:MGO             ← 2 independent
+                           top_overlord_or_this ?= c:MGO }      members
+                   AND = { country_exists = c:MGE
+                           top_overlord_or_this ?= c:MGE } } }
 ```
 
-Folding a tag test into its own `is_subject_of` (`AND = { tag = MGO
-is_subject_of = c:MGO }`) asks for a country that is its own vassal. It is never
-true, so the `NOR` is always true, every owned location matches, the enclosing
-`NOT` is always false — and the phase can never complete, not even after a
-failsafe hands over the whole goal territory. Nothing errors. Nothing logs.
+`top_overlord_or_this` returns the country itself when it is independent, so it
+subsumes a separate `tag =` member and covers the whole subject chain at once.
+The earlier version of this example used `tag =` plus `is_subject_of` as four
+flat members; that works for direct vassals only, and it taught two bugs we
+actually shipped:
+
+- **Folding a tag test into its own `is_subject_of`** (`AND = { tag = MGO
+  is_subject_of = c:MGO }`) asks for a country that is its own vassal. Never
+  true, so the `NOR` is always true, every owned location matches, the
+  enclosing `NOT` is always false — the phase can never complete, not even
+  after a failsafe hands over the whole goal territory. Nothing errors,
+  nothing logs.
+- **`is_subject_of` alone ignores a vassal's vassal**, so ground the claimant
+  effectively ruled still blocked the goal.
 
 ## 6. Wars: casus belli + wargoals
 
@@ -315,6 +379,13 @@ An AI will not conquer on theme without help. Three cooperating layers:
   - and beyond loc, the action needs an entry in
     `common/generic_action_ai_lists/` and a `<price>_cost_modifier` modifier
     type. See CLAUDE.md — three registries, three different error messages.
+- **End conditions render as a CHECKLIST: one `custom_tooltip` per
+  requirement, each text on ONE line.** The panel draws one tick per tooltip,
+  so a single tooltip wrapped around every clause fights the widget — ours
+  showed its text *and* the raw clause dump underneath. All eight vanilla
+  situation end-condition tooltips are one compact sentence and none contains
+  a newline. Put each requirement's tooltip inside its own scripted trigger
+  and let the end trigger be a list of them.
 - Situation panels: copy the closest vanilla `.gui` (`the_revolution.gui` is the
   simplest); a `blockoverride` naming a block that doesn't exist in the vanilla
   template renders *nothing*, silently. Panels read situation variables — set them.
@@ -360,7 +431,7 @@ by some wargoal's allowed_locations** · **no `any_owned_location` with a bare
 geography predicate** · no duplicate event ids / loc keys · BOM on every file ·
 advances/buildings/units exist in vanilla · no unguarded c:TAG comparison
 patterns.
-26 checks, one python script (`tools/verify_mod.py`, auto-detects the
+29 checks, one python script (`tools/verify_mod.py`, auto-detects the
 reference-tree layout), seconds to run.
 
 Two of those checks exist because a manual review missed the thing they now

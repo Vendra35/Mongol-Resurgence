@@ -67,9 +67,25 @@
  mr_torghut_map_tt: "#Y The road west.#! From Dzungaria across the Urals to the Volga — the last great migration of the steppe."
  mr_dzungar_map_tt: "#Y Dzungaria and the western steppe.#! The ground on which the last nomadic empire is being built."
 
- mr_resurgence_end_tt: "The #Y Mongol Horde#! owns [ShowLocationName('karakorum')] and has a presence in the [ShowAreaName('eastern_gobi_area')] and [ShowAreaName('western_gobi_area')] [areas|e], and no rival power owns [locations|e] in the [ShowRegionName('mongolia_region')] [region|e]"
- mr_imperial_end_tt: "The claimant owns [ShowLocationName('samarkand')] and [ShowLocationName('dadu')], and no power outside its realm owns [locations|e] in the [ShowRegionName('khorasan_region')], [ShowRegionName('xinjiang_region')], [ShowRegionName('north_china_region')], [ShowRegionName('manchuria_region')] or [ShowRegionName('tibet_region')] [region|e], nor in the [ShowAreaName('bursol_area')], [ShowAreaName('omsk_area')] or [ShowAreaName('kulykol_area')] [area|e]"
- mr_dominance_end_tt: "#Y The Four Khanates restored.#!\n\n#Y The seats.#! We own [ShowLocationName('karakorum')] and [ShowLocationName('dadu')] (the Yuan), [ShowLocationName('samarkand')] (the Chagatai), [ShowLocationName('sarai_al_jadid')] and [ShowLocationName('kazan')] (the Golden Horde), and [ShowLocationName('tabriz')] and [ShowLocationName('baghdad')] (the Ilkhanate).\n\n#Y The Ilkhanate.#! No power outside our realm holds [locations|e] in the [ShowRegionName('persia_region')] [region|e] or the [ShowAreaName('iraq_arabi_area')] [area|e].\n\n#Y The Golden Horde.#! The same holds true of the [ShowRegionName('steppes_region')] and [ShowRegionName('caucasus_region')] [region|e], and of the [ShowAreaName('kazan_area')], [ShowAreaName('bolghar_area')] and [ShowAreaName('bashkiria_area')] [area|e].\n\n#Y The Yuan.#! The same holds true of the [ShowRegionName('east_china_region')], [ShowRegionName('west_china_region')] and [ShowRegionName('south_china_region')] [region|e] — the Song lands, which fell in 1279.\n\n#Y Korea.#! The [ShowRegionName('korea_region')] [region|e] answers to us or to our [subject|e]. Goryeo submitted in 1259 and was never annexed; a Korean vassal satisfies this.\n\n#Y The westward reach.#! We hold at least one [location|e] in the [ShowRegionName('russian_region')] [region|e] and one in the [ShowAreaName('cappadocia_area')] [area|e]."
+ mr_resurgence_seats_tt: "The #Y Mongol Horde#! or its [subject|e] hold [ShowLocationName('karakorum')] and are present in both the [ShowAreaName('eastern_gobi_area')] and [ShowAreaName('western_gobi_area')] [area|e]"
+ mr_p1_heartland_cleared_tt: "No power outside our realm holds [locations|e] in the [ShowRegionName('mongolia_region')] [region|e]"
+ # --- End requirements: ONE short line per condition ---
+ # The panel renders these as a checklist, one tick per custom_tooltip, so
+ # each must be a single line. Vanilla's own end-condition tooltips are all
+ # one compact sentence and none contains a newline.
+ mr_imperial_seats_tt: "[ShowLocationName('samarkand')] and [ShowLocationName('dadu')] answer to us or to our [subject|e]"
+ mr_p2_corridor_cleared_tt: "No power outside our realm holds [locations|e] in the [ShowRegionName('khorasan_region')] or [ShowRegionName('xinjiang_region')] [region|e]"
+ mr_p2_north_china_cleared_tt: "No power outside our realm holds [locations|e] in the [ShowRegionName('north_china_region')] [region|e]"
+ mr_p2_northern_marches_cleared_tt: "No power outside our realm holds [locations|e] in [ShowRegionName('manchuria_region')], [ShowRegionName('tibet_region')] or the Siberian marches"
+ mr_dominance_seats_tt: "The seven khanate seats — [ShowLocationName('karakorum')], [ShowLocationName('dadu')], [ShowLocationName('samarkand')], [ShowLocationName('sarai_al_jadid')], [ShowLocationName('kazan')], [ShowLocationName('tabriz')] and [ShowLocationName('baghdad')] — answer to us or to our [subject|e]"
+ mr_dominance_russian_foothold_tt: "We or our [subject|e] hold at least one [location|e] in the [ShowRegionName('russian_region')] [region|e]"
+ mr_dominance_cappadocia_tt: "We or our [subject|e] hold at least one [location|e] in the [ShowAreaName('cappadocia_area')] [area|e]"
+ mr_p3_persia_cleared_tt: "The Ilkhanate restored: no power outside our realm holds [locations|e] in the [ShowRegionName('persia_region')] [region|e]"
+ mr_p3_pontic_cleared_tt: "The Golden Horde's march: no power outside our realm holds [locations|e] in the [ShowRegionName('steppes_region')] or [ShowRegionName('caucasus_region')] [region|e]"
+ mr_p3_volga_cleared_tt: "The middle Volga: no power outside our realm holds [locations|e] in the [ShowAreaName('kazan_area')], [ShowAreaName('bolghar_area')] or [ShowAreaName('bashkiria_area')] [area|e]"
+ mr_p3_mesopotamia_cleared_tt: "No power outside our realm holds [locations|e] in the [ShowAreaName('iraq_arabi_area')] [area|e]"
+ mr_p3_song_china_cleared_tt: "The Song lands, which fell in 1279: no power outside our realm holds [locations|e] in [ShowRegionName('east_china_region')], [ShowRegionName('west_china_region')] or [ShowRegionName('south_china_region')]"
+ mr_p3_korea_in_the_fold_tt: "[ShowRegionName('korea_region')] answers to us or to our [subject|e] — Goryeo submitted in 1259 and was never annexed"
 
  mr_resurgence_timeout_tt: "#Y Or 1420 arrives.#! If the steppe is not united by then, the moment has passed."
  mr_imperial_timeout_tt: "#Y Or 1550 arrives.#! The Silk Road will not wait forever."

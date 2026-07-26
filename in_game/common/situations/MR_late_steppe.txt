@@ -96,7 +96,7 @@ mr_chahar_reunification = {
 	tooltip = {
 		if = {
 			limit = {
-				region = region:mongolia_region
+				is_in_scripted_geography = scripted_geography:MR_geo_heartland
 			}
 			custom_tooltip = mr_chahar_map_tt
 		}
@@ -173,7 +173,7 @@ mr_torghut_migration = {
 			every_country = {
 				limit = {
 					OR = {
-						has_presence_in = region:ural_region
+						has_presence_in = scripted_geography:MR_geo_ural
 						AND = {
 							culture = {
 								has_culture_group = culture_group:mongolian_group
@@ -196,7 +196,7 @@ mr_torghut_migration = {
 			}
 			every_country = {
 				limit = {
-					has_presence_in = region:russian_region
+					has_presence_in = scripted_geography:MR_geo_russian_lands
 				}
 				trigger_event_non_silently = mr_steppe.12
 			}
@@ -229,9 +229,9 @@ mr_torghut_migration = {
 		if = {
 			limit = {
 				OR = {
-					region = region:ural_region
-					region = region:russian_region
-					region = region:steppes_region
+					is_in_scripted_geography = scripted_geography:MR_geo_ural
+					is_in_scripted_geography = scripted_geography:MR_geo_russian_lands
+					is_in_scripted_geography = scripted_geography:MR_geo_pontic
 				}
 			}
 			custom_tooltip = mr_torghut_map_tt
@@ -257,8 +257,8 @@ mr_torghut_migration = {
 		if = {
 			limit = {
 				OR = {
-					region = region:ural_region
-					region = region:russian_region
+					is_in_scripted_geography = scripted_geography:MR_geo_ural
+					is_in_scripted_geography = scripted_geography:MR_geo_russian_lands
 				}
 			}
 			value = red
@@ -312,8 +312,8 @@ mr_dzungar_khanate = {
 						has_culture_group = culture_group:mongolian_group
 					}
 					government_type = government_type:steppe_horde
-					has_presence_in = region:xinjiang_region
-					has_presence_in = area:zhetysu_area
+					has_presence_in = scripted_geography:MR_geo_xinjiang
+					has_presence_in = scripted_geography:MR_geo_zhetysu
 				}
 			}
 			every_country = {
@@ -352,8 +352,8 @@ mr_dzungar_khanate = {
 		if = {
 			limit = {
 				OR = {
-					region = region:xinjiang_region
-					region = region:khorasan_region
+					is_in_scripted_geography = scripted_geography:MR_geo_xinjiang
+					is_in_scripted_geography = scripted_geography:MR_geo_khorasan
 				}
 			}
 			custom_tooltip = mr_dzungar_map_tt
