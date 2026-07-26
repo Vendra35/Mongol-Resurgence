@@ -15,19 +15,24 @@ In-game test plan: `docs/TESTING-GUIDE.md`. Extension roadmap and cookbooks:
 `tools/verify_mod.py` (run after every change; every check prints its count).
 
 ## REQUIRED SETUP on a new machine
-The workflow depends on a read-only reference tree **one level above this repo**.
-**This repo is shared between TWO machines whose layouts DIFFER** — neither is
-canonical. Always DETECT which one exists before using any reference path;
-never assume, and never "fix" one layout's paths to the other's.
+The workflow depends on a read-only vanilla reference tree plus the Prussian
+Destiny reference mod. **This repo is shared between TWO machines whose layouts
+DIFFER** — neither is canonical. Always DETECT which one exists before using any
+reference path; never assume, and never "fix" one layout's paths to the other's.
 
-Windows machine (junctions directly under the parent):
+Windows machine — vanilla is read STRAIGHT FROM THE STEAM INSTALL. The old
+`EU5-Vanilla/` junction under the parent proved unreliable (OneDrive emptied it,
+leaving a directory that exists but contains nothing), so the Steam path is
+tried first and the junction survives only as a fallback:
 
 ```
+E:/SteamLibrary/steamapps/common/Europa Universalis V/
+└── game/                       ← READ ONLY, full vanilla install (~51k files)
+
 <parent>/
-├── <this repo>/               ← write here only
-├── The Prussian Destiny/      ← READ ONLY, working, tested reference mod
-└── EU5-Vanilla/               ← READ ONLY, junction → the Steam install
-    └── game/                   ← full vanilla install (~51k files)
+├── <this repo>/                ← write here only
+├── The Prussian Destiny/       ← READ ONLY, working, tested reference mod
+└── EU5-Vanilla/game/           ← legacy junction, fallback only, may be empty
 ```
 
 macOS machine (one wrapper folder under the parent):
@@ -40,10 +45,16 @@ macOS machine (one wrapper folder under the parent):
     └── The Prussian Destiny/                      ← reference mod
 ```
 
-Detection snippet (bash; the skills use the same one):
+Detection snippet (bash; the skills use the same one). Note the `-f` probe on a
+known file: a junction that exists but is EMPTY passes `-d` and silently yields
+zero grep hits — exactly the vacuous-pass class this repo keeps getting bitten
+by.
 
 ```bash
-if [ -d "../EU5-Vanilla/game" ]; then
+STEAM_VAN="/e/SteamLibrary/steamapps/common/Europa Universalis V/game"
+if [ -f "$STEAM_VAN/in_game/map_data/definitions.txt" ]; then
+	VANILLA="$STEAM_VAN"; PD="../The Prussian Destiny"
+elif [ -f "../EU5-Vanilla/game/in_game/map_data/definitions.txt" ]; then
 	VANILLA="../EU5-Vanilla/game"; PD="../The Prussian Destiny"
 else
 	VANILLA="../Reference EU5 vanilla and Prussian Destiny/Europa Universalis V/game"
@@ -51,9 +62,9 @@ else
 fi
 ```
 
-`tools/verify_mod.py` auto-detects the same two layouts (env var `MR_VANILLA`
-overrides both). If neither tree exists, recreate one before doing any mod
-work — **every rule below depends
+`tools/verify_mod.py` auto-detects the same three candidates in the same order
+(env var `MR_VANILLA` overrides all of them). If no tree resolves, fix that
+before doing any mod work — **every rule below depends
 on being able to grep vanilla**. Key vanilla paths used constantly:
 `game/in_game/common/situations/readme.txt` (authoritative situation docs),
 `game/in_game/map_data/definitions.txt` (region → area → province → location
@@ -65,11 +76,28 @@ Six situations, five namespaces, one state machine. End goals are the
 situations' red-lined REGIONS (PD-style): the phase completes when no country
 outside the claimant's realm (itself or subjects) holds the goal regions.
 
+The conquest follows the real Mongol sequence: Phase 2 takes the north and
+east (Manchuria — Jin, 1234; Tibet — Yuan protectorate, 1240s; North China,
+Xinjiang, Khorasan), Phase 3 finishes it (Song China, 1279; Korea, which
+submitted in 1259 and was NEVER annexed, so a Korean SUBJECT satisfies the
+goal) alongside the western khanates.
+
+**Each goal group is ONE scripted trigger** (`mr_p2_*_cleared`,
+`mr_p3_*_cleared`), called by both the end trigger and the situation's monthly
+panel score. They were once written out twice in two different shapes — the
+panel sweeping every country for its owned locations, the end trigger scanning
+the regions — so the progress bar could read 100 on a phase that refused to
+close. One definition, two callers, no drift. When a goal region changes, six
+places must change with it: the goal trigger, the wargoal `allowed_locations`
+(+`allowed_subjugation`), the situation's CB-grant recipient net, the AI
+railroad find-target and fallback lists, the completion failsafe's handover,
+and the `tooltip`/`secondary_map_color` red-lining.
+
 | Situation key | File | Window | Ends when |
 |---|---|---|---|
 | `mongol_resurgence` | MR_mongol_resurgence.txt | 1368–1420 | MGO holds Karakorum + Gobi + ALL of mongolia_region |
-| `mongol_imperial` | MR_mongol_imperial.txt | 1420–1550 | MGO holds Samarkand + Dadu + ALL of khorasan/xinjiang/north_china regions → **MGE (Yeke Mongol Ulus) is PROCLAIMED in on_ending** (form_country bypasses MGE_f's allow; its form_effect grants empire rank + vanilla's 50y restoration modifier) |
-| `mongol_dominance` | MR_mongol_dominance.txt | 1550–1650 | "The Four Khanates": MGE owns the khanate seats (karakorum, dadu, samarkand, sarai_al_jadid, kazan, tabriz, baghdad) + persia_region cleared + russian_region foothold + cappadocia_area presence |
+| `mongol_imperial` | MR_mongol_imperial.txt | 1420–1550 | Samarkand + Dadu held, and `mr_p2_corridor_cleared` (khorasan+xinjiang) + `mr_p2_north_china_cleared` + `mr_p2_northern_marches_cleared` (manchuria+tibet+bursol/omsk/kulykol areas) → **MGE (Yeke Mongol Ulus) is PROCLAIMED in on_ending** (form_country bypasses MGE_f's allow; its form_effect grants empire rank + vanilla's 50y restoration modifier) |
+| `mongol_dominance` | MR_mongol_dominance.txt | 1550–1650 | "The Four Khanates": the seven khanate seats (karakorum, dadu, samarkand, sarai_al_jadid, kazan, tabriz, baghdad) + russian_region foothold + cappadocia_area presence + `mr_p3_persia_cleared` / `_pontic_` (steppes+caucasus) / `_volga_` (kazan/bolghar/bashkiria areas) / `_mesopotamia_` (iraq_arabi) / `_song_china_` (east+west+south china) / `mr_p3_korea_in_the_fold` |
 | `mr_chahar_reunification` | MR_late_steppe.txt | 1604–1634 | one banner over the heartland |
 | `mr_torghut_migration` | MR_late_steppe.txt | 1616–1630 | a horde reaches the Volga (post-trek) |
 | `mr_dzungar_khanate` | MR_late_steppe.txt | 1634–1650 | consolidated + Dzungaria/Tarim/Zhetysu |
@@ -138,7 +166,12 @@ outside the claimant's realm (itself or subjects) holds the goal regions.
   subject is first released via `cancel_subject`, run by the overlord:
   _hardcoded.txt:4808). RULE: the mod never force-converts, locks or robs a
   human player — every conversion is offered, every railroad war postponable,
-  every failsafe is_ai-gated on both claimant and victim.
+  every failsafe is_ai-gated on both claimant and victim, and the alliance-break
+  events (`mr_dominance.24/.27/.28`) are is_ai-gated too. PD fires its
+  equivalent at c:PRU unconditionally (the_prussian_ascension.txt:138), but PD
+  has no such rule and we do; dissolving a player's treaties with no way to
+  refuse is the same class of theft. It is also pointless for them — the break
+  exists because the AI's declare event stalls on its own alliances.
 - **Both P2 and P3 end machinery is dual-tag** (any_country over MGO/MGE +
   guarded is_subject_of pairs): under the Vanilla buff rule nothing carries
   `blocks_country_formation`, so a human claimant can legally form MGE
@@ -147,32 +180,44 @@ outside the claimant's realm (itself or subjects) holds the goal regions.
 - Failsafes force completion, PD-style: birth failsafe (~1375,
   `form_country = formable_country:MGO_f`); per-phase completion failsafes
   (`mr_failsafe_p1/p2/p3_fired`, 5 years before each deadline) that
-  `change_location_owner` + `add_core` the FULL goal territory (P2: khorasan +
-  xinjiang + north_china regions; P3: the seat areas upper_selenga/beiping/
-  transoxiana/lower_don/kazan + iraq_arabi + cappadocia + ryazan + ALL of
-  persia_region). Guards: gated by the auto-conquest rules; claimant
+  `change_location_owner` (+ `add_core`, except where instant cores would
+  over-feed the AI: khorasan and tibet) the FULL goal territory — P2: mongolia,
+  khorasan, xinjiang, north_china, manchuria, tibet + bursol/omsk/kulykol
+  areas; P3: the seat areas + iraq_arabi + cappadocia + ryazan + caucasus +
+  ALL of persia_region + east/west/south china + korea. Guards: gated by the auto-conquest rules; claimant
   `is_ai = yes` (P1's `at_war = no` gate was deliberately removed — an AI
   stuck in an endless war must not stall the handover; P2/P3 keep it);
   locations taken only from AI owners, always via `owner ?=` — the bare
   `owner =` link errors on ownerless locations.
 - CBs are situation-granted (`create_enabled = no`; grant years cover each full
   phase window — 130/100): each wargoal's `allowed_locations` **covers every
-  location its phase's end trigger demands**. The silk-road wargoal also covers
-  `xinjiang_region` (P2 goal) and `mongolia_region` (so a Karakorum lost after
-  P1 stays legally retakable). The westward wargoal covers russian + steppes +
-  ural + **persia + anatolia regions** plus the **iraq_arabi and
-  armenian_highlands areas** (`scope:location.area = area:X` — the same
-  location→area link PD's find-target uses) for the P3 four-khanates goal.
-- 24 modifiers in `main_menu/common/static_modifiers/MR_modifiers.txt`, all wired:
-  phase buffs (granted per buff rule, removed in `on_ending`), historical-mode
-  variants, phase rewards (removed at the NEXT phase's `on_start`, as their
-  tooltips promise), success/failure (AI vs player), transition
-  (`MR_the_sleeping_horde` — AI-only, it blocks war declarations), the
+  location its phase's end trigger demands**. The silk-road wargoal spans both
+  eastern phases: khorasan + xinjiang + north_china + manchuria + tibet +
+  bursol/omsk/kulykol areas (P2), east/west/south china + korea (P3), plus
+  `mongolia_region` so a Karakorum lost after P1 stays legally retakable. The
+  westward wargoal covers russian + steppes + ural + **persia + anatolia +
+  caucasus regions** plus the **iraq_arabi and armenian_highlands areas**
+  (`scope:location.area = area:X` — the same location→area link PD's
+  find-target uses) for the P3 four-khanates goal. `caucasus_region` was a P3
+  goal reachable by NO wargoal until this was audited — when a goal region is
+  added, re-run the coverage cross-check, do not eyeball it.
+- 26 modifiers in `main_menu/common/static_modifiers/MR_modifiers.txt`, all wired:
+  phase buffs (granted per buff rule, removed in the granting phase's
+  `on_ending`), historical-mode variants, phase rewards (**PERMANENT** — never
+  removed, and their tooltips say so), success/failure (AI vs player), the
   `MR_great_khan` + `MR_historically_needed` **character** modifiers, and six
   event-specific rewards (Forge of Warriors, Kurultai's Mandate, Western Ulus
   Restored, Seal of Chinggis, Volga Pastures, Dzungar Legacy). RULE: flavour
   events grant their OWN modifier — phase buffs/rewards belong to the
   situations and the buff rule alone, never re-granted by events.
+- **Panel variables are computed at the END of `on_monthly`, never the top.**
+  Everything that can change what the panel should show — the beats, the birth
+  failsafe, the completion failsafe — runs inside the same tick. Computed
+  first, the panel lags a month behind its own situation. In testing that
+  surfaced as a Phase 2 progress bar reading 0 while every end requirement was
+  already green: the requirement list evaluates live when the panel opens, the
+  bar only shows what the last tick wrote, and the failsafe had handed over the
+  territory in between. All three phases now compute panel state last.
 - Situation panels read live variables the situations compute monthly:
   `MR_mgo_score`/`MR_rival_score` (P1, PD-style strength scores) and
   `MR_mge_score`/`MR_dominance_score` (P2/P3, 0–100 goal progress). Headers use
@@ -227,6 +272,20 @@ outside the claimant's realm (itself or subjects) holds the goal regions.
   engine fallback; a second mod loc file with the same filename SHADOWS the
   main_menu one and every main_menu-only key renders raw (this happened: rules,
   settings, modifier names all showed as keys in game).
+- **A `generic_action` needs THREE side registries**, or the engine errors:
+  `in_game/common/generic_action_ai_lists/` (else
+  `generic_action_ai_list.cpp:82`, and the AI re-evaluates it constantly);
+  a `PERFORM_<key>_ACTION` entry in a `main_menu/gui/` message-types file
+  (else `message_handler.cpp:421` — 149 of vanilla's 155 situation-type
+  actions carry one; never name the file `messagetypes.txt`, that would
+  replace vanilla's 1348 entries); and, for its `price`, a
+  `<price_key>_cost_modifier` in `main_menu/common/modifier_type_definitions/`
+  (else `price_database.cpp:117`). All three were missed the first time.
+- **Loc values must live on ONE physical line.** A literal `
+` that becomes a
+  real newline splits the value and the game logs `Missing colon (:)
+  separator` and drops the entry — while a key-counting scan still sees every
+  key and reports clean. Eleven descriptions shipped this way.
 - Engine-derived loc keys: situations `<key>` + `<key>_desc`; wargoals
   `war_goal_<wargoal_key>` (+`_desc`) — double prefix for `MR_war_goal_*`;
   rules `rule_<key>` / `setting_<option>` (+`_desc`); hints `hint_<key>` +
@@ -265,6 +324,15 @@ outside the claimant's realm (itself or subjects) holds the goal regions.
   `main_menu/common/modifier_type_definitions/` (no EU4 names like `prestige`,
   `stability_modifier`, `governing_capacity`).
 - CBs point at `common/wargoals/` via `war_goal_type`; EU4 `po_*` flags don't exist.
+- **Never `any_owned_location = { region = region:X }`** — it walks a country's
+  entire holdings list to answer a question `has_presence_in = region:X` answers
+  directly (108 vanilla uses, region/area/sub_continent). All 104 in this mod
+  were the bare form and all were converted; `verify_mod.py` now fails on any
+  reintroduction. Related choice of iterator, cheapest first: `has_presence_in`
+  (a predicate) → `region:X = { any_ownable_location_in_region = { owner ?= … } }`
+  (asks "does anyone outside our realm hold this ground", the end-trigger
+  shape) → `ordered_neighbor_country` (neighbours only) → `any_country` /
+  `every_country` (the whole map — only when the ANSWER must be a country).
 - `owns` vs `controls`: events overwhelmingly use `owns` (ownership), `controls` is
   military occupation. Phase goals use `owns`.
 - **`c:TAG` on the right side of any comparison errors every tick while the tag
@@ -278,8 +346,12 @@ outside the claimant's realm (itself or subjects) holds the goal regions.
 - War-declaring railroad events are visible with the declaration in **option A**
   and a postpone **option B** (PD 103 shape), never `hidden` with the war in
   `immediate` — a human claimant must be able to refuse.
-- Files: UTF-8 **with BOM** (`efbbbf`), English only (comments included), `MR_`
-  prefix, tabs for indentation.
+- Files: UTF-8 **with BOM** (`efbbbf`) for `.txt` and `.yml`. **`.gui` files are
+  the exception and carry NO BOM** — vanilla ships 483 `.gui` files and only 49
+  have one, so BOM-less is the house style there (PD's three do have one; it is
+  not load-critical either way, and it is NOT the cause of the `[l]` formatting
+  error). `tools/verify_mod.py` checks `.txt`/`.yml` only, deliberately.
+  English only (comments included), `MR_` prefix, tabs for indentation.
 
 ### Tooling traps (macOS)
 - BSD grep: `\b` in patterns can silently match nothing — a whole audit passed

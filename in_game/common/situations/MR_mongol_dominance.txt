@@ -93,15 +93,9 @@ mongol_dominance = {
 		random_country = {
 			limit = {
 				OR = {
-					any_owned_location = {
-						region = region:russian_region
-					}
-					any_owned_location = {
-						region = region:steppes_region
-					}
-					any_owned_location = {
-						region = region:ural_region
-					}
+					has_presence_in = region:russian_region
+					has_presence_in = region:steppes_region
+					has_presence_in = region:ural_region
 				}
 				NOR = {
 					tag = MGO
@@ -126,9 +120,11 @@ mongol_dominance = {
 					tag = MGE
 				}
 			}
-			# The Phase 2 reward expires here, as its tooltip promises
-			# ("removed upon the start of the 3rd Situation").
-			remove_country_modifier = MR_empire_fulfilled			## !!!!!!!!!!!!!Might be problem because it should ne permanent modifier no? LOOK LATER!!!!!!!!!!!!!!!
+			# The Phase 2 reward (MR_empire_fulfilled) is deliberately
+			# NOT stripped here — it is permanent, marking the
+			# proclamation of the Yeke Mongol Ulus, and its tooltip says
+			# so. Only phase BUFFS are temporary, and Phase 2's own
+			# on_ending removes those.
 			# The war-preparation lock, PD Ascension style: the AI
 			# claimant must not freelance-declare — the railroad event
 			# declares for it. Never applied to a human player.
@@ -140,6 +136,33 @@ mongol_dominance = {
 					modifier = MR_mongol_preparing_for_conquest
 					years = -1
 					mode = replace
+				}
+			}
+			# --- THE SEAT MOVES TO KHANBALIQ ---
+			# Kublai moved the capital from Karakorum to Dadu in 1272,
+			# and the empire stopped being a steppe confederation the
+			# day he did. Phase 3 opens on the same decision. Guarded
+			# three ways: the claimant must actually OWN Dadu (the
+			# Phase 2 goal guarantees it on the success path, but the
+			# fallback path does not), it must not already be sitting
+			# there, and a HUMAN is asked rather than moved — the mod
+			# never relocates a player's capital behind their back.
+			if = {
+				limit = {
+					owns = location:dadu
+					NOT = {
+						capital = location:dadu
+					}
+				}
+				if = {
+					limit = {
+						is_ai = yes
+					}
+					set_capital = location:dadu
+					trigger_event_non_silently = mr_dominance.136
+				}
+				else = {
+					trigger_event_non_silently = mr_dominance.137
 				}
 			}
 			trigger_event_non_silently = mr_dominance.130
@@ -174,21 +197,12 @@ mongol_dominance = {
 		every_country = {
 			limit = {
 				OR = {
-					any_owned_location = {
-						region = region:russian_region
-					}
-					any_owned_location = {
-						region = region:steppes_region
-					}
-					any_owned_location = {
-						region = region:ural_region
-					}
-					any_owned_location = {
-						region = region:persia_region
-					}
-					any_owned_location = {
-						region = region:anatolia_region
-					}
+					has_presence_in = region:russian_region
+					has_presence_in = region:steppes_region
+					has_presence_in = region:ural_region
+					has_presence_in = region:persia_region
+					has_presence_in = region:anatolia_region
+					has_presence_in = region:caucasus_region
 					has_presence_in = area:iraq_arabi_area
 					has_presence_in = area:armenian_highlands_area
 				}
@@ -220,18 +234,14 @@ mongol_dominance = {
 		every_country = {
 			limit = {
 				OR = {
-					any_owned_location = {
-						region = region:north_china_region
-					}
-					any_owned_location = {
-						region = region:mongolia_region
-					}
-					any_owned_location = {
-						region = region:xinjiang_region
-					}
-					any_owned_location = {
-						region = region:khorasan_region
-					}
+					has_presence_in = region:north_china_region
+					has_presence_in = region:mongolia_region
+					has_presence_in = region:xinjiang_region
+					has_presence_in = region:khorasan_region
+					has_presence_in = region:east_china_region
+					has_presence_in = region:west_china_region
+					has_presence_in = region:south_china_region
+					has_presence_in = region:korea_region
 				}
 				NOR = {
 					tag = MGO
@@ -254,6 +264,80 @@ mongol_dominance = {
 				}
 			}
 		}
+		# --- THE WORLD REACTS (PD pd_brandenburg.201/202/200 shape) ---
+		# SPECTATORS: a stake in the theatre, no land the phase demands.
+		every_country = {
+			limit = {
+				OR = {
+					has_presence_in = sub_continent:east_asia
+					has_presence_in = sub_continent:north_asia
+					has_presence_in = sub_continent:central_asia
+					has_presence_in = sub_continent:middle_east
+					has_presence_in = sub_continent:south_asia
+					has_presence_in = sub_continent:eastern_europe
+				}
+				NOT = {
+					OR = {
+						has_presence_in = region:russian_region
+						has_presence_in = region:steppes_region
+						has_presence_in = region:ural_region
+						has_presence_in = region:persia_region
+						has_presence_in = region:anatolia_region
+						has_presence_in = region:caucasus_region
+						has_presence_in = region:east_china_region
+						has_presence_in = region:west_china_region
+						has_presence_in = region:south_china_region
+					}
+				}
+				NOR = {
+					tag = MGO
+					tag = MGE
+				}
+			}
+			trigger_event_non_silently = mr_dominance.25
+		}
+		# VICTIMS: they hold ground inside the phase's goal regions.
+		every_country = {
+			limit = {
+				OR = {
+					has_presence_in = region:russian_region
+					has_presence_in = region:steppes_region
+					has_presence_in = region:ural_region
+					has_presence_in = region:persia_region
+					has_presence_in = region:anatolia_region
+					has_presence_in = region:caucasus_region
+					has_presence_in = region:east_china_region
+					has_presence_in = region:west_china_region
+					has_presence_in = region:south_china_region
+				}
+				NOR = {
+					tag = MGO
+					tag = MGE
+				}
+			}
+			trigger_event_non_silently = mr_dominance.26
+		}
+		# The claimant sheds alliances with those same powers, so the
+		# railroad's declare event is not blocked by its own treaties.
+		every_country = {
+			limit = {
+				OR = {
+					tag = MGO
+					tag = MGE
+				}
+				# AI ONLY. PD fires its equivalent at c:PRU unconditionally
+				# (the_prussian_ascension.txt:138), but PD has no standing
+				# rule about it and this mod does: never force-convert, lock
+				# or rob a human player. Dissolving a player's treaties with
+				# no way to refuse is exactly that. It is also unnecessary
+				# for them — the reason this exists is that the AI's declare
+				# event stalls on its own alliances, and a human gets a
+				# visible, postponable war event and can break alliances
+				# themselves.
+				is_ai = yes
+			}
+			trigger_event_non_silently = mr_dominance.27
+		}
 	}
 	on_monthly = {
 		change_variable = {
@@ -275,178 +359,84 @@ mongol_dominance = {
 			}
 			set_global_variable = mr_mge_seen
 		}
-		# ========== PANEL PROGRESS (0-100) ==========
-		# The .gui reads MR_dominance_score: ten points per goal met.
-		# The ten milestones mirror mr_dominance_end_trigger exactly —
-		# seven khanate seats, Persia cleared, the Russian foothold and
-		# the Cappadocian foothold. 100 = the end trigger is satisfied.
-		set_variable = {
-			name = MR_dominance_score
-			value = 0
-		}
-		if = {
+		# ========== THE KHAN'S OWN PASTURE ==========
+		# The ongoing half of the MR_select_core_region action. The
+		# action itself cannot be used in this phase (its situation
+		# select_trigger lists Phases 1 and 2 only), but a pasture named
+		# back then is still the claimant's, so it keeps working here —
+		# without this the mechanic silently stopped at 1550. Vanilla
+		# does this in on_location_changed_owner (_hardcoded.txt:4489),
+		# but that on_action is defined with an effect block and
+		# redefining the name in a mod would replace the vanilla block
+		# outright — so the situation does it monthly instead. Anything
+		# the claimant has taken inside its chosen region since last
+		# month becomes core, and the Khan's death ends the privilege
+		# exactly as it ends Timur's (_hardcoded.txt:3517).
+		every_country = {
 			limit = {
-				any_country = {
-					OR = {
-						tag = MGO
-						tag = MGE
-					}
-					owns = location:karakorum
+				OR = {
+					tag = MGO
+					tag = MGE
 				}
+				has_variable = mr_core_region
 			}
-			change_variable = {
-				name = MR_dominance_score
-				add = 10
-			}
-		}
-		if = {
-			limit = {
-				any_country = {
-					OR = {
-						tag = MGO
-						tag = MGE
+			# Saved rather than reached with prev.prev: that construct has
+			# ZERO uses anywhere in vanilla, and this file does not invent
+			# syntax. save_scope_as + scope: is the attested way down.
+			save_scope_as = mr_pasture_holder
+			if = {
+				limit = {
+					has_ruler = yes
+					ruler ?= {
+						has_character_modifier = MR_great_khan
 					}
-					owns = location:dadu
 				}
-			}
-			change_variable = {
-				name = MR_dominance_score
-				add = 10
-			}
-		}
-		if = {
-			limit = {
-				any_country = {
-					OR = {
-						tag = MGO
-						tag = MGE
-					}
-					owns = location:samarkand
-				}
-			}
-			change_variable = {
-				name = MR_dominance_score
-				add = 10
-			}
-		}
-		if = {
-			limit = {
-				any_country = {
-					OR = {
-						tag = MGO
-						tag = MGE
-					}
-					owns = location:sarai_al_jadid
-				}
-			}
-			change_variable = {
-				name = MR_dominance_score
-				add = 10
-			}
-		}
-		if = {
-			limit = {
-				any_country = {
-					OR = {
-						tag = MGO
-						tag = MGE
-					}
-					owns = location:kazan
-				}
-			}
-			change_variable = {
-				name = MR_dominance_score
-				add = 10
-			}
-		}
-		if = {
-			limit = {
-				any_country = {
-					OR = {
-						tag = MGO
-						tag = MGE
-					}
-					owns = location:tabriz
-				}
-			}
-			change_variable = {
-				name = MR_dominance_score
-				add = 10
-			}
-		}
-		if = {
-			limit = {
-				any_country = {
-					OR = {
-						tag = MGO
-						tag = MGE
-					}
-					owns = location:baghdad
-				}
-			}
-			change_variable = {
-				name = MR_dominance_score
-				add = 10
-			}
-		}
-		# The Ilkhanate clause: Persia cleared of every outside power.
-		if = {
-			limit = {
-				NOT = {
-					any_country = {
-						NOR = {
-							tag = MGE
-							tag = MGO
-							AND = {
-								country_exists = c:MGE
-								is_subject_of = c:MGE
-							}
-							AND = {
-								country_exists = c:MGO
-								is_subject_of = c:MGO
+				var:mr_core_region = {
+					# TWO passes, deliberately not one. Coring is a
+					# one-way door, so it is limited to what is not core
+					# yet; the modifier is NOT, so it is applied on its
+					# own terms to every owned location that lacks it.
+					# Folding them together (one limit, both effects) was
+					# a real bug: the else branch below strips the
+					# modifier from every location, and a single-pass
+					# version could only re-add it to locations that were
+					# still un-cored — which, after the first pass, is
+					# none of them. The pasture modifier was lost for
+					# good after any interregnum tick.
+					every_location_in_region = {
+						limit = {
+							owner ?= scope:mr_pasture_holder
+							NOT = {
+								integration_level = core
 							}
 						}
-						any_owned_location = {
-							region = region:persia_region
+						change_integration_level = core
+					}
+					every_location_in_region = {
+						limit = {
+							owner ?= scope:mr_pasture_holder
+							NOT = {
+								has_location_modifier = MR_khans_own_pasture
+							}
+						}
+						add_location_modifier = {
+							modifier = MR_khans_own_pasture
+							years = -1
+							mode = add_and_extend
 						}
 					}
 				}
 			}
-			change_variable = {
-				name = MR_dominance_score
-				add = 10
-			}
-		}
-		if = {
-			limit = {
-				any_country = {
-					OR = {
-						tag = MGO
-						tag = MGE
-					}
-					any_owned_location = {
-						region = region:russian_region
+			# No Great Khan on the throne: the pasture is just land again.
+			else = {
+				var:mr_core_region = {
+					every_location_in_region = {
+						limit = {
+							has_location_modifier = MR_khans_own_pasture
+						}
+						remove_location_modifier = MR_khans_own_pasture
 					}
 				}
-			}
-			change_variable = {
-				name = MR_dominance_score
-				add = 10
-			}
-		}
-		if = {
-			limit = {
-				any_country = {
-					OR = {
-						tag = MGO
-						tag = MGE
-					}
-					has_presence_in = area:cappadocia_area
-				}
-			}
-			change_variable = {
-				name = MR_dominance_score
-				add = 10
 			}
 		}
 		# ========== AI RAILROAD: FIND A TARGET ==========
@@ -486,33 +476,20 @@ mongol_dominance = {
 						}
 						defensive_alliance_strength < scope:mr_dom_claimant.offensive_alliance_strength
 						OR = {
-							any_owned_location = {
-								region = region:russian_region
-							}
-							any_owned_location = {
-								region = region:steppes_region
-							}
-							any_owned_location = {
-								region = region:ural_region
-							}
-							any_owned_location = {
-								region = region:persia_region
-							}
-							any_owned_location = {
-								region = region:anatolia_region
-							}
-							any_owned_location = {
-								region = region:mongolia_region
-							}
-							any_owned_location = {
-								region = region:khorasan_region
-							}
-							any_owned_location = {
-								region = region:xinjiang_region
-							}
-							any_owned_location = {
-								region = region:north_china_region
-							}
+							has_presence_in = region:russian_region
+							has_presence_in = region:steppes_region
+							has_presence_in = region:ural_region
+							has_presence_in = region:persia_region
+							has_presence_in = region:anatolia_region
+							has_presence_in = region:caucasus_region
+							has_presence_in = region:mongolia_region
+							has_presence_in = region:khorasan_region
+							has_presence_in = region:xinjiang_region
+							has_presence_in = region:north_china_region
+							has_presence_in = region:east_china_region
+							has_presence_in = region:west_china_region
+							has_presence_in = region:south_china_region
+							has_presence_in = region:korea_region
 							has_presence_in = area:iraq_arabi_area
 							has_presence_in = area:armenian_highlands_area
 						}
@@ -556,33 +533,20 @@ mongol_dominance = {
 							tag = MGE
 							NOT = {
 								OR = {
-									any_owned_location = {
-										region = region:russian_region
-									}
-									any_owned_location = {
-										region = region:steppes_region
-									}
-									any_owned_location = {
-										region = region:ural_region
-									}
-									any_owned_location = {
-										region = region:persia_region
-									}
-									any_owned_location = {
-										region = region:anatolia_region
-									}
-									any_owned_location = {
-										region = region:mongolia_region
-									}
-									any_owned_location = {
-										region = region:khorasan_region
-									}
-									any_owned_location = {
-										region = region:xinjiang_region
-									}
-									any_owned_location = {
-										region = region:north_china_region
-									}
+									has_presence_in = region:russian_region
+									has_presence_in = region:steppes_region
+									has_presence_in = region:ural_region
+									has_presence_in = region:persia_region
+									has_presence_in = region:anatolia_region
+									has_presence_in = region:caucasus_region
+									has_presence_in = region:mongolia_region
+									has_presence_in = region:khorasan_region
+									has_presence_in = region:xinjiang_region
+									has_presence_in = region:north_china_region
+									has_presence_in = region:east_china_region
+									has_presence_in = region:west_china_region
+									has_presence_in = region:south_china_region
+									has_presence_in = region:korea_region
 									has_presence_in = area:iraq_arabi_area
 									has_presence_in = area:armenian_highlands_area
 								}
@@ -718,9 +682,7 @@ mongol_dominance = {
 						tag = MGO
 						tag = MGE
 					}
-					any_owned_location = {
-						region = region:russian_region
-					}
+					has_presence_in = region:russian_region
 				}
 			}
 			every_country = {
@@ -1047,8 +1009,262 @@ mongol_dominance = {
 					add_core = scope:mr_claimant
 				}
 			}
+			region:east_china_region = {
+				every_ownable_location_in_region = {
+					limit = {
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			region:west_china_region = {
+				every_ownable_location_in_region = {
+					limit = {
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			region:south_china_region = {
+				every_ownable_location_in_region = {
+					limit = {
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					add_core = scope:mr_claimant
+				}
+			}
+			region:korea_region = {
+				every_ownable_location_in_region = {
+					limit = {
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								this = scope:mr_claimant
+								is_subject_of = scope:mr_claimant
+							}
+						}
+					}
+					change_location_owner = scope:mr_claimant
+					# add_core = scope:mr_claimant // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
+				}
+			}
 			scope:mr_claimant = {
 				trigger_event_silently = mr_dominance.999
+			}
+		}
+		# NOTE ON PLACEMENT: this block sits at the END of on_monthly, not
+		# the start. The completion failsafe below-of-old ran AFTER the
+		# score was written, so in the month the failsafe handed over the
+		# goal territory the bar still showed the pre-handover value —
+		# observed in game as "progress 0, every end requirement green".
+		# The End Requirements list evaluates live when the panel opens;
+		# the bar only shows what the last tick wrote. Computing it last
+		# makes the two agree within the same tick.
+		# ========== PANEL PROGRESS (0-100) ==========
+		# The .gui reads MR_dominance_score. THIRTEEN milestones, one per
+		# condition in mr_dominance_end_trigger, weighted to sum to
+		# exactly 100 — the seven khanate seats, Persia cleared, the
+		# Russian and Cappadocian footholds, the Pontic/Volga/
+		# Mesopotamian marches, Song China (1279) and Korea. The
+		# "cleared" milestones call the SAME scripted triggers the end
+		# trigger calls, so 100 and "phase complete" mean the same
+		# thing and the bar cannot sit at 100 on an unfinished phase.
+		set_variable = {
+			name = MR_dominance_score
+			value = 0
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:karakorum
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 8
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:dadu
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 8
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:samarkand
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 8
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:sarai_al_jadid
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 8
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:kazan
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 8
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:tabriz
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 8
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:baghdad
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 8
+			}
+		}
+		if = {
+			limit = {
+				mr_p3_persia_cleared = yes
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 8
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					has_presence_in = region:russian_region
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 6
+			}
+		}
+		if = {
+			limit = {
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					has_presence_in = area:cappadocia_area
+				}
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 6
+			}
+		}
+		if = {
+			limit = {
+				mr_p3_pontic_cleared = yes
+				mr_p3_volga_cleared = yes
+				mr_p3_mesopotamia_cleared = yes
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 8
+			}
+		}
+		if = {
+			limit = {
+				mr_p3_song_china_cleared = yes
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 10
+			}
+		}
+		if = {
+			limit = {
+				mr_p3_korea_in_the_fold = yes
+			}
+			change_variable = {
+				name = MR_dominance_score
+				add = 6
 			}
 		}
 	}
@@ -1134,10 +1350,21 @@ mongol_dominance = {
 					this.region = region:anatolia_region
 					this.region = region:ural_region
 					this.region = region:caucasus_region
+					this.region = region:east_china_region
+					this.region = region:west_china_region
+					this.region = region:south_china_region
+					this.region = region:korea_region
 				}
-				NOR = {
-					owner = c:MGE
-					owner = c:MGO
+				# owner ?= { tag = ... }, not owner = c:TAG: the bare link
+				# errors on ownerless locations AND on a tag that is off
+				# the map, and MGO is off the map for most of this phase.
+				NOT = {
+					owner ?= {
+						OR = {
+							tag = MGO
+							tag = MGE
+						}
+					}
 				}
 			}
 			custom_tooltip = mr_dominance_map_tt
@@ -1185,6 +1412,10 @@ mongol_dominance = {
 					region = region:steppes_region
 					region = region:persia_region
 					region = region:caucasus_region
+					region = region:east_china_region
+					region = region:west_china_region
+					region = region:south_china_region
+					region = region:korea_region
 					area = area:cappadocia_area
 					area = area:iraq_arabi_area
 					area = area:kazan_area

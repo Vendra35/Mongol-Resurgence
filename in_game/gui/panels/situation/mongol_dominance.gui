@@ -19,6 +19,23 @@ situation_panel = {
             parentanchor = bottom|left
         }
 
+        # Hides the ruler-title strip that sits beside the portrait.
+        # WHY: one_country_header_template declares block "CountryContext"
+        # TWICE — once empty for the portrait, once carrying the default
+        # datacontext = "[Country.GetGovernment]" that feeds the strip's
+        # country_government_character (character_header.gui:260-295). A
+        # single blockoverride replaces both, so the strip is handed a
+        # Country where it needs a Government and every widget in it logs
+        # "No context supplied ... 'Government'" (character_header.gui:281,
+        # :291) for as long as the panel is open.
+        # Costs nothing visible: those widgets are all gated on
+        # [Government.HasRuler] / [Government.HasActiveRegent], which
+        # already return false, so the strip renders empty today.
+        # Vanilla does exactly this in reformation.gui:88.
+        blockoverride "one_country_ruler_title_visible" {
+            visible = no
+        }
+
         blockoverride "character_religion_visibility" {
             visible = no
         }

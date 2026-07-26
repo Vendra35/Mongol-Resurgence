@@ -1,0 +1,11 @@
+﻿# =================================================================
+# MONGOL RESURGENCE - PRICES
+# =================================================================
+# Field vocabulary from in_game/common/prices/readme.txt. The value
+# is modelled on vanilla's own core-region action, which costs
+# scaled_gold = 4.0 (00_hardcoded.txt:1013,
+# rot_select_core_region_price).
+# =================================================================
+MR_select_core_region_price = {
+	scaled_gold = 4.0
+}

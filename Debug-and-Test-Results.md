@@ -1,4 +1,48 @@
-﻿##### 22.07.2026 TEST RESULTS FIXED ALL #####
+﻿# Debug and Test Results — the working journal of this mod
+
+**What this file is.** The running log of every in-game test session and every
+fix pass that answered one. It is the only document that records *what was
+actually observed in the running game* — every other doc in this repo describes
+intent. When a claim here and a claim elsewhere disagree, this file wins.
+
+**How to read it.** Strictly chronological, oldest at the top, newest at the
+bottom. **Start at the bottom.** Sections alternate between two kinds:
+
+| Heading | Author | Contains |
+|---|---|---|
+| `<date> TEST RESULTS` | the mod author, in Turkish | Numbered findings from a real game run: error.log lines, things that looked wrong, feature requests, and open questions. This is the input. |
+| `<date> CLAUDE FIX PASS` / `AUDIT` | the assistant, mostly Turkish, ASCII-only | What was changed in response, numbered against the findings above it, with the vanilla `file:line` that justified each change. This is the output. |
+
+A finding is answered in the fix pass immediately below it. Items marked
+`(FIXED)` in a TEST RESULTS heading were resolved by the author before the
+session started.
+
+**Conventions.**
+- Findings are numbered per section; later sections refer back as e.g. "24.07 #12".
+- The assistant's entries avoid Turkish characters so the file survives any
+  encoding round-trip. The author's entries do not — that is fine and expected.
+- "Statik dogrulamadan gecti" means `tools/verify_mod.py` passed. It never means
+  the change was tested in game. **Only the TEST RESULTS sections are evidence
+  of in-game behaviour.**
+- File is UTF-8 **with BOM**, like every other `.txt`/`.yml` in the repo.
+
+**Where the durable rules live.** This file is a journal, not a rulebook. When a
+finding here produces a rule, that rule is copied into:
+- `CLAUDE.md` — the standing rules and architecture. Read that first.
+- `docs/EU5-MODDING-GUIDE.md` — the general method, including the verification
+  discipline (§9).
+- `docs/TESTING-GUIDE.md` — a checkable row per behaviour, so the next test run
+  covers it.
+- `docs/FUTURE-DEVELOPMENT.md` §5 — anything knowingly left unfixed.
+
+If you are an assistant picking this repo up cold: read `CLAUDE.md`, then the
+**last two sections of this file**, then ask what to work on. Do not infer that
+something works because a fix pass says it was written — check whether a TEST
+RESULTS section after it confirms the behaviour.
+
+---
+
+##### 22.07.2026 TEST RESULTS FIXED ALL #####
 
 #### 1. Variables set but never used: MR_dominance_events.txt in game error logs (FIXED)
 
@@ -456,4 +500,80 @@ Bu sanırım tahmini(artık tahmin değil kesin öyle test ettim) şundan dolay�
 
 
 
+
+
+
+##### 26.07.2026 CLAUDE FIX PASS (24-25.07 maddeleri: 0, 3, 5, 6, 8, 9, 11, 12, 13 + iki yeni bug) #####
+
+Hepsi statik dogrulamadan gecti (verify_mod.py: 24/24 all checks passed). Oyun ici test EDILMEDI â€” TESTING-GUIDE guncellendi, yeni satirlar: 2.10, 2.12, 3.1-3.6, 4.1, 4.3, 4.4, 5.3, 5.9, 5.10 ve YENI Track 5b.
+
+- (KURULUM) ../EU5-Vanilla junction'i BOSTU (klasor var, icerik yok â€” OneDrive yemis). Artik vanilla dogrudan Steam kurulumundan okunuyor: E:\SteamLibrary\steamapps\common\Europa Universalis V\game. CLAUDE.md + 3 skill + verify_mod.py'nin tespit zinciri: MR_VANILLA -> Steam yolu -> junction -> macOS wrapper. Tespit artik klasor degil BILINEN BIR DOSYA yokluyor; bos junction "-d" testini geciyordu ve butun grepler sessizce sifir donerdi.
+
+- (YENI BUG 1 â€” KRITIK) 2. ve 3. situation HIC bitemiyordu. Bolge taramasindaki NOR'un uyeleri tek bir AND'in icine katlanmis: AND = { country_exists = c:MGO  tag = MGO  is_subject_of = c:MGO } â€” bir ulke kendi vassali olamaz, yani AND daima false, NOR daima true, her sahipli lokasyon eslesiyor, disaridaki NOT daima false. Failsafe tum topraklari verse bile faz kapanmiyordu, sadece sure doluyordu. PD'de calismasinin sebebi: orada iki madde AYRI (this = c:PRU / is_subject_of = c:PRU). 10 blokta duzeltildi. Faz 1 dogruydu (tek tag oldugu icin katlanma olmamis) â€” testlerinde P1'in bitip P2/P3'un bitmemesinin sebebi tam olarak buydu.
+
+- (YENI BUG 2) caucasus_region 3. fazin hedefiydi ama HICBIR wargoal onu kapsamiyordu â€” savasla almak yasal olarak imkansizdi. Westward wargoal'a eklendi. Bu, bu oturumdaki degisikliklerden once de vardi ve elle yapilan denetimlerden kacmisti.
+
+- (HARNESS) verify_mod.py'nin 3 kontrolu Windows'ta SIFIR dosya tariyor, sifir problem bildiriyordu ("/events/" in path â€” glob backslash donuyor). Duzeltildi; 233 event loc anahtari, 6 situation, 19 degisken artik gercekten taraniyor (hepsi temiz cikti). Ayrica 2 YENI kontrol eklendi: "goal territory covered by a wargoal" ve "no any_owned_location with a bare geo predicate". Ikisini de bilerek bozup FAIL verdiklerini gordum, sonra geri aldim. 22 -> 24 kontrol.
+
+- (#4 FIXED) MGO'nun hem claimant hem rival gorunmesi: teshisin dogruydu. mr_rival_country sadece on_start'ta bir kez seciliyordu, failsafe banner'i tam da o ulkeye veriyordu. Rival artik her ay yeniden seciliyor (lider + MGO/MGE disarida). Beat 104 ayni on_monthly icinde DAHA SONRA calistigi icin MGO'nun dogdugu ay lider degiskeni hala eski adayi gosteriyor â€” o tek aylik pencereyi NOR = { tag = MGO tag = MGE } kapatiyor.
+
+- (#5 FIXED) MR_the_sleeping_horde komple kaldirildi (4 yer: P1 on_ended verme, P2 on_start kaldirma, modifier tanimi, 2 loc). Hakliydin â€” P2, P1 biter bitmez basliyor, kapatacak bir bosluk yoktu.
+
+- (#8 FIXED) Odul modifierlari artik KALICI: MR_unified_mongol_banner, MR_mongol_historical_modifier_2 (P2 on_start'ta siliniyordu) ve MR_empire_fulfilled (P3 on_start'ta siliniyordu) hic kaldirilmiyor. 3 loc satirindaki "removed upon the start of the Nth Situation" -> "(Permanent.)". Faz BUFF'lari hala kendi fazinin on_ending'inde siliniyor â€” odul/buff ayrimi artik temiz. MR_empire_fulfilled'in ADI degistirilmedi, istersen degistiririz.
+
+- (#9 KABUL) "Great Mongol Horde" bizim hatamiz degil: vanilla harita etiketini rank_empire_horde_prefix ("Great") + MGE_ADJ ("Mongol") + rank_empire_horde ("Horde") diye BIRLESTIRIYOR, ulke adini kullanmiyor. Duzeltmek customizable_localization/country_ranks.txt'i komple override etmeyi gerektirirdi (2000+ satir, uyumluluk borcu). Simdilik kabul edildi.
+
+- (#2 + #11 FIXED â€” TARIHSEL FETIH) Fetih artik gercek Mogol sirasini izliyor. P2: manchuria (Jin 1234) + tibet (Yuan protektorasi 1240'lar) + bursol/omsk/kulykol alanlari eklendi. P3: east/west/south_china (Song 1279) + korea eklendi. KORE VASSAL olarak: ortak clause zaten subject sahiplerini kabul ettigi icin MGE'nin vassali bir Kore kosulu sagliyor, bagimsiz olan saglamiyor â€” ekstra kod gerekmedi (1259 durumunun birebir karsiligi). Her hedef grubu artik TEK bir scripted trigger (mr_p2_*_cleared / mr_p3_*_cleared) ve hem end trigger hem panel skoru AYNI trigger'i cagiriyor â€” eskiden ikisi farkli sekilde yazilmisti, bar 100 gosterirken faz kapanmayabilirdi. Alti yer birlikte guncellendi: hedef trigger, wargoal allowed_locations/subjugation, CB dagitimi, AI hedef secimi + fallback, failsafe devri, tooltip/secondary_map_color. Khorasan ve Tibet'e bilerek add_core VERILMEDI (senin khorasan gerekcen: bedava core AI'i fazla besliyor).
+
+- (#11 FIXED) Baskent P3 on_start'ta Khanbaliq'e (dadu) tasiniyor â€” Kubilay 1272. AI tasiniyor ve haber aliyor (mr_dominance.136), INSAN oyuncuya soruluyor ve reddedebiliyor (.137). Dadu'ya sahip olmak sart, zaten oradaysa atlaniyor.
+
+- (#3 FIXED) Dunyanin tepkisi: 9 yeni event (mr_dominance.20-28), PD'nin 101/102/200/201/202 sekli. Her faz icin IZLEYICI (sahnede cikari var ama hedef toprakta yok), KURBAN (hedef bolgelerde topragi var) ve ITTIFAK BOZMA (claimant'in kendisi â€” every_related_country + remove_relation, boylece railroad'un savas ilani kendi anlasmasina takilmiyor). P1'in ittifak bozmasi on_start'ta DEGIL Beat 104'te, cunku faz acilirken claimant yok. Kimse ayni haberi iki kez almiyor: mr_dominance.10'u alan bozkir gucleri disarida. 27 loc anahtari.
+
+- (#6 FIXED) "Han'in Otlagi" (MR_select_core_region), vanilla rot_select_core_region'in (rise_of_timur.txt:288) alan alan karsiligi. IKI fazda birden calisiyor (P1+P2), claimant tag cifti, ve kapi MR_great_khan KARAKTER modifieri â€” otlak devletin degil Han'in, Han olunce ayricalik olur. Yeni klasorler: common/generic_actions/ ve common/prices/. Yeni location modifieri MR_khans_own_pasture. Vanilla'nin "sonradan aldigin yerler de otomatik core olur" kismi on_location_changed_owner'da yasiyor â€” o on_action effect blokuyla tanimli, ayni isimle yeniden tanimlamak vanilla'nin butun toprak-devri mantigini ezerdi, o yuzden ayni isi situationlarin on_monthly'sinde yapiyorum. (Yazarken prev.prev kullanmistim â€” vanilla'da SIFIR kullanimi oldugunu gorunce save_scope_as ile degistirdim.)
+
+- (#12 FIXED) any_owned_location'in 89 kullanimi TEK bir bolge yukleminden ibaretti, hepsi has_presence_in'e cevrildi (104 cevrim, bu oturumda eklenenler dahil; vanilla'da 108 kullanim). Geriye tek bir tane kalmadi ve harness artik geri gelmesine izin vermiyor. Kalan any_country/ordered_country bloklarina DOKUNULMADI â€” onlar "su ozellikte bir ulke BUL" isi yapiyor, bolge taramasi ulke donduremez. ordered_neighbor_country (20) sadece komsulari, var:...target_country (19) tek ulkeyi geziyor, tarama degiller. Maliyet sirasi CLAUDE.md'ye yazildi.
+
+- (#13 CEVAP) Modu bekletme, cikar. Gerekce: railroad modu kuran oyuncu zaten tarihselligin bukulmesini talep ediyor (PD'de Brandenburg icin yaptigin sey); total overhaul EU5'in 1337 setup agacini sifirdan yazmak demek, yillarca surer; bitmis bir modu ona rehin vermek bitmis isi copetmek olur. 1337 surumunu cikar, tasarimi (uc fazli state machine, failsafe'ler, buff rule) tasinabilir iskelet olarak koru. CK3 baslangici sorusunda: Mogollar merkezdeyse tek mantikli secenek 1178 (Temucin 1162 dogumlu, 1206'da birlestiriyor); 867 Vikingleri verir ama Mogollari tamamen disarida birakir. Istege bagli ek fikir: tarihselligi onemseyenler icin P3'u (bati seferi) kapatan bir game rule.
+
+- (#1 ve #7 â€” GUI, SENDE) BOM hipotezi CURUDU: 6 .gui dosyamizin HICBIRINDE BOM yok, vanilla ile ayni. Ayrica tum .yml/.gui dosyalarinda #l, |l] veya taninmayan tek bir # tag'i yok (byte duzeyinde tarandi). Government.* spami icin onde gelen hipotez: one_country_header_template block "CountryContext"i IKI kez tanimliyor (biri portre, biri datacontext = "[Country.GetGovernment]" tasiyan ruler seridi) ve tek bir blockoverride ikisini birden eziyor. Ama bu vanilla panellerinin de spam yapmasi gerektigi anlamina gelir, senin gozlemin bunu curutuyor â€” yani DOGRULANMADI. Iki ayirt edici test: (a) ayni surumde vanilla Rise of the Ottomans/Rise of Timur panelini ac, loga bak; (b) bizim CountryContext'i degisken yerine sabit bir tag'e ([GetCountry('CHI')]) cevir, spam kesiliyor mu bak. Hangi teori dogru cikarsa ciksin RISKSIZ cozum: P2/P3'u de two_countries_header_template'e alip ikinci portreyi gizlemek (P1 onu kullaniyor ve hic spam yapmiyor).
+
+- (FINAL NOT FIXED) Tum .md dosyalari elden gecirildi: CLAUDE.md (mimari tablosu, failsafe, modifier sayisi, wargoal kapsami, yeni iterator kurali), README.md, MOD-DESIGN-IDEA.md (yeni faz hedefleri, Kore, baskent, action + immersion bolumleri, kalici odul notu), EU5-MODDING-GUIDE.md (yeni iskelet klasorleri, "en ucuz construct" tablosu, duz NOR kurali, generic_action loc konvansiyonu, location modifier kategorisi, harness bolumu 24 kontrol + iki yeni ders), TESTING-GUIDE.md (10 satir guncellendi + YENI Track 5b), FUTURE-DEVELOPMENT.md (bilinen borc listesi, 2 yeni cookbook, definition of done), AUDIT-2026-07-21.md (yeni hata siniflari notu).
+
+
+
+##### 26.07.2026 IN-GAME TEST RESULTS + FIX PASS #####
+
+Ilk gercek oyun ici test turu. Dort gercek hata cikti, dordu de duzeltildi. Harness 24 -> 26 kontrol, hepsi yesil.
+
+## CALISTIGI DOGRULANANLAR
+
+- (GUI SPAM COZULDU) 2. ve 3. situation panelini acinca gelen Government.* error spami GITTI. NASIL: one_country_header_template `block "CountryContext"` adini IKI kez tanimliyor â€” biri portre icin bos, digeri ruler seridi icin `datacontext = "[Country.GetGovernment]"` tasiyor. Tek bir blockoverride ikisini birden eziyor, yani seride Government yerine Country itiliyor ve icindeki country_government_character (character_header.gui:260-295) Government isteyince "No context supplied" basiyordu. Cozum: seridi komple gizlemek â€” `blockoverride "one_country_ruler_title_visible" { visible = no }`. Vanilla reformation.gui:88 birebir bunu yapiyor. Gorsel kayip YOK, cunku seritteki her widget [Government.HasRuler] ile korunuyordu ve zaten hicbiri render olmuyordu.
+- (END TRIGGER) Scripted trigger'lari ayirip hem end trigger'a hem panel skoruna baglama yapisi calisiyor. custom_tooltip commentlenip bakildiginda mantik dogru gorunuyor.
+- (HARITA) Yeni hedef bolgelerin kirmizi cizgileri calisiyor.
+- (FAILSAFE) 1545'te P2 failsafe'i tetiklendi, topraklari devretti, ertesi ay situation kapandi ve P3 basladi. Yani A1 duzeltmesi (10 bozuk NOR blogu) ISE YARADI â€” eskiden faz hic kapanmiyordu.
+- (AKSIYON) "Claim the Khan's Own Pasture" 2. situation panelinde geliyor, bolge sectirip hem core yapiyor hem MR_khans_own_pasture veriyor.
+
+## DUZELTILEN HATALAR
+
+- (LOC PARSE â€” EN ZARARLISI) `Missing colon (:) separator` x11. Sebep: yazdigim 11 aciklamada `\n\n` dosyaya GERCEK satir sonu olarak dusmus, degerler iki fiziksel satira bolunmus, oyun o 11 girdiyi komple atiyordu. Hepsi birlestirildi. NOT: harness bunu goremiyordu cunku anahtar sayan tarama bozuk satirlari yok sayiyordu â€” YENI KONTROL eklendi (`loc lines are well formed`) ve bilerek bir satir bolunerek yakaladigi kanitlandi.
+
+- (AKSIYONUN UC YAN KAYDI) Bir generic_action eklemek tek basina yetmiyormus; ucu de ayri hata basiyor:
+  * `generic_action_ai_list.cpp:82` -> in_game/common/generic_action_ai_lists/MR_actions_list.txt eklendi (sekil: vanilla rise_of_timur_list.txt). AI listesi olmayinca motor aksiyonu gereginden cok sik degerlendiriyor.
+  * `price_database.cpp:117` -> main_menu/common/modifier_type_definitions/MR_modifier_types.txt eklendi. Her price icin motor <price_key>_cost_modifier diye bir modifier TIPI turetiyor ve tanimli degilse hata basiyor (sekil: hussite_wars_actions_price_cost_modifier, 00_modifier_types.txt:174).
+  * `message_handler.cpp:421` -> main_menu/gui/MR_messagetypes.txt eklendi + 21 loc anahtari. Vanilla'nin 155 situation-tipi aksiyonunun 149'unda bu kayit var, yani pratikte zorunlu. DIKKAT: vanilla hepsini tek bir main_menu/gui/messagetypes.txt icinde tutuyor (1348 girdi) â€” O ISIMLE DOSYA KOYULAMAZ, vanilla'nin tamamini ezerdi. Farkli isimle ayni klasore koyduk. Motor klasoru tariyorsa hata gider; taramiyorsa dosya sessizce yok sayilir (zarar veremez) ve geriye bir log satiri + aksiyon kullanilinca popup cikmamasi kalir. BIR SONRAKI TESTTE BU SATIRIN GIDIP GITMEDIGINE BAK.
+  Bu ucu icin de YENI KONTROL eklendi (`generic actions: ai list + message type + price modifier`), AI listesi gecici silinerek yakaladigi kanitlandi.
+
+- ("IMPERIAL PROGRESSION 0" ACIKLANDI VE DUZELTILDI) Bar 0 gosterirken End Requirements'in hepsi yesildi. Sebep: PANEL PROGRESS blogu on_monthly'nin BASINDA, failsafe ise SONUNDA. Failsafe'in calistigi ay bar devir ONCESI degeri gosteriyordu; End Requirements ise panel acilinca canli degerlendigi icin yesildi. Skor artik on_monthly'nin sonunda hesaplaniyor, ikisi ayni tick icinde uyusuyor. (P2 ve P3, ikisinde de.)
+
+- (ISIM + TOOLTIP) MR_empire_fulfilled -> "The Yeke Mongol Ulus Restored", aciklamasi tarihsel bir cumleye cevrildi. mr_dominance_end_tt yedi baslikli okunabilir bir listeye donusturuldu: Koltuklar / Ilhanli / Altin Orda / Yuan / Kore / Bati erisimi â€” Kore'nin VASSAL olarak sayildigi acikca yaziyor.
+
+## KARAR: OLDUGU GIBI BIRAKILDI
+
+- MGE: "Great Mongol Empire" (senin degistirdigin hali) korunuyor. Uyari: vanilla'nin country_names_l_english.yml dosyasinda adinda "Empire" gecen SIFIR ulke var; bu tam olarak 23.07'de `MGE has the name 'empire'` uyarisini ureten degisiklik. Harita etiketi zaten Great + Mongol + Horde diye bilesiyor (rank_empire_horde_prefix + MGE_ADJ + rank_empire_horde), yani bu ad haritada gorunmuyor â€” geri gelen tek sey o uyari. Alternatif hazir duruyor: "Great Mongol State", Yeke Mongol Ulus'un birebir Ingilizce karsiligi, tetikleyici kelimeyi icermiyor.
+
+## HALA ACIK
+
+- `Unknown formatting tag 'l'` â€” vanilla Rise of Timur paneli acilip loga bakilmadi. O tek bakis dosyayi kapatacak.
+- messagetypes.txt klasor-birlestirme varsayimi (yukarida).
+- has_presence_in â‰¡ any_owned_location { region } esdegerligi: End Requirements satirlari toprak durumuyla uyumlu gorunuyor, yani pratikte dogrulanmis sayilir.
 

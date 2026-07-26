@@ -173,9 +173,7 @@ mr_torghut_migration = {
 			every_country = {
 				limit = {
 					OR = {
-						any_owned_location = {
-							region = region:ural_region
-						}
+						has_presence_in = region:ural_region
 						AND = {
 							culture = {
 								has_culture_group = culture_group:mongolian_group
@@ -198,9 +196,7 @@ mr_torghut_migration = {
 			}
 			every_country = {
 				limit = {
-					any_owned_location = {
-						region = region:russian_region
-					}
+					has_presence_in = region:russian_region
 				}
 				trigger_event_non_silently = mr_steppe.12
 			}
@@ -316,9 +312,7 @@ mr_dzungar_khanate = {
 						has_culture_group = culture_group:mongolian_group
 					}
 					government_type = government_type:steppe_horde
-					any_owned_location = {
-						region = region:xinjiang_region
-					}
+					has_presence_in = region:xinjiang_region
 					has_presence_in = area:zhetysu_area
 				}
 			}

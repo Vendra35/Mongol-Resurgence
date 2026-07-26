@@ -22,13 +22,20 @@ The repo is shared between two machines with different layouts — DETECT,
 never assume (same snippet as CLAUDE.md and `tools/verify_mod.py`):
 
 ```bash
-if [ -d "../EU5-Vanilla/game" ]; then
+STEAM_VAN="/e/SteamLibrary/steamapps/common/Europa Universalis V/game"
+if [ -f "$STEAM_VAN/in_game/map_data/definitions.txt" ]; then
+	VANILLA="$STEAM_VAN"; PD="../The Prussian Destiny"
+elif [ -f "../EU5-Vanilla/game/in_game/map_data/definitions.txt" ]; then
 	VANILLA="../EU5-Vanilla/game"; PD="../The Prussian Destiny"
 else
 	VANILLA="../Reference EU5 vanilla and Prussian Destiny/Europa Universalis V/game"
 	PD="../Reference EU5 vanilla and Prussian Destiny/The Prussian Destiny"
 fi
 ```
+
+Probe a known FILE, not the directory: the legacy `EU5-Vanilla` junction has
+been emptied by OneDrive before, and an empty directory passes `-d` while every
+grep against it returns nothing — a silent vacuous audit.
 
 Read-only. Never write under `$VANILLA` or `$PD`.
 

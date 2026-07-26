@@ -1,0 +1,23 @@
+﻿# =================================================================
+# MONGOL RESURGENCE - MODIFIER TYPE DEFINITIONS
+# =================================================================
+# Declaring a price in common/prices/ is not enough: the engine also
+# derives a cost modifier type named <price_key>_cost_modifier and
+# logs
+#   [price_database.cpp:117] Missing modifier type for price.
+#   MR_select_core_region_price_cost_modifier
+# if it does not exist. Vanilla carries one per price it defines —
+# shape taken from hussite_wars_actions_price_cost_modifier
+# (00_modifier_types.txt:174).
+#
+# color = bad + percent = yes: a HIGHER value means a MORE expensive
+# action, so the game tints increases red and renders them as a
+# percentage.
+# =================================================================
+MR_select_core_region_price_cost_modifier = {
+	color = bad
+	percent = yes
+	game_data = {
+		category = country
+	}
+}

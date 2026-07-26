@@ -9,6 +9,12 @@ playable by AI or human, plus three standalone late-steppe situations covering
 what actually happened: Ligdan Khan's Chahar bid, the Torghut migration to the
 Volga, and the Dzungar Khanate.
 
+The conquest follows the real Mongol sequence rather than a straight line west:
+Manchuria (Jin, 1234) and Tibet (Yuan protectorate, 1240s) in the middle phase,
+Song China (1279) and a subject Korea (1259) alongside the western khanates in
+the last. The whole railroad is opt-in — a master game rule switches it off, and
+every conquest war a human claimant is asked to declare can be postponed.
+
 ## Documentation map
 
 | Doc | What it is |
@@ -20,7 +26,9 @@ Volga, and the Dzungar Khanate.
 | `docs/FUTURE-DEVELOPMENT.md` | How to extend the mod: cookbooks, expansion tracks, known debt |
 | `docs/AUDIT-2026-07-21.md` | Historical audit record of the original broken codebase |
 | `Debug-and-Test-Results.md` | The living test log and fix journal (Turkish) |
-| `tools/verify_mod.py` | 22-check static verification harness — run after every change |
+| `tools/verify_mod.py` | 26-check static verification harness — run after every change |
 
 The repo is shared between two machines with different reference-tree layouts;
-`CLAUDE.md` → REQUIRED SETUP explains the detection convention.
+`CLAUDE.md` → REQUIRED SETUP explains the detection convention. Run the harness
+before and after every change — three of its checks scanned zero files for
+months on one of those machines, and printed no problems the entire time.

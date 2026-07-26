@@ -19,7 +19,8 @@ full in `CLAUDE.md`; this is the checklist form:
 2. **The harness is the gate.** `python3 tools/verify_mod.py` after every
    change; it auto-detects the reference tree on both machines. A red check
    blocks the change. If you add a new *class* of content, extend the harness
-   so it covers that class too (it grew from 19 to 22 checks this way).
+   so it covers that class too (it grew from 19 to 26 checks this way), and
+   prove the new check on a known positive before believing its green.
 3. **Silent failure is the default failure.** New folder names, loc keys,
    hint tags, gfx keys — verify each against vanilla before creating.
    ALL localisation goes in `main_menu/localization/english/MR_l_english.yml`.
@@ -115,6 +116,33 @@ Concrete recipes. Each names the best in-repo template file to copy from.
   preconditions (tag switch!), the phase-complete global must be set in
   `on_ending`'s success branch, not re-derived in `on_ended` — this was a
   real bug at the MGE proclamation.
+
+### 3.6b A situation panel action (a button on the panel)
+Template: `in_game/common/generic_actions/MR_actions.txt`; vanilla original
+`generic_actions/rise_of_timur.txt:288` (`rot_select_core_region`).
+1. `type = situation` + a `select_trigger { looking_for_a = situation }` whose
+   `visible` names your situation(s) — that binding is what puts the button on
+   the panel; the situation file itself needs no changes.
+2. Further `select_trigger`s collect targets (`looking_for_a = region`, with
+   `column = { data = … }` for the picker table).
+3. `price = price:<key>` needs a `common/prices/` entry (`scaled_gold` etc.,
+   vocabulary in that folder's `readme.txt`).
+4. Loc: `<action_key>`, `_desc`, one key per `select_trigger` `name`, the
+   `none_available_msg_key`, every `custom_tooltip` you cite, and the price
+   key. The `PERFORM_*_ACTION_*` message keys are optional.
+5. Gate the *effect* on whatever should make it lapse (ours: the Great Khan
+   character modifier) and undo it in the situation's `on_monthly` when the
+   gate stops being true.
+
+### 3.6c A "the world reacts" event set
+Template: `mr_dominance.20-28`; vanilla-adjacent original
+`PD_events.txt:425/439/1126`.
+Three recipients per phase — spectators (a stake, but no goal land), victims
+(goal land), and the claimant itself for the alliance break
+(`every_related_country = { type = alliance }` + `remove_relation`). Two rules
+learned the hard way: exclude anyone who already got the phase's main opening
+event so nobody is told twice, and fire the claimant's alliance break at the
+moment the claimant EXISTS — for Phase 1 that is Beat 104, not `on_start`.
 
 ### 3.7 A GUI element
 - Template blocks: `mongol_resurgence.gui` (two-country header),
@@ -258,11 +286,29 @@ the fallback everyone sees).
 
 ## 5. Known debt & watch items (start here after each game test)
 
-Carried from the 2026-07-23 audit rounds; none block release, all are
-documented in TESTING-GUIDE Track 8 / the tracks above:
-1. `Unknown formatting tag 'l'` log spam — vanilla-side (the horde
-   ruler/regency string); watch-only. Do not re-grep the mod for it; it is
-   not in our text (verified byte-level).
+Carried from the 2026-07-23 and 2026-07-26 audit rounds; none block release,
+all are documented in TESTING-GUIDE Track 8 / the tracks above:
+1. `Unknown formatting tag 'l'` log spam — believed vanilla-side; watch-only.
+   Re-verified 2026-07-26 at byte level: the mod's `.yml` and `.gui` files
+   contain no `#l`, no `|l]` and no unrecognised `#` tag at all, and none of
+   the six `.gui` files carries a BOM (they match vanilla). **Decisive test:**
+   open a vanilla one-country situation panel (Rise of the Ottomans, Rise of
+   Timur) in the same build and read the log — if the line appears there too,
+   close the item.
+1b. `Government.*` "No context supplied" spam when the **P2/P3** panels are
+   open (P1 is clean). Leading hypothesis: `one_country_header_template`
+   declares `block "CountryContext"` **twice** — once for the portrait, once
+   carrying the default `datacontext = "[Country.GetGovernment]"` for the
+   ruler-title strip — and a single `blockoverride` replaces both, so the
+   Government context never gets pushed. This would make it a vanilla template
+   issue (every vanilla one-country panel does the same thing), which the
+   author's observation that vanilla does *not* spam contradicts, so it is
+   unconfirmed. Two discriminating tests: (a) open a vanilla one-country
+   panel; (b) point our `CountryContext` at a hard-coded live tag instead of
+   `GetVariable('mr_leading_country')` and see whether the spam stops.
+   **Risk-free fix regardless of which theory is right:** switch P2/P3 to
+   `two_countries_header_template` with the second portrait hidden — P1 uses
+   that template and has never spammed.
 2. P3 railroad suspect #1 if its wars never fire:
    `scope:mr_dom_claimant.offensive_alliance_strength`
    (`MR_mongol_dominance.txt`, find-target). Fallback plan: two fixed-tag
@@ -276,7 +322,30 @@ documented in TESTING-GUIDE Track 8 / the tracks above:
 5. Design corner: a player who manually forms MGE during PHASE 1 (needs all
    nine formable seats by 1420 — practically impossible) fails the railroad
    by timeout. Guarded, error-free, accepted.
-6. Cosmetic: the P3 panel rival can be the claimant's own tributary.
+6. Cosmetic: the P3 panel rival can be the claimant's own tributary. (The
+   Phase 1 version of this — MGO appearing as *both* claimant and rival — was
+   fixed on 2026-07-26 by re-picking the rival monthly; Phase 3 picks its
+   theatre rival once at `on_start` and could get the same treatment.)
+7. Vanilla's "anything you conquer in your core region is auto-cored" rider
+   lives in `on_location_changed_owner`, an on_action defined with an `effect`
+   block. We reimplemented it in the situations' `on_monthly` instead, because
+   redefining that on_action name in a mod would replace the vanilla block
+   wholesale. If Paradox ever documents additive on_action merging, the
+   monthly loop can be retired.
+8. `MGE` is localised "Great Mongol Empire" by author decision (2026-07-26).
+   No vanilla country name contains "Empire" — this is the exact string that
+   produces the `MGE has the name 'empire'` load warning, because rank titles
+   compose as "The Great <name> Empire". It is cosmetic: the map label is
+   built from `rank_empire_horde_prefix` + `MGE_ADJ` + `rank_empire_horde`
+   ("Great Mongol Horde") and never uses this name. Drop-in alternative if the
+   warning becomes annoying: "Great Mongol State", the literal English of Yeke
+   Mongol Ulus, which carries no trigger word.
+9. `main_menu/gui/MR_messagetypes.txt` assumes the engine reads that folder
+   rather than only `gui/messagetypes.txt`. Unverified. If
+   `message_handler.cpp:421` survives the next test the assumption is wrong;
+   the file is then inert (it cannot do harm) and the cost is one log line
+   plus no popup when the action fires. Do NOT "fix" it by naming the file
+   `messagetypes.txt` — that replaces vanilla's 1348 entries.
 
 ## 6. Idea parking lot (unscoped one-liners)
 
@@ -291,7 +360,10 @@ claimant loses Karakorum for 10+ years.
 ## 7. Definition of done (any extension)
 
 - [ ] Every new construct carries a vanilla/PD citation (comment it in-file)
-- [ ] `tools/verify_mod.py` fully green on BOTH machine layouts
+- [ ] `tools/verify_mod.py` fully green on BOTH machine layouts (26 checks)
+- [ ] **A new invariant gets a new harness check, proven on a known positive**
+      — break the fix, watch the check fail, restore. Two of the current
+      checks exist because a manual review missed exactly what they catch
 - [ ] Loc complete incl. engine-derived keys and DHE `.entry` keys
 - [ ] Human-choice rule honored (no forced conversions/locks/thefts)
 - [ ] TESTING-GUIDE row(s) added with dates and expected outcomes

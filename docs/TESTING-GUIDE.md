@@ -52,6 +52,20 @@ dates below.
 
 ---
 
+## Track 1b — Engine registries (first load after any new action)
+
+A `generic_action` needs three side registries; each missing one is its own
+error line and all three were missed the first time.
+
+| # | Check | Expect | Implemented in |
+|---|---|---|---|
+| 1b.1 | `generic_action_ai_list.cpp:82` | ABSENT — the action is listed in an ai list | `generic_action_ai_lists/MR_actions_list.txt` |
+| 1b.2 | `price_database.cpp:117` | ABSENT — the price's `_cost_modifier` type exists | `modifier_type_definitions/MR_modifier_types.txt` |
+| 1b.3 | `message_handler.cpp:421` | ABSENT — **watch item.** Vanilla keeps all message types in one `gui/messagetypes.txt`; we ship a differently-named file in that folder on the assumption the engine reads the folder. If the error survives, the assumption is wrong: the file is inert, the action still works, and the cost is this line plus no popup. Do NOT rename our file to `messagetypes.txt` | `main_menu/gui/MR_messagetypes.txt` |
+| 1b.4 | `localization_reader.cpp:451` "Missing colon" | ABSENT — every loc value must sit on ONE physical line | harness check `loc lines are well formed` |
+
+---
+
 ## Track 2 — Phase 1: Mongol Resurgence (1368–1420)
 
 Observer run from 1337. Buffs **Historical**.
@@ -67,9 +81,9 @@ Observer run from 1337. Buffs **Historical**.
 | 2.7 | same month | AI lock | AI MGO has **Mongol War Preparations** (localized name, not a raw `STATIC_MODIFIER_NAME_` key) | beat-104 block + loc |
 | 2.8 | ~1 year later | Railroad war | MGO declares a unification war on a weak Mongol neighbour with the *Unification of the Steppe* CB; war goal shows "**Unify the Steppe**", not a raw key | on_monthly declare + `mr_dominance.997` + wargoal loc |
 | 2.9 | ongoing | War cadence (buff rule only) | Historical ≈ one war per year; Vanilla (no buffs) ≈ one per ~2 years; Terminator ≈ one per ~6 months | declare-block pacing OR |
-| 2.10 | any time | Panel | Situation panel: dual portraits render (no black boxes), both cards show "Score: N" with **different** numbers for leader vs rival; the rival is the **strongest** other steppe horde, not a random distant one | `mongol_resurgence.gui` + monthly score block + ordered_country rival pick |
+| 2.10 | any time | Panel | Situation panel: dual portraits render (no black boxes), both cards show "Score: N" with **different** numbers for leader vs rival; the rival is the **strongest** other steppe horde, not a random distant one. **After MGO is born, the two portraits must be DIFFERENT countries** — MGO used to appear as both claimant and its own rival, because the rival was picked once at on_start and the failsafe then handed the banner to that very country | `mongol_resurgence.gui` + monthly score block + monthly rival re-pick |
 | 2.11 | 1415 | Completion failsafe | If goal unmet and MGO is AI: rest of mongolia_region transferred to MGO, surviving hordes become tributaries — **even mid-war** (the P1 at-peace gate was deliberately removed so an endless war cannot stall it; P2/P3 failsafes still require peace). **Re-run with the rule Deactivated: this must NOT happen** | on_monthly failsafe (rule-gated) |
-| 2.12 | on success | Phase end | "The Rise of the Great Khan" fires; **phase buffs disappear** from every horde (check a rival khan's modifier list too); MGO gets the reward tier matching the buff rule; AI MGO gains The Sleeping Horde. **On a FAILED Phase 1 (timeout), AI MGO must NOT get The Sleeping Horde** — it would be war-locked forever with no Phase 2 to lift it | on_ending + `mr_dominance.1` + success-gated on_ended grant |
+| 2.12 | on success | Phase end | "The Rise of the Great Khan" fires; **phase buffs disappear** from every horde (check a rival khan's modifier list too); MGO gets the reward tier matching the buff rule and **keeps it for the rest of the campaign**. The Sleeping Horde no longer exists — Phase 2 opens the moment Phase 1 closes, so there was never a dormant interval for it to cover; confirm no country anywhere carries it and that no raw `STATIC_MODIFIER_NAME_MR_the_sleeping_horde` key appears | on_ending + `mr_dominance.1` |
 | 2.14 | ~1378+ | Census DHE | "The Count of the Herds" fires once MGO holds Karakorum — manpower burst (count the men) or gold + horde unity (count the herds) | `mr_dominance_dhe.12` |
 | 2.13 | after end | Variables | Save file / console: situation variables (`mr_conquest_*`, `MR_mgo_score`…) are gone | on_ended |
 
@@ -81,12 +95,12 @@ Continue the same observer run.
 
 | # | When | Check | Expect | Implemented in |
 |---|---|---|---|---|
-| 3.1 | ~1420 | Situation starts | `Road to Empire` active; The Sleeping Horde and the Phase 1 reward modifier are **removed** from MGO; the phase buff matching the buff rule is applied; a **new second-generation Great Khan ("Adai")** is enthroned with the Scourge modifier and Conqueror/Born to the Saddle/Strategist traits | `MR_mongol_imperial.txt` on_start + `mr_dominance.120` |
-| 3.2 | 1420+ | CBs granted | MGO has *Mastery of the Silk Road* CBs against holders of north_china / xinjiang / khorasan / persia land | on_start CB loop |
-| 3.3 | any | Panel header | Portrait renders (NOT black) — the header now overrides the correct `CountryContext`/`character_portrait_anchor` blocks; the Character/`GetCourtCountry` error spam from `pdx_data_callstack` is **gone** while the panel is open. Also confirm no `'textbox_single' is not a valid widget` / `'progress' is not a valid widget` errors at game start | `mongol_imperial.gui` header + widget fixes |
-| 3.4 | any | Progress card | "Imperial Expansion Progress" card shows a **score line and a working bar** that fills: +25 Samarkand, +25 Dadu, +25 Khorasan+Xinjiang cleared, +25 North China cleared. (This card is the phase's 0–100 goal meter — that is why it exists) | monthly `MR_mge_score` block + `text_single`/`progressbar value=` fix |
-| 3.5 | map | Red lines | Goal drawing covers khorasan + **xinjiang** + north_china as one contiguous band (no gap in the middle) | secondary_map_color |
-| 3.6 | 1545 | Completion failsafe | If goal unmet, AI, at peace: all three goal regions handed over. With *Imperial Expansion Conquest Automation* Deactivated: nothing happens | on_monthly failsafe (rule-gated) |
+| 3.1 | ~1420 | Situation starts | `Road to Empire` active; the Phase 1 **reward** modifier (Unified Mongol Banner / Master of the Steppe) is still on MGO and **must stay** — only phase *buffs* are temporary; the Phase 2 buff matching the buff rule is applied; a **new second-generation Great Khan ("Adai")** is enthroned with the Scourge modifier and Conqueror/Born to the Saddle/Strategist traits | `MR_mongol_imperial.txt` on_start + `mr_dominance.120` |
+| 3.2 | 1420+ | CBs granted | MGO has *Mastery of the Silk Road* CBs against holders of north_china / xinjiang / khorasan / persia / **manchuria / tibet** land | on_start CB loop |
+| 3.3 | any | Panel header | **CONFIRMED FIXED 26.07.** Portrait renders (NOT black) — the header now overrides the correct `CountryContext`/`character_portrait_anchor` blocks; the Character/`GetCourtCountry` error spam from `pdx_data_callstack` is **gone** while the panel is open. Also confirm no `'textbox_single' is not a valid widget` / `'progress' is not a valid widget` errors at game start | `mongol_imperial.gui` header + widget fixes |
+| 3.4 | any | Progress card | "Imperial Expansion Progress" fills in **five 20-point steps**: Samarkand, Dadu, Khorasan+Xinjiang cleared, North China cleared, northern marches cleared (Manchuria + Tibet + the bursol/omsk/kulykol areas). The bar and the End Requirements list now call the **same** scripted triggers, so **100 must coincide exactly with the phase closing** — a bar sitting at 100 on an open phase is a bug. Equally, a bar at **0 while every requirement is green** is a bug: that was the 26.07 finding, caused by the score being computed before the failsafe in the same tick. Fixed by moving the panel blocks to the end of `on_monthly` in all three phases | monthly `MR_mge_score` + `mr_p2_*_cleared` |
+| 3.5 | map | Red lines | Goal drawing covers khorasan + xinjiang + north_china + **manchuria + tibet** + the three Siberian border areas — one contiguous band, no gap in the middle | secondary_map_color |
+| 3.6 | 1545 | Completion failsafe | If goal unmet, AI, at peace: **all** goal territory handed over (mongolia, khorasan, xinjiang, north_china, manchuria, tibet + the three Siberian areas). Khorasan and Tibet get ownership **without** cores, deliberately. With *Imperial Expansion Conquest Automation* Deactivated: nothing happens | on_monthly failsafe (rule-gated) |
 | 3.7 | on success | **THE PROCLAMATION** | The moment Phase 2 completes, **MGE is formed** (`form_country`, bypassing MGE_f's allow block): the claimant becomes the **Yeke Mongol Ulus** at empire rank, gains vanilla's *Restoration of the Mongol Empire* modifier (50y, from MGE_f's form_effect), and "The Yeke Mongol Ulus Proclaimed" fires. Imperial phase buff **and Mongol War Preparations** removed; Empire Fulfilled granted (not under Vanilla buffs). The country name must show "Yeke Mongol Ulus" — and the `MGE has the name 'empire'` warning must be gone from the logs | on_ending + `mr_dominance.125` |
 | 3.8 | 1420–1550 | DHE layer | Wall Breakers / Silk Road Reborn / Imperial Encampment / **Karakorum Restored** fire for AI MGO (free buildings/units via *Khan's Decree*, Karakorum becomes a city with a market); **The Observatory of Samarkand** (~1424, Samarkand owned) fires for player AND AI | `MR_dominance_dhe_events.txt`, `mr_dominance.995/996` |
 | 3.11 | ~1449 | **Tumu reaction (moved)** | If vanilla's Tumu Crisis goes live (`lost_emperor`), "The Emperor in a Tent" now fires DURING Phase 2 to the Mongol hordes — it was previously watched only by the 1604 Chahar situation and could never fire | P2 on_monthly Tumu watch |
@@ -101,10 +115,10 @@ MGE now exists from the phase's first day (proclaimed at Phase 2's close).
 
 | # | When | Check | Expect | Implemented in |
 |---|---|---|---|---|
-| 4.1 | ~1550 | Situation starts | `The Four Khanates` active for **MGE**; Empire Fulfilled removed; Pax Mongolica (or historical variant) applied; a **third-generation Great Khan ("Altan")** enthroned with Tactical Genius/Inspiring Leader/Expansionist | `MR_mongol_dominance.txt` on_start + `mr_dominance.130` |
+| 4.1 | ~1550 | Situation starts | `The Four Khanates` active for **MGE**; Empire Fulfilled is **kept** (it is permanent — it marks the proclamation); Pax Mongolica (or historical variant) applied; the capital **moves to Khanbaliq/Dadu** for an AI claimant (`mr_dominance.136`) while a human is asked and may refuse (`.137`); a **third-generation Great Khan ("Altan")** enthroned with Tactical Genius/Inspiring Leader/Expansionist | `MR_mongol_dominance.txt` on_start + `mr_dominance.130` |
 | 4.2 | 1550–1650 | **error.log** | ZERO `Invalid right side` errors from `MR_mongol_dominance.txt` — MGE existing from day one removes the old error class entirely; the MGO fallback stays guarded | tag = rewrites + P2-end formation |
-| 4.3 | any | Panel | Header portrait renders from MGE; progress bar counts ten 10-point goals: Karakorum, Dadu, Samarkand, Sarai, Kazan, **Tabriz, Baghdad, Persia cleared**, Russian foothold, **Cappadocia foothold** | gui + `MR_dominance_score` |
-| 4.4 | 1645 | Completion failsafe | If unmet, AI, at peace: upper_selenga/beiping/transoxiana/lower_don/kazan/**iraq_arabi/cappadocia**/ryazan areas **plus ALL of persia_region** handed to the claimant (rule-gated as in 3.6) | on_monthly failsafe |
+| 4.3 | any | Panel | Header portrait renders from MGE; the bar counts **thirteen** weighted goals summing to 100: the seven seats (8 each), Persia cleared (8), Russian foothold (6), Cappadocia foothold (6), Pontic+Volga+Mesopotamia cleared (8), **Song China cleared (10)**, **Korea in the fold (6)**. As in 3.4, 100 must coincide with the phase closing. **Including in the failsafe month** — the panel blocks now run at the END of `on_monthly`, after the failsafe, so a handover and the bar it produces land in the same tick | gui + `MR_dominance_score` + `mr_p3_*` |
+| 4.4 | 1645 | Completion failsafe | If unmet, AI, at peace: the seat areas + iraq_arabi + cappadocia + ryazan + **caucasus** + ALL of persia_region + **east/west/south China + Korea** handed to the claimant (rule-gated as in 3.6) | on_monthly failsafe |
 | 4.5 | on success | The finale | "The Eternal Empire" fires; Pax Mongolica **and Mongol War Preparations** removed; Mongol World Order granted (not under Vanilla buffs); `mr_railroad_complete` set. (The on_ending form_country is now only a fallback — MGE should already exist) | on_ending |
 | 4.6 | alt run | Failure | Let it time out (rules off): "The Empire Crumbles", failure modifiers, `mr_railroad_failed` set — and the late-steppe situations can then still fire | on_ending else |
 | 4.7 | 1550+ | AI lock | AI claimant carries **Mongol War Preparations** for the whole phase | on_start preparing grant |
@@ -122,12 +136,29 @@ Take the claimant (Ctrl+click or `tag`) before MGO forms, or play a horde from 1
 |---|---|---|---|
 | 5.1 | Railroad events as a player | "The Kurultai Demands War" (P1), "The Horde Rides for the Silk Road" (P2) and "The Ulus Calls for Riders" (P3) all appear as **visible events with two options**; option B postpones the war (no war declared, targeting resets, event returns after the cooldown) | `mr_dominance.997/.993/.992` PD-103/203 shape |
 | 5.2 | No AI lock | A human claimant NEVER has Mongol War Preparations, in any phase (can declare wars freely) | `is_ai` gates at beat-104 / P2 on_start / P3 on_start |
-| 5.3 | No sleeping lock | After Phase 1 ends, a human MGO does NOT get The Sleeping Horde | on_ended `is_ai` gate |
+| 5.3 | No inter-phase lock | After Phase 1 ends, a human MGO is free to declare war immediately — nothing war-locks the claimant between phases (The Sleeping Horde was removed entirely; Phase 2 opens the same tick Phase 1 closes) | P1 `on_ended` |
 | 5.4 | Failsafes don't rob the player | Own some mongolia_region land as a NON-claimant at the 1415 failsafe: your locations must NOT be transferred | failsafe `is_ai` owner filter |
 | 5.5 | Great Khan as a player | On forming MGO you also get the new Borjigin ruler + Scourge modifier; at Phase 2 and Phase 3 starts the succession khans (Adai, Altan) replace your ruler too — this is the railroad's signature, human or AI | `mr_dominance.104/.120/.130` |
 | 5.6 | Late-steppe rewards | Chahar success grants **The Seal of Chinggis**; the Torghut arrival grants **The Volga Pastures**; Dzungar consolidation grants **The Dzungar Legacy** — none of them re-grant the Phase 1 banner | `MR_late_steppe_events.txt` + MR_modifiers |
 | 5.7 | The Banner Offered | Take Karakorum as a human horde pre-1375: "The Banner Offered" fires ONCE. Accept → you become MGO (and Beat 104 enthrones the Great Khan next month). Decline → you stay yourself, the event never returns, and the 1375 failsafe converts an **AI** horde instead — never you (unless zero AI Mongol hordes remain on the steppe) | `mr_dominance.11` + AI-preferring failsafe tiers |
+| 5.9 | **Claim the Khan's Own Pasture** | The action appears on the Phase 1 **and** Phase 2 panels (Main Actions). It is disabled while at war, while a pasture is already named, and **while no Great Khan sits the throne** — each with its own readable tooltip, no raw keys. Selecting a region cores every location you already hold there and adds *The Khan's Own Pasture*; anything you take there afterwards is cored within a month. When the Khan dies the location modifiers are stripped | `MR_actions.txt` + P1/P2 on_monthly |
+| 5.10 | Capital offer | At Phase 3's start a human claimant owning Dadu is offered the move to Khanbaliq and **may decline** — the capital must not move on its own | `mr_dominance.137` |
 | 5.8 | Self-formed MGE (Vanilla buffs) | Under *Vanilla (No Buffs)* — the only tier without `blocks_country_formation` — manually form MGE mid-Phase-2 with the nine formable seats: the phase must still be COMPLETABLE (end trigger and resolution are dual-tag) and Phase 3 must start normally | dual-tag `mr_imperial_end_trigger` + P2 on_ending |
+
+---
+
+## Track 5b — The world reacts (immersion layer)
+
+Any run. These are pure flavour except the alliance breaks, but they are the
+most visible thing a non-Mongol player ever sees of this mod.
+
+| # | When | Check | Expect | Implemented in |
+|---|---|---|---|---|
+| 5b.1 | each phase start | Spectators | A country with a stake in the theatre but **no** land the phase demands gets the spectator event (`.20`/`.22`/`.25`) — Word from the Grasslands / The Horde Turns Outward / The Four Corners Remembered | phase `on_start` |
+| 5b.2 | each phase start | Victims | A country holding land **inside** the goal regions gets the victim event instead (`.21`/`.23`/`.26`) | phase `on_start` |
+| 5b.3 | Phase 1 start | No double-telling | A Mongol steppe horde receives "The Eagle of the Steppe" (`.10`) and **neither** `.20` nor `.21` | P1 `on_start` exclusions |
+| 5b.4 | MGO's birth / P2 / P3 start | Alliance breaks | The claimant's alliances with powers standing on the goal regions are dissolved (`.28` at Beat 104, `.24` at P2 start, `.27` at P3 start). Check an ally that holds goal land loses the alliance, and one that does not **keeps** it | `every_related_country` + `remove_relation` |
+| 5b.5 | as a victim | Playability | Take a victim country (e.g. a north-China or Persian power) and confirm the events read as warnings, grant nothing, and never fire twice (`fire_only_once`) | event definitions |
 
 ---
 

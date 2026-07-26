@@ -38,13 +38,6 @@ mongol_imperial = {
 	hint_tag = hint_mongol_imperial
 	on_start = {
 		set_global_variable = mr_imperial_started
-		# The horde is awake now.
-		every_country = {
-			limit = {
-				has_country_modifier = MR_the_sleeping_horde
-			}
-			remove_country_modifier = MR_the_sleeping_horde
-		}
 		set_variable = {
 			name = mr_imperial_momentum
 			value = 0
@@ -78,9 +71,7 @@ mongol_imperial = {
 		}
 		random_country = {
 			limit = {
-				any_owned_location = {
-					region = region:north_china_region
-				}
+				has_presence_in = region:north_china_region
 				NOR = {
 					tag = MGO
 					tag = MGE
@@ -102,11 +93,13 @@ mongol_imperial = {
 				country_exists = c:MGO
 			}
 			c:MGO = {
-				# The Phase 1 rewards expire here, exactly as their
-				# tooltips promise ("removed upon the start of the 2nd
-				# Situation").
-				remove_country_modifier = MR_unified_mongol_banner
-				remove_country_modifier = MR_mongol_historical_modifier_2
+				# The Phase 1 REWARDS (MR_unified_mongol_banner,
+				# MR_mongol_historical_modifier_2) are deliberately NOT
+				# stripped here — they are permanent, and their tooltips
+				# say so. Only the phase BUFFS are temporary, and those
+				# are removed by Phase 1's own on_ending. Rewards do not
+				# stack out of control because each phase grants exactly
+				# one, and each phase's buff still expires with it.
 				# The war-preparation lock, PD Ascension style: the AI
 				# claimant must not freelance-declare — the railroad
 				# event declares for it. Never applied to a human.
@@ -148,18 +141,10 @@ mongol_imperial = {
 				every_country = {
 					limit = {
 						OR = {
-							any_owned_location = {
-								region = region:north_china_region
-							}
-							any_owned_location = {
-								region = region:xinjiang_region
-							}
-							any_owned_location = {
-								region = region:khorasan_region
-							}
-							any_owned_location = {
-								region = region:persia_region
-							}
+							has_presence_in = region:north_china_region
+							has_presence_in = region:xinjiang_region
+							has_presence_in = region:khorasan_region
+							has_presence_in = region:persia_region
 						}
 						NOT = {
 							tag = MGO
@@ -177,6 +162,68 @@ mongol_imperial = {
 					}
 				}
 			}
+		}
+		# --- THE WORLD REACTS (PD pd_brandenburg.201/202/200 shape) ---
+		# SPECTATORS: a stake in the theatre, no land the phase demands.
+		every_country = {
+			limit = {
+				OR = {
+					has_presence_in = sub_continent:east_asia
+					has_presence_in = sub_continent:north_asia
+					has_presence_in = sub_continent:central_asia
+					has_presence_in = sub_continent:middle_east
+					has_presence_in = sub_continent:south_asia
+				}
+				NOT = {
+					OR = {
+						has_presence_in = region:khorasan_region
+						has_presence_in = region:xinjiang_region
+						has_presence_in = region:north_china_region
+						has_presence_in = region:manchuria_region
+						has_presence_in = region:tibet_region
+					}
+				}
+				NOR = {
+					tag = MGO
+					tag = MGE
+				}
+			}
+			trigger_event_non_silently = mr_dominance.22
+		}
+		# VICTIMS: they hold ground inside the phase's goal regions.
+		every_country = {
+			limit = {
+				OR = {
+					has_presence_in = region:khorasan_region
+					has_presence_in = region:xinjiang_region
+					has_presence_in = region:north_china_region
+					has_presence_in = region:manchuria_region
+					has_presence_in = region:tibet_region
+				}
+				NOR = {
+					tag = MGO
+					tag = MGE
+				}
+			}
+			trigger_event_non_silently = mr_dominance.23
+		}
+		# The claimant sheds alliances with those same powers, so the
+		# railroad's declare event is not blocked by its own treaties.
+		every_country = {
+			limit = {
+				tag = MGO
+				# AI ONLY. PD fires its equivalent at c:PRU unconditionally
+				# (the_prussian_ascension.txt:138), but PD has no standing
+				# rule about it and this mod does: never force-convert, lock
+				# or rob a human player. Dissolving a player's treaties with
+				# no way to refuse is exactly that. It is also unnecessary
+				# for them — the reason this exists is that the AI's declare
+				# event stalls on its own alliances, and a human gets a
+				# visible, postponable war event and can break alliances
+				# themselves.
+				is_ai = yes
+			}
+			trigger_event_non_silently = mr_dominance.24
 		}
 	}
 	on_monthly = {
@@ -210,81 +257,80 @@ mongol_imperial = {
 			}
 			set_global_variable = mr_tumu_reaction_seen
 		}
-		# ========== PANEL PROGRESS (0-100) ==========
-		# The .gui progressbar reads MR_mge_score. Four milestones worth
-		# 25 each: the two great seats, then each half of the corridor
-		# cleared of powers outside the claimant's realm.
-		set_variable = {
-			name = MR_mge_score
-			value = 0
-		}
-		if = {
+		# ========== THE KHAN'S OWN PASTURE ==========
+		# The ongoing half of the MR_select_core_region action. Vanilla
+		# does this in on_location_changed_owner (_hardcoded.txt:4489),
+		# but that on_action is defined with an effect block and
+		# redefining the name in a mod would replace the vanilla block
+		# outright — so the situation does it monthly instead. Anything
+		# the claimant has taken inside its chosen region since last
+		# month becomes core, and the Khan's death ends the privilege
+		# exactly as it ends Timur's (_hardcoded.txt:3517).
+		every_country = {
 			limit = {
-				country_exists = c:MGO
-				c:MGO = {
-					owns = location:samarkand
+				OR = {
+					tag = MGO
+					tag = MGE
 				}
+				has_variable = mr_core_region
 			}
-			change_variable = {
-				name = MR_mge_score
-				add = 25
-			}
-		}
-		if = {
-			limit = {
-				country_exists = c:MGO
-				c:MGO = {
-					owns = location:dadu
+			# Saved rather than reached with prev.prev: that construct has
+			# ZERO uses anywhere in vanilla, and this file does not invent
+			# syntax. save_scope_as + scope: is the attested way down.
+			save_scope_as = mr_pasture_holder
+			if = {
+				limit = {
+					has_ruler = yes
+					ruler ?= {
+						has_character_modifier = MR_great_khan
+					}
 				}
-			}
-			change_variable = {
-				name = MR_mge_score
-				add = 25
-			}
-		}
-		if = {
-			limit = {
-				country_exists = c:MGO
-				NOT = {
-					any_country = {
-						NOR = {
-							tag = MGO
-							is_subject_of = c:MGO
+				var:mr_core_region = {
+					# TWO passes, deliberately not one. Coring is a
+					# one-way door, so it is limited to what is not core
+					# yet; the modifier is NOT, so it is applied on its
+					# own terms to every owned location that lacks it.
+					# Folding them together (one limit, both effects) was
+					# a real bug: the else branch below strips the
+					# modifier from every location, and a single-pass
+					# version could only re-add it to locations that were
+					# still un-cored — which, after the first pass, is
+					# none of them. The pasture modifier was lost for
+					# good after any interregnum tick.
+					every_location_in_region = {
+						limit = {
+							owner ?= scope:mr_pasture_holder
+							NOT = {
+								integration_level = core
+							}
 						}
-						OR = {
-							any_owned_location = {
-								region = region:khorasan_region
+						change_integration_level = core
+					}
+					every_location_in_region = {
+						limit = {
+							owner ?= scope:mr_pasture_holder
+							NOT = {
+								has_location_modifier = MR_khans_own_pasture
 							}
-							any_owned_location = {
-								region = region:xinjiang_region
-							}
+						}
+						add_location_modifier = {
+							modifier = MR_khans_own_pasture
+							years = -1
+							mode = add_and_extend
 						}
 					}
 				}
 			}
-			change_variable = {
-				name = MR_mge_score
-				add = 25
-			}
-		}
-		if = {
-			limit = {
-				country_exists = c:MGO
-				NOT = {
-					any_country = {
-						NOR = {
-							tag = MGO
-							is_subject_of = c:MGO
+			# No Great Khan on the throne: the pasture is just land again.
+			else = {
+				var:mr_core_region = {
+					every_location_in_region = {
+						limit = {
+							has_location_modifier = MR_khans_own_pasture
 						}
-						any_owned_location = {
-							region = region:north_china_region
-						}
+						remove_location_modifier = MR_khans_own_pasture
 					}
 				}
-			}
-			change_variable = {
-				name = MR_mge_score
-				add = 25
 			}
 		}
 		# ========== AI RAILROAD: FIND A TARGET ==========
@@ -312,15 +358,11 @@ mongol_imperial = {
 						}
 						defensive_alliance_strength < c:MGO.offensive_alliance_strength
 						OR = {
-							any_owned_location = {
-								region = region:khorasan_region
-							}
-							any_owned_location = {
-								region = region:xinjiang_region
-							}
-							any_owned_location = {
-								region = region:north_china_region
-							}
+							has_presence_in = region:khorasan_region
+							has_presence_in = region:xinjiang_region
+							has_presence_in = region:north_china_region
+							has_presence_in = region:manchuria_region
+							has_presence_in = region:tibet_region
 						}
 					}
 					max = 1
@@ -360,15 +402,11 @@ mongol_imperial = {
 							is_subject_of = c:MGO
 							NOT = {
 								OR = {
-									any_owned_location = {
-										region = region:khorasan_region
-									}
-									any_owned_location = {
-										region = region:xinjiang_region
-									}
-									any_owned_location = {
-										region = region:north_china_region
-									}
+									has_presence_in = region:khorasan_region
+									has_presence_in = region:xinjiang_region
+									has_presence_in = region:north_china_region
+									has_presence_in = region:manchuria_region
+									has_presence_in = region:tibet_region
 								}
 							}
 						}
@@ -469,9 +507,7 @@ mongol_imperial = {
 			}
 			every_country = {
 				limit = {
-					any_owned_location = {
-						region = region:north_china_region
-					}
+					has_presence_in = region:north_china_region
 				}
 				trigger_event_non_silently = mr_dominance.122
 			}
@@ -632,8 +668,169 @@ mongol_imperial = {
 					add_core = c:MGO
 				}
 			}
+			region:manchuria_region = {
+				every_ownable_location_in_region = {
+					limit = {
+						# owner ?= not owner =: the bare link errors on
+						# ownerless locations.
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
+					change_location_owner = c:MGO
+					# add_core = c:MGO // The reason we don't grant cores immediately is that instantly coring those lands breaks historical accuracy, and it also makes the AI way too strong.
+				}
+			}
+			region:tibet_region = {
+				every_ownable_location_in_region = {
+					limit = {
+						# owner ?= not owner =: the bare link errors on
+						# ownerless locations.
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
+					change_location_owner = c:MGO
+					# No add_core, same reasoning as khorasan above: Tibet was
+					# a Yuan protectorate, never Mongol home ground, and free
+					# cores here would over-feed the AI claimant.
+				}
+			}
+			area:bursol_area = {
+				every_ownable_location_in_area = {
+					limit = {
+						# owner ?= not owner =: the bare link errors on
+						# ownerless locations.
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
+					change_location_owner = c:MGO
+					add_core = c:MGO
+				}
+			}
+			area:omsk_area = {
+				every_ownable_location_in_area = {
+					limit = {
+						# owner ?= not owner =: the bare link errors on
+						# ownerless locations.
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
+					change_location_owner = c:MGO
+					add_core = c:MGO
+				}
+			}
+			area:kulykol_area = {
+				every_ownable_location_in_area = {
+					limit = {
+						# owner ?= not owner =: the bare link errors on
+						# ownerless locations.
+						owner ?= {
+							is_ai = yes
+							NOR = {
+								tag = MGO
+								is_subject_of = c:MGO
+							}
+						}
+					}
+					change_location_owner = c:MGO
+					add_core = c:MGO
+				}
+			}
 			c:MGO = {
 				trigger_event_silently = mr_dominance.999
+			}
+		}
+		# NOTE ON PLACEMENT: this block sits at the END of on_monthly, not
+		# the start. The completion failsafe below-of-old ran AFTER the
+		# score was written, so in the month the failsafe handed over the
+		# goal territory the bar still showed the pre-handover value —
+		# observed in game as "progress 0, every end requirement green".
+		# The End Requirements list evaluates live when the panel opens;
+		# the bar only shows what the last tick wrote. Computing it last
+		# makes the two agree within the same tick.
+		# ========== PANEL PROGRESS (0-100) ==========
+		# The .gui progressbar reads MR_mge_score. Four milestones worth
+		# 25 each: the two great seats, then each half of the corridor
+		# cleared of powers outside the claimant's realm.
+		set_variable = {
+			name = MR_mge_score
+			value = 0
+		}
+		if = {
+			limit = {
+				country_exists = c:MGO
+				c:MGO = {
+					owns = location:samarkand
+				}
+			}
+			change_variable = {
+				name = MR_mge_score
+				add = 20
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:MGO
+				c:MGO = {
+					owns = location:dadu
+				}
+			}
+			change_variable = {
+				name = MR_mge_score
+				add = 20
+			}
+		}
+		# The three territorial fifths. These call the SAME scripted
+		# triggers mr_imperial_end_trigger calls, so the bar and the
+		# requirement can no longer disagree; they are also region-scoped
+		# rather than a monthly sweep of every country's holdings.
+		if = {
+			limit = {
+				country_exists = c:MGO
+				mr_p2_corridor_cleared = yes
+			}
+			change_variable = {
+				name = MR_mge_score
+				add = 20
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:MGO
+				mr_p2_north_china_cleared = yes
+			}
+			change_variable = {
+				name = MR_mge_score
+				add = 20
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:MGO
+				mr_p2_northern_marches_cleared = yes
+			}
+			change_variable = {
+				name = MR_mge_score
+				add = 20
 			}
 		}
 	}
@@ -773,6 +970,11 @@ mongol_imperial = {
 					region = region:khorasan_region
 					region = region:xinjiang_region
 					region = region:north_china_region
+					region = region:manchuria_region
+					region = region:tibet_region
+					area = area:bursol_area
+					area = area:omsk_area
+					area = area:kulykol_area
 				}
 			}
 			custom_tooltip = mr_imperial_map_tt
@@ -807,6 +1009,11 @@ mongol_imperial = {
 					region = region:khorasan_region
 					region = region:xinjiang_region
 					region = region:north_china_region
+					region = region:manchuria_region
+					region = region:tibet_region
+					area = area:bursol_area
+					area = area:omsk_area
+					area = area:kulykol_area
 				}
 				NOT = {
 					owner ?= {

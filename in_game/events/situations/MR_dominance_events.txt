@@ -42,6 +42,340 @@ mr_dominance.10 = {
 	}
 }
 
+# --- THE SEAT MOVES TO KHANBALIQ ---------------------------------
+# Kublai left Karakorum for Dadu in 1272. .136 tells an AI claimant
+# it has done the same; .137 OFFERS the move to a human, who may
+# refuse — the mod never relocates a player's capital for them.
+mr_dominance.136 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.136.title
+	desc = mr_dominance.136.desc
+	outcome = positive
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+	option = {
+		name = mr_dominance.136.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+mr_dominance.137 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.137.title
+	desc = mr_dominance.137.desc
+	outcome = neutral
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+	option = {
+		name = mr_dominance.137.a
+		ai_chance = {
+			factor = 100
+		}
+		trigger = {
+			owns = location:dadu
+		}
+		set_capital = location:dadu
+	}
+	option = {
+		name = mr_dominance.137.b
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+# --- THE WORLD REACTS (PD pd_brandenburg.101/102/200/201/202) -----
+# Three kinds of recipient, per phase:
+#   SPECTATOR  a power with a stake in the theatre but no land the
+#              claimant wants — it hears the news and nothing more
+#   VICTIM     a power holding land inside the phase's goal regions —
+#              it is being told what is about to ride over it
+#   ALLIANCE   the claimant itself, whose alliances with countries in
+#              the goal regions are dissolved so the railroad's
+#              declare event is not blocked by its own treaties
+# All are pure flavour except the alliance ones; none grants a phase
+# buff or reward (those belong to the situations and the buff rule).
+# Phase 1 spectators: the wider east hears that the steppe is uniting.
+mr_dominance.20 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.20.title
+	desc = mr_dominance.20.desc
+	outcome = neutral
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+	option = {
+		name = mr_dominance.20.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# Phase 1 victims: whoever holds ground in the Mongolian heartland.
+mr_dominance.21 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.21.title
+	desc = mr_dominance.21.desc
+	outcome = negative
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = exterior
+		10 = angry
+	}
+	option = {
+		name = mr_dominance.21.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# Phase 2 spectators: Asia learns the horde has turned outward.
+mr_dominance.22 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.22.title
+	desc = mr_dominance.22.desc
+	outcome = neutral
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+	option = {
+		name = mr_dominance.22.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# Phase 2 victims: the Silk Road corridor, North China, Manchuria, Tibet.
+mr_dominance.23 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.23.title
+	desc = mr_dominance.23.desc
+	outcome = negative
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = armed
+		10 = angry
+	}
+	option = {
+		name = mr_dominance.23.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# Phase 3 spectators: the news reaches Rus, Persia and Anatolia.
+mr_dominance.25 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.25.title
+	desc = mr_dominance.25.desc
+	outcome = neutral
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+	option = {
+		name = mr_dominance.25.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# Phase 3 victims: the four khanates' lands and the Song south.
+mr_dominance.26 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.26.title
+	desc = mr_dominance.26.desc
+	outcome = negative
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = armed
+		10 = angry
+	}
+	option = {
+		name = mr_dominance.26.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# Phase 2: the claimant sheds allies standing on the corridor.
+mr_dominance.24 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.24.title
+	desc = mr_dominance.24.desc
+	outcome = neutral
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = angry
+	}
+	immediate = {
+		# every_related_country over the alliance relation, then
+		# remove_relation from the claimant's side — PD_events.txt:1126
+		# (pd_brandenburg.200) does exactly this before its phase opens.
+		# root here is the claimant, so prev inside the remove is the ally.
+		save_scope_as = mr_break_claimant
+		every_related_country = {
+			type = alliance
+			limit = {
+				OR = {
+						has_presence_in = region:khorasan_region
+						has_presence_in = region:xinjiang_region
+						has_presence_in = region:north_china_region
+						has_presence_in = region:manchuria_region
+						has_presence_in = region:tibet_region
+				}
+			}
+			scope:mr_break_claimant = {
+				remove_relation = {
+					type = relation_type:alliance
+					first = prev
+					second = this
+				}
+			}
+		}
+	}
+	option = {
+		name = mr_dominance.24.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# Phase 3: the same, for the western theatre and the Song south.
+mr_dominance.27 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.27.title
+	desc = mr_dominance.27.desc
+	outcome = neutral
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = angry
+	}
+	immediate = {
+		# every_related_country over the alliance relation, then
+		# remove_relation from the claimant's side — PD_events.txt:1126
+		# (pd_brandenburg.200) does exactly this before its phase opens.
+		# root here is the claimant, so prev inside the remove is the ally.
+		save_scope_as = mr_break_claimant
+		every_related_country = {
+			type = alliance
+			limit = {
+				OR = {
+						has_presence_in = region:russian_region
+						has_presence_in = region:steppes_region
+						has_presence_in = region:ural_region
+						has_presence_in = region:persia_region
+						has_presence_in = region:anatolia_region
+						has_presence_in = region:caucasus_region
+						has_presence_in = region:east_china_region
+						has_presence_in = region:west_china_region
+						has_presence_in = region:south_china_region
+						has_presence_in = area:iraq_arabi_area
+				}
+			}
+			scope:mr_break_claimant = {
+				remove_relation = {
+					type = relation_type:alliance
+					first = prev
+					second = this
+				}
+			}
+		}
+	}
+	option = {
+		name = mr_dominance.27.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# Phase 1: fired at MGO's birth, not at on_start — the claimant
+# does not exist when Phase 1 opens.
+mr_dominance.28 = {
+	type = country_event
+	category = situation_event
+	title = mr_dominance.28.title
+	desc = mr_dominance.28.desc
+	outcome = neutral
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = angry
+	}
+	immediate = {
+		# every_related_country over the alliance relation, then
+		# remove_relation from the claimant's side — PD_events.txt:1126
+		# (pd_brandenburg.200) does exactly this before its phase opens.
+		# root here is the claimant, so prev inside the remove is the ally.
+		save_scope_as = mr_break_claimant
+		every_related_country = {
+			type = alliance
+			limit = {
+				OR = {
+						has_presence_in = region:mongolia_region
+				}
+			}
+			scope:mr_break_claimant = {
+				remove_relation = {
+					type = relation_type:alliance
+					first = prev
+					second = this
+				}
+			}
+		}
+	}
+	option = {
+		name = mr_dominance.28.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
 # =========================== PHASE 1 =============================
 # 1368-1420: the unification of Mongolia.
 # --- The Banner Offered ------------------------------------------
@@ -1245,21 +1579,11 @@ mr_dominance.992 = {
 			limit = {
 				scope:mr_war_target = {
 					OR = {
-						any_owned_location = {
-							region = region:russian_region
-						}
-						any_owned_location = {
-							region = region:steppes_region
-						}
-						any_owned_location = {
-							region = region:ural_region
-						}
-						any_owned_location = {
-							region = region:persia_region
-						}
-						any_owned_location = {
-							region = region:anatolia_region
-						}
+						has_presence_in = region:russian_region
+						has_presence_in = region:steppes_region
+						has_presence_in = region:ural_region
+						has_presence_in = region:persia_region
+						has_presence_in = region:anatolia_region
 						has_presence_in = area:iraq_arabi_area
 						has_presence_in = area:armenian_highlands_area
 					}

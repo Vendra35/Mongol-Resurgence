@@ -1,0 +1,36 @@
+﻿# =================================================================
+# MONGOL RESURGENCE - GENERIC ACTION AI LIST
+# =================================================================
+# Every generic action must appear in exactly one of these lists or
+# the engine logs
+#   [generic_action_ai_list.cpp:82] Action X is not explicitly
+#   listed in an ai list! This has performance considerations!
+# and evaluates the action far more often than it needs to. The list
+# is the AI's shortlist: it only considers these actions while
+# `potential` holds.
+#
+# Shape copied from vanilla's rise_of_timur_list.txt, which registers
+# the action MR_select_core_region was modelled on.
+#
+# The claimant is a tag pair because a human can legally form MGE
+# mid-Phase-2 under the Vanilla buff rule. The action itself is only
+# offered in Phases 1 and 2 (its situation select_trigger), but the
+# potential covers Phase 3 as well so the AI is not re-evaluating a
+# list it can never satisfy.
+# =================================================================
+MR_actions_list = {
+	potential = {
+		OR = {
+			tag = MGO
+			tag = MGE
+		}
+		OR = {
+			can_see_situation = situation:mongol_resurgence
+			can_see_situation = situation:mongol_imperial
+			can_see_situation = situation:mongol_dominance
+		}
+	}
+	actions = {
+		MR_select_core_region
+	}
+}

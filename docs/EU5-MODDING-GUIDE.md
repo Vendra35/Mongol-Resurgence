@@ -46,6 +46,7 @@ YourMod/
 │   ├── common/
 │   │   ├── situations/  scripted_triggers/  casus_belli/  wargoals/
 │   │   ├── scriptable_hints/  on_action/            ← singular! not on_actions
+│   │   ├── generic_actions/  prices/                ← panel buttons + their cost
 │   │   └── ...
 │   ├── events/<any_subfolders>/
 │   └── gui/panels/situation/<situation_key>.gui
@@ -179,6 +180,37 @@ deceive:
     `country_exists = c:X` **in the same AND** — trigger ANDs short-circuit, so
     the link is never touched when the tag is absent.
 
+### Choosing the cheapest construct that answers the question
+`any_owned_location = { region = region:X }` walks a country's entire holdings
+list. `has_presence_in = region:X` answers the same question directly (108
+vanilla uses; it also takes `area:` and `sub_continent:`). We had 104 of the
+first form and none of the second. Cheapest first:
+
+| Construct | Iterates | Use when |
+|---|---|---|
+| `has_presence_in = region:X` | nothing (indexed) | "does this country hold anything in X" |
+| `region:X = { any_ownable_location_in_region = { owner ?= … } }` | one region's locations | "does anyone **outside our realm** hold X" — the end-trigger shape |
+| `ordered_neighbor_country` | neighbours | picking a war target |
+| `any_country` / `every_country` | the whole map | only when the ANSWER must be a country |
+
+Two details on the region-scan form. Use `owner ?=`, never `owner =`: regions
+like khorasan and west China contain **unowned** locations, and the bare link
+errors on them — with `?=` an ownerless location simply does not match, which is
+what you want. And keep the `NOR` **flat**:
+
+```
+owner ?= { NOR = { tag = MGO                                    ← 4 independent
+                   tag = MGE                                       members
+                   AND = { country_exists = c:MGO  is_subject_of = c:MGO }
+                   AND = { country_exists = c:MGE  is_subject_of = c:MGE } } }
+```
+
+Folding a tag test into its own `is_subject_of` (`AND = { tag = MGO
+is_subject_of = c:MGO }`) asks for a country that is its own vassal. It is never
+true, so the `NOR` is always true, every owned location matches, the enclosing
+`NOT` is always false — and the phase can never complete, not even after a
+failsafe hands over the whole goal territory. Nothing errors. Nothing logs.
+
 ## 6. Wars: casus belli + wargoals
 
 EU5 splits EU4's CB into two files: the CB (`common/casus_belli/`) points via
@@ -207,7 +239,10 @@ MY_war_goal = {
 
 **The coverage rule:** `allowed_locations` must cover *every* location your
 scenario's goal demands. Ours covered 2 of 9 required regions — wars could be won
-while the goal stayed legally untakeable. Grant CBs from situation `on_start`
+while the goal stayed legally untakeable. It happened a second time, with one
+region, and survived a manual review: **automate this check** (see §9). Note that
+a goal *area* is covered if its parent *region* is listed, so the check has to
+resolve area→region through `definitions.txt` rather than compare strings. Grant CBs from situation `on_start`
 (`add_casus_belli = { target = scope:x type = casus_belli:cb_X years = N }`), and
 re-grant in later phases: a `years = 50` grant from 1420 is long expired by 1600.
 
@@ -269,7 +304,17 @@ An AI will not conquer on theme without help. Three cooperating layers:
     wargoal that means the double-prefixed `war_goal_MR_war_goal_x`;
   - game rules → `rule_<rule_key>`, `setting_<option>`, `setting_<option>_desc`;
   - hints → `hint_<key>` + `hint_<key>_hint_text`;
-  - static modifiers → `STATIC_MODIFIER_NAME_<key>` (+ `_DESC_`).
+  - static modifiers → `STATIC_MODIFIER_NAME_<key>` (+ `_DESC_`);
+  - generic actions → `<action_key>` + `_desc`, plus a key per `select_trigger`
+    `name` and its `none_available_msg_key`, plus `<price_key>` for the
+    `price = price:X` it spends, plus the `PERFORM_<action>_ACTION*` family.
+    Those message keys look optional across the whole action set (46 of 354)
+    but are effectively **mandatory for `type = situation`**: 149 of vanilla's
+    155 situation actions define them, and the engine logs
+    `message_handler.cpp:421` without one.
+  - and beyond loc, the action needs an entry in
+    `common/generic_action_ai_lists/` and a `<price>_cost_modifier` modifier
+    type. See CLAUDE.md — three registries, three different error messages.
 - Situation panels: copy the closest vanilla `.gui` (`the_revolution.gui` is the
   simplest); a `blockoverride` naming a block that doesn't exist in the vanilla
   template renders *nothing*, silently. Panels read situation variables — set them.
@@ -277,13 +322,30 @@ An AI will not conquer on theme without help. Three cooperating layers:
   sort_priority), not just loc.
 - Modifiers: `game_data = { category = country }` + types that exist in
   `main_menu/common/modifier_type_definitions/` — EU4 names (`prestige`,
-  `stability_modifier`, `governing_capacity`, `global_unrest`) do not.
+  `stability_modifier`, `governing_capacity`, `global_unrest`) do not. The
+  category decides which type family is legal: a `category = location` modifier
+  takes the `local_*` family (`local_unrest`, `local_monthly_prosperity`), and
+  one file may hold both categories — vanilla splits them across
+  `country.txt`/`location.txt` by convention only.
+- **Tooltips must not promise what the code does not do.** Ours said "removed
+  upon the start of the 2nd Situation" for rewards that should have been
+  permanent, and the code dutifully removed them — but the phases run
+  back-to-back, so the player received a reward and lost it in the same instant.
+  When buff and reward tiers coexist, be explicit about which is temporary
+  (stripped by the granting phase's own `on_ending`) and which is not.
 
 ## 9. Verify like you don't trust yourself — because you shouldn't
 
 Two of our audits reported "clean" on broken code: BSD grep's `\b` silently
 matching nothing, and line-grep on multi-line constructs. Rules:
 - Python over shell for anything multi-line; `grep -F` for literals.
+- Writing files back: read AND write `utf-8-sig`. Reading with `utf-8-sig` and
+  writing with `utf-8` silently strips the BOM off a file that needs one.
+- Escaping survives exactly one layer. A literal `
+` meant for a loc value
+  has to still be a backslash and an `n` when it lands in the file; build it
+  explicitly (`chr(92) + "n"`) rather than counting backslashes through a
+  heredoc, a shell and a Python string literal.
 - **Every check prints its item count** — a check that can only print nothing is
   indistinguishable from a check that ran on nothing.
 - Prove a scan on a known positive before trusting its negative.
@@ -293,11 +355,40 @@ braces balanced per file · situation fields ⊆ documented set · every referen
 loc key exists in the *correct* tree · every fired event defined · every defined
 event reachable (fired or dhe) · scripted triggers / modifiers / hints resolve ·
 no orphan modifiers · globals set↔read symmetric · situation vars cleaned in
-on_ended · regions/areas exist in definitions.txt · wargoal coverage ⊇ goal
-regions · no duplicate event ids / loc keys · BOM on every file · advances/
-buildings/units exist in vanilla · no unguarded c:TAG comparison patterns.
-22 checks, one python script (`tools/verify_mod.py`, auto-detects the
+on_ended · regions/areas exist in definitions.txt · **every goal region covered
+by some wargoal's allowed_locations** · **no `any_owned_location` with a bare
+geography predicate** · no duplicate event ids / loc keys · BOM on every file ·
+advances/buildings/units exist in vanilla · no unguarded c:TAG comparison
+patterns.
+26 checks, one python script (`tools/verify_mod.py`, auto-detects the
 reference-tree layout), seconds to run.
+
+Two of those checks exist because a manual review missed the thing they now
+catch. `caucasus_region` sat in the Phase 3 goal for months while **no wargoal
+allowed taking it** — the phase was unwinnable and nothing errored. And a
+`NOR` whose members had been folded into one self-contradicting `AND`
+(`tag = MGO` *and* `is_subject_of = c:MGO` — a country cannot be its own vassal)
+made Phases 2 and 3 unclosable, silently, in twenty places. **Write the check
+the moment you fix the bug**, and prove it on the known positive: break the fix
+again, watch the check fail, then restore. A check you have never seen fail is
+a check you have not tested.
+
+A harness only guards the shapes it knows. Two whole classes walked past a
+green run and were caught by the game instead: **eleven localisation values
+split across two physical lines** (a literal `
+` that became a real newline —
+the key-counting scan saw every key and reported clean while the game logged
+`Missing colon (:) separator` and dropped all eleven), and **a generic action
+missing its three side registries** (ai list, message type, price cost
+modifier — three different engine errors). Both now have checks. The lesson is
+not "add these two checks", it is: when the game finds something your harness
+did not, the fix is two commits — the bug, and the check.
+
+Also beware the harness itself going quietly vacuous. Three of ours selected
+files by substring (`"/events/" in path`); on Windows `glob` returns
+backslashes, so those checks scanned **zero** files and reported no problems for
+as long as the repo was worked on from the Windows machine. The item counts were
+printed the whole time — reading them is the point.
 
 Beyond static checks, walk the **state machine** by hand: every failure path sets
 its terminal state; nothing depends on an event having a recipient; no end
@@ -306,6 +397,11 @@ reference-integrity harness structurally cannot see.
 
 ## 10. Process
 
+0. **Prove the reference tree is really there.** Every rule in this guide
+   depends on grepping vanilla. Probe a known *file* (`in_game/map_data/
+   definitions.txt`), never just the directory: ours was a junction that OneDrive
+   emptied, so the folder existed, `-d` passed, and every citation check would
+   have returned a confident zero hits.
 1. **Read first, write nothing.** Vanilla + your working reference mod + the
    design doc.
 2. **Search before building** — vanilla probably already has your feature (three
@@ -336,6 +432,9 @@ reference-integrity harness structurally cannot see.
 | `add_prestige = 25` | `add_prestige = prestige_mild_bonus` |
 | CB `po_*` flags, `badboy_factor` | wargoal file: `allowed_locations`, costs, `ticking_war_score` |
 | modifier `prestige = 0.25` | `monthly_prestige` etc. from modifier_type_definitions |
-| `is_in_region` | `region = region:x` inside location iterators / `has_presence_in` |
+| `is_in_region` | `region = region:x` inside location iterators |
+| "does X own anything in region Y" | `has_presence_in = region:y` — **not** `any_owned_location = { region = … }` |
+| province-scope `add_core` | location scope; integration uses `change_integration_level = core` |
+| decisions | `common/generic_actions/` (`type = situation` for panel buttons) |
 | `owns_or_controls` | `owns` (events use it 70:1 over `controls`) |
 | 4-letter tags | never — 3 letters, always |

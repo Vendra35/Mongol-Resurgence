@@ -1,0 +1,163 @@
+﻿# =================================================================
+# MONGOL RESURGENCE - SITUATION ACTIONS
+# =================================================================
+# One action, modelled field-for-field on vanilla's
+# rot_select_core_region (in_game/common/generic_actions/
+# rise_of_timur.txt:288-385), which is the "Select Core Region"
+# button on the Rise of Timur panel.
+#
+# The Mongol reading of the same mechanic: a Great Khan names the
+# pasture his people will call their own, and everything the horde
+# already holds there stops being conquered ground and becomes
+# home ground.
+#
+# THREE deliberate differences from the vanilla original:
+#   1. It is available in BOTH railroad phases (Phase 1 and Phase
+#      2), not one, so the claimant can name a heartland early and
+#      the corridor later.
+#   2. The claimant is a tag pair (MGO/MGE), because a human can
+#      legally form MGE mid-Phase-2 under the Vanilla buff rule.
+#   3. The gate is our own MR_great_khan character modifier, where
+#      vanilla gates on timmy_wants_to_play. Same idea: the claim
+#      is the KHAN's, not the state's.
+#
+# NOT copied: vanilla's ongoing "anything you conquer here is
+# automatically a core" rider. That lives in vanilla's
+# on_location_changed_owner (_hardcoded.txt:4489), an on_action
+# defined with an effect block — redefining that name in a mod
+# would replace the vanilla block wholesale and take a great deal
+# of unrelated location-transfer logic down with it. The situations
+# do the same job in their own on_monthly instead, off the
+# mr_core_region variable this action sets.
+# =================================================================
+MR_select_core_region = {
+	type = situation
+	potential = {
+		scope:actor = {
+			OR = {
+				tag = MGO
+				tag = MGE
+			}
+		}
+	}
+	price = price:MR_select_core_region_price
+	allow = {
+		scope:actor = {
+			is_rebel_country = no
+			custom_tooltip = {
+				text = MR_has_NOT_selected_core_region_tt
+				NOT = {
+					has_variable = mr_core_region
+				}
+			}
+			custom_tooltip = {
+				text = MR_needs_a_great_khan_tt
+				has_ruler = yes
+				ruler ?= {
+					has_character_modifier = MR_great_khan
+				}
+			}
+			at_war = no
+		}
+	}
+	automation_tick = never
+	automation_tick_frequency = 12
+	select_trigger = {
+		looking_for_a = situation
+		target_flag = recipient
+		name = "choose_situation"
+		column = {
+			data = name
+		}
+		visible = {
+			OR = {
+				situation:mongol_resurgence = this
+				situation:mongol_imperial = this
+			}
+			situation_is_active = yes
+		}
+	}
+	select_trigger = {
+		looking_for_a = region
+		target_flag = target
+		name = "MR_select_core_region_select_region"
+		none_available_msg_key = "MR_select_core_region_no_regions"
+		column = {
+			data = name
+		}
+		column = {
+			data = population
+		}
+		visible = {
+			any_location_in_region = {
+				owner ?= scope:actor
+				percent >= 0.4
+			}
+		}
+	}
+	effect = {
+		if = {
+			limit = {
+				exists = scope:target
+			}
+			custom_tooltip = {
+				text = MR_select_core_region_tt_specific
+				scope:actor = {
+					set_variable = {
+						name = mr_core_region
+						value = scope:target
+					}
+				}
+				scope:target ?= {
+					if = {
+						limit = {
+							scope:actor = {
+								has_ruler = yes
+								ruler ?= {
+									has_character_modifier = MR_great_khan
+								}
+							}
+						}
+						every_location_in_region = {
+							limit = {
+								owner ?= scope:actor
+							}
+							change_integration_level = core
+							add_location_modifier = {
+								modifier = MR_khans_own_pasture
+								years = -1
+								mode = add_and_extend
+							}
+						}
+					}
+				}
+			}
+		}
+		else = {
+			custom_tooltip = MR_select_core_region_tt
+		}
+	}
+	ai_will_do = {
+		add = 25
+		add = {
+			# The heartland first: an AI khan who names anywhere else as
+			# his own pasture is not the khan this mod is about.
+			if = {
+				limit = {
+					exists = scope:target
+					scope:target = region:mongolia_region
+				}
+				value = 100
+			}
+		}
+		add = {
+			if = {
+				limit = {
+					exists = scope:target
+					scope:target = region:north_china_region
+				}
+				value = 50
+			}
+		}
+	}
+}

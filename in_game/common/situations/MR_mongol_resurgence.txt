@@ -74,9 +74,7 @@ mongol_resurgence = {
 					has_culture_group = culture_group:mongolian_group
 				}
 				government_type = government_type:steppe_horde
-				any_owned_location = {
-					region = region:mongolia_region
-				}
+				has_presence_in = region:mongolia_region
 			}
 			save_scope_as = mr_first_claimant
 		}
@@ -183,6 +181,69 @@ mongol_resurgence = {
 				}
 			}
 		}
+		# --- THE WORLD REACTS (PD pd_brandenburg.101/102 shape) ---
+		# SPECTATORS: a stake in the eastern theatre, but no Mongolian
+		# ground and not one of the steppe powers that just got .10.
+		every_country = {
+			limit = {
+				OR = {
+					has_presence_in = sub_continent:east_asia
+					has_presence_in = sub_continent:north_asia
+					has_presence_in = sub_continent:central_asia
+				}
+				NOT = {
+					has_presence_in = region:mongolia_region
+				}
+				# Mirrors the mr_dominance.10 recipient set ABOVE exactly,
+				# capital filter included. Without the capital clause a
+				# Mongol horde seated outside the eastern steppe was
+				# excluded here while never having received .10 — it heard
+				# nothing at all.
+				NOT = {
+					AND = {
+						culture = {
+							has_culture_group = culture_group:mongolian_group
+						}
+						government_type = government_type:steppe_horde
+						capital ?= {
+							OR = {
+								sub_continent = sub_continent:east_asia
+								sub_continent = sub_continent:north_asia
+							}
+						}
+					}
+				}
+			}
+			trigger_event_non_silently = mr_dominance.20
+		}
+		# VICTIMS: they are standing on the heartland the claim is for.
+		# The steppe powers that received .10 are excluded, so nobody
+		# gets told twice about the same news.
+		every_country = {
+			limit = {
+				has_presence_in = region:mongolia_region
+				# Mirrors the mr_dominance.10 recipient set ABOVE exactly,
+				# capital filter included. Without the capital clause a
+				# Mongol horde seated outside the eastern steppe was
+				# excluded here while never having received .10 — it heard
+				# nothing at all.
+				NOT = {
+					AND = {
+						culture = {
+							has_culture_group = culture_group:mongolian_group
+						}
+						government_type = government_type:steppe_horde
+						capital ?= {
+							OR = {
+								sub_continent = sub_continent:east_asia
+								sub_continent = sub_continent:north_asia
+							}
+						}
+					}
+				}
+			}
+			trigger_event_non_silently = mr_dominance.21
+		}
 	}
 	on_monthly = {
 		change_variable = {
@@ -193,77 +254,79 @@ mongol_resurgence = {
 			name = mr_conquest_cooldown
 			add = 1
 		}
-		# ========== PANEL SCORES (PD PD_bra_score / PD_teu_score) ==========
-		# Strength scores for the two header countries: military strength
-		# plus income plus a fifth of prestige. The .gui reads
-		# MR_mgo_score / MR_rival_score off the situation scope.
-		if = {
+		# ========== THE KHAN'S OWN PASTURE ==========
+		# The ongoing half of the MR_select_core_region action. Vanilla
+		# does this in on_location_changed_owner (_hardcoded.txt:4489),
+		# but that on_action is defined with an effect block and
+		# redefining the name in a mod would replace the vanilla block
+		# outright — so the situation does it monthly instead. Anything
+		# the claimant has taken inside its chosen region since last
+		# month becomes core, and the Khan's death ends the privilege
+		# exactly as it ends Timur's (_hardcoded.txt:3517).
+		every_country = {
 			limit = {
-				country_exists = var:mr_leading_country
+				OR = {
+					tag = MGO
+					tag = MGE
+				}
+				has_variable = mr_core_region
 			}
-			var:mr_leading_country = {
-				save_scope_as = mr_leading_scope
-			}
+			# Saved rather than reached with prev.prev: that construct has
+			# ZERO uses anywhere in vanilla, and this file does not invent
+			# syntax. save_scope_as + scope: is the attested way down.
+			save_scope_as = mr_pasture_holder
 			if = {
 				limit = {
-					country_exists = scope:mr_leading_scope
-				}
-				set_variable = {
-					name = MR_mgo_score
-					value = scope:mr_leading_scope.military_strength
-				}
-				change_variable = {
-					name = MR_mgo_score
-					add = scope:mr_leading_scope.monthly_income_trade_and_tax
-				}
-				scope:mr_leading_scope = {
-					set_variable = {
-						name = mr_temp_prestige
-						value = prestige
-					}
-					change_variable = {
-						name = mr_temp_prestige
-						multiply = 0.2
+					has_ruler = yes
+					ruler ?= {
+						has_character_modifier = MR_great_khan
 					}
 				}
-				change_variable = {
-					name = MR_mgo_score
-					add = scope:mr_leading_scope.var:mr_temp_prestige
+				var:mr_core_region = {
+					# TWO passes, deliberately not one. Coring is a
+					# one-way door, so it is limited to what is not core
+					# yet; the modifier is NOT, so it is applied on its
+					# own terms to every owned location that lacks it.
+					# Folding them together (one limit, both effects) was
+					# a real bug: the else branch below strips the
+					# modifier from every location, and a single-pass
+					# version could only re-add it to locations that were
+					# still un-cored — which, after the first pass, is
+					# none of them. The pasture modifier was lost for
+					# good after any interregnum tick.
+					every_location_in_region = {
+						limit = {
+							owner ?= scope:mr_pasture_holder
+							NOT = {
+								integration_level = core
+							}
+						}
+						change_integration_level = core
+					}
+					every_location_in_region = {
+						limit = {
+							owner ?= scope:mr_pasture_holder
+							NOT = {
+								has_location_modifier = MR_khans_own_pasture
+							}
+						}
+						add_location_modifier = {
+							modifier = MR_khans_own_pasture
+							years = -1
+							mode = add_and_extend
+						}
+					}
 				}
 			}
-		}
-		if = {
-			limit = {
-				country_exists = var:mr_rival_country
-			}
-			var:mr_rival_country = {
-				save_scope_as = mr_rival_scope
-			}
-			if = {
-				limit = {
-					country_exists = scope:mr_rival_scope
-				}
-				set_variable = {
-					name = MR_rival_score
-					value = scope:mr_rival_scope.military_strength
-				}
-				change_variable = {
-					name = MR_rival_score
-					add = scope:mr_rival_scope.monthly_income_trade_and_tax
-				}
-				scope:mr_rival_scope = {
-					set_variable = {
-						name = mr_temp_prestige
-						value = prestige
+			# No Great Khan on the throne: the pasture is just land again.
+			else = {
+				var:mr_core_region = {
+					every_location_in_region = {
+						limit = {
+							has_location_modifier = MR_khans_own_pasture
+						}
+						remove_location_modifier = MR_khans_own_pasture
 					}
-					change_variable = {
-						name = mr_temp_prestige
-						multiply = 0.2
-					}
-				}
-				change_variable = {
-					name = MR_rival_score
-					add = scope:mr_rival_scope.var:mr_temp_prestige
 				}
 			}
 		}
@@ -292,9 +355,7 @@ mongol_resurgence = {
 							is_subject_of = prev
 						}
 						defensive_alliance_strength < c:MGO.offensive_alliance_strength
-						any_owned_location = {
-							region = region:mongolia_region
-						}
+						has_presence_in = region:mongolia_region
 					}
 					max = 1
 					order_by = {
@@ -388,9 +449,7 @@ mongol_resurgence = {
 							tag = MGO
 							is_subject_of = c:MGO
 							NOT = {
-								any_owned_location = {
-									region = region:mongolia_region
-								}
+								has_presence_in = region:mongolia_region
 							}
 						}
 					}
@@ -430,9 +489,7 @@ mongol_resurgence = {
 			}
 			every_country = {
 				limit = {
-					any_owned_location = {
-						region = region:mongolia_region
-					}
+					has_presence_in = region:mongolia_region
 				}
 				trigger_event_non_silently = mr_dominance.101
 			}
@@ -448,9 +505,7 @@ mongol_resurgence = {
 			}
 			every_country = {
 				limit = {
-					any_owned_location = {
-						region = region:mongolia_region
-					}
+					has_presence_in = region:mongolia_region
 				}
 				trigger_event_non_silently = mr_dominance.102
 			}
@@ -487,6 +542,19 @@ mongol_resurgence = {
 			}
 			c:MGO = {
 				trigger_event_non_silently = mr_dominance.104
+				# The claimant sheds any alliance with a power standing on
+				# the heartland, so the railroad's declare event is not
+				# blocked by its own treaties (PD_events.txt:1126 shape).
+				# Fired here, not at on_start: MGO does not exist then.
+				# AI ONLY, like the Phase 2/3 versions — a human player's
+				# treaties are not dissolved without asking, and a human
+				# claimant is not blocked by them in the first place.
+				if = {
+					limit = {
+						is_ai = yes
+					}
+					trigger_event_non_silently = mr_dominance.28
+				}
 				# The war-preparation lock, PD-style: the AI claimant
 				# must not freelance-declare wars — the railroad event
 				# declares for it. Never applied to a human player.
@@ -646,9 +714,7 @@ mongol_resurgence = {
 							has_culture_group = culture_group:mongolian_group
 						}
 						government_type = government_type:steppe_horde
-						any_owned_location = {
-							region = region:mongolia_region
-						}
+						has_presence_in = region:mongolia_region
 						is_subject = no
 						at_war = no
 						is_ai = yes
@@ -660,9 +726,7 @@ mongol_resurgence = {
 							has_culture_group = culture_group:mongolian_group
 						}
 						government_type = government_type:steppe_horde
-						any_owned_location = {
-							region = region:mongolia_region
-						}
+						has_presence_in = region:mongolia_region
 						is_subject = no
 						at_war = no
 						is_ai = yes
@@ -682,9 +746,7 @@ mongol_resurgence = {
 							has_culture_group = culture_group:mongolian_group
 						}
 						government_type = government_type:steppe_horde
-						any_owned_location = {
-							region = region:mongolia_region
-						}
+						has_presence_in = region:mongolia_region
 						is_subject = no
 						is_ai = yes
 					}
@@ -695,9 +757,7 @@ mongol_resurgence = {
 							has_culture_group = culture_group:mongolian_group
 						}
 						government_type = government_type:steppe_horde
-						any_owned_location = {
-							region = region:mongolia_region
-						}
+						has_presence_in = region:mongolia_region
 						is_subject = no
 						is_ai = yes
 					}
@@ -716,9 +776,7 @@ mongol_resurgence = {
 							has_culture_group = culture_group:mongolian_group
 						}
 						government_type = government_type:steppe_horde
-						any_owned_location = {
-							region = region:mongolia_region
-						}
+						has_presence_in = region:mongolia_region
 					}
 				}
 				random_country = {
@@ -727,9 +785,7 @@ mongol_resurgence = {
 							has_culture_group = culture_group:mongolian_group
 						}
 						government_type = government_type:steppe_horde
-						any_owned_location = {
-							region = region:mongolia_region
-						}
+						has_presence_in = region:mongolia_region
 					}
 					save_scope_as = mr_emergence_candidate
 					overlord ?= {
@@ -798,9 +854,7 @@ mongol_resurgence = {
 						tag = MGO
 						is_subject_of = c:MGO
 					}
-					any_owned_location = {
-						region = region:mongolia_region
-					}
+					has_presence_in = region:mongolia_region
 				}
 				make_subject_of = {
 					target = c:MGO
@@ -809,6 +863,174 @@ mongol_resurgence = {
 			}
 			c:MGO = {
 				trigger_event_silently = mr_dominance.999
+			}
+		}
+		# NOTE ON PLACEMENT: the two panel blocks sit at the END of
+		# on_monthly. Everything that can change what they should show —
+		# Beat 104 pointing mr_leading_country at the newborn MGO, the
+		# birth failsafe creating it, the completion failsafe handing over
+		# the heartland — runs below them in this same tick. Computed at
+		# the top, the panel lagged a month behind its own situation; that
+		# showed up in Phase 2 testing as a progress bar reading 0 while
+		# every end requirement was already green.
+		# ========== PANEL HEADER: RIVAL MUST NOT BE THE CLAIMANT ==========
+		# mr_rival_country used to be picked once, in on_start, and never
+		# looked at again. The failsafe then hands the banner to the
+		# STRONGEST candidate — which is exactly the country on_start had
+		# already saved as the rival — and Beat 104 points
+		# mr_leading_country at the same country. Both header variables
+		# then held one country and the panel drew MGO twice, once as
+		# claimant and once as its own rival.
+		#
+		# So the rival is re-picked every month, with the current leader
+		# and both claimant tags excluded. Same selection idiom as
+		# on_start (war_of_religions.txt:54-59), same sub-continent cap.
+		# The tag exclusions are belt and braces. They were REQUIRED when
+		# this block ran at the top of on_monthly: Beat 104 pointed
+		# mr_leading_country at the newborn MGO further down the same
+		# tick, so for one month the leader variable still named the
+		# pre-birth claimant and only the tag test kept MGO out of its
+		# own rival slot. The block now runs last, after Beat 104 and
+		# after the birth failsafe, so the leader exclusion alone would
+		# do — the tag tests stay because they cost nothing and they
+		# survive any future reordering.
+		if = {
+			limit = {
+				country_exists = var:mr_leading_country
+			}
+			var:mr_leading_country = {
+				save_scope_as = mr_monthly_leader
+			}
+			ordered_country = {
+				limit = {
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
+					government_type = government_type:steppe_horde
+					NOT = {
+						this = scope:mr_monthly_leader
+					}
+					NOR = {
+						tag = MGO
+						tag = MGE
+					}
+					capital ?= {
+						OR = {
+							sub_continent = sub_continent:east_asia
+							sub_continent = sub_continent:north_asia
+						}
+					}
+				}
+				order_by = military_strength
+				max = 1
+				check_range_bounds = no
+				save_scope_as = mr_monthly_rival
+			}
+			if = {
+				limit = {
+					country_exists = scope:mr_monthly_rival
+				}
+				set_variable = {
+					name = mr_rival_country
+					value = scope:mr_monthly_rival
+				}
+			}
+			# No eligible rival left on the board. The slot is cleared
+			# ONLY if what it still holds is the claimant itself — an
+			# empty header slot is better than a duplicated flag, but a
+			# stale-yet-distinct rival is better than an empty one.
+			else_if = {
+				limit = {
+					has_variable = mr_rival_country
+					country_exists = var:mr_rival_country
+					var:mr_rival_country = {
+						this = scope:mr_monthly_leader
+					}
+				}
+				remove_variable = mr_rival_country
+				# The panel would otherwise keep drawing the departed
+				# rival's last score next to an empty slot.
+				set_variable = {
+					name = MR_rival_score
+					value = 0
+				}
+			}
+		}
+		# ========== PANEL SCORES (PD PD_bra_score / PD_teu_score) ==========
+		# Strength scores for the two header countries: military strength
+		# plus income plus a fifth of prestige. The .gui reads
+		# MR_mgo_score / MR_rival_score off the situation scope.
+		if = {
+			limit = {
+				country_exists = var:mr_leading_country
+			}
+			var:mr_leading_country = {
+				save_scope_as = mr_leading_scope
+			}
+			if = {
+				limit = {
+					country_exists = scope:mr_leading_scope
+				}
+				set_variable = {
+					name = MR_mgo_score
+					value = scope:mr_leading_scope.military_strength
+				}
+				change_variable = {
+					name = MR_mgo_score
+					add = scope:mr_leading_scope.monthly_income_trade_and_tax
+				}
+				scope:mr_leading_scope = {
+					set_variable = {
+						name = mr_temp_prestige
+						value = prestige
+					}
+					change_variable = {
+						name = mr_temp_prestige
+						multiply = 0.2
+					}
+				}
+				change_variable = {
+					name = MR_mgo_score
+					add = scope:mr_leading_scope.var:mr_temp_prestige
+				}
+			}
+		}
+		if = {
+			limit = {
+				# has_variable first: the rival slot can now be CLEARED
+				# above when the only candidate left was the claimant.
+				has_variable = mr_rival_country
+				country_exists = var:mr_rival_country
+			}
+			var:mr_rival_country = {
+				save_scope_as = mr_rival_scope
+			}
+			if = {
+				limit = {
+					country_exists = scope:mr_rival_scope
+				}
+				set_variable = {
+					name = MR_rival_score
+					value = scope:mr_rival_scope.military_strength
+				}
+				change_variable = {
+					name = MR_rival_score
+					add = scope:mr_rival_scope.monthly_income_trade_and_tax
+				}
+				scope:mr_rival_scope = {
+					set_variable = {
+						name = mr_temp_prestige
+						value = prestige
+					}
+					change_variable = {
+						name = mr_temp_prestige
+						multiply = 0.2
+					}
+				}
+				change_variable = {
+					name = MR_rival_score
+					add = scope:mr_rival_scope.var:mr_temp_prestige
+				}
 			}
 		}
 	}
@@ -859,31 +1081,13 @@ mongol_resurgence = {
 		}
 	}
 	on_ended = {
-		# The horde is unified but has not yet turned outward — the
-		# dormant interval between Phase 1 and Phase 2. AI only, like
-		# PD_the_sleeping_giant: it carries blocked_from_declaring_war,
-		# which must never be forced onto a human player.
-		# SUCCESS ONLY: Phase 2 is what lifts this lock, and Phase 2
-		# never starts after a failed Phase 1 (mr_railroad_failed) —
-		# granting it on the failure path war-locked the AI claimant
-		# for the rest of the campaign. The trigger is still evaluable
-		# here because Phase 1 ends with no tag switch.
-		if = {
-			limit = {
-				mr_resurgence_end_trigger = yes
-				country_exists = c:MGO
-				c:MGO = {
-					is_ai = yes
-				}
-			}
-			c:MGO = {
-				add_country_modifier = {
-					modifier = MR_the_sleeping_horde
-					years = -1
-					mode = replace
-				}
-			}
-		}
+		# NOTE: there is deliberately no dormant-interval modifier here.
+		# PD needed PD_the_sleeping_giant because its phases are not
+		# back-to-back; ours are — mr_can_start_imperial fires on
+		# has_global_variable = mr_phase_one_complete, which this very
+		# on_ending sets, so Phase 2 opens on the next evaluation. A
+		# blocked_from_declaring_war modifier in that gap bought nothing
+		# and read as un-Mongol besides.
 		remove_variable = mr_resurgence_momentum
 		remove_global_variable = mr_beat_100_fired
 		remove_global_variable = mr_beat_101_fired

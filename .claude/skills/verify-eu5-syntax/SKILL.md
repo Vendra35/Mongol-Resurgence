@@ -21,12 +21,16 @@ not "other Paradox games do this", not "MR already uses it" — MR is not eviden
 
 ## Reference paths
 
-From the repo root, the read-only reference is one level up. The repo is
-shared between two machines with different layouts — DETECT, never assume
-(same snippet as CLAUDE.md and `tools/verify_mod.py`):
+On Windows vanilla is read straight from the Steam install; on macOS it sits in
+a wrapper folder one level above the repo. The repo is shared between two
+machines with different layouts — DETECT, never assume (same snippet as
+CLAUDE.md and `tools/verify_mod.py`):
 
 ```bash
-if [ -d "../EU5-Vanilla/game" ]; then
+STEAM_VAN="/e/SteamLibrary/steamapps/common/Europa Universalis V/game"
+if [ -f "$STEAM_VAN/in_game/map_data/definitions.txt" ]; then
+	VANILLA="$STEAM_VAN"; PD="../The Prussian Destiny"
+elif [ -f "../EU5-Vanilla/game/in_game/map_data/definitions.txt" ]; then
 	VANILLA="../EU5-Vanilla/game"; PD="../The Prussian Destiny"
 else
 	VANILLA="../Reference EU5 vanilla and Prussian Destiny/Europa Universalis V/game"
@@ -34,8 +38,13 @@ else
 fi
 ```
 
-Never write anything under `$VANILLA` or `$PD` — `$VANILLA` is a junction to the real game install, 
-`$PD` is the working Prussian Destiny mod folder.
+Probe a known FILE, not the directory: the legacy `EU5-Vanilla` junction has
+been emptied by OneDrive before, and an empty directory passes `-d` while every
+grep against it returns nothing — so a citation check would pass vacuously with
+zero hits, which is the exact failure this skill exists to prevent.
+
+Never write anything under `$VANILLA` or `$PD` — `$VANILLA` is the real game
+install, `$PD` is the working Prussian Destiny mod folder.
 
 ## Procedure
 

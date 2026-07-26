@@ -130,23 +130,9 @@ MR_mongol_preparing_for_conquest = {
 	blocked_from_declaring_war = yes
 }
 
-# --- Sleeping Giant (Situation 1 -> 2 transition) ---
-MR_the_sleeping_horde = {
-	game_data = {
-		category = country
-	}
-	tax_income_efficiency = 0.1
-	global_estate_max_tax = 0.1
-	global_estate_target_satisfaction = 0.1
-	global_pop_promotion_speed_modifier = 1
-	global_monthly_development = 0.002
-	global_production_efficiency = 0.2
-	global_monthly_prosperity = 0.002
-	global_population_growth = 0.01
-	manpower_importance_modifier = 50
-	blocks_country_formation = yes
-	blocked_from_declaring_war = yes
-}
+# (MR_the_sleeping_horde was removed: Phase 2 starts the moment Phase 1
+# ends, so there was no dormant interval for it to cover. See the note in
+# MR_mongol_resurgence.txt's on_ended.)
 
 # --- Situation 3: Pax Mongolica ---
 MR_pax_mongolica = {
@@ -401,4 +387,19 @@ MR_dzungar_legacy = {
 	tax_income_efficiency = 0.1
 	monthly_rebel_growth = -0.0025
 	num_local_governors = 1
+}
+
+# --- The Khan's Own Pasture (LOCATION modifier) -------------------
+# Granted by the MR_select_core_region action to every location the
+# claimant already holds in its chosen region. category = location,
+# not country — the modifier types below are the local_* family
+# (vanilla's own equivalent is rot_timurs_core_region,
+# main_menu/common/static_modifiers/location.txt:2043).
+MR_khans_own_pasture = {
+	game_data = {
+		category = location
+	}
+	local_unrest = -0.2
+	local_devastation_recovery = 0.005
+	local_monthly_prosperity = 0.001
 }

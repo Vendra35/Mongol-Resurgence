@@ -46,9 +46,16 @@ MR_war_goal_steppe_unification = {
 # Covers samarkand (khorasan), dadu (north_china), xinjiang_region
 # (a Phase 2 goal region since the corridor was made contiguous)
 # and mongolia_region (so a Karakorum lost after Phase 1 stays
-# legally retakable). The three southern China regions stay in
-# scope as conquest freedom for the Ming hegemony war, though the
-# Phase 3 goal no longer demands the old southern seats.
+# legally retakable).
+#
+# The eastern conquest is split across the two phases the way the
+# history ran, so this one wargoal has to span both:
+#   Phase 2 goals  manchuria (Jin, 1234), tibet (Yuan protectorate,
+#                  1240s), north_china, xinjiang, khorasan, plus the
+#                  bursol/omsk/kulykol border areas
+#   Phase 3 goals  east/west/south China (Song, 1279) and korea,
+#                  which the end trigger accepts as a SUBJECT
+#                  (Goryeo submitted in 1259 and was never annexed)
 MR_war_goal_silk_road = {
 	type = superiority
 	attacker = {
@@ -66,6 +73,17 @@ MR_war_goal_silk_road = {
 				scope:location.region = region:west_china_region
 				scope:location.region = region:south_china_region
 				scope:location.region = region:tibet_region				## New addition for immersion
+				# Phase 2 goal regions: Manchuria (Jin, 1234) and the
+				# Siberian border areas that square off the northern
+				# frontier. Tibet above is a Phase 2 goal too.
+				scope:location.region = region:manchuria_region
+				scope:location.area = area:bursol_area
+				scope:location.area = area:omsk_area
+				scope:location.area = area:kulykol_area
+				# Phase 3 goal: Korea, which the end trigger accepts as
+				# a SUBJECT — hence subjugation below matters more than
+				# conquest here, but both stay legal.
+				scope:location.region = region:korea_region
 			}
 		}
 		allowed_subjugation = {
@@ -79,6 +97,11 @@ MR_war_goal_silk_road = {
 				scope:loser.capital.region = region:west_china_region
 				scope:loser.capital.region = region:south_china_region
 				scope:loser.capital.region = region:tibet_region				## New addition for immersion
+				scope:loser.capital.region = region:manchuria_region
+				scope:loser.capital.area = area:bursol_area
+				scope:loser.capital.area = area:omsk_area
+				scope:loser.capital.area = area:kulykol_area
+				scope:loser.capital.region = region:korea_region
 			}
 		}
 	}
@@ -110,6 +133,10 @@ MR_war_goal_westward_advance = {
 				scope:location.region = region:ural_region
 				scope:location.region = region:persia_region
 				scope:location.region = region:anatolia_region
+				# The Caucasus is a Phase 3 goal (mr_p3_pontic_cleared) and
+				# was reachable by no wargoal at all — the exact coverage
+				# failure the rule at the top of this file warns about.
+				scope:location.region = region:caucasus_region
 				scope:location.area = area:iraq_arabi_area
 				scope:location.area = area:armenian_highlands_area
 			}
@@ -121,6 +148,7 @@ MR_war_goal_westward_advance = {
 				scope:loser.capital.region = region:ural_region
 				scope:loser.capital.region = region:persia_region
 				scope:loser.capital.region = region:anatolia_region
+				scope:loser.capital.region = region:caucasus_region
 				scope:loser.capital.area = area:iraq_arabi_area
 				scope:loser.capital.area = area:armenian_highlands_area
 			}
