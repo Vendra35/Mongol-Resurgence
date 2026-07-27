@@ -1,0 +1,27 @@
+﻿# =================================================================
+# MONGOL RESURGENCE - MODIFIER ICONS
+# =================================================================
+# Fixes `modifier_type.cpp:1294 Missing Icon for Modifier`.
+#
+# The icon is NOT a field on the modifier type and NOT purely a
+# filename convention — it is declared here, in
+# main_menu/common/modifier_icons/ (vanilla ships 4912 entries across
+# 00_modifier_icons.txt and 01_byz.txt). Format and fallback:
+#
+#   <modifier_type> = {
+#       positive = "…/icon.dds"   # used if >= 0, or if no negative
+#       negative = "…/icon.dds"   # optional, used if < 0
+#   }
+#
+# The path may point at ANY existing .dds, including one that belongs
+# to a different modifier — vanilla does this itself
+# (build_hippodrome_price_cost_modifier borrows expand_rgo's icon,
+# rot_reform_into_monarchy borrows rot_select_core_region's). So a mod
+# does not have to author art to clear the error.
+#
+# We borrow vanilla's own core-region-cost icon, which is exactly the
+# concept our action spends on.
+# =================================================================
+MR_select_core_region_price_cost_modifier = {
+	positive = "gfx/interface/icons/modifier_types/rot_select_core_region_price_cost_modifier.dds"
+}

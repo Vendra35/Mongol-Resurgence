@@ -69,6 +69,47 @@ Rules that cost us real bugs:
 - metadata.json: `name, id, version, supported_game_version, short_description,
   tags, relationships, game_custom_data` — not EU4's `short_desc`/`dependencies`.
 
+## 2b. Total conversion: where the world actually comes from
+
+Neither of the two total-conversion mods studied repaints the map. The world at
+game start is `main_menu/setup/start/`, a numbered pipeline of 25 files that a
+mod overrides wholesale:
+
+```
+02_core  03_markets  04_dynasties  05_characters  06_pops
+07_cities_and_buildings  08_institutions  09_roads  10_countries  11_art
+12_diplomacy  13_religion  14_development  15_international_organizations
+16_wars  18_opinions  19_diseases  20_rivals  21_locations  22_situations
+23_colonies  24_town_rights  25_area_preferences  26_ai_personalities  27_armies
+```
+
+A country is placed by listing **vanilla location names**:
+
+```
+countries = { countries = {
+	NOR = { own_control_core = { bergen oslo nidaros stavanger … } }
+} }
+```
+
+Anything no country claims simply stays empty — which is how a mod ships a
+playable world covering one region only.
+
+Three layers, in increasing cost:
+1. **Replace `setup/start`** — required, and sufficient for a playable world.
+2. **Replace `map_data/location_templates.txt`** — optional fidelity. One line
+   per location (28,573 in vanilla) setting `topography`, `vegetation`,
+   `climate`, `religion`, `culture`, `raw_material`,
+   `natural_harbor_suitability`. Whole-file override, so it must be re-merged
+   whenever a patch touches it.
+3. **Repaint the map** — new location geometry. Neither mod did this; budget it
+   as a separate project, not a prerequisite.
+
+Move the timeframe with `common/defines` (`START_DATE`, `END_DATE`), and keep
+the engine calendar POSITIVE — vanilla timers, cooldowns, AI scheduling,
+situations, institutions and saves assume positive years in several places. If
+the setting is BC, keep the engine date internal and drive the DISPLAYED date
+from country variables.
+
 ## 3. Situations — the campaign skeleton
 
 `common/situations/readme.txt` **inside the vanilla tree** is the authoritative
@@ -420,6 +461,40 @@ matching nothing, and line-grep on multi-line constructs. Rules:
 - **Every check prints its item count** — a check that can only print nothing is
   indistinguishable from a check that ran on nothing.
 - Prove a scan on a known positive before trusting its negative.
+
+**Make the game tell you instead of guessing.** Two console commands — run,
+captured and now checked into this repo under
+`docs/EU5-Vanilla-Script-Docs/` — remove most of the guesswork this section is
+about:
+
+| Command | Wiki description | Gives you |
+|---|---|---|
+| `script_docs` (alias `script_documentation`) | "Prints script documentation" | The engine's own list of triggers and effects — the authority the citation rule is really appealing to |
+| `dump_data_types` (alias `DumpDataTypes`) | "dumps the registered data types" | The GUI data types and their methods — what `Country.`, `Government.`, `Character.` actually expose |
+
+Both need `-debug_mode`; output lands in the user folder
+(`Documents/Paradox Interactive/Europa Universalis V/`). What you get:
+
+| File | Contains | Format |
+|---|---|---|
+| `triggers.log` | 1798 triggers | `## name`, description, `Traits:`, `**Supported Scopes**: …` |
+| `effects.log` | 1534 effects | same |
+| `event_targets.log` | 289 scope links | `### name`, `Input Scopes:`, `Output Scopes:` |
+| `modifiers.log` | 2436 modifier tags | `Tag: name, Categories: …` |
+| `on_actions.log` | every hook | `name:`, `From Code:`, `Expected Scope:` |
+| `data_types/*.txt` | GUI/promote types, 2.9 MB | `dump_data_types` output |
+
+**Run these once per game version and check them in.** Grepping vanilla only
+ever showed what someone happened to write; this shows what is *legal*. The
+scope bug that cost this mod 120 wrong call sites is one lookup:
+`is_in_scripted_geography` → *location, province_definition, area, region,
+sub_continent, continent*; `has_presence_in` → *country*.
+
+One caution learned immediately: `modifiers.log` gives every tag a `Categories`
+list that always includes `All`, and `siege_ability` is declared `Unit` while
+working fine inside a `category = country` static modifier. The category says
+what a modifier AFFECTS, not where it may be declared — so do not build a
+category check on it. A check that cannot fail is worse than none.
 
 The harness that guards this mod (run after every change; adapt freely) checks:
 braces balanced per file · situation fields ⊆ documented set · every referenced

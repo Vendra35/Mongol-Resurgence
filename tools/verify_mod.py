@@ -393,6 +393,67 @@ for p_, s_ in code.items():
                          f"note 'direct' in a comment if that is really the intent")
 check("subjecthood walks the whole chain", len(code), probs, min_count=5)
 
+# ---- everything we call exists in the ENGINE'S OWN documentation ----
+# docs/EU5-Vanilla-Script-Docs/ is the output of the console commands
+# `script_docs` and `dump_data_types`, run against the shipped game. It is the
+# authority the citation rule was always appealing to: 1798 triggers and 1534
+# effects, each with its **Supported Scopes**, 2436 modifier tags with their
+# categories, plus event targets and on_actions.
+#
+# Regenerate after a game patch: launch with -debug_mode, open the console,
+# run `script_docs` then `dump_data_types`, and copy the logs from the user
+# folder over this directory.
+BS = chr(92)
+_SD = MOD + "/docs/EU5-Vanilla-Script-Docs"
+if os.path.isdir(_SD):
+    def _headed(fname, lvl):
+        out = {}
+        cur = None
+        for _l in read(_np(os.path.join(_SD, fname))).split(chr(10)):
+            if _l.startswith(lvl) and not _l.startswith(lvl + "#"):
+                cur = _l[len(lvl):].strip(); out[cur] = []
+            elif cur is not None:
+                out[cur].append(_l)
+        return out
+
+    _trig = _headed("triggers.log", "## ")
+    _eff = _headed("effects.log", "## ")
+    _et = _headed("event_targets.log", "### ")
+    _mods = {}
+    for _l in read(_np(os.path.join(_SD, "modifiers.log"))).split(chr(10)):
+        _m = re.match(r"Tag: ([a-z_0-9]+), Categories: (.*)", _l.strip())
+        if _m:
+            _mods[_m.group(1)] = {c.strip().lower() for c in _m.group(2).split(",") if c.strip()}
+    _onact = set(re.findall(r"^([a-z_0-9]+):$", read(_np(os.path.join(_SD, "on_actions.log"))), re.M))
+
+    # 1. modifier tags exist.
+    # NOT their category: every tag in modifiers.log also carries "All", so a
+    # category comparison can never fire — and it would be wrong anyway.
+    # `siege_ability` is declared Unit yet works inside a category = country
+    # static modifier here, so the category describes what a modifier AFFECTS,
+    # not where it may be declared. A check that cannot fail is worse than no
+    # check: it implies coverage it does not have.
+    probs, count = [], 0
+    _msrc = strip_comments(read(MOD + "/main_menu/common/static_modifiers/MR_modifiers.txt"))
+    for _m in re.finditer(r"^([A-Za-z_0-9]+) = " + BS + "{(.*?)^" + BS + "}", _msrc, re.M | re.S):
+        for _line in _m.group(2).split(chr(10)):
+            _k = re.match(r"[ " + BS + "t]*([a-z_0-9]+) = ", _line)
+            if not _k or _k.group(1) in ("game_data", "category"): continue
+            count += 1
+            if _k.group(1) not in _mods:
+                probs.append(f"{_m.group(1)}: '{_k.group(1)}' is not a modifier tag the engine knows")
+    check("modifier tags exist in engine docs", count, probs, min_count=50)
+
+    # 2. on_action hooks
+    probs = []
+    _oa = strip_comments(read(MOD + "/in_game/common/on_action/MR_on_actions.txt"))
+    _hooks = set(re.findall(r"^([a-z_0-9]+) = " + BS + "{", _oa, re.M))
+    _own = _hooks & set(re.findall(r"^[ " + BS + "t]+([a-z_0-9]+)$", _oa, re.M))
+    for _h in sorted(_hooks - _own):
+        if _h not in _onact:
+            probs.append(f"{_h} is not an on_action the engine declares")
+    check("on_action hooks vs engine docs", len(_hooks), probs, min_count=2)
+
 # ---- geography trigger matches the scope it sits in ----
 # is_in_scripted_geography is a LOCATION trigger; has_presence_in is the
 # COUNTRY one. Swapping them is silent in the harness and loud in game:

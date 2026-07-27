@@ -272,6 +272,19 @@ AI find-target and fallback, failsafe handover, `tooltip`/
 
 
 ### Verification
+- **`docs/EU5-Vanilla-Script-Docs/` is the authority.** It is the console output
+  of `script_docs` and `dump_data_types` run against the shipped game: 1798
+  triggers and 1534 effects **each with its `**Supported Scopes**`**, 2436
+  modifier tags, 289 event targets with input/output scopes, and the on_action
+  list with expected scopes. Look there FIRST — before grepping vanilla, which
+  only ever showed what someone happened to use, never what is legal.
+  Regenerate after a game patch: launch with `-debug_mode`, console
+  `script_docs` then `dump_data_types`, copy the logs from the user folder.
+  Two harness checks already read it.
+  Worked example, the bug it would have prevented: `is_in_scripted_geography`
+  → *Supported Scopes: location, province_definition, area, region,
+  sub_continent, continent*; `has_presence_in` → *country*. The engine's error
+  message was quoting that exact list back at us.
 - **Citation rule:** no field/effect/trigger enters a file without a vanilla or PD
   `file:line` using it *in the same position and scope*. Existence is not enough —
   `add_mil` exists but is a **character**-scope skill effect; using it at country
@@ -288,7 +301,10 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   On-map at start: CHI, CHG, GLH, DLH, JLY, CHB, MZF, INJ, GRG. Emergent: TIM
   (`flavor_tim.8`), OIR (`flavor_chi.txt`), MGO/MGE (formables, this mod).
   Dead: HLG (zero vanilla script uses). `dynamic_historical_event` with an emergent
-  tag is fine (vanilla uses `tag = TIM` 15×). Tags are always 3 letters.
+  tag is fine (vanilla uses `tag = TIM` 15×). Tags are always 3 letters **in vanilla** (2217 of 2217) and in this mod, so the
+  harness treats 4+ as a finding. It is a CONVENTION, not an engine limit: a
+  published total conversion ships 471 five-letter tags used live in script.
+  Relevant only if a future project needs hundreds of new tags.
 - Do not port syntax from other Paradox games. EU5 is its own thing.
 
 ### Silent-failure rules (no error, no log, mechanic just doesn't exist)

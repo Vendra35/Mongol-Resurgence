@@ -146,12 +146,23 @@ named `<price_key>_cost_modifier`.
 `hussite_wars_actions_price_cost_modifier`.
 
 ### `modifier_type.cpp:1294 — Missing Icon for Modifier: <key>`
-**Means:** no icon at `main_menu/gfx/interface/icons/modifier_types/<key>.dds`.
-There is **no `icon` field** — the lookup is by filename convention.
-**Fix:** ship a small `.dds` at that path, or accept it. **Cosmetic, and
-vanilla omits some of its own** (it ships one for
-`rot_select_core_region_price_cost_modifier` but not for
-`rot_plan_invasion_price_cost_modifier`).
+**Means:** the modifier type has no icon **declaration**.
+**Fix — no art required.** There is no `icon` field on the modifier type, and
+it is not purely a filename convention either: icons are declared in
+`main_menu/common/modifier_icons/` (vanilla ships 4912 entries):
+
+```
+<modifier_type> = {
+	positive = "gfx/interface/icons/modifier_types/whatever.dds"   # >= 0, or the only one
+	negative = "gfx/interface/icons/modifier_types/whatever.dds"   # optional, < 0
+}
+```
+
+The path may point at **any existing `.dds`, including another modifier's** —
+vanilla does exactly that (`build_hippodrome_price_cost_modifier` borrows
+`expand_rgo`'s, `rot_reform_into_monarchy` borrows `rot_select_core_region`'s).
+So borrow one and the error clears. There is also a `default = yes` entry in
+the file, which is what you fall back to when nothing matches.
 
 ### `message_handler.cpp:421 — Failed to find message type: PERFORM_<action>_ACTION`
 **Means:** a `type = situation` generic action sends a message when performed
@@ -174,6 +185,23 @@ at all, so renaming may not change what you see on the map: an empire-rank
 steppe horde reads "Great <Adj> Horde" whatever you call it.
 
 ---
+
+## Separating your errors from vanilla's
+
+Vanilla emits plenty of its own errors, and telling them apart costs real time
+— `Unknown formatting tag 'l'` was investigated three times here before being
+confirmed vanilla-side. A published project solves this with a maintained
+filter list plus a watcher script that strips known-vanilla entries from
+`error.log` and writes a clean copy. Their filter format is worth copying:
+
+```
+contains:<text>
+exact:<full entry body>
+regex:<python regular expression>
+```
+
+Their list is 663 lines for EU5 1.3. Building one for this project is cheap and
+pays back the first time an unfamiliar signature turns out not to be ours.
 
 ## Adding to this file
 

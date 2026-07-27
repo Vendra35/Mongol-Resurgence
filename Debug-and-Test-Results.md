@@ -635,3 +635,79 @@ Yukseltilen: `goal territory covered by a wargoal` artik LOKASYON seviyesinde ka
 Kaldirilan: generic action mesaj-tipi sarti (cozulemez oldugu icin, gerekcesiyle).
 Yeni kontrollerin HEPSI known positive'de kanitlandi: cografya adina yazim hatasi, sahipsiz atom, ters cevrilmis trigger, korumasiz top_owner, wargoal'dan cikarilmis atom.
 
+
+
+##### 27.07.2026 REFERANS MODLARIN ANALIZI + MOTORUN KENDI DOKUMANTASYONU #####
+
+Bu bolum kod degil BILGI kazanimi. Uc dis kaynak incelendi ve en sonunda motorun kendi script dokumantasyonu repoya girdi. Harness 29 -> 31.
+
+## EN ONEMLISI: docs/EU5-Vanilla-Script-Docs/
+
+Oyun icinde `-debug_mode` ile konsola `script_docs` ve `dump_data_types` yazilarak alindi. Icerik:
+- triggers.log  : 1798 trigger, HER BIRI `**Supported Scopes**` beyaniyla
+- effects.log   : 1534 effect, ayni sekilde
+- event_targets.log : 289 scope baglantisi, Input Scopes -> Output Scopes
+- modifiers.log : 2436 modifier tag'i
+- on_actions.log: her hook, Expected Scope ile
+- data_types/   : 2.9 MB GUI/promote tipleri
+
+BU ARTIK OTORITE. Vanilla'yi grep'lemek sadece birinin ne YAZDIGINI gosteriyordu; bu neyin YASAL oldugunu gosteriyor. CLAUDE.md'nin Verification bolumu buna gore degistirildi: once buraya bak.
+
+Ilk sorgu, bugun bizi isiran seydi:
+  is_in_scripted_geography -> location, province_definition, area, region, sub_continent, continent
+  has_presence_in          -> country
+Oyunun verdigi hata mesaji birebir bu listeyi geri okuyormus. Bu dosya elimizde olsaydi 120 yanlis cagri yeri hic olusmazdi.
+
+Bugun yazdigimiz her sey dogrulandi: top_owner (location->country), top_overlord_or_this (country->country), capital (country->location), owns (country), is_subject_of (country). Ayrica daha temiz bir alternatif bulundu: `is_subject_or_below_of` = "vassali mi ya da vassalinin vassali mi" â€” amaca ozel trigger. Bizimki dogru ve test edildi, degistirilmedi.
+
+Tum mod listeye karsi tarandi: 315 tanimlayicinin hepsi aciklandi, UYDURMA TEK BIR MOTOR CONSTRUCT'I YOK.
+
+## HARNESS 29 -> 31
+
++ modifier tags exist in engine docs (187 satirimiz, 2436 resmi tag'e karsi)
++ on_action hooks vs engine docs
+Ikisi de known positive'de kanitlandi ('disciplin' yazim hatasi yakalandi).
+
+BIR KONTROL DE SILINDI ve sebebi onemli: modifier KATEGORISI karsilastirmasi yazmistim, sonra her tag'in `All` kategorisini de tasidigini gordum â€” yani hic atesleneMEZ. Ustelik kavramsal olarak da yanlis: siege_ability `Unit` kategorisinde ama bizim `category = country` blogumuzda sorunsuz calisiyor; kategori modifier'in NEYI ETKILEDIGINI soyluyor, nerede tanimlanabilecegini degil. Ateslenemeyen kontrol, olmayan kontroldan kotudur â€” sahip olmadigi kapsami ima eder. Bu harness'in var olus sebebi olan tuzagin ta kendisi.
+
+## CANLI HATA DUZELTILDI: modifier ikonu
+
+`modifier_type.cpp:1294` kapandi. Ben "ikon dosya adi konvansiyonuyla araniyor" demistim, EKSIK BILGIYDI. Gercek: `main_menu/common/modifier_icons/`, vanilla'da 4912 girdi, ve yol BASKA BIR MODIFIER'IN ikonuna isaret edebiliyor (vanilla kendisi yapiyor). Hic sanat uretmeden cozuldu. Decoder duzeltildi.
+
+## TOTAL CONVERSION MIMARISI COZULDU
+
+Iki total conversion incelendi (Bronze Era yayinlanmis mod, ve senin 867 test modun). IKISI DE HARITAYI BOYAMIYOR.
+
+Dunya `main_menu/setup/start/` altindaki 25 numarali dosyadan geliyor. Ulke yerlestirmek = VANILLA LOKASYON ADLARINI LISTELEMEK:
+  countries = { countries = { NOR = { own_control_core = { bergen oslo nidaros ... } } } }
+Hicbir ulkenin sahiplenmedigi yer bos kaliyor â€” "sadece Iskandinavya vardi" etkisi bundan, Location Painter'dan degil.
+
+Uc katman, artan maliyetle:
+1. setup/start degistir â€” ZORUNLU, oynanabilir dunya icin YETERLI
+2. map_data/location_templates.txt (28.573 satir, her lokasyonun kulturu/dini/kaynagi/arazisi) â€” OPSIYONEL sadakat katmani, tam dosya override'i oldugu icin her yamada birlestirilmeli
+3. harita boyama â€” IKISI DE YAPMADI
+
+Takvim `common/defines` ile tasiniyor (START_DATE/END_DATE) ve motor POZITIF yilda tutuluyor; Bronze Era MO tarihleri ulke degiskenleriyle SUNUM katmaninda gosteriyor. Gerekce kendi dokumanlarinda: vanilla timerlari, cooldownlari, AI zamanlamasi, situationlar, institutionlar ve save'ler birkac yerde pozitif takvim varsayiyor.
+
+## TAG KURALIMIZ DUZELTILDI
+
+Vanilla'da 2217 tag'in 2217'si UC HARFLI. Ama Bronze Era'da 531 tag var: 471'i BES harfli, 47'si dort, 13'u uc â€” ve canli kodda kullaniliyorlar (c:ALASI). Yani "3 harf" bir VANILLA KONVANSIYONU, motor siniri degil. Overhaul'da yuzlerce yeni tag gerekince onemli olacak. Harness kontrolu birakildi cunku BU mod vanilla tag'leri kullaniyor.
+
+## CIKARILAMAYAN IKI DERS
+
+- `message_handler.cpp:421` COZULEMEZ. Motor sadece `main_menu/gui/messagetypes.txt` dosyasini okuyor (vanilla'nin o klasorunde baska .txt yok). Farkli isimli mod dosyasi sessizce yok sayiliyor â€” Timur modununki de olu. Ayni isimli dosya vanilla'nin 1348 girdisini siler. Olu dosyamiz silindi.
+- `Unknown formatting tag 'l'` VANILLA KAYNAKLI, oyun ici dogrulandi (vanilla panellerinde de cikiyor). Dosya kapandi.
+
+## DIS KAYNAKLARDAN ALINANLAR (FUTURE-DEVELOPMENT 5b/5c/5d)
+
+Timur modu (railroad): scripted_geography, top_owner. Almadiklarimiz ama overhaul icin kaydedilenler: auto_modifiers (kosul dogruyken kendiliginden uygulanan modifier), custom peace_treaties + ai_desire (hedef topragi BARIS MASASINDA devretmek â€” failsafe'ten cok daha iyi bir railroad primitifi), area_preferences, scripted_effects, disasters, on_winning_war/on_ending_war hook ailesi.
+
+HLJSXK/eu5-modding-project (Claude Code ile yurutulen bir mod): CLAUDE.md'leri 140 SATIR ve oyle kaliyor cunku icinde sadece KURAL var; bilgi anti_patterns.yaml + valid_enums.yaml + PROJECT_OVERVIEW.md icinde buyuyup gen_brief.py ile BRIEF.md'ye DERLENIYOR. Bizim 438 satirlik CLAUDE.md sorunumuzun cevabi bu. Ayrica error_log_filter.py + 663 satirlik vanilla_error_filters.txt â€” error.log'dan vanilla gurultusunu ayikliyor; `[l]` meselesine uc kez donmemizin sebebi buydu.
+
+## HER KAYNAGA CITATION KURALI UYGULANIR
+
+Iki dis kaynak da hatali iddialar icerdi:
+- Timur modu `any_country_in_hierarchy` kullaniyor â€” vanilla'da SIFIR kullanim, hicbir yerde.
+- HLJSXK'in CLAUDE.md'si "location_rank sadece 3 deger alir" diyor â€” vanilla'da DORT var ve eksik olan IKINCI EN COK kullanilan: city 356, megalopolis 279, town 244, rural_settlement 121.
+Populer ve yayinlanmis olmak "attested" demek degil.
+

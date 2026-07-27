@@ -360,8 +360,9 @@ all are documented in TESTING-GUIDE Track 8 / the tracks above:
 
 ## 5b. Techniques worth stealing from other mods
 
-Read from *Legacy of Timur: An Age of Gunpowder*, a large published railroad
-mod, on 2026-07-26. Analysis only — nothing copied.
+### Read from *Legacy of Timur: An Age of Gunpowder* (a railroad mod), 2026-07-26
+
+Analysis only — nothing copied.
 
 | Thing | Why it matters | Status here |
 |---|---|---|
@@ -375,10 +376,219 @@ mod, on 2026-07-26. Analysis only — nothing copied.
 | on_action family: `monthly_country_pulse`, `biyearly_country_pulse`, `on_winning_war`, `on_ending_war` (`scope:winner`/`loser`/`war`), weighted `random_events` | Event-driven instead of monthly polling | Only `yearly_country_pulse` used |
 | `situation:X.var:Y` read from outside; variables on the `scope:war` object | One-shot guards that die with the war instead of polluting globals | Not adopted |
 
+### Read from *Bronze Era* (a published TOTAL CONVERSION), 2026-07-27
+
+Different animal from a railroad mod: it moves the whole game to the Late
+Bronze Age. The findings below are the ones that decide how the planned
+overhaul gets built.
+
+**A total conversion does NOT repaint the map.** `in_game/map_data/
+location_templates.txt` is a VANILLA file — 28,573 lines, one per location,
+setting `topography`, `vegetation`, `climate`, `religion`, `culture`,
+`raw_material`, `natural_harbor_suitability`. Bronze Era ships its own 28,575
+line version. So you keep vanilla's location geometry and rewrite what every
+location *is*. Locations meant to be wilderness simply get terrain and no
+culture/religion, which is why most of their map is empty.
+*Cost:* it is a whole-file override, so every patch that touches
+location_templates.txt has to be re-merged. Budget for that.
+*Consequence:* a location-painting tool is for authoring new location SHAPES —
+a much bigger job that this mod did not need.
+
+**Move the timeframe with `common/defines`, and keep the engine on POSITIVE
+years.** They override `START_DATE`/`END_DATE` and remap the *display*:
+internal year 1 = 1209 BC, `displayed BC year = 1210 - internal year`, with
+`bronze_display_year` / `bronze_display_ad_year` country variables driving the
+topbar while the real engine date stays visible as a secondary line. Their
+stated reason, worth quoting: vanilla "timers, cooldowns, AI scheduling,
+situations, institutions and saves assume a normal positive calendar in
+several places". Ages are remapped onto the same internal scale. For a CK3-era
+start (867/1066/1178) the dates are already positive, but the technique —
+engine date internal, historical date presentational — is the one to copy for
+any chronology shift.
+
+**Country tags are not necessarily three letters.** Vanilla has 2217 tags and
+every one is exactly 3. Bronze Era has 531: **471 five-letter, 47 four-letter,
+13 three-letter** (`ALASI`, `AMURU`, `ASYRI`…), and they are used live in
+script (`c:ALASI`, `tag = ASYRI`). So "3 letters" is a vanilla CONVENTION, not
+an engine limit — which matters when an overhaul needs hundreds of new tags and
+3-letter uniqueness becomes painful. NOT verified in a running game by us;
+confirm before relying on it. Our own harness still treats 4+ as a finding,
+correctly, because this mod uses vanilla tags.
+
+**48 `common/` folders we have never touched.** They use: advances, age,
+auto_modifiers, biases, building_categories, building_types, country_ranks,
+cultures, culture_groups, customizable_localization, defines, diseases,
+estate_privileges, formable_countries, gods, goods, goods_demand, holy_sites,
+institution, international_organizations (+3 sub-systems), languages,
+language_families, laws, levies, modifiers, peace_treaties,
+production_methods, religions, religion_groups, religious_aspects/factions/
+figures/focuses/schools, road_types, script_values, scripted_effects,
+scripted_guis, subject_types, unit_types/categories/abilities/
+formation_preference, historical_scores. That list IS the shape of the work.
+
+**`scripted_guis`** — only 2 in vanilla and 2 here, for bespoke interactive
+panels (ruins exploration, a Trojan War phase). Rare but available.
+
+**They keep design docs in `docs/*.md` too** — 1028 lines on starting
+technologies, 581 on their city-prestige system. Same discipline as this repo.
+
+**COUNTER-EXAMPLE — do not copy their localisation.** They ship THREE loc
+trees: a root-level `localization/` (26 files; vanilla has no such folder, so
+those are almost certainly dead), `in_game/localization/` (13) and
+`main_menu/localization/` (61). **25 filenames appear in more than one tree and
+20 of those have DIVERGENT content** — `Bronze_city_razing_l_english.yml` is
+32 KB in one and 9 KB in another. Whichever loads last wins and the other's
+keys vanish. This is exactly the shadowing bug that cost this repo a debugging
+session and produced our hard rule: **one tree, `main_menu/localization/`,
+and never two files with the same name.** A published mod doing it wrong is
+not a licence to.
+
 **Counter-lesson:** that mod uses `any_country_in_hierarchy` /
 `every_country_in_hierarchy` in 14 places and vanilla has **zero** uses of
 either, anywhere. Popular and published is not attested. The citation rule
 holds regardless of the source.
+
+## 5c. The community toolchain, and three mechanisms we did not know
+
+Surveyed 2026-07-27. Claims from third-party docs are marked as such; anything
+labelled **verified** was checked against the vanilla files here.
+
+### Tools other people already built
+| Tool | What it is | Worth it? |
+|---|---|---|
+| **CWTools** (`tboby.cwtools-vscode`) | Paradox script language server for VS Code — live syntax and reference checking in the editor | **Yes, install first.** Bronze Era recommends it in `.vscode/extensions.json`. Catches in the editor what our harness catches after the fact |
+| **EU5 ModHelper** (github.com/sinjako/EU5-Modhelper) | Browser tool, plain JS, no install. Browses 30+ game categories, edits values, stages changes, generates mod skeletons, handles UTF-8 BOM and `REPLACE:` syntax | Useful for bulk value edits and for seeing what a category contains. No map editing, no validation |
+| **Community Mod Framework** (github.com/Europa-Universalis-5-Modding-Co-op) | Shared compatibility layer: a common in-game settings menu, dismissable alerts, `cmf_is_mod_active` mod-detection trigger, post-lobby/load hooks, country-transfer hook, a mod action log, and `cmf_suppress` for warnings. Declared as a dependency in `metadata.json` | Consider for the overhaul if coexisting with other mods matters. There is a wiki PDF for it already in `docs/` |
+
+### Three engine mechanisms worth chasing
+
+**1. `script_docs` and `dump_data_types` (console).** Reported to make the game
+emit its own trigger/effect documentation and GUI data-type documentation.
+**If true this is the biggest single workflow change available to us**: instead
+of grepping vanilla to decide whether a construct exists and what scope it
+takes, we would have the engine's own list. That is precisely the class of bug
+that cost this repo a round on 2026-07-27 (`is_in_scripted_geography` is a
+LOCATION trigger; we used it in country scope in 120 places). **Run these two
+commands once and keep the output in the repo.** Not yet verified.
+
+**2. Database operation prefixes.** A key can be written
+`TRY_REPLACE:existing_key = { … }` to modify a vanilla database entry instead of
+replacing the file. **Verified:** zero uses anywhere in vanilla (it never needs
+them), but a published mod uses `REPLACE:` 12×, `TRY_REPLACE:` 9× and `INJECT:`
+1×. Third-party docs give the conflict-resolution order as
+`INJECT_OR_CREATE → REPLACE_OR_CREATE → TRY_INJECT → TRY_REPLACE → INJECT →
+REPLACE`, resolved by operation type first and filename second.
+**Why we care:** this may be the way out of whole-file overrides — the problem
+that makes `location_templates.txt` patch-fragile and makes
+`gui/messagetypes.txt` untouchable. Worth an experiment before the overhaul.
+
+**3. `replace_paths` in `metadata.json` → `game_custom_data`.** Declares vanilla
+paths the game should ignore entirely. **Verified present** in Bronze Era's
+metadata, though they ship it empty. For a total conversion this is how you drop
+all vanilla countries or setup wholesale rather than fighting them entry by
+entry.
+
+### And one fact that fixed a live error here
+Modifier icons are **declared**, not conventional: `main_menu/common/
+modifier_icons/` (4912 vanilla entries), `<type> = { positive = "path.dds" }`,
+and the path may borrow another modifier's art — vanilla does this itself. That
+cleared `modifier_type.cpp:1294` with no art authored. Full entry in
+`EU5-ERROR-DECODER.md`.
+
+## 5d. How another Claude-driven EU5 project is organised
+
+`HLJSXK/eu5-modding-project` (the "Standard of Living" mod, 1.3.11) is run with
+Claude Code and has the most developed process of anything surveyed. Read
+2026-07-27.
+
+### The structure worth copying — it solves our CLAUDE.md bloat
+Their `CLAUDE.md` is **140 lines and stays that way**, because it holds only
+RULES. The knowledge lives elsewhere and is COMPILED:
+
+```
+CLAUDE.md                     rules only, stable, ~140 lines
+docs/knowledge/anti_patterns.yaml   structured: one entry per discovered trap
+docs/knowledge/valid_enums.yaml     structured: enum whitelists
+docs/knowledge/PROJECT_OVERVIEW.md  what exists NOW (not a changelog)
+docs/knowledge/BRIEF.md             AUTO-GENERATED from the three above
+scripts/gen_brief.py                the generator
+```
+
+`CLAUDE.md` says: *"For any non-trivial task, read `docs/knowledge/BRIEF.md`
+first."* Ours is 438 lines and growing because rules and knowledge are fused.
+**For the overhaul, split them from day one.**
+
+### Four rules of theirs that are sharper than ours
+1. **3-Step Resolution + a FORBIDDEN list.** Step 1 is "direct edit, only if
+   100% certain"; then official defines; then vanilla/mod source. And a list of
+   categories where **Step 1 is banned outright** — blockoverride block names,
+   custom_tooltip key formats, GUI template structure, any enum, any modifier
+   name, any scripted trigger not defined in the mod, loc encoding, GUI
+   expression syntax. Our citation rule says "cite everything"; naming the
+   categories where memory is *forbidden* is more enforceable.
+2. **Declarative Verification.** Before writing in those categories, emit
+   `**Verification** — Step [2/3], Reference: file:line, Quote: "..."`. If not
+   found: `FAILED. Asking user.` **Then stop.** It moves the citation from a
+   code comment into the transcript, where the user can audit it live.
+3. **Knowledge Capture, automatic.** Triggered by using Step 2/3 OR by fixing a
+   runtime engine error. When triggered you MUST update the yaml + the workflow
+   table + the knowledge base + regenerate BRIEF — *"in the same response as
+   the fix, before the task is marked complete. Do not wait for the user to
+   ask."* This is the formalised version of what we do ad hoc.
+4. **Bug Fix Rule.** A bug is fixed by correcting syntax, never by deleting the
+   feature — removal only if both verification steps fail AND the user is told.
+   A good guard against quietly narrowing scope.
+
+### A tool we should steal outright
+`error_log_filter.py` + `vanilla_error_filters.txt` (663 lines of known vanilla
+noise) watches `error.log` and strips everything vanilla already emits, leaving
+only your mod's errors. We burned time across three sessions on
+`Unknown formatting tag 'l'` before confirming it was vanilla's. A filter list
+answers that on day one. Their filter format:
+
+```
+contains:<text>          exact:<full entry>          regex:<python re>
+```
+
+### Verified against vanilla — and one of their claims is WRONG
+This is the point of the citation rule, and it applies to good sources too.
+
+| Their claim | Verdict |
+|---|---|
+| `location_rank` has **only 3** values: rural_settlement, town, city | **WRONG.** Vanilla uses four, and the missing one is the *second* most common: `city` 356, **`megalopolis` 279**, `town` 244, `rural_settlement` 121 |
+| Icons can be drawn inline as `@icon_name!` from `main_menu/gui/shared/font_icons.gui` | **CONFIRMED** — 64 KB, 364 `texticon` entries. A whole icon mechanism we have never used; cheaper than a widget |
+| Location `auto_modifiers` are non-functional; use `static_modifiers` | **PLAUSIBLE** — vanilla's auto_modifiers declare only admiral, dynasty, general, internationalorganization categories; no location, no country |
+| Loc `.yml` must be UTF-8 **BOM** | Confirmed, matches our own rule |
+| No `mean_time_to_happen` in EU5 | Confirmed, matches ours |
+| Float literals read to 5 decimal places | Not verified |
+
+### What their `reference_official_defines/` actually contains
+Worth knowing precisely, because it looks like more than it is.
+
+- `docs/data_types_*.txt` (2.9 MB total) — this is **`dump_data_types` output**:
+  GUI/promote data types with return types, not script triggers. Useful for GUI
+  work, but **it did not cover our case**: `HasRulerOrRegent`,
+  `GetRulerOrRegent` and `GetRegencyInfo` — the three methods behind our
+  situation-panel context bug — appear **zero** times.
+- `changes_script_docs.md` (31 KB) — the 1.2 → 1.3 **diff** of the script
+  documentation, not the documentation itself. Its structure is the useful
+  part, because it tells us what the full `script_docs` output looks like:
+  sections for **Scopes / Effects / Triggers / Event Targets / Iterators /
+  On Actions / Modifiers**, and the header note confirms each element's entry
+  carries its **scopes**. That is the thing we actually want, and it is still
+  only obtainable by running the console command.
+- `types/*.txt` — per-database type definitions (building_types, casus_belli,
+  laws, peace_treaties, unit_types, international_organizations, institutions).
+
+**Conclusion: still run `script_docs`.** The dump present here is the other
+command's output and is only partially useful.
+
+### One construct family found in that diff, worth remembering
+`all_holy_sites_owned_by_or_below_of` — *"owned by the target country, its
+subjects, **or its subjects' subjects**"*. So there is an `_or_below_of` naming
+family for subject-chain questions, and vanilla's `conquistadors.txt` uses
+`is_subject_or_below_of`. Next time the "whole realm" question comes up, look
+for `*_or_below_of` before reaching for `top_overlord_or_this`.
 
 ## 6. Idea parking lot (unscoped one-liners)
 
