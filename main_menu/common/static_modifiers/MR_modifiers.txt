@@ -217,8 +217,31 @@ MR_great_khan = {
 	max_war_exhaustion = -5
 	aggressiveness_modifier = 1
 	force_allow_as_leader = yes
-	auto_conquer_at_war = yes
 	can_colonize = no
+}
+
+# --- The Chinggisid Blitz (character modifier, FIRST KHAN ONLY) ---
+# auto_conquer_at_war used to sit in MR_great_khan, which all three
+# generations receive. It turns every completed occupation into
+# ownership on the spot, with no peace deal — so it bypasses the
+# wargoals' allowed_locations entirely, which is the system every phase
+# goal rests on and the one verify_mod.py has a coverage check for. The
+# visible symptom was Phase 2 bordergore: peace deals produce contiguous,
+# goal-scoped gains, occupation-conquest produces whatever the army
+# walked through.
+# Split out so only Batu (mr_dominance.104, Phase 1) carries it. Phase 1
+# IS the blitz — unify the steppe, one banner, fast. Phases 2 and 3 are
+# meant to be deliberate, fought through the railroad's war events and
+# their wargoals, and Phase 3 is Pax Mongolica besides. Vanilla agrees on
+# the shape: timmy_wants_to_play gives it to Timur the man, not to a
+# dynasty (character.txt:1813).
+# To extend it to the second khan later, add one add_character_modifier
+# call to mr_dominance.120 — nothing else needs to change.
+MR_chinggisid_blitz = {
+	game_data = {
+		category = character
+	}
+	auto_conquer_at_war = yes
 }
 
 # --- Historically Needed (character modifier) ---
@@ -278,16 +301,13 @@ MR_imperial_historical_modifier = {
 	army_light_cavalry_power = 0.15
 	monthly_gold_income = 100
 	army_maintenance_efficiency = 0.25
-	global_levy_size_modifier = 0.5
-	antagonism_received_modifier = -0.5
 	global_integration_speed_modifier = 2
 	annexation_speed_base = 4
 	bias_for_militarist_policies = 100
 	aggressiveness_modifier = 1
-	land_morale_modifier = 0.05
-	discipline = 0.05
+	army_light_cavalry_power = 0.1
 	siege_ability = 0.2
-	expected_army_size = 12
+	expected_army_size = 4
 	blocks_country_formation = yes
 	blocked_from_conversion = yes
 }
@@ -307,7 +327,7 @@ MR_dominance_historical_modifier = {
 	global_monthly_prosperity = 0.002
 	subject_loyalty = 15
 	monthly_rebel_growth = -0.0025
-	expected_army_size = 15
+	expected_army_size = 6
 	blocked_from_conversion = yes
 }
 

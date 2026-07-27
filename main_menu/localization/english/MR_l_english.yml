@@ -177,6 +177,8 @@
  # --- The Great Khan (character modifier, Timur-style, Immortality Modifier) ---
  STATIC_MODIFIER_NAME_MR_great_khan: "The Scourge of the Steppe"
  STATIC_MODIFIER_DESC_MR_great_khan: "This ruler carries the Borjigin blood and the will of Chinggis. The clans follow wherever the horsetail standard points."
+ STATIC_MODIFIER_NAME_MR_chinggisid_blitz: "The Chinggisid Blitz"
+ STATIC_MODIFIER_DESC_MR_chinggisid_blitz: "The horde does not besiege, negotiate and withdraw. What the tumens ride over is theirs the moment the last defender falls. #color_red (First Great Khan only — the later generations must take their conquests at the peace table.)#!"
  STATIC_MODIFIER_NAME_MR_historically_needed: "Historically Needed"
  STATIC_MODIFIER_DESC_MR_historically_needed: "This ruler is essential for the historical progression of the Mongol Resurgence."
 

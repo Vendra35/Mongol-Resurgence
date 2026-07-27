@@ -575,6 +575,14 @@ mr_dominance.104 = {
 					modifier = MR_historically_needed
 					years = 65
 				}
+				# FIRST KHAN ONLY — the second and third generations
+				# (mr_dominance.120/.130) deliberately do NOT get this.
+				# See the note on the modifier itself.
+				add_character_modifier = {
+					modifier = MR_chinggisid_blitz
+					years = -1
+					mode = add_and_extend
+				}
 				add_trait = trait:conqueror
 				add_trait = trait:tactical_genius
 				add_trait = trait:strategist
@@ -796,6 +804,7 @@ mr_dominance.120 = {
 			ruler ?= {
 				remove_character_modifier = MR_great_khan
 				remove_character_modifier = MR_historically_needed
+				remove_character_modifier = MR_chinggisid_blitz
 			}
 			create_character = {
 				estate = estate_type:nobles_estate
@@ -1049,6 +1058,7 @@ mr_dominance.130 = {
 			ruler ?= {
 				remove_character_modifier = MR_great_khan
 				remove_character_modifier = MR_historically_needed
+				remove_character_modifier = MR_chinggisid_blitz
 			}
 			create_character = {
 				estate = estate_type:nobles_estate
@@ -1081,7 +1091,7 @@ mr_dominance.130 = {
 				}
 				add_character_modifier = {
 					modifier = MR_historically_needed
-					years = 30
+					years = 15
 				}
 				add_trait = trait:tactical_genius
 				add_trait = trait:inspiring_leader
