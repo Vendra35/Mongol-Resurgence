@@ -69,25 +69,14 @@ mongol_imperial = {
 				value = c:MGO
 			}
 		}
-		random_country = {
-			limit = {
-				has_presence_in = scripted_geography:MR_geo_north_china
-				NOR = {
-					tag = MGO
-					tag = MGE
-				}
-			}
-			save_scope_as = mr_theatre_rival
-		}
-		if = {
-			limit = {
-				country_exists = scope:mr_theatre_rival
-			}
-			set_variable = {
-				name = mr_rival_country
-				value = scope:mr_theatre_rival
-			}
-		}
+		# No mr_rival_country here, unlike Phase 1. This panel uses
+		# one_country_header_template — mongol_imperial.gui overrides
+		# CountryContext only, so a rival variable would be written to the
+		# savefile every campaign and read by nothing. Phase 1 is the one
+		# that needs it: two_countries_header_template, plus a monthly
+		# recompute and a re-pick when the rival dies. A once-in-on_start
+		# pick would be worse than nothing anyway — by mid-phase it points
+		# at whatever country happened to hold north China in 1420.
 		if = {
 			limit = {
 				country_exists = c:MGO
@@ -341,7 +330,8 @@ mongol_imperial = {
 		# ========== AI RAILROAD: FIND A TARGET ==========
 		# PD Ascension shape: pick the weakest neighbour holding land in
 		# the goal corridor (khorasan / xinjiang / north_china) whose
-		# alliance web is weaker than the claimant's. No is_ai gate —
+		# alliance web is not overwhelming — a RATIO gate, see the long
+		# note on the same block in MR_mongol_resurgence.txt. No is_ai gate —
 		# human claimants get the war event with the postpone option.
 		if = {
 			limit = {
@@ -361,7 +351,10 @@ mongol_imperial = {
 						NOT = {
 							top_overlord_or_this ?= prev
 						}
-						defensive_alliance_strength < c:MGO.offensive_alliance_strength
+						relative_defensive_alliance_strength = {
+							target = c:MGO
+							value < 1.5
+						}
 						OR = {
 							has_presence_in = scripted_geography:MR_geo_khorasan
 							has_presence_in = scripted_geography:MR_geo_xinjiang
@@ -437,13 +430,13 @@ mongol_imperial = {
 				OR = {
 					AND = {
 						has_game_rule = MR_buff_enabled
-						var:mr_imp_conquest_cooldown > 12
+						var:mr_imp_conquest_cooldown > 4
 					}
 					AND = {
 						NOT = {
 							has_game_rule = MR_buff_enabled
 						}
-						var:mr_imp_conquest_cooldown > 36
+						var:mr_imp_conquest_cooldown > 8
 					}
 				}
 				country_exists = c:MGO
@@ -454,22 +447,26 @@ mongol_imperial = {
 						OR = {
 							AND = {
 								has_game_rule = MR_buff_enabled
-								months_since_war >= 12
+								months_since_war >= 4
 							}
 							AND = {
 								NOT = {
 									has_game_rule = MR_buff_enabled
 								}
-								months_since_war >= 24
+								months_since_war >= 8
 							}
 						}
+						# NOT prev — two hops (c:MGO -> situation -> target),
+						# so prev is the SITUATION here. See the long note on
+						# the same block in MR_mongol_resurgence.txt.
 						situation:mongol_imperial = {
 							var:mr_imp_conquest_target_country = {
+								country_exists = c:MGO
 								NOT = {
-									top_overlord_or_this ?= prev
+									top_overlord_or_this ?= c:MGO
 								}
 								NOT = {
-									has_truce_with = prev
+									has_truce_with = c:MGO
 								}
 							}
 						}
@@ -925,7 +922,6 @@ mongol_imperial = {
 		# The wiki recommends clearing situation variables in on_ended
 		# to keep them out of the savefile.
 		remove_variable = mr_leading_country
-		remove_variable = mr_rival_country
 		remove_variable = MR_mge_score
 		remove_variable = mr_imp_conquest_cooldown
 		remove_variable = mr_imp_conquest_target

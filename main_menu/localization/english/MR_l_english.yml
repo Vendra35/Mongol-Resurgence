@@ -76,7 +76,7 @@
  mr_imperial_seats_tt: "[ShowLocationName('samarkand')] and [ShowLocationName('dadu')] answer to us or to our [subject|e]"
  mr_p2_corridor_cleared_tt: "No power outside our realm holds [locations|e] in the [ShowRegionName('khorasan_region')] or [ShowRegionName('xinjiang_region')] [region|e]"
  mr_p2_north_china_cleared_tt: "No power outside our realm holds [locations|e] in the [ShowRegionName('north_china_region')] [region|e]"
- mr_p2_northern_marches_cleared_tt: "No power outside our realm holds [locations|e] in [ShowRegionName('manchuria_region')], [ShowRegionName('tibet_region')] or the Siberian marches"
+ mr_p2_northern_marches_cleared_tt: "No power outside our realm holds [locations|e] in [ShowRegionName('manchuria_region')], [ShowRegionName('tibet_region')] or the Siberian marches: [ShowAreaName('bursol_area')], [ShowAreaName('omsk_area')] and [ShowAreaName('kulykol_area')] [area|e]"
  mr_dominance_seats_tt: "The seven khanate seats — [ShowLocationName('karakorum')], [ShowLocationName('dadu')], [ShowLocationName('samarkand')], [ShowLocationName('sarai_al_jadid')], [ShowLocationName('kazan')], [ShowLocationName('tabriz')] and [ShowLocationName('baghdad')] — answer to us or to our [subject|e]"
  mr_dominance_russian_foothold_tt: "We or our [subject|e] hold at least one [location|e] in the [ShowRegionName('russian_region')] [region|e]"
  mr_dominance_cappadocia_tt: "We or our [subject|e] hold at least one [location|e] in the [ShowAreaName('cappadocia_area')] [area|e]"
@@ -183,6 +183,8 @@
  # --- Event-Specific Rewards ---
  STATIC_MODIFIER_NAME_MR_forge_of_warriors: "The Forge of Warriors"
  STATIC_MODIFIER_DESC_MR_forge_of_warriors: "The tumens drill as they did under the old banners: ten, a hundred, a thousand, ten thousand."
+ STATIC_MODIFIER_NAME_MR_sacred_capital_restored: "The Sacred Capital Restored"
+ STATIC_MODIFIER_DESC_MR_sacred_capital_restored: "Karakorum answers to the horsetail standard again. The Khan holds a capital now, not a camp. #G (Permanent — but lost if Karakorum is lost.)#!"
  STATIC_MODIFIER_NAME_MR_kurultai_mandate: "The Kurultai's Mandate"
  STATIC_MODIFIER_DESC_MR_kurultai_mandate: "The assembled chieftains have proclaimed our supremacy over all Mongol peoples by the old law of the steppe."
  STATIC_MODIFIER_NAME_MR_western_ulus_restored: "The Western Ulus Restored"
@@ -368,9 +370,9 @@
  mr_dominance.104.desc: "The power struggle on the steppe has reached its conclusion. A new Great Khan of the Borjigin blood has emerged victorious, having crushed all rivals and united the Mongol tribes under a single war banner. The balance of power in Asia has been fundamentally altered, and the established empires beyond the steppe must now reckon with a resurgent Mongol threat."
  mr_dominance.104.a: "They grow stronger by the day."
 
- mr_dominance.105.title: "Victory on the Steppe"
- mr_dominance.105.desc: "The enemy lies broken beneath our horses' hooves! Our rival khan has been decisively defeated, their warriors scattered, and their lands absorbed into our growing domain. The steppe now recognizes only one master, and the path to greater conquests lies open before us."
- mr_dominance.105.a: "A glorious day for the Mongol people!"
+ mr_dominance.105.title: "Karakorum Is Ours"
+ mr_dominance.105.desc: "The sacred capital has been taken. Our riders came through the Orkhon valley and found the old city half in ruin, its walls patched with rubble, its Buddhist and Nestorian quarters emptied by a century of neglect — and none of that matters. This is the ground Ogedei paved, where the envoys of Rome and Baghdad once waited their turn to kneel. The horsetail standard stands over it again.\n\nThe clans understand what a capital means. A khan with a camp commands whoever happens to be riding beside him; a khan seated at Karakorum commands the memory of the empire itself. Word is already going out across the steppe, and the lesser khans are counting their warriors with a new anxiety."
+ mr_dominance.105.a: "Let the standard fly where Ogedei raised it."
 
  mr_dominance.107.title: "Scattered to the Winds"
  mr_dominance.107.desc: "Disaster! Our forces have been routed, our warriors flee in disarray, and our rival has proven the stronger. The campaign has ended in humiliating defeat. Our prestige is shattered, and many of the tribes that swore allegiance to us now abandon our banner. We must retreat and lick our wounds."

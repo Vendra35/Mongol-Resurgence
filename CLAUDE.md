@@ -434,6 +434,23 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   `country_exists = c:X` in the SAME AND (short-circuit). Same family:
   `owner = { ... }` in a location limit errors on OWNERLESS locations — always
   `owner ?= {` (the failsafe handover blocks all hit this).
+- **`prev` is exactly ONE scope hop, and only scope-CHANGING blocks count as
+  hops** — `if`/`limit`/`AND`/`OR`/`NOT` are transparent, so the nesting you
+  read on screen is not the nesting `prev` walks. Two hops down
+  (`c:MGO = { … situation:X = { var:target = { … prev } } }`) it lands on the
+  **situation**, not on the claimant, and the engine says so precisely:
+  `Left side and right side during comparison were of different types (left was
+  'country', right was 'situation')` (`jomini_script_system.cpp:252`). Shipped
+  wrong in all three railroad declare blocks; the truce check next to it was
+  silently comparing against the same wrong scope, so the AI could be sent at a
+  truced target. It is RARE in the log — the pacing gate above it short-circuits
+  nearly every tick — so testing will not reliably surface it. Going up more
+  than one hop: `save_scope_as` + `scope:x`, never `prev.prev` (zero vanilla
+  uses; already the stated rule in the pasture blocks). When the claimant is a
+  fixed tag, just name `c:MGO` with the usual `country_exists` guard.
+  `verify_mod.py` now walks the scope stack and fails on any country-target
+  `prev` that lands on a non-country scope; it carries a canary of the exact
+  broken shape so the walker cannot pass vacuously.
 - War-declaring railroad events are visible with the declaration in **option A**
   and a postpone **option B** (PD 103 shape), never `hidden` with the war in
   `immediate` — a human claimant must be able to refuse.

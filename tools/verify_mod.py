@@ -574,6 +574,101 @@ for p, s in code.items():
                 probs.append(f"UNGUARDED is_neighbor_of = c:{m.group(1)} at {rel}:{i}")
 check("no unguarded c:TAG comparison patterns", count, probs, min_count=1000)
 
+# ---- `prev` resolves to a country where a country is required ----
+# `prev` is ONE scope hop up, and the hop is counted in scope-CHANGING blocks
+# only — if/limit/AND/OR/NOT are transparent. Two hops down (claimant ->
+# situation:X -> var:target) it therefore lands on the SITUATION, not on the
+# claimant, and the engine says so: "Left side and right side during comparison
+# were of different types (left was 'country', right was 'situation')",
+# jomini_script_system.cpp:252. That shipped in all three railroad declare
+# blocks. It is rare in the log because the pacing gate above it short-circuits
+# nearly every tick, so it cannot be relied on to surface in testing.
+_LINKS = {"owner", "top_owner", "ruler", "heir", "consort", "capital", "overlord",
+          "top_overlord_or_this", "culture", "religion", "market", "province",
+          "location", "area", "region", "this", "root", "prev", "from", "dynasty",
+          "defender_leader", "attacker_leader", "employer", "country", "controller"}
+_PREFIXED = re.compile(r"^(c|scope|var|situation|region|area|location|culture|religion|"
+                       r"scripted_geography|province|continent|sub_continent|character|"
+                       r"trait|building|government_type|culture_group|casus_belli):")
+_ITER = re.compile(r"^(every|any|random|ordered)_")
+# Scopes that are definitely NOT a country. `scope:`/`var:` are deliberately
+# absent — their type is not knowable from the text, so they are never flagged.
+_NOT_A_COUNTRY = re.compile(r"^(situation|region|area|location|scripted_geography|culture|"
+                            r"religion|province|continent|sub_continent|character|dynasty|"
+                            r"trait|building):|^(every|any|random|ordered)_"
+                            r"(location|area|region|province|character|sub_unit|unit|"
+                            r"building|advance|war|relation|goods)")
+_NOT_A_COUNTRY_LINKS = {"capital", "ruler", "heir", "consort", "culture", "religion",
+                        "market", "province", "location", "area", "region", "dynasty"}
+# Positions whose right-hand side must be a COUNTRY.
+_COUNTRY_TARGET = re.compile(
+    r"^\s*(has_truce_with|top_overlord_or_this|is_subject_of|is_neighbor_of|is_at_war_with|"
+    r"is_rival_of|is_allied_with|cancel_subject|target|first|second|this|overlord|owner|"
+    r"top_owner)\s*\??=\s*prev\s*$")
+_OPEN = re.compile(r"^\s*([A-Za-z0-9_:.\-]+)\s*\??=\s*\{\s*$")
+
+
+def _prev_findings(src, rel):
+    """Walk the scope stack; report country-target `prev` landing off-country."""
+    found, seen, stack, depth = [], 0, [], 0
+    for n, raw in enumerate(src.splitlines(), 1):
+        line = re.sub(r"#.*", "", raw)
+        if not line.strip():
+            continue
+        if _COUNTRY_TARGET.match(line):
+            seen += 1
+            parent = stack[-2][0] if len(stack) >= 2 else "<file root>"
+            if _NOT_A_COUNTRY.match(parent) or parent in _NOT_A_COUNTRY_LINKS:
+                found.append(f"{rel}:{n}: prev resolves to '{parent}', not a country"
+                             f" -> {line.strip()[:48]}")
+        m = _OPEN.match(line)
+        if m:
+            depth += 1
+            k = m.group(1)
+            if _PREFIXED.match(k) or _ITER.match(k) or k in _LINKS:
+                stack.append((k, depth))
+            continue
+        depth += line.count("{")
+        for _ in range(line.count("}")):
+            if stack and stack[-1][1] == depth:
+                stack.pop()
+            depth -= 1
+    return found, seen
+
+
+# Known positive: the exact shape that shipped broken, so a parser that stops
+# walking the stack cannot pass this check vacuously.
+_canary = """
+c:MGO = {
+	if = {
+		limit = {
+			situation:mongol_resurgence = {
+				var:mr_conquest_target_country = {
+					NOT = {
+						top_overlord_or_this ?= prev
+					}
+				}
+			}
+		}
+	}
+}
+"""
+assert _prev_findings(_canary, "canary")[0], "prev scope walker is broken — canary not flagged"
+assert not _prev_findings(_canary.replace("?= prev", "?= c:MGO"), "canary")[0], \
+    "prev scope walker false-positives on the fixed form"
+
+probs, count = [], 0
+for p, s in code.items():
+    f, seen = _prev_findings(s, os.path.relpath(p, MOD).replace(os.sep, "/"))
+    probs += f
+    count += seen
+# prev.prev / prevprev: zero uses anywhere in vanilla, so it is not attested
+# syntax. save_scope_as + scope: is the way down more than one hop.
+for p, s in code.items():
+    for _ in re.finditer(r"\bprev\s*\.\s*prev\b|\bprevprev\b", strip_comments(s)):
+        probs.append(f"{os.path.relpath(p, MOD)}: prev.prev is unattested syntax")
+check("prev lands on a country where one is required", count, probs, min_count=8)
+
 # ---- on_action hooks + events ----
 oa = strip_comments(read(MOD + "/in_game/common/on_action/MR_on_actions.txt"))
 probs = []

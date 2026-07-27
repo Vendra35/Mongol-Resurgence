@@ -21,7 +21,7 @@
 MR_war_goal_steppe_unification = {
 	type = superiority
 	attacker = {
-		conquer_cost = 1
+		conquer_cost = 0.5
 		subjugate_cost = 1
 		antagonism = 0.25
 		allowed_locations = {
@@ -69,7 +69,7 @@ MR_war_goal_steppe_unification = {
 MR_war_goal_silk_road = {
 	type = superiority
 	attacker = {
-		conquer_cost = 1
+		conquer_cost = 0.25
 		subjugate_cost = 1
 		antagonism = 0.25
 		allowed_locations = {
@@ -110,7 +110,7 @@ MR_war_goal_silk_road = {
 	}
 	defender = {
 	}
-	ticking_war_score = 0.5
+	ticking_war_score = 1
 }
 
 # --- Phase 3: the westward advance -------------------------------
@@ -126,7 +126,7 @@ MR_war_goal_silk_road = {
 MR_war_goal_westward_advance = {
 	type = superiority
 	attacker = {
-		conquer_cost = 1
+		conquer_cost = 0.5
 		subjugate_cost = 1
 		antagonism = 0.25
 		allowed_locations = {
@@ -159,5 +159,5 @@ MR_war_goal_westward_advance = {
 	}
 	defender = {
 	}
-	ticking_war_score = 0.5
+	ticking_war_score = 1
 }

@@ -545,7 +545,7 @@ mr_dominance.104 = {
 			create_character = {
 				estate = estate_type:nobles_estate
 				first_name = Batu
-				age = 30
+				age = 20
 				culture = root.culture
 				religion = root.religion
 				dynasty = dynasty:borjigin_dynasty
@@ -609,25 +609,17 @@ mr_dominance.105 = {
 			factor = 100
 		}
 		add_prestige = prestige_severe_bonus
-		if = {
-			limit = {
-				has_game_rule = MR_buff_enabled
-			}
-			add_country_modifier = {
-				modifier = MR_unified_mongol_banner
-				years = -1
-				mode = replace
-			}
-		}
-		else_if = {
-			limit = {
-				has_game_rule = MR_buff_historical
-			}
-			add_country_modifier = {
-				modifier = MR_mongol_historical_modifier_2
-				years = -1
-				mode = replace
-			}
+		add_horde_unity = horde_unity_mild_bonus
+		# Its OWN modifier, ungated by the buff rule, like every other
+		# event-specific reward in this mod. It used to grant
+		# MR_unified_mongol_banner / MR_mongol_historical_modifier_2 —
+		# the exact pair mr_dominance.1 grants when the phase ends — so
+		# holding Karakorum paid out the entire Phase 1 reward mid-phase
+		# and the resolution event added only prestige on top.
+		add_country_modifier = {
+			modifier = MR_sacred_capital_restored
+			years = -1
+			mode = replace
 		}
 	}
 }
@@ -649,6 +641,10 @@ mr_dominance.107 = {
 		ai_chance = {
 			factor = 100
 		}
+		# Karakorum is gone, so the reward for holding it goes too. Fired
+		# at every Mongol steppe horde, not just the claimant — removing a
+		# modifier a country never had is a no-op (effects.log:9625).
+		remove_country_modifier = MR_sacred_capital_restored
 		if = {
 			limit = {
 				is_ai = yes
@@ -804,7 +800,7 @@ mr_dominance.120 = {
 			create_character = {
 				estate = estate_type:nobles_estate
 				first_name = Adai
-				age = 25
+				age = 18
 				culture = root.culture
 				religion = root.religion
 				dynasty = dynasty:borjigin_dynasty
@@ -832,11 +828,13 @@ mr_dominance.120 = {
 				}
 				add_character_modifier = {
 					modifier = MR_historically_needed
-					years = 65
+					years = 40
 				}
 				add_trait = trait:conqueror
 				add_trait = trait:born_to_the_saddle
 				add_trait = trait:strategist
+				add_trait = trait:tactical_genius
+				add_trait = trait:expansionist
 			}
 		}
 	}
@@ -1055,12 +1053,12 @@ mr_dominance.130 = {
 			create_character = {
 				estate = estate_type:nobles_estate
 				first_name = Altan
-				age = 30
+				age = 20
 				culture = root.culture
 				religion = root.religion
 				dynasty = dynasty:borjigin_dynasty
 				adm = {
-					80
+					90
 					100
 				}
 				dip = {
@@ -1068,7 +1066,7 @@ mr_dominance.130 = {
 					100
 				}
 				mil = {
-					85
+					90
 					100
 				}
 				save_scope_as = mr_third_khan
@@ -1083,11 +1081,13 @@ mr_dominance.130 = {
 				}
 				add_character_modifier = {
 					modifier = MR_historically_needed
-					years = 65
+					years = 30
 				}
 				add_trait = trait:tactical_genius
 				add_trait = trait:inspiring_leader
 				add_trait = trait:expansionist
+				add_trait = trait:conqueror
+				add_trait = trait:strategist
 			}
 		}
 	}

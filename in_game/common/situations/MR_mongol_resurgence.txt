@@ -332,8 +332,18 @@ mongol_resurgence = {
 		}
 		# ========== AI RAILROAD: FIND A TARGET ==========
 		# Pick the weakest neighbour holding Mongolian ground whose
-		# defensive alliance web is weaker than ours. Ordered by
+		# defensive alliance web is not overwhelming. Ordered by
 		# num_locations ascending, so the softest target comes first.
+		# The gate is a RATIO, not an absolute comparison. It used to read
+		# `defensive_alliance_strength < c:MGO.offensive_alliance_strength`:
+		# the target plus every country that would defend it, against MGO
+		# plus every country that would join its attack. MGO is normally
+		# allianceless here (mr_dominance.28 breaks its treaties on
+		# purpose), so that demanded MGO ALONE outweigh the target's whole
+		# bloc — a bar above 1.0, while vanilla's own AI war gate opens at
+		# 0.45 (situations/hundred_years_war.txt:112). Block form per
+		# docs/EU5-Vanilla-Script-Docs/triggers.log:9904; vanilla uses the
+		# function form at generic_actions/rise_of_the_ottomans.txt:242.
 		# No is_ai gate, PD-style: a human claimant also gets targets
 		# picked and the war event offered — with the option to postpone.
 		if = {
@@ -354,7 +364,10 @@ mongol_resurgence = {
 						NOT = {
 							top_overlord_or_this ?= prev
 						}
-						defensive_alliance_strength < c:MGO.offensive_alliance_strength
+						relative_defensive_alliance_strength = {
+							target = c:MGO
+							value < 1.5
+						}
 						has_presence_in = scripted_geography:MR_geo_heartland
 					}
 					max = 1
@@ -388,15 +401,15 @@ mongol_resurgence = {
 				OR = {
 					AND = {
 						has_game_rule = MR_buff_enabled
-						var:mr_conquest_cooldown > 6
+						var:mr_conquest_cooldown > 4
 					}
 					AND = {
 						has_game_rule = MR_buff_historical
-						var:mr_conquest_cooldown > 12
+						var:mr_conquest_cooldown > 8
 					}
 					AND = {
 						has_game_rule = MR_buff_disabled
-						var:mr_conquest_cooldown > 24
+						var:mr_conquest_cooldown > 12
 					}
 				}
 				country_exists = c:MGO
@@ -407,24 +420,34 @@ mongol_resurgence = {
 						OR = {
 							AND = {
 								has_game_rule = MR_buff_enabled
-								months_since_war >= 6
+								months_since_war >= 4
 							}
 							AND = {
 								has_game_rule = MR_buff_historical
-								months_since_war >= 12
+								months_since_war >= 8
 							}
 							AND = {
 								has_game_rule = MR_buff_disabled
-								months_since_war >= 24
+								months_since_war >= 12
 							}
 						}
+						# NOT prev. The scope chain here is TWO hops deep —
+						# c:MGO -> situation -> the target country — so prev
+						# inside this block resolves to the SITUATION, not to
+						# the claimant. The engine said so exactly:
+						# "left was 'country', right was 'situation'"
+						# (jomini_script_system.cpp:252). Rare in the log
+						# because the pacing OR above short-circuits nearly
+						# every tick. c:MGO named directly, as the fallback
+						# block below already does, guarded in the same AND.
 						situation:mongol_resurgence = {
 							var:mr_conquest_target_country = {
+								country_exists = c:MGO
 								NOT = {
-									top_overlord_or_this ?= prev
+									top_overlord_or_this ?= c:MGO
 								}
 								NOT = {
-									has_truce_with = prev
+									has_truce_with = c:MGO
 								}
 							}
 						}

@@ -90,29 +90,9 @@ mongol_dominance = {
 				value = c:MGO
 			}
 		}
-		random_country = {
-			limit = {
-				OR = {
-					has_presence_in = scripted_geography:MR_geo_russian_lands
-					has_presence_in = scripted_geography:MR_geo_western_reach
-					has_presence_in = scripted_geography:MR_geo_pontic
-				}
-				NOR = {
-					tag = MGO
-					tag = MGE
-				}
-			}
-			save_scope_as = mr_theatre_rival
-		}
-		if = {
-			limit = {
-				country_exists = scope:mr_theatre_rival
-			}
-			set_variable = {
-				name = mr_rival_country
-				value = scope:mr_theatre_rival
-			}
-		}
+		# No mr_rival_country here — see the note on the same spot in
+		# MR_mongol_imperial.txt. mongol_dominance.gui is a one-country
+		# header, so nothing ever read it.
 		every_country = {
 			limit = {
 				OR = {
@@ -431,7 +411,9 @@ mongol_dominance = {
 		# MGE mid-phase), scoped via random_country. Targets: the
 		# weakest neighbour holding land in either theatre — the
 		# westward goal regions (russian / steppes / ural) or the seat
-		# regions (mongolia / khorasan / xinjiang / the four Chinas).
+		# regions (mongolia / khorasan / xinjiang / the four Chinas), whose
+		# defensive alliance web is not overwhelming — a RATIO gate, see
+		# the long note on the same block in MR_mongol_resurgence.txt.
 		if = {
 			limit = {
 				var:mr_dom_conquest_target = 0
@@ -461,7 +443,10 @@ mongol_dominance = {
 						NOT = {
 							top_overlord_or_this ?= prev
 						}
-						defensive_alliance_strength < scope:mr_dom_claimant.offensive_alliance_strength
+						relative_defensive_alliance_strength = {
+							target = scope:mr_dom_claimant
+							value < 1.5
+						}
 						OR = {
 							has_presence_in = scripted_geography:MR_geo_russian_lands
 							has_presence_in = scripted_geography:MR_geo_western_reach
@@ -569,6 +554,17 @@ mongol_dominance = {
 						tag = MGE
 					}
 				}
+				# Saved because the truce/subject check below sits TWO hops
+				# down (claimant -> situation -> target country), where prev
+				# resolves to the SITUATION, not to us — the engine reported
+				# it as "left was 'country', right was 'situation'"
+				# (jomini_script_system.cpp:252). P1/P2 can just name c:MGO;
+				# here the claimant is either MGO or MGE, so it has to be
+				# saved. prev.prev is not an option: zero vanilla uses.
+				# The find-target block's mr_dom_claimant cannot be reused —
+				# it only exists on ticks where the target slot was EMPTY,
+				# and this block only runs when the slot is FULL.
+				save_scope_as = mr_dom_declarer
 				if = {
 					limit = {
 						OR = {
@@ -586,10 +582,10 @@ mongol_dominance = {
 						situation:mongol_dominance = {
 							var:mr_dom_conquest_target_country = {
 								NOT = {
-									top_overlord_or_this ?= prev
+									top_overlord_or_this ?= scope:mr_dom_declarer
 								}
 								NOT = {
-									has_truce_with = prev
+									has_truce_with = scope:mr_dom_declarer
 								}
 							}
 						}
@@ -1264,7 +1260,6 @@ mongol_dominance = {
 		# The wiki recommends clearing situation variables in on_ended
 		# to keep them out of the savefile.
 		remove_variable = mr_leading_country
-		remove_variable = mr_rival_country
 		remove_variable = MR_dominance_score
 		remove_variable = mr_dom_conquest_cooldown
 		remove_variable = mr_dom_conquest_target
