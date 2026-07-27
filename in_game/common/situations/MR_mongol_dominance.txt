@@ -1235,6 +1235,19 @@ mongol_dominance = {
 				trigger_event_non_silently = mr_dominance.132
 			}
 			set_global_variable = mr_railroad_complete
+			# Arm the Great Partition, 30 years out. The endgame
+			# situation opens on this flag rather than on a calendar
+			# date: Phase 3 can close any time between 1550 and 1650,
+			# and a fixed start would leave a fast campaign idling for
+			# decades with a finished empire and nothing happening.
+			# Thirty years is one generation of Khaghans - long enough
+			# that the restored empire is enjoyed, short enough that the
+			# reckoning still lands before 1700 in every run. Delayed
+			# form per effects.log:10578 (102 vanilla uses of years =).
+			trigger_event_silently = {
+				id = mr_dominance.140
+				years = 30
+			}
 		}
 		else = {
 			every_country = {

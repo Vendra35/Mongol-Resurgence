@@ -161,3 +161,57 @@ MR_war_goal_westward_advance = {
 	}
 	ticking_war_score = 1
 }
+
+# --- The Great Partition: carving the dying empire ---------------
+# The vulture's wargoal. Granted to the Khaghan's NEIGHBOURS as
+# cohesion falls, not to the claimant — this is the one MR wargoal
+# aimed AT the Mongols rather than for them, and it is what gives a
+# player who never touched the steppe a reason to care about the
+# endgame.
+#
+# COVERAGE: the successor uluses plus the ground the empire took in
+# Phases 2 and 3. Anything the Khaghan holds on a frontier is fair
+# game, which is exactly what Russia and the Qing did to the real
+# steppe between 1650 and 1757. The heartland is INCLUDED: unlike the
+# partition's own release logic, an outside power carving Mongolia
+# itself is historically the ending, not a forbidden move.
+#
+# No subjugation block. A neighbour carving pieces off a collapsing
+# empire takes land; it does not inherit the Chinggisid claim, and
+# allowing whole-realm subjugation here would let one lucky vulture
+# swallow the entire Yeke Mongol Ulus in a single peace.
+MR_war_goal_carve_the_ulus = {
+	type = superiority
+	attacker = {
+		conquer_cost = 0.5
+		subjugate_cost = 1
+		antagonism = 0.25
+		allowed_locations = {
+			scope:location ?= {
+				OR = {
+					is_in_scripted_geography = scripted_geography:MR_geo_heartland
+					is_in_scripted_geography = scripted_geography:MR_geo_kazakh_steppe
+					is_in_scripted_geography = scripted_geography:MR_geo_nogai_steppe
+					is_in_scripted_geography = scripted_geography:MR_geo_crimean_seat
+					is_in_scripted_geography = scripted_geography:MR_geo_bashkiria
+					is_in_scripted_geography = scripted_geography:MR_geo_dzungaria
+					is_in_scripted_geography = scripted_geography:MR_geo_tarim
+					is_in_scripted_geography = scripted_geography:MR_geo_siberian_marches
+					is_in_scripted_geography = scripted_geography:MR_geo_xinjiang
+					is_in_scripted_geography = scripted_geography:MR_geo_khorasan
+					is_in_scripted_geography = scripted_geography:MR_geo_north_china
+					is_in_scripted_geography = scripted_geography:MR_geo_manchuria
+					is_in_scripted_geography = scripted_geography:MR_geo_pontic
+					is_in_scripted_geography = scripted_geography:MR_geo_volga
+					is_in_scripted_geography = scripted_geography:MR_geo_ural
+					is_in_scripted_geography = scripted_geography:MR_geo_russian_lands
+					is_in_scripted_geography = scripted_geography:MR_geo_persia
+				}
+			}
+		}
+	}
+	defender = {
+	}
+	ticking_war_score = 1
+}
+

@@ -1,4 +1,4 @@
-# CLAUDE.md — Mongol Resurgence (EU5 Mod)
+﻿# CLAUDE.md — Mongol Resurgence (EU5 Mod)
 
 ## What this is
 A finished, working mod for Europa Universalis V. Alternate history, tightly anchored
@@ -72,7 +72,7 @@ hierarchy), `game/in_game/setup/countries/` (tags), `game/main_menu/common/`
 (script values, modifier types, game rules).
 
 ## Architecture (as built)
-Six situations, five namespaces, one state machine. End goals are the
+Seven situations, six namespaces, one state machine. End goals are the
 situations' red-lined REGIONS (PD-style): the phase completes when no country
 outside the claimant's realm (itself or subjects) holds the goal regions.
 
@@ -119,7 +119,28 @@ AI find-target and fallback, failsafe handover, `tooltip`/
 | `mr_chahar_reunification` | MR_late_steppe.txt | 1604–1634 | one banner over the heartland |
 | `mr_torghut_migration` | MR_late_steppe.txt | 1616–1630 | a horde reaches the Volga (post-trek) |
 | `mr_dzungar_khanate` | MR_late_steppe.txt | 1634–1650 | consolidated + Dzungaria/Tarim/Zhetysu |
+| `mr_great_partition` | MR_great_partition.txt | opens on a flag, 1600–1720 | the Khaghan is gone from the map, or Mongolia has left his realm |
 
+- **THE GREAT PARTITION (`mr_great_partition`)** — the endgame, and the
+  railroad's mirror. Phases 1–3 gather the four khanates; this runs the same
+  seats in reverse. It opens on the flag `mr_partition_ready`, set 30 years
+  after Phase 3 succeeds by the delayed `mr_dominance.140`, NOT on a calendar
+  date: Phase 3 can close any time 1550–1650 and a fixed start would leave a
+  fast campaign idling for decades. `MR_cohesion_score` counts DOWN from 100 as
+  uluses leave the realm, `mr_partition_concessions` is what the kurultai has
+  bought back (a standing term, because the score is recomputed from scratch
+  monthly). Three threshold beats (85/55/40) reach three DISJOINT audiences —
+  the Khaghan, neighbours, distant spectators — and the 55 mark also grants
+  neighbours `cb_MR_carve_the_ulus`, the only MR wargoal pointed AT the Mongols.
+  `mr_partition.100` puts the kurultai's three moves to the Khaghan every five
+  years; none is free. `on_ending` either releases the successors, each at its
+  own threshold ordered by distance from Karakorum (Crimea 85 → Dzungaria 55),
+  or grants the permanent `MR_the_ulus_endures`. **The successors are the
+  polities that ACTUALLY EXISTED around 1650–1700 — KAZ, OIR, CRI, NOG, BSH,
+  CHG — not the 1337 khanates**: a Golden Horde in 1650 would be a second piece
+  of alternate history, and the point of this situation is the alternate
+  timeline closing back onto the real map. They come back with plain
+  `change_location_owner`; a landless-but-defined tag needs no formable.
 - Event namespaces: `mr_dominance` (lifecycle + AI events 992–999),
   `mr_imperial` (campaign arc), `mr_history` (historical DHEs, 1337–1526,
   all firing ON their real dates via `monthly_chance = 100`; `.9` is Delhi's
@@ -224,7 +245,7 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   find-target uses) for the P3 four-khanates goal. `caucasus_region` was a P3
   goal reachable by NO wargoal until this was audited — when a goal region is
   added, re-run the coverage cross-check, do not eyeball it.
-- 26 modifiers in `main_menu/common/static_modifiers/MR_modifiers.txt`, all wired:
+- 30 modifiers in `main_menu/common/static_modifiers/MR_modifiers.txt`, all wired:
   phase buffs (granted per buff rule, removed in the granting phase's
   `on_ending`), historical-mode variants, phase rewards (**PERMANENT** — never
   removed, and their tooltips say so), success/failure (AI vs player), the
@@ -233,6 +254,18 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   Restored, Seal of Chinggis, Volga Pastures, Dzungar Legacy). RULE: flavour
   events grant their OWN modifier — phase buffs/rewards belong to the
   situations and the buff rule alone, never re-granted by events.
+- **Never hand the AI claimant a penalty it cannot fight, and rebellion is the
+  one it cannot fight.** Nearly every buff and reward in this mod pushes
+  `monthly_rebel_growth` DOWN on purpose: an AI Khaghan does not manage
+  revolts, and a railroad that collapses into unrest it cannot suppress stops
+  being a railroad. So no MR content may raise `monthly_rebel_growth` or
+  `global_separatism` on the claimant — a `MR_kurultai_defied` written that way
+  would have undone the whole policy through one 40%-`ai_chance` option.
+  Costs go into currencies the AI survives (`monthly_legitimacy`,
+  `monthly_horde_unity`, prestige, gold) and, better, into the situation's own
+  gauge: the kurultai's defiance option subtracts from
+  `mr_partition_concessions`, so the penalty lands as a faster collapse rather
+  than as rebels. Same pressure, expressed where the situation can resolve it.
 - **Panel variables are computed at the END of `on_monthly`, never the top.**
   Everything that can change what the panel should show — the beats, the birth
   failsafe, the completion failsafe — runs inside the same tick. Computed
@@ -255,6 +288,18 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   black portraits + Character-context log spam. Widgets: `text_single` (not
   `textbox_single`), `progressbar` with `value`/`min`/`max` (`progress` is not
   a property) — vanilla refs the_revolution.gui:112, italian_wars.gui:316.
+  **A progressbar reading a script variable MUST wrap `GetValue` in
+  `FixedPointToFloat(...)`.** `value` takes a float; a script variable reads
+  back as fixed-point, so the bare `…GetVariable('X').GetValue` resolves to 0
+  and the bar sits empty forever — no error, no log line, the panel just looks
+  finished-at-zero. Both MR bars shipped this way and the feature was written
+  off as broken. Every vanilla bar that reads a script variable wraps it,
+  with zero exceptions: `italian_wars.gui:326` is the same construct on a
+  situation variable, `decline_of_majapahit.gui:196` the minimal form
+  (`value = "[FixedPointToFloat(….GetVariable('demak_progress').GetValue)]"`).
+  Scale with `Multiply_float(…, '(float)100')` only when the underlying value
+  is 0–1 (the_revolution.gui:115); a score already stored 0–100 needs no
+  scaling, just `min = 0` / `max = 100`.
 - Read-only vanilla hook: Chahar reacts to a live Tumu Crisis via
   `any_country = { has_variable = lost_emperor }`. Never write vanilla state.
 - Deliberately NOT implemented (vanilla already has them): Tumu Crisis

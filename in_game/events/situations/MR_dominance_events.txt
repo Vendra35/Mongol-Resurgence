@@ -1646,3 +1646,26 @@ mr_dominance.999 = {
 		name = mr_dominance.999.a
 	}
 }
+
+# --- Arming the Great Partition ---------------------------------
+# Fired 30 years after Phase 3 closes in success (see the note at
+# that call site in MR_mongol_dominance.txt). Hidden and silent: it
+# exists only to set the flag mr_can_start_partition waits on, so
+# the endgame situation opens relative to when the empire was
+# actually finished rather than on a fixed date.
+mr_dominance.140 = {
+	type = country_event
+	outcome = neutral
+	# empty_text is vanilla's placeholder for a hidden event's loc
+	# (customizable_localization_l_english.yml). Vanilla's own hidden
+	# events declare title/desc/outcome even though nothing renders
+	# them - hidden_events_for_ai_conquest.txt:4-9.
+	title = empty_text
+	desc = empty_text
+	hidden = yes
+	fire_only_once = yes
+	immediate = {
+		set_global_variable = mr_partition_ready
+	}
+}
+

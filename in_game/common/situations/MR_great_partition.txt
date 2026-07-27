@@ -1,0 +1,647 @@
+﻿# =================================================================
+# THE GREAT PARTITION (opens 1600-1720, gated on Phase 3 ending)
+# =================================================================
+# The endgame of the railroad, and its mirror. Phases 1-3 gathered
+# the four khanates; this one runs the same seven seats in reverse.
+#
+# The empire is never conquered from outside — that is not how any
+# Mongol partition ever happened. Moengke died in 1259 and the Toluid
+# civil war split the realm into uluses; the Chinggisid world came
+# apart at the succession, every time. So the pressure here is
+# internal and the outside powers are vultures, not conquerors.
+#
+# HISTORICAL CONVERGENCE. The successors are deliberately the
+# polities that ACTUALLY EXISTED on the steppe around 1650-1700 —
+# Kazakh, Oirat, Crimea, Nogai, Bashkir, Chagatai in the Tarim — and
+# NOT the 1337 khanates. A Golden Horde reappearing in 1650 would be
+# a second piece of alternate history; the point of this situation is
+# the opposite, the alternate timeline closing back onto the real
+# map. By 1710 the Kazakhs are on the Kazakh steppe, the Dzungars in
+# Dzungaria, Crimea is an Ottoman vassal, and Russia and the Manchu
+# are eating the edges — which is what happened.
+#
+# Successor ground is named ONCE, in scripted_geography (MR_geo_*),
+# and asked about ONCE, through the mr_ulus_*_held triggers. Both
+# the cohesion score and on_ending's outcome branch read the same
+# triggers, the way mr_p2_*_cleared is read by both the end trigger
+# and the panel. Change an ulus boundary in the atom and every
+# consumer follows.
+#
+# WINDOW. can_start is gated on the mr_partition_ready flag, not on
+# a date — see the note on mr_can_start_partition. Phase 3 can finish
+# any time between 1550 and 1650, and a fixed start would leave a
+# fast campaign idling. The 1600-1720 dates below are the outer
+# bound only.
+# =================================================================
+mr_great_partition = {
+	monthly_spawn_chance = monthly_spawn_chance_unique
+	can_start = {
+		mr_can_start_partition = yes
+	}
+	visible = {
+		mr_partition_visible = yes
+	}
+	can_end = {
+		OR = {
+			mr_partition_end_trigger = yes
+			# Time expiry, same reason as every other phase: without it
+			# the situation can only ever end in collapse, which leaves
+			# on_ending's "the ulus holds" branch unreachable.
+			custom_tooltip = {
+				text = mr_partition_timeout_tt
+				current_date > 1720.1.1
+			}
+		}
+	}
+	on_start = {
+		set_global_variable = mr_partition_started
+		set_variable = {
+			name = mr_partition_momentum
+			value = 0
+		}
+		# Cohesion is a 0-100 score like MR_dominance_score, but it
+		# counts DOWN: 100 is an empire that still holds every ulus.
+		# Seeded full so the opening months read honestly before the
+		# first monthly recompute lands.
+		set_variable = {
+			name = MR_cohesion_score
+			value = 100
+		}
+		# What the Khaghan has bought back at the kurultai. Cohesion is
+		# recomputed from scratch every month, so a decision that simply
+		# added to the score would be wiped on the next tick; concessions
+		# are a standing term the recompute adds back in.
+		set_variable = {
+			name = mr_partition_concessions
+			value = 0
+		}
+		set_variable = {
+			name = mr_partition_kurultai_cooldown
+			value = 0
+		}
+		# Panel header. The Khaghan is normally MGE; MGO is the
+		# failed-proclamation fallback that Phase 3 also carries.
+		# Guarded, because c:TAG on the right of a comparison errors
+		# every tick while the tag is off the map.
+		if = {
+			limit = {
+				country_exists = c:MGE
+			}
+			set_variable = {
+				name = mr_leading_country
+				value = c:MGE
+			}
+		}
+		else_if = {
+			limit = {
+				country_exists = c:MGO
+			}
+			set_variable = {
+				name = mr_leading_country
+				value = c:MGO
+			}
+		}
+	}
+	on_monthly = {
+		# --- COHESION ---
+		# Computed at the END of on_monthly, never the top. Everything
+		# that can change what the panel should show runs inside the
+		# same tick; computed first, the panel lags a month behind its
+		# own situation. All three earlier phases were fixed for
+		# exactly this, and the bug surfaced as a progress bar reading
+		# zero while every requirement was already green.
+		#
+		# Drivers are things an AI Khaghan actually experiences —
+		# ground lost, ulus by ulus. A driver only a human would trip
+		# would leave the situation frozen in an all-AI game, which is
+		# how this mod is usually watched.
+		set_variable = {
+			name = MR_cohesion_score
+			value = 100
+		}
+		if = {
+			limit = {
+				NOT = {
+					mr_ulus_heartland_held = yes
+				}
+			}
+			change_variable = {
+				name = MR_cohesion_score
+				subtract = 30
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					mr_ulus_kazakh_held = yes
+				}
+			}
+			change_variable = {
+				name = MR_cohesion_score
+				subtract = 12
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					mr_ulus_dzungaria_held = yes
+				}
+			}
+			change_variable = {
+				name = MR_cohesion_score
+				subtract = 12
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					mr_ulus_tarim_held = yes
+				}
+			}
+			change_variable = {
+				name = MR_cohesion_score
+				subtract = 12
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					mr_ulus_nogai_held = yes
+				}
+			}
+			change_variable = {
+				name = MR_cohesion_score
+				subtract = 10
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					mr_ulus_crimea_held = yes
+				}
+			}
+			change_variable = {
+				name = MR_cohesion_score
+				subtract = 8
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					mr_ulus_bashkiria_held = yes
+				}
+			}
+			change_variable = {
+				name = MR_cohesion_score
+				subtract = 8
+			}
+		}
+		# The Siberian frontier yields no successor khanate — the Sibir
+		# Khanate fell in 1598 and that ground is Russian by now — but
+		# losing it is still pressure.
+		if = {
+			limit = {
+				NOT = {
+					mr_ulus_sibir_held = yes
+				}
+			}
+			change_variable = {
+				name = MR_cohesion_score
+				subtract = 8
+			}
+		}
+		# Everything the kurultai has conceded is added back. This is why
+		# concessions is a variable and not a one-off change to the score:
+		# the recompute above starts from 100 each month and would erase
+		# any direct adjustment.
+		change_variable = {
+			name = MR_cohesion_score
+			add = var:mr_partition_concessions
+		}
+		# Floor the score so the panel bar cannot render negative, and cap
+		# it so heavy concessions cannot overfill the bar past its max.
+		if = {
+			limit = {
+				var:MR_cohesion_score < 0
+			}
+			set_variable = {
+				name = MR_cohesion_score
+				value = 0
+			}
+		}
+		if = {
+			limit = {
+				var:MR_cohesion_score > 100
+			}
+			set_variable = {
+				name = MR_cohesion_score
+				value = 100
+			}
+		}
+		change_variable = {
+			name = mr_partition_momentum
+			add = 1
+		}
+		# --- THRESHOLD BEATS ---
+		# Fired as cohesion falls PAST each mark, once each, via a global
+		# flag — the same shape the earlier phases use for mr_beat_*_fired.
+		# Placed after the score is recomputed and before the panel header,
+		# so a beat and the number it is reacting to always agree.
+		#
+		# Three audiences, mirroring the mr_dominance.22 / .23 split that
+		# the earlier phases already send at their own openings:
+		#   the KHAGHAN gets the strain from the inside
+		#   NEIGHBOURS get the opportunity — they border the dying empire
+		#   SPECTATORS get atmosphere; they have a stake in the theatre but
+		#     no shared border, so for them this is news, not a chance
+		# Neighbour and spectator sets are disjoint by construction, so no
+		# country ever receives two versions of the same beat.
+		if = {
+			limit = {
+				var:MR_cohesion_score < 85
+				NOT = {
+					has_global_variable = mr_partition_beat_85_fired
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						tag = MGE
+						tag = MGO
+					}
+				}
+				trigger_event_non_silently = mr_partition.1
+			}
+			every_country = {
+				limit = {
+					mr_partition_is_neighbour = yes
+				}
+				trigger_event_non_silently = mr_partition.11
+			}
+			set_global_variable = mr_partition_beat_85_fired
+		}
+		if = {
+			limit = {
+				var:MR_cohesion_score < 55
+				NOT = {
+					has_global_variable = mr_partition_beat_55_fired
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						tag = MGE
+						tag = MGO
+					}
+				}
+				trigger_event_non_silently = mr_partition.2
+			}
+			# The vultures gather. Every neighbour gets the carve CB at
+			# this mark and keeps it for the rest of the window — this is
+			# the lever that lets a player who never touched the steppe
+			# take part in the endgame, and the reason an all-AI game
+			# still ends with Russia and the Manchu on Mongol ground.
+			# Granted against whichever of MGE/MGO is the Khaghan; the
+			# country_exists guard sits in the same AND, per house rule.
+			every_country = {
+				limit = {
+					mr_partition_is_neighbour = yes
+				}
+				trigger_event_non_silently = mr_partition.12
+				if = {
+					limit = {
+						country_exists = c:MGE
+					}
+					add_casus_belli = {
+						target = c:MGE
+						type = casus_belli:cb_MR_carve_the_ulus
+						years = 80
+					}
+				}
+				if = {
+					limit = {
+						country_exists = c:MGO
+					}
+					add_casus_belli = {
+						target = c:MGO
+						type = casus_belli:cb_MR_carve_the_ulus
+						years = 80
+					}
+				}
+			}
+			every_country = {
+				limit = {
+					mr_partition_is_spectator = yes
+				}
+				trigger_event_non_silently = mr_partition.22
+			}
+			set_global_variable = mr_partition_beat_55_fired
+		}
+		if = {
+			limit = {
+				var:MR_cohesion_score < 40
+				NOT = {
+					has_global_variable = mr_partition_beat_40_fired
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						tag = MGE
+						tag = MGO
+					}
+				}
+				trigger_event_non_silently = mr_partition.3
+			}
+			every_country = {
+				limit = {
+					mr_partition_is_neighbour = yes
+				}
+				trigger_event_non_silently = mr_partition.13
+			}
+			every_country = {
+				limit = {
+					mr_partition_is_spectator = yes
+				}
+				trigger_event_non_silently = mr_partition.23
+			}
+			set_global_variable = mr_partition_beat_40_fired
+		}
+		# --- THE KURULTAI ---
+		# Once the first crack has shown, the assembly puts the question
+		# to the Khaghan every five years or so. No option is free: every
+		# answer costs land, order or treasure, which is the whole point —
+		# the historical Khaghans had exactly these three moves and none
+		# of them was good. Fired to the claimant, human or AI alike, with
+		# ai_chance on every option so an observed game still plays it.
+		change_variable = {
+			name = mr_partition_kurultai_cooldown
+			add = 1
+		}
+		if = {
+			limit = {
+				var:mr_partition_kurultai_cooldown > 60
+				var:MR_cohesion_score < 85
+			}
+			every_country = {
+				limit = {
+					OR = {
+						tag = MGE
+						tag = MGO
+					}
+				}
+				trigger_event_non_silently = mr_partition.100
+			}
+			set_variable = {
+				name = mr_partition_kurultai_cooldown
+				value = 0
+			}
+		}
+		# Panel header last, for the same reason as the score.
+		if = {
+			limit = {
+				country_exists = c:MGE
+			}
+			set_variable = {
+				name = mr_leading_country
+				value = c:MGE
+			}
+		}
+		else_if = {
+			limit = {
+				country_exists = c:MGO
+			}
+			set_variable = {
+				name = mr_leading_country
+				value = c:MGO
+			}
+		}
+	}
+	on_ending = {
+		# Branch on the goal trigger, never on a side-signal — the same
+		# rule every other phase follows.
+		if = {
+			limit = {
+				mr_partition_end_trigger = yes
+			}
+			set_global_variable = mr_partition_collapsed
+			# --- THE SUCCESSORS ---
+			# An ulus breaks away when cohesion has fallen past ITS OWN
+			# threshold, and the thresholds are ordered by distance from
+			# Karakorum: the west goes first. That is how it actually
+			# happened — the Golden Horde and the Ilkhanate were
+			# effectively independent within a generation of Chinggis,
+			# while the eastern heartland held longest.
+			#
+			# Deliberately NOT "only ground the Khaghan already lost".
+			# No Mongol partition ever worked that way: Moengke died in
+			# 1259 with the empire completely intact and it split anyway,
+			# at the succession, along the ulus lines the conquest itself
+			# drew. Berke, Hulagu, Kublai and Ariq Boeke each held their
+			# ulus firmly and separated regardless. Modelling the split as
+			# a consequence of territorial loss would invert the real
+			# causation — and it would mean a well-played AI Khaghan
+			# produces no successors at all, leaving the map a blob and
+			# breaking the one thing this situation is for.
+			#
+			# The second clause covers the other case: an ulus already
+			# outside the realm is gone whatever the score says.
+			#
+			# change_location_owner brings a defined-but-landless tag back
+			# onto the map by itself — no formable needed. Vanilla does
+			# exactly this to revive SKE, which owns nothing at 1337
+			# (flavor_swe_dan.txt:4-5), and every tag below carries the
+			# culture_definition / religion_definition in
+			# setup/countries that the engine instantiates it from.
+			#
+			# The heartland is absent on purpose: losing Mongolia is not a
+			# secession, it is the end of the empire, and it is already
+			# one of the two ways this situation can close.
+			# The Crimean Khanate — furthest from Karakorum, and
+			# historically the Chinggisid state that outlived every
+			# other one, to 1783.
+			if = {
+				limit = {
+					OR = {
+						var:MR_cohesion_score < 85
+						NOT = {
+							mr_ulus_crimea_held = yes
+						}
+					}
+				}
+				scripted_geography:MR_geo_crimean_seat = {
+					every_location_in_scripted_geography = {
+						limit = {
+							mr_in_claimant_realm = yes
+						}
+						change_location_owner = c:CRI
+					}
+				}
+			}
+			# The Nogai Horde, on the northern Caspian steppe.
+			if = {
+				limit = {
+					OR = {
+						var:MR_cohesion_score < 80
+						NOT = {
+							mr_ulus_nogai_held = yes
+						}
+					}
+				}
+				scripted_geography:MR_geo_nogai_steppe = {
+					every_location_in_scripted_geography = {
+						limit = {
+							mr_in_claimant_realm = yes
+						}
+						change_location_owner = c:NOG
+					}
+				}
+			}
+			# The Kazakh Khanate, 1465-1847 — the largest surviving
+			# steppe state and the true heir of the Desht-i Kipchak.
+			if = {
+				limit = {
+					OR = {
+						var:MR_cohesion_score < 70
+						NOT = {
+							mr_ulus_kazakh_held = yes
+						}
+					}
+				}
+				scripted_geography:MR_geo_kazakh_steppe = {
+					every_location_in_scripted_geography = {
+						limit = {
+							mr_in_claimant_realm = yes
+						}
+						change_location_owner = c:KAZ
+					}
+				}
+			}
+			# The Bashkirs of the southern Urals.
+			if = {
+				limit = {
+					OR = {
+						var:MR_cohesion_score < 70
+						NOT = {
+							mr_ulus_bashkiria_held = yes
+						}
+					}
+				}
+				scripted_geography:MR_geo_bashkiria = {
+					every_location_in_scripted_geography = {
+						limit = {
+							mr_in_claimant_realm = yes
+						}
+						change_location_owner = c:BSH
+					}
+				}
+			}
+			# Chagatai in the Tarim — Yarkent stayed Chagatayid until
+			# 1705, then passed to the Khojas.
+			if = {
+				limit = {
+					OR = {
+						var:MR_cohesion_score < 60
+						NOT = {
+							mr_ulus_tarim_held = yes
+						}
+					}
+				}
+				scripted_geography:MR_geo_tarim = {
+					every_location_in_scripted_geography = {
+						limit = {
+							mr_in_claimant_realm = yes
+						}
+						change_location_owner = c:CHG
+					}
+				}
+			}
+			# The Oirats: the Dzungars, the last steppe empire, and the
+			# nearest ulus to the heartland. Destroyed 1755.
+			if = {
+				limit = {
+					OR = {
+						var:MR_cohesion_score < 55
+						NOT = {
+							mr_ulus_dzungaria_held = yes
+						}
+					}
+				}
+				scripted_geography:MR_geo_dzungaria = {
+					every_location_in_scripted_geography = {
+						limit = {
+							mr_in_claimant_realm = yes
+						}
+						change_location_owner = c:OIR
+					}
+				}
+			}
+		}
+		else = {
+			set_global_variable = mr_partition_survived
+			# The window closed with the Khaghan still on the throne and
+			# Mongolia still his. The reward is PERMANENT, like every other
+			# phase reward here, and it is not a cavalry buff: an empire
+			# that survives this century survives by ceasing to be a horde
+			# in the old sense. Granted to whichever of MGE/MGO held on.
+			every_country = {
+				limit = {
+					OR = {
+						tag = MGE
+						tag = MGO
+					}
+				}
+				add_country_modifier = {
+					modifier = MR_the_ulus_endures
+					years = -1
+					mode = replace
+				}
+				trigger_event_non_silently = mr_partition.200
+			}
+		}
+	}
+	on_ended = {
+		# The wiki recommends clearing situation variables in on_ended
+		# to keep them out of the savefile.
+		remove_variable = mr_leading_country
+		remove_variable = MR_cohesion_score
+		remove_variable = mr_partition_momentum
+		remove_variable = mr_partition_concessions
+		remove_variable = mr_partition_kurultai_cooldown
+		remove_global_variable = mr_partition_beat_85_fired
+		remove_global_variable = mr_partition_beat_55_fired
+		remove_global_variable = mr_partition_beat_40_fired
+	}
+	tooltip = {
+		if = {
+			limit = {
+				OR = {
+					is_in_scripted_geography = scripted_geography:MR_geo_heartland
+					is_in_scripted_geography = scripted_geography:MR_geo_kazakh_steppe
+					is_in_scripted_geography = scripted_geography:MR_geo_nogai_steppe
+					is_in_scripted_geography = scripted_geography:MR_geo_crimean_seat
+					is_in_scripted_geography = scripted_geography:MR_geo_bashkiria
+					is_in_scripted_geography = scripted_geography:MR_geo_dzungaria
+					is_in_scripted_geography = scripted_geography:MR_geo_tarim
+				}
+			}
+			custom_tooltip = mr_partition_map_tt
+		}
+	}
+	map_color = {
+		if = {
+			limit = {
+				owner ?= {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+				}
+			}
+			value = this.owner.country_color
+		}
+		else = {
+			value = define:NMapColors|DEFAULT_COLOR
+		}
+	}
+}

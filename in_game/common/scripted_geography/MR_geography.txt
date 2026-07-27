@@ -257,3 +257,88 @@ MR_geo_russian_foothold = {
 		tambov_area
 	}
 }
+
+# =================================================================
+# THE GREAT PARTITION (mr_great_partition) - SUCCESSOR ULUSES
+# =================================================================
+# Where each successor khanate is seated when the restored empire
+# comes apart. These answer a DIFFERENT question from the atoms
+# above — those say "what must be cleared to finish a phase", these
+# say "which ulus is this ground, and does the Khaghan still hold
+# it". Overlap with a goal atom is therefore expected and correct;
+# the rule this file follows is one atom per distinct BOUNDARY, and
+# a successor's boundary is not a phase goal's boundary.
+#
+# The set is deliberately the polities that ACTUALLY EXISTED on the
+# steppe around 1650-1700, not the 1337 khanates. A Golden Horde
+# reappearing in 1650 would be a second piece of alternate history;
+# the point of this situation is the opposite — the alternate
+# timeline closing back onto the real map. So the western ulus comes
+# apart into Kazakh, Nogai, Crimea and Bashkir rather than into GLH.
+#
+# Successors that need NO new atom, because an existing one already
+# draws the right boundary:
+#   Khalkha / the Mongol heartland  MR_geo_heartland
+#   Oirat (the Dzungars)            MR_geo_dzungaria
+#   Chagatai (Yarkent, Chagatayid   MR_geo_tarim
+#     until 1705, then the Khoja)
+#
+# Sibir (SIB) is deliberately NOT a successor. The Sibir Khanate was
+# destroyed in 1598, before this situation's window opens, and by
+# 1650 western Siberia is Russian. Producing one here would be a
+# second piece of alternate history in the situation whose whole
+# point is closing the alternate timeline. The Siberian frontier
+# still feeds the cohesion score (mr_ulus_sibir_held) — losing it is
+# pressure — it just yields no khanate. Russia takes that ground,
+# which is what happened.
+
+# The Kazakh Khanate (KAZ), 1465-1847 — the largest surviving
+# steppe state and the true heir of the Desht-i Kipchak. Zhetysu
+# (Semirechye) is included because it was Kazakh ground in this
+# window; the Dzungars only took it later.
+MR_geo_kazakh_steppe = {
+	area = {
+		desht_kipchak_area
+		zhetysu_area
+	}
+}
+
+# The Crimean Khanate (CRI) — the last Chinggisid state standing,
+# an Ottoman vassal that outlived every other one, to 1783.
+MR_geo_crimean_seat = {
+	area = {
+		crimea_area
+	}
+}
+
+# The Nogai Horde (NOG) — the steppe around the northern Caspian,
+# between the Volga mouth and the Yaik. There is no nogai_area in
+# definitions.txt, so this is the ground it actually held:
+# astrakhan at the Volga mouth, majar on the north Caucasus steppe,
+# lower_yik reaching east toward the Ural river. Contiguous.
+#
+# yedisan_area is deliberately NOT here despite being named for the
+# Yedisan, the Nogai's western branch: on the map it sits next to
+# Moldavia and Podolia, north-west of the Black Sea — roughly
+# 1500 km from the other three, with the whole Pontic steppe in
+# between. Including it would make this successor a split blob
+# reaching from the Ural river to the Dniester. The historical
+# Yedisan was a Crimean/Ottoman vassal by this period anyway, so it
+# is not the Khaghan's to lose.
+MR_geo_nogai_steppe = {
+	area = {
+		astrakhan_area
+		majar_area
+		lower_yik_area
+	}
+}
+
+# The Bashkirs (BSH) — the southern Urals. Split out from
+# MR_geo_volga, which stays as it is: that atom is a Phase 3 goal
+# and must keep its own boundary. Two atoms sharing an area is fine;
+# what this file forbids is an atom REFERENCING another atom.
+MR_geo_bashkiria = {
+	area = {
+		bashkiria_area
+	}
+}

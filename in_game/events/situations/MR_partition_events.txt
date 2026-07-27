@@ -1,0 +1,400 @@
+﻿namespace = mr_partition
+
+# =================================================================
+# THE GREAT PARTITION - THRESHOLD BEATS
+# =================================================================
+# Fired from mr_great_partition's on_monthly as cohesion falls past
+# 85, 55 and 40, once each. Three voices per beat:
+#   .1  .2  .3   the Khaghan, from inside the strain
+#   .11 .12 .13  neighbours, for whom this is an opportunity
+#   .22 .23      distant spectators, for whom it is news
+# The audience sets are disjoint (mr_partition_is_neighbour /
+# _is_spectator), so nobody hears the same beat twice.
+#
+# These are flavour and signal only. They grant no phase buffs and no
+# phase rewards — those belong to the situation and the buff rule
+# alone, the standing rule in this mod. The vulture CB and the
+# back-an-ulus levers hang off these same thresholds and are not
+# built yet; when they are, they attach here.
+#
+# 85 is early enough that the empire can still act, 40 late enough
+# that everyone can see where it ends. The uluses themselves break
+# away in on_ending, each at its own threshold.
+# =================================================================
+
+# --- 85: the first crack ----------------------------------------
+mr_partition.1 = {
+	type = country_event
+	category = situation_event
+	title = mr_partition.1.title
+	desc = mr_partition.1.desc
+	outcome = negative
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = angry
+	}
+	option = {
+		name = mr_partition.1.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+mr_partition.11 = {
+	type = country_event
+	category = situation_event
+	title = mr_partition.11.title
+	desc = mr_partition.11.desc
+	outcome = neutral
+	fire_only_once = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+	option = {
+		name = mr_partition.11.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# --- 55: the centre strains -------------------------------------
+mr_partition.2 = {
+	type = country_event
+	category = situation_event
+	title = mr_partition.2.title
+	desc = mr_partition.2.desc
+	outcome = negative
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = angry
+	}
+	option = {
+		name = mr_partition.2.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+mr_partition.12 = {
+	type = country_event
+	category = situation_event
+	title = mr_partition.12.title
+	desc = mr_partition.12.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = armed
+		10 = regular
+	}
+	option = {
+		name = mr_partition.12.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+mr_partition.22 = {
+	type = country_event
+	category = situation_event
+	title = mr_partition.22.title
+	desc = mr_partition.22.desc
+	outcome = neutral
+	fire_only_once = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+	option = {
+		name = mr_partition.22.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# --- 40: each ulus for itself -----------------------------------
+mr_partition.3 = {
+	type = country_event
+	category = situation_event
+	title = mr_partition.3.title
+	desc = mr_partition.3.desc
+	outcome = negative
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = angry
+	}
+	option = {
+		name = mr_partition.3.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+mr_partition.13 = {
+	type = country_event
+	category = situation_event
+	title = mr_partition.13.title
+	desc = mr_partition.13.desc
+	outcome = positive
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = armed
+		10 = happy
+	}
+	option = {
+		name = mr_partition.13.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+mr_partition.23 = {
+	type = country_event
+	category = situation_event
+	title = mr_partition.23.title
+	desc = mr_partition.23.desc
+	outcome = neutral
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+	option = {
+		name = mr_partition.23.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# =================================================================
+# THE KURULTAI
+# =================================================================
+# Fired to the Khaghan every five years once cohesion has dropped
+# below 85, from mr_great_partition's on_monthly.
+#
+# No option is free. That is the design: the historical Khaghans had
+# exactly these three moves and every one of them cost something.
+# Granting a pasture buys real cohesion but hands an ulus away for
+# good; binding the ulus to the centre keeps the map whole and buys
+# nothing, only unrest; paying the khan delays the question at the
+# price of the treasury. Doing nothing is not on the list, because
+# it was never available to them either.
+#
+# Every option carries ai_chance, so an AI Khaghan plays this too —
+# this mod is usually watched in observer and a decision only a human
+# could make would freeze the situation.
+mr_partition.100 = {
+	type = country_event
+	category = situation_event
+	title = mr_partition.100.title
+	desc = mr_partition.100.desc
+	outcome = neutral
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+	# --- Grant the ulus its own pastures ---
+	# Releases the FURTHEST ulus still held, in the same order the
+	# collapse uses: Crimea first, Dzungaria last. Its weight leaves the
+	# cohesion sum, but the concession is worth more than any single
+	# ulus, so the net is a realm that is smaller and steadier.
+	option = {
+		name = mr_partition.100.a
+		ai_chance = {
+			factor = 40
+		}
+		# The payment is made BEFORE the release, and guarded on an ulus
+		# actually being there to give away. Unguarded and placed after the
+		# chain it was an exploit: once all six had gone the chain matched
+		# nothing while the concession still paid, so every later kurultai
+		# handed out a free +25. Cohesion then pinned at 100 and the
+		# situation closed on the SURVIVAL branch, granting 'The Ulus
+		# Endures' to an empire that had lost every ulus it ever had.
+		# The guard has to run first, because the release makes its own
+		# condition false.
+		if = {
+			limit = {
+				OR = {
+					mr_ulus_crimea_held = yes
+					mr_ulus_nogai_held = yes
+					mr_ulus_kazakh_held = yes
+					mr_ulus_bashkiria_held = yes
+					mr_ulus_tarim_held = yes
+					mr_ulus_dzungaria_held = yes
+				}
+			}
+			situation:mr_great_partition = {
+				change_variable = {
+					name = mr_partition_concessions
+					add = 25
+				}
+			}
+			add_stability = stability_mild_penalty
+		}
+		if = {
+			limit = {
+				mr_ulus_crimea_held = yes
+			}
+			scripted_geography:MR_geo_crimean_seat = {
+				every_location_in_scripted_geography = {
+					limit = {
+						mr_in_claimant_realm = yes
+					}
+					change_location_owner = c:CRI
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				mr_ulus_nogai_held = yes
+			}
+			scripted_geography:MR_geo_nogai_steppe = {
+				every_location_in_scripted_geography = {
+					limit = {
+						mr_in_claimant_realm = yes
+					}
+					change_location_owner = c:NOG
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				mr_ulus_kazakh_held = yes
+			}
+			scripted_geography:MR_geo_kazakh_steppe = {
+				every_location_in_scripted_geography = {
+					limit = {
+						mr_in_claimant_realm = yes
+					}
+					change_location_owner = c:KAZ
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				mr_ulus_bashkiria_held = yes
+			}
+			scripted_geography:MR_geo_bashkiria = {
+				every_location_in_scripted_geography = {
+					limit = {
+						mr_in_claimant_realm = yes
+					}
+					change_location_owner = c:BSH
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				mr_ulus_tarim_held = yes
+			}
+			scripted_geography:MR_geo_tarim = {
+				every_location_in_scripted_geography = {
+					limit = {
+						mr_in_claimant_realm = yes
+					}
+					change_location_owner = c:CHG
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				mr_ulus_dzungaria_held = yes
+			}
+			scripted_geography:MR_geo_dzungaria = {
+				every_location_in_scripted_geography = {
+					limit = {
+						mr_in_claimant_realm = yes
+					}
+					change_location_owner = c:OIR
+				}
+			}
+		}
+	}
+	# --- Bind them to the centre ---
+	# The map stays whole and nothing is bought: cohesion keeps falling
+	# at the rate it was already falling, and the realm pays for the
+	# refusal in unrest.
+	option = {
+		name = mr_partition.100.b
+		ai_chance = {
+			factor = 40
+		}
+		add_country_modifier = {
+			modifier = MR_kurultai_defied
+			years = 25
+			mode = add_and_extend
+		}
+		add_horde_unity = horde_unity_mild_penalty
+		# The real cost, and the one the AI can actually feel: cohesion
+		# now falls faster than it was falling, so more uluses clear
+		# their thresholds when the empire finally comes apart.
+		situation:mr_great_partition = {
+			change_variable = {
+				name = mr_partition_concessions
+				subtract = 10
+			}
+		}
+	}
+	# --- Buy the khan's loyalty ---
+	# Delays the question rather than answering it: a smaller concession
+	# than autonomy, and the treasury pays. add_gold takes a raw number;
+	# there are no named script values for money (vanilla passes raw too,
+	# qa_debug.txt:516).
+	option = {
+		name = mr_partition.100.c
+		ai_chance = {
+			factor = 20
+		}
+		add_gold = -500
+		situation:mr_great_partition = {
+			change_variable = {
+				name = mr_partition_concessions
+				add = 10
+			}
+		}
+	}
+}
+
+# --- The window closed and the ulus held -------------------------
+# Fired from on_ending's survival branch. The counterpart to the six
+# releases in the collapse branch: not a restored empire at its
+# height, but one that reached 1720 with a centre — which no real
+# steppe power managed.
+mr_partition.200 = {
+	type = country_event
+	category = situation_event
+	title = mr_partition.200.title
+	desc = mr_partition.200.desc
+	outcome = positive
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = happy
+	}
+	option = {
+		name = mr_partition.200.a
+		ai_chance = {
+			factor = 100
+		}
+		add_prestige = prestige_extreme_bonus
+	}
+}
+

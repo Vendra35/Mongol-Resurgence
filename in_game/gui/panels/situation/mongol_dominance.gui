@@ -138,6 +138,16 @@ situation_panel = {
                         # fill property is value (the_revolution.gui:
                         # 112-116), min/max as in italian_wars.gui:
                         # 316-326 — "progress" is not a property.
+                        # GetValue MUST be wrapped in FixedPointToFloat:
+                        # value takes a float and a script variable reads
+                        # back as fixed-point, so the bare call resolved
+                        # to 0 and this bar sat empty in every campaign.
+                        # Every vanilla bar that reads a script variable
+                        # wraps it, without exception —
+                        # italian_wars.gui:326 is the same construct on a
+                        # situation variable, decline_of_majapahit.gui:196
+                        # the minimal form. No Multiply_float here: the
+                        # score is already 0-100, matching min/max.
                         text_single = {
                             name = "score_label"
                             layoutpolicy_horizontal = expanding
@@ -150,7 +160,7 @@ situation_panel = {
                             using = morale_progressbar_bar
                             min = 0
                             max = 100
-                            value = "[SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('MR_dominance_score').GetValue]"
+                            value = "[FixedPointToFloat(SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('MR_dominance_score').GetValue)]"
                             tooltip = "mongol_dominance_progress_tooltip"
                         }
                     }

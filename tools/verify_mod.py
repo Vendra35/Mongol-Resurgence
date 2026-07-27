@@ -162,6 +162,12 @@ for p, s in code.items():
     b = strip_comments(s)
     for m in re.finditer(r"trigger_event_(?:silently|non_silently) = ([a-z_]+\.\d+)", b):
         fired.add(m.group(1))
+    # The DELAYED block form: trigger_event_silently = { id = X years = N }
+    # (effects.log:10578, days/months/years). Matching only the scalar form
+    # above reported every delayed event as unreachable — the same false
+    # positive this harness produced when it was pointed at another mod.
+    for m in re.finditer(r"trigger_event_(?:silently|non_silently) = \{[^}]*?\bid = ([a-z_]+\.\d+)", b, re.S):
+        fired.add(m.group(1))
     # events fired from on_action `events = { ... }` lists
     for m in re.finditer(r"events = \{([^}]*)\}", b):
         fired |= set(re.findall(r"([a-z_]+\.\d+)", m.group(1)))

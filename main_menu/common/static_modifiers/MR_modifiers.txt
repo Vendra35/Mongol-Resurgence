@@ -17,7 +17,7 @@ MR_mongol_warrior_spirit = {
 	siege_ability = 0.25
 	monthly_horde_unity = 2
 	stability_investment = 1
-	monthly_rebel_growth = -0.0025
+	monthly_rebel_growth = -0.1
 	character_mil_child_education = 0.75
 	expected_army_size = 20
 }
@@ -35,10 +35,9 @@ MR_unified_mongol_banner = {
 	subject_loyalty = 25
 	global_levy_size_modifier = 1
 	levy_recovery_modifier = 1
-	monthly_rebel_growth = -0.001
 	character_mil_child_education = 0.75
 	num_local_governors = 1
-	expected_army_size_modifier = 4
+	expected_army_size_modifier = 1
 }
 
 # --- Situation 1 Failure (AI) ---
@@ -76,6 +75,7 @@ MR_imperial_conquest = {
 	discipline = 0.1
 	global_manpower_modifier = 0.5
 	siege_ability = 0.4
+	monthly_rebel_growth = -0.1
 	bias_for_militarist_policies = 100
 	blocks_country_formation = yes
 	blocked_from_conversion = yes
@@ -86,12 +86,11 @@ MR_empire_fulfilled = {
 	game_data = {
 		category = country
 	}
+	land_morale_modifier = 0.1
 	global_manpower_modifier = 0.15
 	monthly_prestige = 0.15
 	global_integration_speed_modifier = 1
-	subject_loyalty = 25
-	monthly_rebel_growth = -0.0025
-	expected_army_size_modifier = 4
+	expected_army_size_modifier = 1
 	num_local_governors = 1
 }
 
@@ -145,10 +144,7 @@ MR_pax_mongolica = {
 	global_monthly_development = 0.001
 	global_population_growth = 0.005
 	subject_loyalty = 25
-	monthly_rebel_growth = -0.005
-	cultures_capacity = 3
-	global_max_bureaucracy_slots = 2
-	allow_bureaucracy = yes
+	monthly_rebel_growth = -0.05
 }
 
 # --- Situation 3 Permanent ---
@@ -159,6 +155,7 @@ MR_mongol_world_order = {
 	global_manpower_modifier = 0.2
 	monthly_prestige = 0.1
 	diplomatic_reputation = -2
+	cultures_capacity = 3
 	global_max_bureaucracy_slots = 3
 	allow_bureaucracy = yes
 }
@@ -201,7 +198,7 @@ MR_great_khan = {
 	global_army_levy_size_modifier = 0.5
 	levy_recovery_modifier = 1
 	stability_investment = 1
-	monthly_rebel_growth = -0.05
+	monthly_rebel_growth = -0.1
 	global_manpower_modifier = 0.5
 	antagonism_received_modifier = -1
 	army_maintenance_efficiency = 0.85
@@ -270,9 +267,10 @@ MR_mongol_historical_modifier = {
 	army_maintenance_efficiency = 0.75
 	global_integration_speed_modifier = 1
 	annexation_speed_base = 3
+	subject_loyalty = 50
 	monthly_horde_unity = 1
 	stability_investment = 0.5
-	monthly_rebel_growth = -0.005
+	monthly_rebel_growth = -0.1
 	expected_army_size = 10
 }
 
@@ -284,13 +282,8 @@ MR_mongol_historical_modifier_2 = {
 	siege_ability = 0.1
 	global_manpower_modifier = 0.1
 	global_integration_speed_modifier = 1
-	subject_loyalty = 25
-	global_hostile_attrition = 0.5
-	monthly_horde_unity = 0.5
-	stability_investment = 0.25
-	monthly_rebel_growth = -0.0025
 	character_mil_child_education = 1
-	expected_army_size = 2
+	expected_army_size_modifier = 1
 }
 
 # Historical Phase 2 Buff
@@ -298,16 +291,20 @@ MR_imperial_historical_modifier = {
 	game_data = {
 		category = country
 	}
-	army_light_cavalry_power = 0.15
-	monthly_gold_income = 100
+	army_light_cavalry_power = 0.2
+	monthly_gold_income = 200
+	global_manpower_modifier = 0.25
 	army_maintenance_efficiency = 0.25
 	global_integration_speed_modifier = 2
 	annexation_speed_base = 4
 	bias_for_militarist_policies = 100
 	aggressiveness_modifier = 1
-	army_light_cavalry_power = 0.1
+	monthly_rebel_growth = -0.1
 	siege_ability = 0.2
-	expected_army_size = 4
+	subject_loyalty = 100
+	monthly_horde_unity = 1
+	stability_investment = 0.5
+	expected_army_size_modifier = 2
 	blocks_country_formation = yes
 	blocked_from_conversion = yes
 }
@@ -317,17 +314,18 @@ MR_dominance_historical_modifier = {
 	game_data = {
 		category = country
 	}
-	siege_ability = 0.25
-	army_light_cavalry_power = 0.2
-	global_manpower_modifier = 0.05
-	monthly_prestige = 0.1
+	siege_ability = 0.4
+	army_light_cavalry_power = 0.25
+	global_manpower_modifier = 0.25
 	global_integration_speed_modifier = 3
 	annexation_speed_base = 5
-	tax_income_efficiency = 0.05
-	global_monthly_prosperity = 0.002
-	subject_loyalty = 15
-	monthly_rebel_growth = -0.0025
-	expected_army_size = 6
+	bias_for_militarist_policies = 100
+	monthly_rebel_growth = -0.1
+	subject_loyalty = 100
+	monthly_horde_unity = 1
+	stability_investment = 0.5
+	expected_army_size_modifier = 3
+	blocks_country_formation = yes
 	blocked_from_conversion = yes
 }
 
@@ -343,7 +341,7 @@ MR_forge_of_warriors = {
 	game_data = {
 		category = country
 	}
-	land_morale_modifier = 0.1
+	land_morale_modifier = 0.2
 	levy_combat_efficiency_modifier = 0.25
 	army_tradition_from_battle = 0.5
 }
@@ -365,7 +363,55 @@ MR_sacred_capital_restored = {
 	stability_investment = 0.05
 	global_manpower_modifier = 0.1
 	army_light_cavalry_power = 0.05
-	monthly_rebel_growth = -0.0005
+}
+
+# --- The Ulus Endures (mr_great_partition survival, PERMANENT) ---
+# The reward for reaching 1720 with the heartland and the Khaghan
+# still standing. Deliberately NOT a cavalry buff: an empire that
+# survives this window survives by stopping being a horde in the old
+# sense — written law, counted taxes, cast cannon, governors who stay
+# where they are put. It is the same sentence MR_dzungar_legacy makes
+# about the Dzungars, granted to a state that managed it at scale.
+#
+# PERMANENT, like every other phase reward in this mod, and the
+# tooltip says so.
+MR_the_ulus_endures = {
+	game_data = {
+		category = country
+	}
+	army_artillery_power = 0.15
+	global_max_bureaucracy_slots = 2
+	allow_bureaucracy = yes
+	tax_income_efficiency = 0.1
+	global_monthly_development = 0.001
+	monthly_legitimacy = 0.5
+	global_integration_speed_modifier = 2
+	num_local_governors = 1
+	cultures_capacity = 3
+	monthly_rebel_growth = -0.0025
+}
+
+# --- The Kurultai Defied (mr_partition.100 option B, 25 years) ---
+# The price of keeping the map whole. Refusing the assembly costs
+# nothing in territory and buys nothing in cohesion.
+#
+# The cost is deliberately NOT rebellion. This mod's modifiers push
+# monthly_rebel_growth DOWN almost everywhere on purpose: an AI Khaghan
+# cannot manage a revolt, and a railroad that collapses into unrest it
+# cannot fight stops being a railroad. Giving the AI a 40%-chance option
+# that raises rebel growth would have undone that everywhere at once.
+# So defiance is paid in legitimacy and horde unity — currencies the AI
+# survives — and above all in the situation's OWN gauge: option B also
+# subtracts from mr_partition_concessions, so cohesion falls faster and
+# more uluses break away at the end. Same pressure, expressed where the
+# situation can actually resolve it.
+MR_kurultai_defied = {
+	game_data = {
+		category = country
+	}
+	monthly_rebel_growth = 0.005
+	monthly_legitimacy = -0.5
+	monthly_horde_unity = -0.5
 }
 
 # --- The Kurultai's Mandate (mr_dominance_dhe.4, permanent) ---
@@ -373,6 +419,8 @@ MR_kurultai_mandate = {
 	game_data = {
 		category = country
 	}
+	tax_income_efficiency = 0.05
+	global_monthly_prosperity = 0.002
 	monthly_horde_unity = 0.5
 	monthly_legitimacy = 0.5
 	monthly_prestige = 0.1
@@ -419,7 +467,6 @@ MR_dzungar_legacy = {
 	discipline = 0.05
 	siege_ability = 0.2
 	tax_income_efficiency = 0.1
-	monthly_rebel_growth = -0.0025
 }
 
 # --- The Khan's Own Pasture (LOCATION modifier) -------------------

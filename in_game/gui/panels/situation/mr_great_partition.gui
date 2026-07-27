@@ -1,13 +1,17 @@
 situation_panel = {
 
-    ##################################### TOP HEADER (SINGLE PORTRAIT - ONE EMPIRE) #####################################
-    # one_country_header_template receives its country via a block
-    # named "CountryContext" and its anchor via
-    # "character_portrait_anchor" (country_header.gui:156/:160) — the
-    # First*/first_* names belong to the TWO-country template only.
-    # Overriding the wrong names left the portrait black with
-    # "No context supplied ... Character" log spam. Exact vanilla
-    # pattern for variable-driven context: rise_of_the_ottomans.gui:13.
+    ##################################### TOP HEADER (SINGLE PORTRAIT - THE KHAGHAN) #####################################
+    # one_country_header_template receives its country via a block named
+    # "CountryContext" and its anchor via "character_portrait_anchor"
+    # (country_header.gui:156/:160) — the First*/first_* names belong to
+    # the TWO-country template only. Overriding the wrong names left the
+    # portrait black with "No context supplied ... Character" log spam.
+    #
+    # Deliberately the ONE-country header, not the dual portrait Phase 1
+    # uses. There is no single rival here: the empire is coming apart
+    # into six successors at once, and picking one of them to stand
+    # opposite the Khaghan would misrepresent what is happening. The
+    # cohesion bar carries the drama instead.
     blockoverride "situation_panel_image" {
         using = one_country_header_template
 
@@ -19,19 +23,11 @@ situation_panel = {
             parentanchor = bottom|left
         }
 
-        # Hides the ruler-title strip that sits beside the portrait.
-        # WHY: one_country_header_template declares block "CountryContext"
-        # TWICE — once empty for the portrait, once carrying the default
-        # datacontext = "[Country.GetGovernment]" that feeds the strip's
-        # country_government_character (character_header.gui:260-295). A
-        # single blockoverride replaces both, so the strip is handed a
-        # Country where it needs a Government and every widget in it logs
-        # "No context supplied ... 'Government'" (character_header.gui:281,
-        # :291) for as long as the panel is open.
-        # Costs nothing visible: those widgets are all gated on
-        # [Government.HasRuler] / [Government.HasActiveRegent], which
-        # already return false, so the strip renders empty today.
-        # Vanilla does exactly this in reformation.gui:88.
+        # Hides the ruler-title strip beside the portrait. See the long
+        # note in mongol_dominance.gui: one_country_header_template
+        # declares "CountryContext" twice and a single blockoverride
+        # replaces both, handing the strip a Country where it wants a
+        # Government. Vanilla does the same in reformation.gui:88.
         blockoverride "one_country_ruler_title_visible" {
             visible = no
         }
@@ -59,10 +55,10 @@ situation_panel = {
             # CARD 1: SITUATION DESCRIPTION
             situation_card_expandable = {
                 blockoverride "header_button_onclick" {
-                    onclick = "[LateralView.Vars.Toggle( 'mr_imperial_desc_toggled' )]"
+                    onclick = "[LateralView.Vars.Toggle( 'mr_partition_desc_toggled' )]"
                 }
                 blockoverride "header_text" {
-                    text = "situation_mongol_imperial_title"
+                    text = "situation_mr_great_partition_title"
                 }
                 blockoverride "header_icon" {
                     texture = "gfx/interface/icons/traits/_default.dds"
@@ -73,25 +69,25 @@ situation_panel = {
                         layoutpolicy_horizontal = expanding
                         max_width = 460
                         autoresize = yes
-                        text = "situation_mongol_imperial_desc"
+                        text = "situation_mr_great_partition_desc"
                         using = fontsize_medium
                     }
                 }
                 blockoverride "bottom_content_onclick" {
-                    visible = "[LateralView.Vars.Exists( 'mr_imperial_desc_toggled' )]"
+                    visible = "[LateralView.Vars.Exists( 'mr_partition_desc_toggled' )]"
                 }
                 blockoverride "icon_replace_visible_yes" {
-                    visible = "[LateralView.Vars.Exists( 'mr_imperial_desc_toggled' )]"
+                    visible = "[LateralView.Vars.Exists( 'mr_partition_desc_toggled' )]"
                 }
                 blockoverride "icon_replace_visible_not" {
-                    visible = "[Not(LateralView.Vars.Exists( 'mr_imperial_desc_toggled' ))]"
+                    visible = "[Not(LateralView.Vars.Exists( 'mr_partition_desc_toggled' ))]"
                 }
             }
 
-            # CARD 2: OBJECTIVES LIST
+            # CARD 2: END CONDITIONS
             situation_card_expandable = {
                 blockoverride "header_button_onclick" {
-                    onclick = "[LateralView.Vars.Toggle( 'mr_imperial_req_toggled' )]"
+                    onclick = "[LateralView.Vars.Toggle( 'mr_partition_req_toggled' )]"
                 }
                 blockoverride "header_text" {
                     text = "END_REQUIREMENTS"
@@ -106,23 +102,23 @@ situation_panel = {
                     }
                 }
                 blockoverride "bottom_content_onclick" {
-                    visible = "[LateralView.Vars.Exists( 'mr_imperial_req_toggled' )]"
+                    visible = "[LateralView.Vars.Exists( 'mr_partition_req_toggled' )]"
                 }
                 blockoverride "icon_replace_visible_yes" {
-                    visible = "[LateralView.Vars.Exists( 'mr_imperial_req_toggled' )]"
+                    visible = "[LateralView.Vars.Exists( 'mr_partition_req_toggled' )]"
                 }
                 blockoverride "icon_replace_visible_not" {
-                    visible = "[Not(LateralView.Vars.Exists( 'mr_imperial_req_toggled' ))]"
+                    visible = "[Not(LateralView.Vars.Exists( 'mr_partition_req_toggled' ))]"
                 }
             }
 
-            # CARD 3: SCORE AND PROGRESS
+            # CARD 3: COHESION
             situation_card_expandable = {
                 blockoverride "header_button_onclick" {
-                    onclick = "[LateralView.Vars.Toggle( 'mr_imperial_score_toggled' )]"
+                    onclick = "[LateralView.Vars.Toggle( 'mr_partition_cohesion_toggled' )]"
                 }
                 blockoverride "header_text" {
-                    text = "mongol_imperial_progress_tooltip"
+                    text = "mr_great_partition_progress_tooltip"
                 }
                 blockoverride "header_icon" {
                     texture = "gfx/interface/icons/disasters/end_requirements_green.dds"
@@ -133,41 +129,46 @@ situation_panel = {
                         spacing = 5
                         layoutpolicy_horizontal = expanding
 
-                        # text_single (3926 vanilla uses), not the
-                        # nonexistent textbox_single; a progressbar's
-                        # fill property is value (the_revolution.gui:
-                        # 112-116), min/max as in italian_wars.gui:
-                        # 316-326 — "progress" is not a property.
+                        # This bar counts DOWN, unlike every other panel in
+                        # the mod: 100 is an empire that still holds every
+                        # ulus, and the successors break away as it falls
+                        # past their thresholds. GetValue is wrapped in
+                        # FixedPointToFloat because value takes a float and
+                        # a script variable reads back as fixed-point — the
+                        # bare call silently resolves to 0, which is what
+                        # kept the other two bars empty for the whole
+                        # project. italian_wars.gui:326 is the same
+                        # construct on a situation variable.
                         text_single = {
-                            name = "score_label"
+                            name = "cohesion_label"
                             layoutpolicy_horizontal = expanding
-                            text = "MR_MGE_SCORE_TT"
+                            text = "MR_COHESION_SCORE_TT"
                         }
 
                         progressbar = {
-                            name = "imperial_progress"
+                            name = "partition_cohesion"
                             size = { 380 24 }
                             using = morale_progressbar_bar
                             min = 0
                             max = 100
-                            value = "[FixedPointToFloat(SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('MR_mge_score').GetValue)]"
-                            tooltip = "mongol_imperial_progress_tooltip"
+                            value = "[FixedPointToFloat(SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('MR_cohesion_score').GetValue)]"
+                            tooltip = "mr_great_partition_progress_tooltip"
                         }
                     }
                 }
                 blockoverride "bottom_content_onclick" {
-                    visible = "[LateralView.Vars.Exists( 'mr_imperial_score_toggled' )]"
+                    visible = "[LateralView.Vars.Exists( 'mr_partition_cohesion_toggled' )]"
                 }
                 blockoverride "icon_replace_visible_yes" {
-                    visible = "[LateralView.Vars.Exists( 'mr_imperial_score_toggled' )]"
+                    visible = "[LateralView.Vars.Exists( 'mr_partition_cohesion_toggled' )]"
                 }
                 blockoverride "icon_replace_visible_not" {
-                    visible = "[Not(LateralView.Vars.Exists( 'mr_imperial_score_toggled' ))]"
+                    visible = "[Not(LateralView.Vars.Exists( 'mr_partition_cohesion_toggled' ))]"
                 }
             }
 
             # Zeroes out the gap below
-            expand = {} 
+            expand = {}
         }
     }
 }

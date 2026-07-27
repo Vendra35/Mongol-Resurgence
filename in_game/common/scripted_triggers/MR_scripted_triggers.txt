@@ -893,3 +893,260 @@ MR_percent_of_army_balance = {
 		}
 	}
 }
+
+
+# =================================================================
+# THE GREAT PARTITION - ULUS INTEGRITY
+# =================================================================
+# One predicate per successor ulus: does the Khaghan's realm still
+# hold this ground? These are the INVERSE of the mr_p2_*/mr_p3_*
+# goal triggers above — those ask "is this clear of outsiders" while
+# a phase is being won, these ask "is this still ours" while the
+# empire is coming apart. Same shape, same dual-tag realm test, so
+# the two read alike.
+#
+# Each is written ONCE and consumed by both the cohesion score and
+# the partition's outcome branch, exactly as mr_p2_*_cleared is
+# consumed by both the end trigger and the monthly panel. When an
+# ulus boundary changes, edit its geography atom and every consumer
+# follows.
+#
+# `any_location_in_scripted_geography` + `owner ?=` is the attested
+# shape (see mr_p3_volga_cleared); the bare `owner =` link errors on
+# ownerless locations.
+
+mr_ulus_heartland_held = {
+	NOT = {
+		scripted_geography:MR_geo_heartland = {
+			any_location_in_scripted_geography = {
+				NOT = {
+					mr_in_claimant_realm = yes
+				}
+			}
+		}
+	}
+}
+
+mr_ulus_kazakh_held = {
+	NOT = {
+		scripted_geography:MR_geo_kazakh_steppe = {
+			any_location_in_scripted_geography = {
+				NOT = {
+					mr_in_claimant_realm = yes
+				}
+			}
+		}
+	}
+}
+
+mr_ulus_nogai_held = {
+	NOT = {
+		scripted_geography:MR_geo_nogai_steppe = {
+			any_location_in_scripted_geography = {
+				NOT = {
+					mr_in_claimant_realm = yes
+				}
+			}
+		}
+	}
+}
+
+mr_ulus_crimea_held = {
+	NOT = {
+		scripted_geography:MR_geo_crimean_seat = {
+			any_location_in_scripted_geography = {
+				NOT = {
+					mr_in_claimant_realm = yes
+				}
+			}
+		}
+	}
+}
+
+mr_ulus_bashkiria_held = {
+	NOT = {
+		scripted_geography:MR_geo_bashkiria = {
+			any_location_in_scripted_geography = {
+				NOT = {
+					mr_in_claimant_realm = yes
+				}
+			}
+		}
+	}
+}
+
+mr_ulus_dzungaria_held = {
+	NOT = {
+		scripted_geography:MR_geo_dzungaria = {
+			any_location_in_scripted_geography = {
+				NOT = {
+					mr_in_claimant_realm = yes
+				}
+			}
+		}
+	}
+}
+
+mr_ulus_tarim_held = {
+	NOT = {
+		scripted_geography:MR_geo_tarim = {
+			any_location_in_scripted_geography = {
+				NOT = {
+					mr_in_claimant_realm = yes
+				}
+			}
+		}
+	}
+}
+
+# The Siberian frontier. A cohesion input only — it yields no
+# successor khanate (the Sibir Khanate fell in 1598, and by this
+# window that ground is Russian). Losing it is pressure, not a
+# partition outcome.
+mr_ulus_sibir_held = {
+	NOT = {
+		scripted_geography:MR_geo_siberian_marches = {
+			any_location_in_scripted_geography = {
+				NOT = {
+					mr_in_claimant_realm = yes
+				}
+			}
+		}
+	}
+}
+
+# =================================================================
+# THE GREAT PARTITION - LIFECYCLE TRIGGERS
+# =================================================================
+# The situation opens on a FLAG, not on a calendar date. Phase 3
+# ends when its goal is met, which under the Terminator pace can be
+# decades before its 1650 deadline; a fixed start date would leave a
+# fast campaign idling for seventy years. Phase 3's on_ending fires
+# a delayed event (years = 30) that sets mr_partition_ready, so the
+# opening tracks when the empire was actually finished:
+#   Phase 3 done 1580 -> opens 1610 -> resolves ~1650-1670
+#   Phase 3 done 1650 -> opens 1650 -> resolves ~1690
+# The situation's own window (1600-1720) is only the outer bound.
+mr_can_start_partition = {
+	NOT = {
+		has_game_rule = mr_railroad_off
+	}
+	has_global_variable = mr_railroad_complete
+	has_global_variable = mr_partition_ready
+	NOT = {
+		has_global_variable = mr_partition_started
+	}
+	# A resolved partition never reopens. Both terminals are checked,
+	# not just one: on_ending sets exactly one of them and there is no
+	# path that sets neither.
+	NOT = {
+		has_global_variable = mr_partition_collapsed
+	}
+	NOT = {
+		has_global_variable = mr_partition_survived
+	}
+	# Nothing to come apart if the railroad never finished.
+	NOT = {
+		has_global_variable = mr_railroad_failed
+	}
+	current_date > 1600.1.1
+	# The Khaghan is normally MGE; MGO is the failed-proclamation
+	# fallback, kept for the same reason Phase 3 keeps it.
+	OR = {
+		country_exists = c:MGE
+		country_exists = c:MGO
+	}
+}
+
+mr_partition_visible = {
+	OR = {
+		tag = MGO
+		tag = MGE
+		AND = {
+			country_exists = c:MGO
+			is_neighbor_of = c:MGO
+		}
+		AND = {
+			country_exists = c:MGE
+			is_neighbor_of = c:MGE
+		}
+		has_presence_in = sub_continent:east_asia
+		has_presence_in = sub_continent:north_asia
+		has_presence_in = sub_continent:central_asia
+		has_presence_in = sub_continent:south_asia
+		has_presence_in = sub_continent:eastern_europe
+		has_presence_in = sub_continent:middle_east
+	}
+}
+
+# The empire has come apart when the Khaghan no longer holds the
+# heartland AND has lost at least one outer ulus outright, or when
+# the tag is gone entirely. Time expiry is the third way out, so
+# on_ending's "held" branch stays reachable.
+mr_partition_end_trigger = {
+	OR = {
+		custom_tooltip = {
+			text = mr_partition_khaghan_gone_tt
+			NOR = {
+				country_exists = c:MGE
+				country_exists = c:MGO
+			}
+		}
+		custom_tooltip = {
+			text = mr_partition_heartland_lost_tt
+			NOT = {
+				mr_ulus_heartland_held = yes
+			}
+		}
+	}
+}
+
+# =================================================================
+# THE GREAT PARTITION - AUDIENCES
+# =================================================================
+# Who hears a threshold beat, and in which voice. The two sets are
+# DISJOINT: a neighbour is never also a spectator, so nobody gets two
+# versions of the same news. Same split the earlier phases use for
+# mr_dominance.22 / .23, keyed on a border rather than on goal
+# regions — the partition has no goal regions, it has a dying centre.
+#
+# The claimant itself is excluded from both; it gets its own beat.
+
+# Shares a border with the Khaghan: the collapse is an opportunity.
+mr_partition_is_neighbour = {
+	NOR = {
+		tag = MGE
+		tag = MGO
+	}
+	OR = {
+		AND = {
+			country_exists = c:MGE
+			is_neighbor_of = c:MGE
+		}
+		AND = {
+			country_exists = c:MGO
+			is_neighbor_of = c:MGO
+		}
+	}
+}
+
+# A stake in the theatre but no shared border: this is news, not a
+# chance. Explicitly NOT a neighbour, which keeps the sets disjoint.
+mr_partition_is_spectator = {
+	NOR = {
+		tag = MGE
+		tag = MGO
+	}
+	NOT = {
+		mr_partition_is_neighbour = yes
+	}
+	OR = {
+		has_presence_in = sub_continent:east_asia
+		has_presence_in = sub_continent:north_asia
+		has_presence_in = sub_continent:central_asia
+		has_presence_in = sub_continent:south_asia
+		has_presence_in = sub_continent:eastern_europe
+		has_presence_in = sub_continent:middle_east
+	}
+}
+

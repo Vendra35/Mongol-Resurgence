@@ -22,6 +22,8 @@
  mongol_imperial_desc: "$situation_mongol_imperial_desc$"
  mongol_dominance: "The Four Khanates"
  mongol_dominance_desc: "$situation_mongol_dominance_desc$"
+ mr_great_partition: "The Great Partition"
+ mr_great_partition_desc: "$situation_mr_great_partition_desc$"
  mr_chahar_reunification: "The Chahar Reunification"
  mr_chahar_reunification_desc: "Ligdan Khan of the Chahar, last Great Khan of the Chinggisid line, is trying to bring the fractured Mongol clans back under a single banner by force. The eastern clans drift toward the rising Manchu power, and the western Oirats never accepted Borjigin supremacy in the first place. A claim is worth what the horsemen behind it can enforce."
  mr_torghut_migration: "The Torghut Migration"
@@ -35,6 +37,8 @@
  situation_mongol_imperial_title: "Road to Empire"
  situation_mongol_imperial_desc: "The steppe is united, but the Mongol destiny demands more. Our ancestors did not stop at the edge of the grasslands; they carved an empire that stretched from the Pacific to the Danube. The world forgot the taste of fear, but we shall remind them.\n\nNow begins the true test. We must transform our tribal confederation into a proper imperial machine, capable of sustained conquest across vast distances. The road ahead is paved with the bones of those who thought themselves safe behind walls and rivers.\n\n#Y ----------------------------------------#!\n\n#G HISTORICAL CONTEXT & AI BEHAVIOR:#!\nAfter Genghis Khan united the Mongol tribes in 1206, he didn't rest. He immediately turned outward, conquering the Jin Dynasty, the Khwarezmian Empire, and laying the foundation for the largest contiguous land empire in history. Similarly, our unified Mongol state will now look beyond the steppe.\n\n#Y What to Expect:#! The AI will aggressively expand into neighboring regions, prioritizing the Silk Road corridor from north China through Xinjiang to Transoxiana, and pressing north-east into Manchuria and south into Tibet, as the Yuan did. Expect large-scale invasions, calculated sieges, and the systematic dismantling of regional powers. The empire that emerges will be a true terror to behold."
 
+ situation_mr_great_partition_title: "The Great Partition"
+ situation_mr_great_partition_desc: "The Yeke Mongol Ulus stands from the Danube to the Yellow Sea, and it has stood long enough that the men who built it are dead. What holds it together is a name, a bloodline and a courier network, and the uluses on its edges have begun to count how far Karakorum really is.\n\nNo outside army will bring this empire down. It will come apart the way every Chinggisid realm came apart: at a succession, along the lines the conquest itself drew.\n\n#Y ----------------------------------------#!\n\n#G HISTORICAL CONTEXT & AI BEHAVIOR:#!\nMoengke Khan died in 1259 with the empire completely intact, and it split anyway. Berke, Hulagu, Kublai and Ariq Boeke each held their ulus firmly and separated regardless: the Chinggisid world never fell to an invader, it divided at the succession. This situation runs the conquest in reverse along the same lines.\n\n#Y What to Expect:#! Cohesion falls as uluses slip from the Khaghan's realm, and each successor breaks away at its own threshold, ordered by distance from Karakorum — Crimea first, Dzungaria last. The heartland never secedes; losing Mongolia ends the empire outright. What emerges is the map that actually existed around 1700: the Kazakh Khanate, the Dzungars, Crimea, the Nogai, the Bashkirs and Chagatai in the Tarim, with Russia and the Manchu taking the edges."
  situation_mongol_dominance_title: "The Four Khanates"
  situation_mongol_dominance_desc: "The Yeke Mongol Ulus has been proclaimed. From the Sea of Japan to Transoxiana, the Mongol banner flies unchallenged — but the old empire had four corners, and three of them are still missing their masters.\n\nNow the final phase begins. The domains of the Golden Horde on the Volga, the Ilkhanate in Persia and Mesopotamia, and the roads into Rus and Anatolia must all answer to the Great Khan again. The Mongol Age will not be a brief moment in history; it will be the foundation of a new world order.\n\n#Y ----------------------------------------#!\n\n#G HISTORICAL CONTEXT & AI BEHAVIOR:#!\nAt its height, the Mongol Empire was divided among four khanates: the Yuan in China, the Chagatai in Transoxiana, the Golden Horde on the Volga, and the Ilkhanate in Persia. Hulagu's riders sacked Baghdad in 1258 and broke the Seljuks at Kose Dag in 1243 — the deepest the horde ever rode into Anatolia. This phase restores that map.\n\n#Y What to Expect:#! The AI will press westward — against the Russian principalities, the Volga khanates, and the powers of Persia and Mesopotamia — until the seats of all four khanates, all of Persia, and footholds in Rus and Cappadocia are under the imperial banner — while in the east it finishes what the Yuan began, taking the rest of China as the Song fell in 1279 and binding Korea as a [subject|e]."
 
@@ -89,6 +93,10 @@
 
  mr_resurgence_timeout_tt: "#Y Or 1420 arrives.#! If the steppe is not united by then, the moment has passed."
  mr_imperial_timeout_tt: "#Y Or 1550 arrives.#! The Silk Road will not wait forever."
+ mr_partition_khaghan_gone_tt: "#R The Khaghan is gone from the map.#! There is no centre left to hold anything."
+ mr_partition_heartland_lost_tt: "#R Mongolia itself has slipped from the Khaghan's realm.#! An empire that cannot hold Karakorum is a memory with an army."
+ mr_partition_timeout_tt: "#Y Or 1720 arrives.#! The steppe has outlived its own ending; whatever stands then, stands."
+ mr_partition_map_tt: "This is ulus ground — one of the successors that will inherit if the centre fails."
  mr_dominance_timeout_tt: "#Y Or 1650 arrives.#! The age of the horse archer ends with or without us."
  mr_chahar_timeout_tt: "#Y Or 1634 arrives.#! Ligdan's claim dies with him."
  mr_torghut_timeout_tt: "#Y Or 1630 arrives.#! The trek ends where it ends."
@@ -108,10 +116,12 @@
  MR_MGE_SCORE_TT: "Progress: [SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('MR_mge_score').GetValue|0]%"
  MR_MGE_MILITARY_STRENGTH_TT_TITLE: "Great Khan's Military Strength"
  MR_MGE_SCORE_TT_DESC: "Progress toward the phase goal: each great seat held and each corridor region cleared of foreign powers advances the bar."
+ MR_COHESION_SCORE_TT: "Cohesion: [SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('MR_cohesion_score').GetValue|0]%"
  MR_DOMINANCE_SCORE_TT: "Progress: [SituationView.GetActiveSituation.GetSituation.MakeScope.GetVariable('MR_dominance_score').GetValue|0]%"
 
  mongol_resurgence_progress_tooltip: "Unification Progress"
  mongol_imperial_progress_tooltip: "Imperial Expansion Progress"
+ mr_great_partition_progress_tooltip: "Imperial Cohesion"
  mongol_dominance_progress_tooltip: "Consolidation Progress"
 
  # ==============================================================================
@@ -122,6 +132,8 @@
 
  cb_MR_steppe_unification: "Unification of the Steppe"
  cb_MR_steppe_unification_desc: "The clans of the steppe answer to one banner or to none. Whoever holds the Chinggisid claim has the right to compel the rest."
+ cb_MR_carve_the_ulus: "Carve the Ulus"
+ cb_MR_carve_the_ulus_desc: "The thing that could not be fought is coming apart, and its frontier provinces are answering to nobody in particular. Land like that has no owner for a season or two, and seasons like that do not come twice in a dynasty."
  cb_MR_silk_road: "Mastery of the Silk Road"
  cb_MR_silk_road_desc: "The road from the Ordos to Persia has paid tribute to the horde before, and will again. The cities along it are ours to take."
  cb_MR_westward_advance: "The Westward Advance"
@@ -129,6 +141,8 @@
 
  war_goal_MR_war_goal_steppe_unification: "Unify the Steppe"
  war_goal_MR_war_goal_steppe_unification_desc: "[war_goal|e] is to bring the Mongolian heartland under a single banner. Conquest is limited to the Mongolia region."
+ war_goal_MR_war_goal_carve_the_ulus: "Carve the Ulus"
+ war_goal_MR_war_goal_carve_the_ulus_desc: "[war_goal|e] is to take what the Khaghan can no longer hold. Conquest is limited to the frontier the Mongols conquered and the ulus lands now breaking away from them."
  war_goal_MR_war_goal_silk_road: "Seize the Silk Road"
  war_goal_MR_war_goal_silk_road_desc: "[war_goal|e] is to master the corridor from north China through Transoxiana. Conquest is limited to the Silk Road and China regions."
  war_goal_MR_war_goal_westward_advance: "Advance into the West"
@@ -187,6 +201,10 @@
  STATIC_MODIFIER_DESC_MR_forge_of_warriors: "The tumens drill as they did under the old banners: ten, a hundred, a thousand, ten thousand."
  STATIC_MODIFIER_NAME_MR_sacred_capital_restored: "The Sacred Capital Restored"
  STATIC_MODIFIER_DESC_MR_sacred_capital_restored: "Karakorum answers to the horsetail standard again. The Khan holds a capital now, not a camp. #G (Permanent — but lost if Karakorum is lost.)#!"
+ STATIC_MODIFIER_NAME_MR_the_ulus_endures: "The Ulus Endures"
+ STATIC_MODIFIER_DESC_MR_the_ulus_endures: "Written law, counted taxes, cast cannon, governors who stay where they are sent. The steppe survived its ending by becoming something else. #G (Permanent.)#!"
+ STATIC_MODIFIER_NAME_MR_kurultai_defied: "The Kurultai Defied"
+ STATIC_MODIFIER_DESC_MR_kurultai_defied: "The assembly asked and was refused. The uluses remain on the map and their khans remain in their tents, counting."
  STATIC_MODIFIER_NAME_MR_kurultai_mandate: "The Kurultai's Mandate"
  STATIC_MODIFIER_DESC_MR_kurultai_mandate: "The assembled chieftains have proclaimed our supremacy over all Mongol peoples by the old law of the steppe."
  STATIC_MODIFIER_NAME_MR_western_ulus_restored: "The Western Ulus Restored"
@@ -240,24 +258,53 @@
  # ==============================================================================
  # MGO and MGE are vanilla tags (both named plain "Mongolia" in vanilla's
  # country_names_l_english.yml:4904-4907). These overrides give the two stages
- # of the railroad distinct names. RULE: a tag's name must never contain the
- # word "Empire" — no vanilla tag name does, and country_database.cpp warns
- # about it because rank titles compose as "The Great <name> Empire". The
- # empire therefore uses its historical name, Yeke Mongol Ulus ("Great Mongol
- # State"); the formable button keeps the familiar "Mongol Empire" label.
- # The empty mge_empire / mgo_horde keys suppress the government-form name
- # suffix, the same pattern PD uses for ngc_confederation.
+ # of the railroad distinct names.
+ #
+ # HOW A HORDE'S NAME IS ACTUALLY BUILT — this is not obvious and it cost a
+ # real investigation. A steppe horde does NOT use its NAME key on the map.
+ # customizable_localization/country_name_construction.txt:100 matches
+ # government_type = steppe_horde first and resolves to
+ # country_name_construction_prefix_name_horde, which is
+ # "$country_name_construction_prefix_adjective_rank$" =
+ # "$PREFIX$ $ADJ$ $RANK$". So the map name is built from the ADJECTIVE and
+ # the RANK word, and MGE / MGO below are never read for it.
+ #
+ # RANK is picked by customizable_localization/country_ranks.txt, first match
+ # wins: line 306 is rank_empire_horde (empire rank AND steppe horde), and the
+ # plain rank_empire fallback sits far below at line 625. That is why forming
+ # MGE rendered "Great Mongol Horde" — the tag changed, but the composition
+ # never touched the MGE key. Vanilla behaves identically; the familiar
+ # "Mongol Empire" is the formable BUTTON label (MGE_f), not the country name.
+ #
+ # The fix is one line: rank_empire_horde below. MGE sits at empire rank
+ # (MGE_f's form_effect sets it) so it composes "Great" + "Mongol" + "Empire";
+ # MGO sits lower and takes rank_kingdom_horde, which vanilla still renders
+ # "Horde", giving "Mongol Horde". Exactly the two names the railroad wants,
+ # with no whole-file override of vanilla's 700-line country_ranks.txt.
+ # Side effect, accepted: any OTHER steppe horde that reaches empire rank also
+ # reads "Empire" instead of "Horde". Hordes below empire rank are untouched.
+ #
+ # MGE / MGO keys are still kept: they are what event text and any $MGE$
+ # reference resolve to. RULE: a tag's name must never contain the word
+ # "Empire" — no vanilla tag name does, and country_database.cpp warns about
+ # it because rank titles compose as "The Great <name> Empire". So the NAME
+ # key stays the historical Yeke Mongol Ulus ("Great Mongol State") while the
+ # composed map name reads "Great Mongol Empire".
+ #
+ # (The old mge_empire / mgo_horde keys were deleted. They were copied from
+ # PD's ngc_confederation, and PD defines no country_ranks branch for that key
+ # either — dead in both mods. The engine reads rank_empire_horde /
+ # rank_kingdom_horde, never <tag>_<rank>.)
+ rank_empire_horde: "Empire"
  MGE: "Great Mongol State"
  MGE_ADJ: "Mongol"
  MGE_f: "Mongol Empire"
  MGE_f_desc: "The restored empire of the Great Khans — the Yeke Mongol Ulus — forged from the fractured tribes of the steppe under the iron will of a new Chinggisid. Its disciplined hordes and imperial administration now stand as the dominant power across Asia and beyond."
- mge_empire: ""
 
  MGO: "Mongol Horde"
  MGO_ADJ: "Mongol"
  MGO_f: "Mongol Horde"
  MGO_f_desc: "A powerful confederation of Mongol tribes, united under a single khan. Though not yet an empire, its warrior traditions and steppe mobility make it a threat to all settled civilizations on its borders."
- mgo_horde: ""
 
  # ==============================================================================
  # ----------------- SITUATION EVENTS (mr_dominance) -----------------
@@ -338,6 +385,40 @@
  mr_dominance.28.desc: "The banner is raised and the claim is made. But a claimant hemmed in by his own oaths is no claimant at all — and several of the camps we swore friendship to are pitched squarely on the heartland we have just claimed as ours.\n\nThe oaths are set aside. The steppe has only ever recognised one kind of bond in the end, and it is not written on paper."
  mr_dominance.28.a: "The banner outranks the oath."
 
+ # --- The Great Partition: threshold beats ---
+ mr_partition.1.title: "A Courier Does Not Return"
+ mr_partition.1.desc: "The relay post at the Kerulen bend has gone three months without a rider from the west. That is not, in itself, a rebellion. Couriers drown, horses founder, winters close roads. But the yam was the nervous system of everything Chinggis built, and a limb that stops reporting has stopped being governed.\n\nThe scribes bring the tally without being asked. Four western ordus have not sent their share of the levy this season. Their letters are polite, their reasons plausible, and not one of them mentions the Khaghan by name."
+ mr_partition.1.a: "Send riders. Let them see we still count."
+ mr_partition.11.title: "The Great Khan's Silence"
+ mr_partition.11.desc: "Our envoys on the Mongol frontier report something they cannot quite name. The border garrisons are still there, still disciplined, still unmistakably the horde. But the orders they follow now come from their own ulus khan, and when our men ask after the Khaghan they get careful answers.\n\nAn empire that must be careful about its own name has begun to end. Whether that is opportunity or catastrophe depends entirely on how close one lives to it, and we live very close indeed."
+ mr_partition.11.a: "Watch the border. Say nothing yet."
+ mr_partition.2.title: "The Kurultai Will Not Assemble"
+ mr_partition.2.desc: "The summons went out under the horsetail standard, as it has since Chinggis. Half the ulus khans have not come. Of those who did, three arrived with more armed men than protocol permits and camped apart from the others, on ground they chose themselves.\n\nNobody has said the word. Nobody needs to. The empire is still one realm on every map in the chancery, and in the felt tents outside it is already several, waiting to find out which of them will admit it first."
+ mr_partition.2.a: "Let them camp where they like. For now."
+ mr_partition.12.title: "The Ulus Khans Are Taking Meetings"
+ mr_partition.12.desc: "A rider came to our court without banners, from a khan who is technically a subject of the Khaghan and did not once use the word. He wanted to know what we would consider a border. He wanted to know it quietly.\n\nWe have spent generations learning to live beside an empire that could not be fought. That empire is negotiating with itself now, and its pieces have started shopping for friends."
+ mr_partition.12.a: "Receive him. Promise nothing, refuse nothing."
+ mr_partition.22.title: "News From the Steppe Road"
+ mr_partition.22.desc: "The caravans arrive later each season, and their masters have stopped complaining about tolls, which is how we know the tolls are no longer being collected by anyone in particular. Merchants who once crossed the whole continent under a single peace now hire their own guards between one pasture and the next.\n\nThe Pax Mongolica was never loved. It is going to be missed."
+ mr_partition.22.a: "Note it in the chronicle. Raise the insurance."
+ mr_partition.3.title: "Each Ulus for Itself"
+ mr_partition.3.desc: "It has stopped being a question of loyalty and become a question of logistics. The western khans are not defying us; they are simply governing, because someone must, and Karakorum is a season away and getting further.\n\nThis is how it ended the last time. Not with a battle lost but with grandsons who each held a quarter of the world and saw no reason to ask permission. We are living inside the same year our ancestors lived in, and we already know what it is called."
+ mr_partition.3.a: "Hold the heartland. That much is still ours."
+ mr_partition.13.title: "The Carcass and the Crows"
+ mr_partition.13.desc: "The thing that could not be resisted is coming apart on our doorstep, and every neighbour it ever terrified is doing the same arithmetic we are: which piece, how soon, and who else has noticed.\n\nThere will not be a second chance at this. Land that has been Mongol since before our grandfathers is about to have no owner at all for a season or two, and seasons like that do not come twice in a dynasty."
+ mr_partition.13.a: "Muster. Quietly, and quickly."
+ mr_partition.23.title: "The World Without the Khan"
+ mr_partition.23.desc: "For as long as anyone at court can remember, every calculation began with the Mongols: what they would permit, where they would look, how long we had. That single fact organised the age.\n\nIt is being removed. The maps will need redrawing, and so will every assumption drawn on top of them, and the men who redraw them fastest will inherit the century."
+ mr_partition.23.a: "An age is ending. Prepare for the next one."
+
+ mr_partition.100.title: "The Kurultai Demands an Answer"
+ mr_partition.100.desc: "They have come this time, and that is worse than the season they stayed away. The ulus khans are seated in order of precedence, drinking our airag, and one after another they have laid the same complaint before the standard: the pastures are theirs, the herds are theirs, the men who ride for us are theirs, and the orders come from a city none of them has seen in twenty years.\n\nThe old law is on their side and everyone in the tent knows it. Chinggis divided the world among his sons because no one man can watch all of it, and every Khaghan since has spent his reign pretending otherwise. The assembly is not asking whether the empire will change. It is asking who will say so first, and what it will cost."
+ mr_partition.100.a: "Let them have their pastures. A smaller realm that answers is worth more than a wide one that does not."
+ mr_partition.100.b: "There is one standard and one law. They will be bound to the centre."
+ mr_partition.100.c: "Open the treasury. Loyalty that must be bought is still loyalty this year."
+ mr_partition.200.title: "The Ulus Endures"
+ mr_partition.200.desc: "The century that ended every other steppe power has closed, and we are still here. Not as our great-grandfathers were: the tumens drill beside cast guns now, the tax rolls are counted twice by clerks who cannot ride, and the governors we send to the uluses stay where they are put and write letters instead of raising their own banners.\n\nSomething was traded away for that. The old men say it in the felt tents and they are not wrong. But every horde that refused the trade is a name in somebody else's chronicle, and we are a state with a capital, an army and a treasury — which is the only form in which the steppe was ever going to survive its own ending."
+ mr_partition.200.a: "Let the chroniclers argue. We are still here."
  mr_dominance.1.title: "The Rise of the Great Khan"
  mr_dominance.1.desc: "The steppe has chosen its master! Through blood, iron, and unrelenting will, our horde has subjugated all rivals and united the Mongol tribes under a single banner. The days of petty khans and divided pastures are over. A new Great Khan has emerged, and the world shall once again learn to fear the Mongol name.\n\nFrom the Altai Mountains to the Gobi Desert, the clans now ride as one. But this is merely the beginning. Our ancestors conquered half the known world. We shall finish what they started."
  mr_dominance.1.a: "The world is ours to conquer!"

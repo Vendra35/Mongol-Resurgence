@@ -68,3 +68,24 @@ cb_MR_westward_advance = {
 		}
 	}
 }
+
+# --- The Great Partition: the vultures ---------------------------
+# Granted to the Khaghan's neighbours by mr_great_partition as
+# cohesion falls, the only MR casus belli pointed at the Mongols.
+cb_MR_carve_the_ulus = {
+	create_visible = {
+		always = no
+	}
+	create_enabled = {
+		always = no
+	}
+	additional_war_enthusiasm_attacker = 1
+	war_goal_type = MR_war_goal_carve_the_ulus
+	ai_will_do = {
+		add = {
+			desc = "BASE"
+			value = 100
+		}
+	}
+}
+
