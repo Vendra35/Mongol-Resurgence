@@ -473,6 +473,12 @@ mr_great_partition = {
 					every_location_in_scripted_geography = {
 						limit = {
 							mr_in_claimant_realm = yes
+							# AUDIT 2026-07-29 (D6): never take a human
+							# player's land — neither the Khaghan's nor
+							# a human vassal's (CLAUDE.md human-choice).
+							owner ?= {
+								is_ai = yes
+							}
 						}
 						change_location_owner = c:CRI
 					}
@@ -492,6 +498,12 @@ mr_great_partition = {
 					every_location_in_scripted_geography = {
 						limit = {
 							mr_in_claimant_realm = yes
+							# AUDIT 2026-07-29 (D6): never take a human
+							# player's land — neither the Khaghan's nor
+							# a human vassal's (CLAUDE.md human-choice).
+							owner ?= {
+								is_ai = yes
+							}
 						}
 						change_location_owner = c:NOG
 					}
@@ -512,6 +524,12 @@ mr_great_partition = {
 					every_location_in_scripted_geography = {
 						limit = {
 							mr_in_claimant_realm = yes
+							# AUDIT 2026-07-29 (D6): never take a human
+							# player's land — neither the Khaghan's nor
+							# a human vassal's (CLAUDE.md human-choice).
+							owner ?= {
+								is_ai = yes
+							}
 						}
 						change_location_owner = c:KAZ
 					}
@@ -531,6 +549,12 @@ mr_great_partition = {
 					every_location_in_scripted_geography = {
 						limit = {
 							mr_in_claimant_realm = yes
+							# AUDIT 2026-07-29 (D6): never take a human
+							# player's land — neither the Khaghan's nor
+							# a human vassal's (CLAUDE.md human-choice).
+							owner ?= {
+								is_ai = yes
+							}
 						}
 						change_location_owner = c:BSH
 					}
@@ -551,6 +575,12 @@ mr_great_partition = {
 					every_location_in_scripted_geography = {
 						limit = {
 							mr_in_claimant_realm = yes
+							# AUDIT 2026-07-29 (D6): never take a human
+							# player's land — neither the Khaghan's nor
+							# a human vassal's (CLAUDE.md human-choice).
+							owner ?= {
+								is_ai = yes
+							}
 						}
 						change_location_owner = c:CHG
 					}
@@ -571,6 +601,12 @@ mr_great_partition = {
 					every_location_in_scripted_geography = {
 						limit = {
 							mr_in_claimant_realm = yes
+							# AUDIT 2026-07-29 (D6): never take a human
+							# player's land — neither the Khaghan's nor
+							# a human vassal's (CLAUDE.md human-choice).
+							owner ?= {
+								is_ai = yes
+							}
 						}
 						change_location_owner = c:OIR
 					}

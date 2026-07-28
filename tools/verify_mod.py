@@ -285,7 +285,10 @@ for p_, s_ in code.items():
     count += body.count("any_owned_location")
     for _m in _bare.finditer(body):
         probs.append(f"{os.path.relpath(p_, MOD)}: use has_presence_in instead of {' '.join(_m.group(0).split())}")
-check("no any_owned_location with a bare geo predicate", len(code), sorted(set(probs)), min_count=10)
+# AUDIT 2026-07-29 (D5): len(code) was passed as the count — the check
+# printed the FILE count while scanning zero occurrences. Prohibition
+# checks count the pattern itself; zero occurrences IS the target state.
+check("no any_owned_location with a bare geo predicate", count, sorted(set(probs)), min_count=0)
 
 # ---- geography: regions/areas/locations exist in definitions ----
 defs = read(VAN + "/in_game/map_data/definitions.txt")
@@ -397,7 +400,7 @@ for p_, s_ in code.items():
             probs.append(f"{os.path.relpath(p_, MOD)}:{_i}: is_subject_of only "
                          f"matches a DIRECT vassal — use top_overlord_or_this, or "
                          f"note 'direct' in a comment if that is really the intent")
-check("subjecthood walks the whole chain", len(code), probs, min_count=5)
+check("subjecthood walks the whole chain", count, probs, min_count=0)  # AUDIT 2026-07-29 (D5): same len(code) bug
 
 # ---- everything we call exists in the ENGINE'S OWN documentation ----
 # docs/EU5-Vanilla-Script-Docs/ is the output of the console commands

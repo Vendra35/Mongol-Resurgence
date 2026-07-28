@@ -1244,9 +1244,21 @@ mongol_dominance = {
 			# that the restored empire is enjoyed, short enough that the
 			# reckoning still lands before 1700 in every run. Delayed
 			# form per effects.log:10578 (102 vanilla uses of years =).
-			trigger_event_silently = {
-				id = mr_dominance.140
-				years = 30
+			# AUDIT 2026-07-29 (D1): on_ending's root is the SITUATION,
+			# and a country_event fired from situation scope has no
+			# recipient — silently. Wrapped in the claimant's own scope;
+			# every other call site in this mod already does this.
+			every_country = {
+				limit = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+				}
+				trigger_event_silently = {
+					id = mr_dominance.140
+					years = 30
+				}
 			}
 		}
 		else = {

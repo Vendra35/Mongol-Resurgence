@@ -1,0 +1,16 @@
+﻿# AUDIT 2026-07-29 (D2): KAZ is a formable-only tag — coat of arms, loc
+# and KAZ_f ship in vanilla, but NO identity block exists anywhere, so
+# change_location_owner = c:KAZ hits country_manager.cpp:206 "Unknown
+# country". The registry entry is what lets the engine instantiate it
+# (the SKE law). Color is vanilla's own map_KAZ (02_map.txt:333);
+# culture: vanilla has no Kazakh culture — cuman_culture is the
+# kipchak-language steppe culture matching KAZ_f's own potential
+# (culture.language = language:kipchak_language).
+
+KAZ = {
+	color = map_KAZ
+	color2 = rgb { 16 41 202 }
+
+	culture_definition = cuman_culture
+	religion_definition = sunni
+}

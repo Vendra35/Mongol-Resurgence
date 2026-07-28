@@ -802,6 +802,19 @@ mongol_resurgence = {
 						}
 						government_type = government_type:steppe_horde
 						has_presence_in = scripted_geography:MR_geo_heartland
+						# AUDIT 2026-07-29 (D6b): tier 3 could conscript
+						# a HUMAN horde and cancel a HUMAN overlord's
+						# subject unasked. Now: AI candidates only, and
+						# a subject qualifies only under an AI overlord.
+						# If only human candidates remain, the phase
+						# times out instead — the honest outcome.
+						is_ai = yes
+						OR = {
+							is_subject = no
+							overlord ?= {
+								is_ai = yes
+							}
+						}
 					}
 				}
 				random_country = {
@@ -811,6 +824,13 @@ mongol_resurgence = {
 						}
 						government_type = government_type:steppe_horde
 						has_presence_in = scripted_geography:MR_geo_heartland
+						is_ai = yes
+						OR = {
+							is_subject = no
+							overlord ?= {
+								is_ai = yes
+							}
+						}
 					}
 					save_scope_as = mr_emergence_candidate
 					overlord ?= {

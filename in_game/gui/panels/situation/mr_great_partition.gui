@@ -70,7 +70,6 @@ situation_panel = {
                         max_width = 460
                         autoresize = yes
                         text = "situation_mr_great_partition_desc"
-                        using = fontsize_medium
                     }
                 }
                 blockoverride "bottom_content_onclick" {
