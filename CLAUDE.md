@@ -526,3 +526,43 @@ AI find-target and fallback, failsafe handover, `tooltip`/
 
 ## Language
 All code, localisation and comments in English.
+
+## LAWS DISCOVERED DOWNSTREAM — read before any new MR work (added 2026-07-29)
+
+The 1066 Test Mod (`../1066 Test Mod/docs/`) carries the LIVING law books:
+`KNOWLEDGE.md`, `EU5-MODDING-GUIDE.md`, `EU5-ERROR-DECODER.md`. They contain
+engine laws found AFTER this mod shipped, several of which correct or refine
+what this repo believes. Read them before writing anything here. The ones
+that bite THIS mod's content class directly:
+
+- **"Subjects cannot declare war" is a VASSAL law only.** `tributary.txt:88`
+  is `allow_declaring_wars = { always = yes }`, and vanilla ships
+  monarchy-over-monarchy tributaries at setup. If MR ever creates subject
+  relations, pick the type by this, not by the old blanket rule.
+- **Empire rank kills the NAME key.** At `rank_empire` the name composes
+  from ADJ+RANK and the NAME key is never read (first-match branch :117).
+  Any future rank change for MGO/MGE silently changes how their names
+  compose — check the whole chain, not the key you edited.
+- **End-anchored one-liner regexes have TWO blind spots**: one-line blocks
+  (already known here) AND trailing comments after the closing brace
+  (`} #comment`). Every new harness check needs `(?:#[^\n]*)?` before its
+  `\n` and an exact-count assertion.
+- **The country_exists guard convention has a measured limit.** It is
+  observed working for COUNTRY links (this repo's nine-session log), but
+  vanilla's own `exists` guard does NOT suppress evaluation-logging for IO
+  event-target links (decoder: the middle_kingdom entry). If MR ever touches
+  `international_organization:` links, do not assume the guard transfers.
+- **Landless-with-claims is Paradox's own standard shape** (13 such tags in
+  the Balkans/Caucasus alone) — if the MGE resurrection arc is ever
+  extended, claims-on-a-landless-tag is the attested vehicle.
+- **Invented name keys are a proven mechanism** (a name key is just a loc
+  key; seven shipped in the 1066 mod, screenshot-verified, with free
+  language-row rendering) — if MR ever authors characters.
+- **Comment words can collide with location tokens** (`van`, `split`,
+  `kars` are real locations) — any script that scans ownership-list tokens
+  must mask comments length-preservingly first.
+
+A deep audit of this mod against those laws was launched 2026-07-29
+(overnight Opus agent, categorized findings). If its report is not yet
+reflected here, ask the user whether it landed, or re-run the audit brief
+in `../1066 Test Mod/docs/HANDOFF.md`'s pending-items note.
