@@ -473,11 +473,22 @@ mr_great_partition = {
 					every_location_in_scripted_geography = {
 						limit = {
 							mr_in_claimant_realm = yes
-							# AUDIT 2026-07-29 (D6): never take a human
-							# player's land — neither the Khaghan's nor
-							# a human vassal's (CLAUDE.md human-choice).
+							# AUDIT 2026-07-29 (D6, revised with the user):
+							# the collapse IS this situation's purpose and
+							# the claimant has YEARS of visible counterplay
+							# (the beats, the per-ulus held-triggers), so a
+							# human Khaghan collapses like anyone else —
+							# gating on is_ai would make the endgame a
+							# silent no-op for the player. Who stays
+							# protected is the BYSTANDER: a human VASSAL's
+							# land is never taken; they had no counterplay.
+							# tag = is the string compare that never errors.
 							owner ?= {
-								is_ai = yes
+								OR = {
+									is_ai = yes
+									tag = MGO
+									tag = MGE
+								}
 							}
 						}
 						change_location_owner = c:CRI
@@ -498,11 +509,22 @@ mr_great_partition = {
 					every_location_in_scripted_geography = {
 						limit = {
 							mr_in_claimant_realm = yes
-							# AUDIT 2026-07-29 (D6): never take a human
-							# player's land — neither the Khaghan's nor
-							# a human vassal's (CLAUDE.md human-choice).
+							# AUDIT 2026-07-29 (D6, revised with the user):
+							# the collapse IS this situation's purpose and
+							# the claimant has YEARS of visible counterplay
+							# (the beats, the per-ulus held-triggers), so a
+							# human Khaghan collapses like anyone else —
+							# gating on is_ai would make the endgame a
+							# silent no-op for the player. Who stays
+							# protected is the BYSTANDER: a human VASSAL's
+							# land is never taken; they had no counterplay.
+							# tag = is the string compare that never errors.
 							owner ?= {
-								is_ai = yes
+								OR = {
+									is_ai = yes
+									tag = MGO
+									tag = MGE
+								}
 							}
 						}
 						change_location_owner = c:NOG
@@ -524,11 +546,22 @@ mr_great_partition = {
 					every_location_in_scripted_geography = {
 						limit = {
 							mr_in_claimant_realm = yes
-							# AUDIT 2026-07-29 (D6): never take a human
-							# player's land — neither the Khaghan's nor
-							# a human vassal's (CLAUDE.md human-choice).
+							# AUDIT 2026-07-29 (D6, revised with the user):
+							# the collapse IS this situation's purpose and
+							# the claimant has YEARS of visible counterplay
+							# (the beats, the per-ulus held-triggers), so a
+							# human Khaghan collapses like anyone else —
+							# gating on is_ai would make the endgame a
+							# silent no-op for the player. Who stays
+							# protected is the BYSTANDER: a human VASSAL's
+							# land is never taken; they had no counterplay.
+							# tag = is the string compare that never errors.
 							owner ?= {
-								is_ai = yes
+								OR = {
+									is_ai = yes
+									tag = MGO
+									tag = MGE
+								}
 							}
 						}
 						change_location_owner = c:KAZ
@@ -549,11 +582,22 @@ mr_great_partition = {
 					every_location_in_scripted_geography = {
 						limit = {
 							mr_in_claimant_realm = yes
-							# AUDIT 2026-07-29 (D6): never take a human
-							# player's land — neither the Khaghan's nor
-							# a human vassal's (CLAUDE.md human-choice).
+							# AUDIT 2026-07-29 (D6, revised with the user):
+							# the collapse IS this situation's purpose and
+							# the claimant has YEARS of visible counterplay
+							# (the beats, the per-ulus held-triggers), so a
+							# human Khaghan collapses like anyone else —
+							# gating on is_ai would make the endgame a
+							# silent no-op for the player. Who stays
+							# protected is the BYSTANDER: a human VASSAL's
+							# land is never taken; they had no counterplay.
+							# tag = is the string compare that never errors.
 							owner ?= {
-								is_ai = yes
+								OR = {
+									is_ai = yes
+									tag = MGO
+									tag = MGE
+								}
 							}
 						}
 						change_location_owner = c:BSH
@@ -575,11 +619,22 @@ mr_great_partition = {
 					every_location_in_scripted_geography = {
 						limit = {
 							mr_in_claimant_realm = yes
-							# AUDIT 2026-07-29 (D6): never take a human
-							# player's land — neither the Khaghan's nor
-							# a human vassal's (CLAUDE.md human-choice).
+							# AUDIT 2026-07-29 (D6, revised with the user):
+							# the collapse IS this situation's purpose and
+							# the claimant has YEARS of visible counterplay
+							# (the beats, the per-ulus held-triggers), so a
+							# human Khaghan collapses like anyone else —
+							# gating on is_ai would make the endgame a
+							# silent no-op for the player. Who stays
+							# protected is the BYSTANDER: a human VASSAL's
+							# land is never taken; they had no counterplay.
+							# tag = is the string compare that never errors.
 							owner ?= {
-								is_ai = yes
+								OR = {
+									is_ai = yes
+									tag = MGO
+									tag = MGE
+								}
 							}
 						}
 						change_location_owner = c:CHG
@@ -601,11 +656,22 @@ mr_great_partition = {
 					every_location_in_scripted_geography = {
 						limit = {
 							mr_in_claimant_realm = yes
-							# AUDIT 2026-07-29 (D6): never take a human
-							# player's land — neither the Khaghan's nor
-							# a human vassal's (CLAUDE.md human-choice).
+							# AUDIT 2026-07-29 (D6, revised with the user):
+							# the collapse IS this situation's purpose and
+							# the claimant has YEARS of visible counterplay
+							# (the beats, the per-ulus held-triggers), so a
+							# human Khaghan collapses like anyone else —
+							# gating on is_ai would make the endgame a
+							# silent no-op for the player. Who stays
+							# protected is the BYSTANDER: a human VASSAL's
+							# land is never taken; they had no counterplay.
+							# tag = is the string compare that never errors.
 							owner ?= {
-								is_ai = yes
+								OR = {
+									is_ai = yes
+									tag = MGO
+									tag = MGE
+								}
 							}
 						}
 						change_location_owner = c:OIR
