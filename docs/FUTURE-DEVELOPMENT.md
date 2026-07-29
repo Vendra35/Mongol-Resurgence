@@ -161,13 +161,17 @@ Ordered roughly by value-for-effort. Each lists: concept, anchor, what to
 touch, proven building blocks, pitfalls, size (S/M/L/XL).
 
 **APPROVED PROGRAM (user, 2026-07-30 — "hepsini yapalım"):** T1, T2, T5
-plus the five new tracks T11-T15 below are all green-lit. Build order:
-T1 (via the new tools/new_flavor.py scaffold generator, ported from the
-1066 sister project the same day) → T11 Tumu-mirror → T2 + T12 Jade
-Seal → T13/T14 texture packs → T5 → T15 balance instrument. HARD GATE:
-nothing touches mr_dominance.120/.130 (T2's files) until the
-2026-07-30 six-lens audit report has been reviewed — its lens 4 examines
-exactly those files. New tracks:
+plus the five new tracks T11-T15 below are all green-lit.
+**LANDED THE SAME DAY (flavor waves 1-2, commits 24352ae..1629512):**
+T13 (zud, repeatable), T14 (paiza/ortoq pair with the purge finale),
+and T1's court+envoys half — Ming Embassy, Timur, Bayan, Karakorum
+Debate, all armed with third options and lasting modifiers.
+**STILL TO BUILD:** T1's remainder (Black Death yam hook — verify the
+persistent signal first; the rival-khan mini-arc — situation events,
+not DHE), T11 Tumu-mirror (needs a cited war-score trigger), T2 + T12
+(the audit gate is now LIFTED — the six-lens report landed and its
+lens 4 cleared the railroad files), T5 Shattered Steppe, T15
+power-ratio instrument. New tracks:
 
 ### T11 — "The Emperor in the Camp" (Tumu-mirror flagship DHE, S-M)
 1449 inverted: at war with the Chinese empire and decisively winning →
