@@ -531,12 +531,20 @@ svars.discard("mr_temp_prestige")  # lives on countries; PD leaves temps too
 probs = [f"{v} set but never removed in any on_ended" for v in sorted(svars - removed)]
 check("situation vars cleaned in on_ended", len(svars), probs, min_count=5)
 
-# ---- units/advances/buildings in events exist in vanilla ----
+# ---- units/advances/buildings in events exist in vanilla OR the mod ----
+# The MOD's own database files joined the cache 2026-07-30, when the
+# first mod-defined advance (MR_advances.txt) proved the vanilla-only
+# cache had a blind spot: it flagged mr_legacy_of_the_yassa as unknown.
+# A referenced key is legal if EITHER tree defines it; a typo still
+# fails because it matches neither.
 probs, count = [], 0
 van_files = {
-    "advance": glob.glob(VAN + "/in_game/common/advances/*.txt"),
-    "building": glob.glob(VAN + "/in_game/common/building_types/*.txt"),
-    "unit": glob.glob(VAN + "/in_game/common/unit_types/*.txt"),
+    "advance": glob.glob(VAN + "/in_game/common/advances/*.txt")
+               + glob.glob(MOD + "/in_game/common/advances/*.txt"),
+    "building": glob.glob(VAN + "/in_game/common/building_types/*.txt")
+                + glob.glob(MOD + "/in_game/common/building_types/*.txt"),
+    "unit": glob.glob(VAN + "/in_game/common/unit_types/*.txt")
+            + glob.glob(MOD + "/in_game/common/unit_types/*.txt"),
 }
 van_cache = {k: "\n".join(read(p) for p in v) for k, v in van_files.items()}
 for p, s in code.items():

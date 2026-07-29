@@ -13,4 +13,15 @@ KAZ = {
 
 	culture_definition = cuman_culture
 	religion_definition = sunni
+
+	# MEASURED (observer run 2026-07-29): without this line the bookmark
+	# init prints a 12-line barrage for KAZ (no government type, no
+	# capital, no society values...) ending with the engine's own advice
+	# to add it. SKE dodges the barrage differently — it has revolter
+	# cores in 10_countries.txt:308 — but is_historic is the vanilla
+	# idiom for identity-only blocks (58 uses, e.g. balkans.txt:40).
+	# WATCH: whether an is_historic tag still instantiates through
+	# change_location_owner is unobserved — the Great Partition game
+	# test must confirm KAZ actually spawns.
+	is_historic = yes
 }

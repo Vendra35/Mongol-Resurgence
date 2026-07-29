@@ -765,3 +765,13 @@
  mr_steppe.22.desc: "From the Tarim to the western steppe, one authority holds — with laws written down, taxes counted, garrisons that stay put, and artillery that answers artillery.\n\nThe age of the horse archer is over everywhere. Here, alone, the steppe has survived its ending by becoming something else."
  mr_steppe.22.historical_info: "At its height the Dzungar Khanate controlled Dzungaria, the Tarim Basin, and much of the Kazakh steppe. Its destruction by the Qianlong Emperor in 1755-58 was so complete that historians describe it as genocide, and it marked the definitive end of nomadic power in Eurasia."
  mr_steppe.22.a: "The steppe endures, in a new shape."
+
+ # --- The shared MGO/MGE advance line + the Yassa reform (2026-07-30) ---
+ mr_legacy_of_the_yassa: "Legacy of the Yassa"
+ mr_legacy_of_the_yassa_desc: "The Great Yassa of Chinggis Khan was never a book to be read but a discipline to be lived — succession settled by kurultai, loyalty rewarded above lineage, the herds and the army counted as one. Restoring its authority tells every tribe that this empire remembers what made the first one."
+ mr_horse_lords_reborn: "Horse Lords Reborn"
+ mr_horse_lords_reborn_desc: "A generation grew up inside walls. Put them back in the saddle: the compound bow drilled from childhood, the remount herds rebuilt, the feigned retreat practiced until it is instinct again."
+ mr_yam_riders: "Riders of the Yam"
+ mr_yam_riders_desc: "The Yam relay once carried a rider from the Danube to Karakorum faster than any rumor. Rebuilt, it feeds our armies before they hunger and remounts them before they slow — distance itself becomes our weapon again."
+ MR_yassa_code: "The Yassa Code"
+ MR_yassa_code_desc: "The law of the steppe, written down at last — one code over horde and settled land alike, binding khan and herdsman, general and governor."

@@ -1,0 +1,27 @@
+﻿# The Yassa Code — the unique reform mr_legacy_of_the_yassa unlocks.
+# Gated exactly like vanilla's basic_timariot_system
+# (country_specific.txt:1105-1119: unique + has_or_had_tag + has_advance),
+# and it carries government_reform_slots = 1 in its own modifier so
+# taking it never consumes a slot (vanilla does the same at :1099; the
+# 1066 sister project proved the pattern in game). NO `government =`
+# field ON PURPOSE — the timariot precedent — so the reform SURVIVES the
+# horde's settle-to-monarchy transition, which the user ruled historical
+# (the Yuan did exactly this in 1272) and left unblocked (2026-07-30).
+
+MR_yassa_code = {
+	unique = yes
+	potential = {
+		OR = {
+			has_or_had_tag = MGO
+			has_or_had_tag = MGE
+		}
+		has_advance = mr_legacy_of_the_yassa
+	}
+	country_modifier = {
+		army_light_cavalry_power = 0.1
+		army_light_cavalry_maintenance_cost_modifier = -0.1
+		land_morale_modifier = 0.05
+		government_reform_slots = 1
+	}
+	years = 2
+}

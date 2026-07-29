@@ -186,6 +186,29 @@ steppe horde reads "Great <Adj> Horde" whatever you call it.
 
 ---
 
+### `jomini_script_system.cpp:252 — Undefined event target 'target_ruler' / 'target_province' + Event target link 'scope' returned an unset scope` at `events/disaster/horde_civil_war.txt:608/628/739/750/761`
+**Means:** VANILLA-side, confirmed 2026-07-30: the mod ships no override of
+that file. Vanilla sets the scopes with a swallowed link
+(`ruler_or_regent ?= { save_scope_as = target_ruler }` at :730, province
+set in one branch only at :562) and then uses `scope:target_ruler` /
+`scope:target_province` UNGUARDED in the option bodies — when a civil-war
+party is momentarily rulerless the save never happens and every option
+errors. The error.log `CHARACTER.GetName` / `FetchData` /
+`THIRD_ADD_CHARACTER_MODIFIER_DURATION` trio with identical timestamps is
+the SAME event's tooltips failing to render the name, not a second bug.
+**Fix:** none — accepted. Effects no-op harmlessly. Worth one glance per
+observer run only if a MOD-driven rulerless horde becomes common.
+
+### `initialize_from_bookmark.cpp:495-1719 — Country 'KAZ Kazakh' has no government type / heir-selection / capital / society values / parliament_type…` (12-line barrage)
+**Means:** an identity-only registry block (the SKE law, audit D2) with NO
+setup presence trips the bookmark initializer, which ends with its own
+advice: add `is_historic = yes`. SKE itself dodges it by carrying revolter
+cores (vanilla 10_countries.txt:308); vanilla's identity-only blocks use
+`is_historic = yes` instead (58 uses, balkans.txt:40).
+**Fix:** FIXED 2026-07-30 — `is_historic = yes` on the KAZ block. WATCH:
+confirm in the Great Partition game test that KAZ still instantiates via
+`change_location_owner` with the flag set; that combination is unobserved.
+
 ## Separating your errors from vanilla's
 
 Vanilla emits plenty of its own errors, and telling them apart costs real time

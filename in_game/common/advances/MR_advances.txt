@@ -1,0 +1,53 @@
+﻿# The shared MGO/MGE advance line (user request 2026-07-30). Gating uses
+# has_or_had_tag under OR so BOTH the horde and the proclaimed empire
+# qualify, and a country that switched tags mid-campaign keeps every
+# advance it earned — covering the MGO->MGE switch is what the trigger
+# exists for (vanilla gates the timariot reform the same way,
+# government_reforms/country_specific.txt:1108). Shapes cloned from
+# vanilla's own steppe line country_CHG.txt (chained requires, age
+# placement, cavalry magnitudes) and country_TUS.txt.
+
+mr_legacy_of_the_yassa = {
+	age = age_2_renaissance
+	potential = {
+		OR = {
+			has_or_had_tag = MGO
+			has_or_had_tag = MGE
+		}
+	}
+
+	requires = regiment_reinforcement_speed_renaissance
+
+	monthly_legitimacy = 0.1
+	monthly_horde_unity = 0.1
+}
+
+mr_horse_lords_reborn = {
+	age = age_2_renaissance
+	potential = {
+		OR = {
+			has_or_had_tag = MGO
+			has_or_had_tag = MGE
+		}
+	}
+
+	requires = mr_legacy_of_the_yassa
+
+	army_light_cavalry_power = 0.2
+	army_heavy_cavalry_power = 0.2
+}
+
+mr_yam_riders = {
+	age = age_3_discovery
+	potential = {
+		OR = {
+			has_or_had_tag = MGO
+			has_or_had_tag = MGE
+		}
+	}
+
+	requires = mr_horse_lords_reborn
+
+	army_light_cavalry_maintenance_cost_modifier = -0.2
+	army_light_cavalry_reinforce_cost_modifier = -0.33
+}
