@@ -9,7 +9,7 @@ Mongol Empire, alongside three standalone late-steppe situations covering what
 actually happened historically.
 
 Full design spec: `docs/MOD-DESIGN-IDEA.md`. How-to and methodology:
-`docs/EU5-MODDING-GUIDE.md`. Historical audit record: `docs/AUDIT-2026-07-21.md`.
+`docs/EU5-MODDING-GUIDE.md`. Audit records: `docs/AUDIT-2026-07-21.md`, `docs/AUDIT-2026-07-29.md`, `docs/AUDIT-2026-07-30.md`.
 In-game test plan: `docs/TESTING-GUIDE.md`. Extension roadmap and cookbooks:
 `docs/FUTURE-DEVELOPMENT.md`. Static verification harness:
 `tools/verify_mod.py` (run after every change; every check prints its count).

@@ -711,3 +711,16 @@ Iki dis kaynak da hatali iddialar icerdi:
 - HLJSXK'in CLAUDE.md'si "location_rank sadece 3 deger alir" diyor â€” vanilla'da DORT var ve eksik olan IKINCI EN COK kullanilan: city 356, megalopolis 279, town 244, rural_settlement 121.
 Populer ve yayinlanmis olmak "attested" demek degil.
 
+
+
+## NEXT GAME SESSION CHECKLIST (the 2026-07-30 batch — nothing below has in-game evidence yet)
+
+Click tour, ~10 minutes, observer or MGO hands-on:
+1. 1372+ as/watching MGO: DHE timeline shows "A Ming embassy demands submission"; taking Defiance leaves a 10-year "Defiance of the South" modifier on the country panel.
+2. If TIM exists: "Timur's shadow reaches the steppe" fires (three options incl. the bride price); if TIM never rose, the event correctly never appears.
+3. 1370-85: "The Return of Bayan" — after the historical option, a high-adm character named Bayan appears in the court roster. THIS IS A PROBE: create_character without a dynasty line is unobserved.
+4. Any winter: "Zud" fires and CAN REPEAT in a later year (no fire_only_once).
+5. Paiza event: option a leaves "The Ortoq Partnerships" (+25 gold/month); 3-6 years later "The Ortoq's Bill" arrives (three options incl. the purge).
+6. 1430+: "The Karakorum Debate" (fires for MGO or MGE — the multi-tag probe); each option leaves its 20-year modifier.
+7. EVERY event window shows the historical-info text (the explicit-field fix — if any is blank, say which).
+8. Carried from the audit: KAZ actually spawns in the Great Partition (is_historic probe); mr_yam_riders researchable at the 1437 age boundary; MGE proclamation still works if the AI settled first; the "Great Mongol Empire" map label while still a horde.
