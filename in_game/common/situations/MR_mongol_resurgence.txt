@@ -99,8 +99,16 @@ mongol_resurgence = {
 					has_culture_group = culture_group:mongolian_group
 				}
 				government_type = government_type:steppe_horde
-				NOT = {
-					this = scope:mr_first_claimant
+				# exists-guard added (audit S3, 2026-07-30): the save
+				# above CAN fail if no candidate matches, and this limit
+				# runs once per country on the map. mr_can_start makes
+				# that impossible today, but the guard lived in another
+				# file with nothing linking them — the horde_civil_war
+				# shape. `exists = scope:x` is vanilla's own unset-scope
+				# guard (D008_flavor_BYZ.txt immediate).
+				OR = {
+					NOT = { exists = scope:mr_first_claimant }
+					NOT = { this = scope:mr_first_claimant }
 				}
 				capital ?= {
 					OR = {
@@ -390,11 +398,13 @@ mongol_resurgence = {
 		}
 		# ========== AI RAILROAD: DECLARE ==========
 		# Pacing follows the buff rule alone, PD-style (brandenburg_rise
-		# ties pace to BRA_buff_enabled). The old timeline-pacing rule is
-		# gone: Terminator declares roughly every 6 months, Historical
-		# roughly yearly, Vanilla roughly every two years. Every tier has
-		# a branch — with none, a buff-disabled campaign would simply
-		# never declare its unification wars.
+		# ties pace to BRA_buff_enabled). Terminator declares roughly
+		# every 4-5 months, Historical every 8-9, Vanilla roughly yearly
+		# — the CODE's numbers are the spec (audit D2 ruling 2026-07-30:
+		# the user kept the fast pace; the observer run showed the AI
+		# needs it against a dominant China). Every tier has a branch —
+		# with none, a buff-disabled campaign would simply never declare
+		# its unification wars.
 		if = {
 			limit = {
 				var:mr_conquest_target = 1
@@ -441,6 +451,14 @@ mongol_resurgence = {
 						# every tick. c:MGO named directly, as the fallback
 						# block below already does, guarded in the same AND.
 						situation:mongol_resurgence = {
+							# Dead-target guard (audit S1, 2026-07-30): P1
+							# alone ran declare BEFORE the fallback that
+							# clears an annexed target, so one tick could
+							# deref a stale reference. Same guard the
+							# fallback below already uses, same AND,
+							# short-circuits first. P2/P3 order the
+							# fallback first and never had the window.
+							country_exists = var:mr_conquest_target_country
 							var:mr_conquest_target_country = {
 								country_exists = c:MGO
 								NOT = {

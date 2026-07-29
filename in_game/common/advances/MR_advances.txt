@@ -46,7 +46,13 @@ mr_yam_riders = {
 		}
 	}
 
-	requires = mr_horse_lords_reborn
+	# NOT mr_horse_lords_reborn: 2748/2748 vanilla requires name a
+	# SAME-age advance, zero exceptions (audit D1, 2026-07-30) — a
+	# cross-age chain likely dead-ends when age 3 opens. Vanilla's own
+	# steppe line does exactly this hop: chg_sons_of_chagatai (age 3)
+	# roots on crown_power_advance_discovery (0_age_of_discovery.txt:
+	# 323), not on its own age-2 predecessor.
+	requires = crown_power_advance_discovery
 
 	army_light_cavalry_maintenance_cost_modifier = -0.2
 	army_light_cavalry_reinforce_cost_modifier = -0.33

@@ -176,8 +176,11 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   steppe-unification CB), `.993` (P2, silk-road CB), `.992` (P3 — westward CB
   if the target holds russian/steppes/ural/persia/anatolia land or
   iraq_arabi/armenian_highlands presence, silk-road CB otherwise). Pacing by
-  buff rule alone: P1 6/12/24 months (Terminator/Historical/Vanilla) with
-  matching months_since_war gates, P2 12/36, P3 12/60 (PD Ascension shape).
+  buff rule alone: P1 cooldown > 4/8/12 months (Terminator/Historical/
+  Vanilla) with matching months_since_war gates, P2 > 4/8, P3 > 12/60 —
+  the CODE's numbers are the spec (audit D2 ruling 2026-07-30: the user
+  kept the fast pace; an older 6/12/24 + 12/36 figure lived here and in
+  two file comments and matched nothing).
   Variables: `mr_conquest_*` (P1), `mr_imp_conquest_*` (P2),
   `mr_dom_conquest_*` (P3) — P2 seeds `target_country = c:MGO` in on_start;
   P3 seeds the claimant via if/else (c:MGE normally, c:MGO on the

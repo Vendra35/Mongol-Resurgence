@@ -1379,7 +1379,7 @@ mr_dominance.996 = {
 			limit = {
 				has_advance = horse_lords
 			}
-			capital = {
+			capital ?= {
 				while = {
 					count = 10
 					create_sub_unit_with_owner = {
@@ -1394,7 +1394,7 @@ mr_dominance.996 = {
 			limit = {
 				has_advance = horse_lords
 			}
-			capital = {
+			capital ?= {
 				while = {
 					count = 5
 					create_sub_unit_with_owner = {
@@ -1410,7 +1410,7 @@ mr_dominance.996 = {
 			limit = {
 				has_advance = unlock_light_dragoons_advance
 			}
-			capital = {
+			capital ?= {
 				while = {
 					count = 5
 					create_sub_unit_with_owner = {
@@ -1424,7 +1424,7 @@ mr_dominance.996 = {
 			limit = {
 				has_advance = unlock_hussars_advance
 			}
-			capital = {
+			capital ?= {
 				while = {
 					count = 5
 					create_sub_unit_with_owner = {
@@ -1438,7 +1438,7 @@ mr_dominance.996 = {
 			limit = {
 				has_advance = unlock_pistoleers_advance
 			}
-			capital = {
+			capital ?= {
 				while = {
 					count = 5
 					create_sub_unit_with_owner = {

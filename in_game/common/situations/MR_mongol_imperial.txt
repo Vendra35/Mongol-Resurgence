@@ -421,9 +421,11 @@ mongol_imperial = {
 			}
 		}
 		# ========== AI RAILROAD: DECLARE ==========
-		# PD Ascension pacing: the later phases press harder than the
-		# unification — Terminator roughly yearly, otherwise every ~3
-		# years (cooldown > 36), with the same months_since_war gates.
+		# PD Ascension principle: the later phases press harder than
+		# the unification. Terminator roughly every 4-5 months,
+		# otherwise every 8-9 (cooldown > 4 / > 8) — the CODE's numbers
+		# are the spec (audit D2 ruling 2026-07-30: the user kept the
+		# fast pace over the older written ~3-year figure).
 		if = {
 			limit = {
 				var:mr_imp_conquest_target = 1
