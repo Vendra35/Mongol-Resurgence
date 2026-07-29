@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """DHE flavor-pack scaffold generator — ported from the 1066 sister
 project (2026-07-30) and adapted to this mod's conventions: packs are
-THEMED (mr_court, mr_economy...) rather than per-country, files follow
-the MR_<pack>_dhe_events.txt naming next to MR_dominance_dhe_events.txt,
-and each pack gets its own loc file (unique filename — never a second
-file named MR_l_english.yml, the duplicate-filename shadow rule).
+THEMED (mr_court, mr_economy...) rather than per-country, and files
+follow the MR_<pack>_dhe_events.txt naming next to
+MR_dominance_dhe_events.txt.
+
+HOUSE LOC RULE (user, 2026-07-30): ALL localisation lives in
+MR_l_english.yml. The per-pack loc file this generator emits is a
+DRAFT ONLY — fold its rows into MR_l_english.yml and DELETE the draft
+before committing; the harness reads every english yml, so a
+forgotten draft would pass silently, but one file is the convention.
 
 What it does NOT do: triggers, effects, option bodies, design. Those
 follow this repo's CLAUDE.md citation discipline. What it does: the

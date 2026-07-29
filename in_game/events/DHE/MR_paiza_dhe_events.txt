@@ -97,4 +97,14 @@ mr_paiza.100 = {
 		}
 		add_legitimacy = legitimacy_mild_penalty
 	}
+
+	option = {
+		# Seize the ledgers, the tablets, and the silver both — a
+		# windfall today, and every clan that partnered with the
+		# houses remembers who beggared them.
+		name = mr_paiza.100.c
+		add_gold = 1000
+		remove_country_modifier = MR_ortoq_partnerships
+		add_horde_unity = horde_unity_mild_penalty
+	}
 }

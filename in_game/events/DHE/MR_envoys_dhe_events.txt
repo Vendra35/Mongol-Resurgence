@@ -35,15 +35,31 @@ mr_envoys.1 = {
 
 	option = {
 		# Defiance — the historical Northern Yuan line with early Ming.
+		# The answer rides south in every saddle for a decade.
 		name = mr_envoys.1.a
 		historical_option = yes
 		add_prestige = prestige_mild_bonus
+		add_country_modifier = {
+			modifier = MR_defiance_of_the_south
+			years = 10
+			mode = add
+		}
 	}
 
 	option = {
-		# Feigned submission: take the gifts, promise nothing.
+		# Feigned submission: take the gifts, promise nothing — and
+		# hear the clans mutter about a khan who takes southern silver.
 		name = mr_envoys.1.b
 		add_gold = 500
+		add_legitimacy = legitimacy_mild_penalty
+	}
+
+	option = {
+		# Melt their seals into stirrups. The south laughs; the tribes
+		# cheer.
+		name = mr_envoys.1.c
+		add_horde_unity = horde_unity_mild_bonus
+		add_prestige = prestige_weak_penalty
 	}
 }
 
@@ -88,8 +104,23 @@ mr_envoys.2 = {
 	}
 
 	option = {
-		# Send his envoys back shaved. The army relishes what follows.
+		# Send his envoys back shaved. The army relishes what follows,
+		# and the horde's gaze turns west for a decade.
 		name = mr_envoys.2.b
 		add_army_tradition = army_tradition_mild_bonus
+		add_country_modifier = {
+			modifier = MR_eyes_westward
+			years = 10
+			mode = add
+		}
+	}
+
+	option = {
+		# A Chinggisid bride for the Gurkani — Timur styled himself
+		# son-in-law of the house of Chinggis his whole life; let him
+		# pay a bride price worthy of the honor.
+		name = mr_envoys.2.c
+		add_gold = 750
+		add_prestige = prestige_mild_penalty
 	}
 }

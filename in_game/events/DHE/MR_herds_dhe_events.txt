@@ -49,4 +49,14 @@ mr_herds.1 = {
 		name = mr_herds.1.b
 		add_horde_unity = horde_unity_mild_bonus
 	}
+
+	option = {
+		# The historical third answer: when the steppe starves, the
+		# steppe rides. Loot and glory against order — the frontier
+		# war every zud seeded.
+		name = mr_herds.1.c
+		add_gold = 400
+		add_army_tradition = army_tradition_mild_bonus
+		add_stability = stability_mild_penalty
+	}
 }
