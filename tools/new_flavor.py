@@ -64,9 +64,10 @@ START = (1337, 1, 1)
 # }
 SPECS = {
     # The approved program's first wave (FUTURE-DEVELOPMENT.md 4,
-    # 2026-07-30). envoys/herds/paiza were ARMED the same day; court
-    # ships INERT (Bayan needs the create_character design pass,
-    # Karakorum needs the MGE tag + three faith modifiers).
+    # 2026-07-30) — ALL FOUR packs armed the same day: envoys, herds,
+    # paiza, and court (Bayan on the create_character-minus-limbo
+    # shape, Karakorum with the multi-tag MGO+MGE block and the three
+    # faith modifiers).
     "envoys": {
         "tag": "MGO",
         "events": [
@@ -111,6 +112,7 @@ EVENT_TPL = """######################################
 	type = country_event
 	title = {ns}.{num}.title
 	desc = {ns}.{num}.desc
+	historical_info = {ns}.{num}.historical_info
 	outcome = neutral
 	fire_only_once = yes
 

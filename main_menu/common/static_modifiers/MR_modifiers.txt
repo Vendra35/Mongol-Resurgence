@@ -516,3 +516,28 @@ MR_eyes_westward = {
 	}
 	army_light_cavalry_power = 0.1
 }
+
+# The Karakorum Debate's three verdicts (mr_court.2) — twenty years of
+# the court leaning one way. Flavor marks only: NO change_religion
+# rides on these (the CLAUDE.md rule — vanilla owns the Altan Khan
+# conversion; we react, we do not duplicate).
+MR_way_of_the_lama = {
+	game_data = {
+		category = country
+	}
+	monthly_legitimacy = 0.05
+}
+
+MR_eternal_sky = {
+	game_data = {
+		category = country
+	}
+	monthly_horde_unity = 0.05
+}
+
+MR_path_of_the_qadis = {
+	game_data = {
+		category = country
+	}
+	monthly_gold_income = 10
+}

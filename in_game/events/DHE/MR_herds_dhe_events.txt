@@ -11,6 +11,7 @@ mr_herds.1 = {
 	type = country_event
 	title = mr_herds.1.title
 	desc = mr_herds.1.desc
+	historical_info = mr_herds.1.historical_info
 	outcome = neutral
 	# NO fire_only_once ON PURPOSE — the zud recurs; trap 2's documented
 	# exception for deliberately repeating events. The 2% monthly chance

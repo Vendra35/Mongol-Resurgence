@@ -11,6 +11,7 @@ mr_envoys.1 = {
 	type = country_event
 	title = mr_envoys.1.title
 	desc = mr_envoys.1.desc
+	historical_info = mr_envoys.1.historical_info
 	outcome = neutral
 	fire_only_once = yes
 
@@ -71,6 +72,7 @@ mr_envoys.2 = {
 	type = country_event
 	title = mr_envoys.2.title
 	desc = mr_envoys.2.desc
+	historical_info = mr_envoys.2.historical_info
 	outcome = neutral
 	fire_only_once = yes
 

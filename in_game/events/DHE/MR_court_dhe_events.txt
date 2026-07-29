@@ -1,7 +1,8 @@
 ﻿namespace = mr_court
-# mr_court — SCAFFOLD (tools/new_flavor.py). Every event is
-# INERT until its `# ARM:` gate is replaced; the trigger
-# law and the eight traps are in the generator header.
+# mr_court — the T1 court pack, ARMED 2026-07-30 (flavor wave 2).
+# House style: railroad-rule gate on story beats (the mr_history.1
+# precedent); historical_info as an explicit event field (also the
+# mr_history shape — the loc key alone does not render).
 
 ######################################
 # 1 — The Return of Bayan
@@ -11,6 +12,7 @@ mr_court.1 = {
 	type = country_event
 	title = mr_court.1.title
 	desc = mr_court.1.desc
+	historical_info = mr_court.1.historical_info
 	outcome = neutral
 	fire_only_once = yes
 
@@ -26,21 +28,47 @@ mr_court.1 = {
 		monthly_chance = 10
 	}
 
-	# ARM: replace `always = no` with the real gate (this is a FLAVOR
-	# event — it SHOULD have one; trap 8). Every nullable link behind
-	# ?= (trap 6). Remember the railroad-off game rule gate if this
-	# pack must respect it: NOT = { has_game_rule = mr_railroad_off }.
 	trigger = {
-		always = no
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 	}
 
 	option = {
+		# A tent, a seal, and the ear of the Khan — the exile court's
+		# last chancellor brings Yuan statecraft to the steppe.
+		# create_character on the proven mr_dominance.104 shape MINUS
+		# limbo and enthronement: a courtier, not a khan. No dynasty
+		# line on purpose (the Merkid are no dynasty here); whether
+		# the omission renders cleanly is the game test's probe.
 		name = mr_court.1.a
 		historical_option = yes
+		create_character = {
+			estate = estate_type:nobles_estate
+			first_name = Bayan
+			age = 50
+			culture = root.culture
+			religion = root.religion
+			adm = {
+				80
+				100
+			}
+			dip = {
+				60
+				100
+			}
+			mil = {
+				20
+				60
+			}
+		}
+		add_legitimacy = legitimacy_mild_bonus
 	}
 
 	option = {
+		# The steppe needs no ink-brush ministers.
 		name = mr_court.1.b
+		add_horde_unity = horde_unity_mild_bonus
 	}
 }
 
@@ -52,6 +80,7 @@ mr_court.2 = {
 	type = country_event
 	title = mr_court.2.title
 	desc = mr_court.2.desc
+	historical_info = mr_court.2.historical_info
 	outcome = neutral
 	fire_only_once = yes
 
@@ -61,26 +90,52 @@ mr_court.2 = {
 	}
 
 	dynamic_historical_event = {
+		# BOTH tags — the debate belongs to whoever holds the imperial
+		# court, horde or proclaimed empire (the multi-tag block is the
+		# house pattern for P2-window events; 100 vanilla instances).
 		tag = MGO
+		tag = MGE
 		from = 1430.1.1
 		to = 1550.1.1
 		monthly_chance = 5
 	}
 
-	# ARM: replace `always = no` with the real gate (this is a FLAVOR
-	# event — it SHOULD have one; trap 8). Every nullable link behind
-	# ?= (trap 6). Remember the railroad-off game rule gate if this
-	# pack must respect it: NOT = { has_game_rule = mr_railroad_off }.
 	trigger = {
-		always = no
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 	}
 
 	option = {
+		# Let the lamas speak last — the road the eastern Mongols
+		# historically took. Twenty years of the court leaning dharma.
 		name = mr_court.2.a
 		historical_option = yes
+		add_country_modifier = {
+			modifier = MR_way_of_the_lama
+			years = 20
+			mode = add
+		}
 	}
 
 	option = {
+		# The Eternal Sky needs no temples.
 		name = mr_court.2.b
+		add_country_modifier = {
+			modifier = MR_eternal_sky
+			years = 20
+			mode = add
+		}
+	}
+
+	option = {
+		# The qadis argue well — and the caravan cities of the west
+		# pray toward Mecca. The Golden Horde chose this road once.
+		name = mr_court.2.c
+		add_country_modifier = {
+			modifier = MR_path_of_the_qadis
+			years = 20
+			mode = add
+		}
 	}
 }
