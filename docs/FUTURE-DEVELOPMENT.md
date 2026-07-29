@@ -160,6 +160,44 @@ moment the claimant EXISTS — for Phase 1 that is Beat 104, not `on_start`.
 Ordered roughly by value-for-effort. Each lists: concept, anchor, what to
 touch, proven building blocks, pitfalls, size (S/M/L/XL).
 
+**APPROVED PROGRAM (user, 2026-07-30 — "hepsini yapalım"):** T1, T2, T5
+plus the five new tracks T11-T15 below are all green-lit. Build order:
+T1 (via the new tools/new_flavor.py scaffold generator, ported from the
+1066 sister project the same day) → T11 Tumu-mirror → T2 + T12 Jade
+Seal → T13/T14 texture packs → T5 → T15 balance instrument. HARD GATE:
+nothing touches mr_dominance.120/.130 (T2's files) until the
+2026-07-30 six-lens audit report has been reviewed — its lens 4 examines
+exactly those files. New tracks:
+
+### T11 — "The Emperor in the Camp" (Tumu-mirror flagship DHE, S-M)
+1449 inverted: at war with the Chinese empire and decisively winning →
+capture the emperor; ransom / puppet / release triple choice. Anchor:
+Esen Taishi capturing the Zhengtong Emperor at Tumu. Counterplay beat
+against a dominant Great Chen (the 2026-07-29 observer's finding).
+Pitfall: no imprisonment exists in EU5 — build it as modifier+event on
+the enemy ruler (the proven construction class), and cite a war-score
+trigger before designing around one.
+
+### T12 — The Jade Seal / Borjigin legitimacy (M, pairs with T2)
+"Who holds the Seal of the Great Khan": a variable-borne token granting
+a legitimacy modifier; non-Borjigin usurpation (the Esen fate — dead
+within two years) as the cautionary arc; rival khans contest the seal.
+
+### T13 — Zud, the killing winter (S, repeatable texture)
+Herd die-off event (slaughter early / raid south / appeal to the sky) —
+the real motor of steppe eruptions. Small lasting choices, repeatable
+(no fire_only_once; verify the random-pool route if pulsed).
+
+### T14 — Ortoq partnerships and the paiza (S-M, economy texture)
+Extends the Silk Road DHE: grant paiza to merchant houses → income now,
+corruption events later. Anchor: the ortoq system of the Yuan.
+
+### T15 — Power-ratio catch-up (S, balance instrument)
+Replace/augment the flat observer-run buffs: the AI catch-up events
+measure the claimant's army against the strongest China-culture power
+and scale their grant by the gap — self-adjusting instead of
+hand-tuned. Requires a cited army-size comparison trigger first.
+
 ### T1 — Deepen the existing arc with content (S–M each, do these first)
 The skeleton is done; flesh is cheap now. Concrete, dated, cite-able ideas:
 - **"The Return of Bayan"** (P1, ~1370): the last great Yuan chancellor
