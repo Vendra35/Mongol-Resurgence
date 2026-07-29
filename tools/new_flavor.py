@@ -58,14 +58,37 @@ START = (1337, 1, 1)
 #   "events": [(id, "short comment", "from", "to", monthly_chance), ...]
 # }
 SPECS = {
-    # The T1 court pack (FUTURE-DEVELOPMENT.md, approved 2026-07-30):
-    # "court": {
-    #     "tag": "MGO",
-    #     "events": [
-    #         (1, "The Return of Bayan", "1370.1.1", "1385.1.1", 10),
-    #         (2, "The Karakorum Debate", "1380.1.1", "1420.1.1", 5),
-    #     ],
-    # },
+    # The approved program's first wave (FUTURE-DEVELOPMENT.md 4,
+    # 2026-07-30). envoys/herds/paiza were ARMED the same day; court
+    # ships INERT (Bayan needs the create_character design pass,
+    # Karakorum needs the MGE tag + three faith modifiers).
+    "envoys": {
+        "tag": "MGO",
+        "events": [
+            (1, "The Ming Embassy", "1372.1.1", "1400.1.1", 8),
+            (2, "Timur and the Khan", "1380.1.1", "1405.2.1", 6),
+        ],
+    },
+    "herds": {
+        "tag": "MGO",
+        "events": [
+            (1, "Zud - the killing winter", "1370.1.1", "1650.1.1", 2),
+        ],
+    },
+    "paiza": {
+        "tag": "MGO",
+        "events": [
+            (1, "The Paiza and the Ortoq", "1375.1.1", "1500.1.1", 5),
+            (100, "The Ortoq's Bill (chain)", "1375.1.1", "1520.1.1", 1),
+        ],
+    },
+    "court": {
+        "tag": "MGO",
+        "events": [
+            (1, "The Return of Bayan", "1370.1.1", "1385.1.1", 10),
+            (2, "The Karakorum Debate", "1430.1.1", "1550.1.1", 5),
+        ],
+    },
     "demo": {   # --out testing only; never generate into the repo
         "tag": "MGO",
         "events": [

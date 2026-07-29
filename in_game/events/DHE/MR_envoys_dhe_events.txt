@@ -1,0 +1,95 @@
+﻿namespace = mr_envoys
+# mr_envoys — SCAFFOLD (tools/new_flavor.py). Every event is
+# INERT until its `# ARM:` gate is replaced; the trigger
+# law and the eight traps are in the generator header.
+
+######################################
+# 1 — The Ming Embassy
+######################################
+
+mr_envoys.1 = {
+	type = country_event
+	title = mr_envoys.1.title
+	desc = mr_envoys.1.desc
+	outcome = neutral
+	fire_only_once = yes
+
+	illustration_tags = {
+		10 = regular
+		10 = interior
+	}
+
+	dynamic_historical_event = {
+		tag = MGO
+		from = 1372.1.1
+		to = 1400.1.1
+		monthly_chance = 8
+	}
+
+	# Fires while the horde court still stands to receive an embassy —
+	# the settle-exposure map's cheap thematic gate. No railroad-rule
+	# gate: story flavor plays under every rule setting.
+	trigger = {
+		government_type = government_type:steppe_horde
+	}
+
+	option = {
+		# Defiance — the historical Northern Yuan line with early Ming.
+		name = mr_envoys.1.a
+		historical_option = yes
+		add_prestige = prestige_mild_bonus
+	}
+
+	option = {
+		# Feigned submission: take the gifts, promise nothing.
+		name = mr_envoys.1.b
+		add_gold = 500
+	}
+}
+
+######################################
+# 2 — Timur and the Khan
+######################################
+
+mr_envoys.2 = {
+	type = country_event
+	title = mr_envoys.2.title
+	desc = mr_envoys.2.desc
+	outcome = neutral
+	fire_only_once = yes
+
+	illustration_tags = {
+		10 = regular
+		10 = interior
+	}
+
+	dynamic_historical_event = {
+		tag = MGO
+		from = 1380.1.1
+		to = 1405.2.1
+		monthly_chance = 6
+	}
+
+	# Swallowed harmlessly in campaigns where Timur never rises — being
+	# skipped when conditions fail is the flavor law's point. The bare
+	# c:TIM guard is the mr_history.6 precedent (country_exists in the
+	# same trigger; c:DLH there).
+	trigger = {
+		country_exists = c:TIM
+	}
+
+	option = {
+		# Wary courtesy between conquerors — the historical steppe
+		# diplomacy of the 1380s-90s; Tokhtamysh learned the price of
+		# the alternative.
+		name = mr_envoys.2.a
+		historical_option = yes
+		add_prestige = prestige_mild_bonus
+	}
+
+	option = {
+		# Send his envoys back shaved. The army relishes what follows.
+		name = mr_envoys.2.b
+		add_army_tradition = army_tradition_mild_bonus
+	}
+}

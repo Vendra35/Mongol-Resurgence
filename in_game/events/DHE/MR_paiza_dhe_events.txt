@@ -1,0 +1,100 @@
+﻿namespace = mr_paiza
+# mr_paiza — SCAFFOLD (tools/new_flavor.py). Every event is
+# INERT until its `# ARM:` gate is replaced; the trigger
+# law and the eight traps are in the generator header.
+
+######################################
+# 1 — The Paiza and the Ortoq
+######################################
+
+mr_paiza.1 = {
+	type = country_event
+	title = mr_paiza.1.title
+	desc = mr_paiza.1.desc
+	outcome = neutral
+	fire_only_once = yes
+
+	illustration_tags = {
+		10 = regular
+		10 = interior
+	}
+
+	dynamic_historical_event = {
+		tag = MGO
+		from = 1375.1.1
+		to = 1500.1.1
+		monthly_chance = 5
+	}
+
+	# One real condition: no second offer while a scheme already runs.
+	trigger = {
+		NOT = {
+			has_country_modifier = MR_ortoq_partnerships
+		}
+	}
+
+	option = {
+		# Grant the paizas — the Yuan ortoq system reborn: merchant
+		# houses ride under the khan's tablet, and the silver flows
+		# now. The bill arrives in a few years (the chain event).
+		name = mr_paiza.1.a
+		historical_option = yes
+		add_country_modifier = {
+			modifier = MR_ortoq_partnerships
+			years = 25
+			mode = add
+		}
+		trigger_event_silently = {
+			id = mr_paiza.100
+			days = { 1080 2160 }
+		}
+	}
+
+	option = {
+		# Keep trade in the clans — slower, but the khan's own.
+		name = mr_paiza.1.b
+		add_legitimacy = legitimacy_mild_bonus
+	}
+}
+
+######################################
+# 100 — The Ortoq's Bill (chain)
+######################################
+
+# CHAIN-ONLY: no dynamic_historical_event block (mr_paiza.1's option
+# schedules it via the delayed block form) and NO event-level trigger —
+# a fired beat with a trigger can be silently swallowed at fire time;
+# that is the railroad half of the trigger law.
+mr_paiza.100 = {
+	type = country_event
+	title = mr_paiza.100.title
+	desc = mr_paiza.100.desc
+	outcome = neutral
+	fire_only_once = yes
+
+	illustration_tags = {
+		10 = regular
+		10 = interior
+	}
+
+	option = {
+		# Cancel the concessions — the historical end of every ortoq
+		# cycle: the court discovers what the tablets have been costing.
+		name = mr_paiza.100.a
+		historical_option = yes
+		remove_country_modifier = MR_ortoq_partnerships
+		add_stability = stability_mild_bonus
+	}
+
+	option = {
+		# The silver must flow. The merchants know it, and now the
+		# court knows they know.
+		name = mr_paiza.100.b
+		add_country_modifier = {
+			modifier = MR_ortoq_partnerships
+			years = 25
+			mode = add_and_extend
+		}
+		add_legitimacy = legitimacy_mild_penalty
+	}
+}

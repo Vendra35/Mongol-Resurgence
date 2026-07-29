@@ -489,3 +489,13 @@ MR_khans_own_pasture = {
 	local_devastation_recovery = 0.005
 	local_monthly_prosperity = 0.001
 }
+
+# The ortoq scheme (mr_paiza.1/.100, T14): caravan silver while the
+# khan's tablets ride. Granted 25y, extendable by the chain's b-option;
+# cancelled outright by its a-option.
+MR_ortoq_partnerships = {
+	game_data = {
+		category = country
+	}
+	monthly_gold_income = 25
+}

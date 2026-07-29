@@ -1,0 +1,86 @@
+﻿namespace = mr_court
+# mr_court — SCAFFOLD (tools/new_flavor.py). Every event is
+# INERT until its `# ARM:` gate is replaced; the trigger
+# law and the eight traps are in the generator header.
+
+######################################
+# 1 — The Return of Bayan
+######################################
+
+mr_court.1 = {
+	type = country_event
+	title = mr_court.1.title
+	desc = mr_court.1.desc
+	outcome = neutral
+	fire_only_once = yes
+
+	illustration_tags = {
+		10 = regular
+		10 = interior
+	}
+
+	dynamic_historical_event = {
+		tag = MGO
+		from = 1370.1.1
+		to = 1385.1.1
+		monthly_chance = 10
+	}
+
+	# ARM: replace `always = no` with the real gate (this is a FLAVOR
+	# event — it SHOULD have one; trap 8). Every nullable link behind
+	# ?= (trap 6). Remember the railroad-off game rule gate if this
+	# pack must respect it: NOT = { has_game_rule = mr_railroad_off }.
+	trigger = {
+		always = no
+	}
+
+	option = {
+		name = mr_court.1.a
+		historical_option = yes
+	}
+
+	option = {
+		name = mr_court.1.b
+	}
+}
+
+######################################
+# 2 — The Karakorum Debate
+######################################
+
+mr_court.2 = {
+	type = country_event
+	title = mr_court.2.title
+	desc = mr_court.2.desc
+	outcome = neutral
+	fire_only_once = yes
+
+	illustration_tags = {
+		10 = regular
+		10 = interior
+	}
+
+	dynamic_historical_event = {
+		tag = MGO
+		from = 1430.1.1
+		to = 1550.1.1
+		monthly_chance = 5
+	}
+
+	# ARM: replace `always = no` with the real gate (this is a FLAVOR
+	# event — it SHOULD have one; trap 8). Every nullable link behind
+	# ?= (trap 6). Remember the railroad-off game rule gate if this
+	# pack must respect it: NOT = { has_game_rule = mr_railroad_off }.
+	trigger = {
+		always = no
+	}
+
+	option = {
+		name = mr_court.2.a
+		historical_option = yes
+	}
+
+	option = {
+		name = mr_court.2.b
+	}
+}

@@ -355,6 +355,7 @@
  MR_needs_a_great_khan_tt: "A #Y Great Khan#! sits the throne"
  MR_select_core_region_price: "$MR_select_core_region$ Cost"
  STATIC_MODIFIER_NAME_MR_khans_own_pasture: "The Khan's Own Pasture"
+ STATIC_MODIFIER_NAME_MR_ortoq_partnerships: "The Ortoq Partnerships"
  STATIC_MODIFIER_DESC_MR_khans_own_pasture: "The Khan has named this ground as the horde's own. It is no longer held — it is dwelt in."
  # --- The world reacts: spectators, victims, broken alliances ---
  mr_dominance.20.title: "Word from the Grasslands"

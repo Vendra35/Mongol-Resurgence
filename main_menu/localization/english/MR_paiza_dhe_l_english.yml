@@ -1,0 +1,13 @@
+﻿l_english:
+ mr_paiza.1.title: "The Paiza and the Ortoq"
+ mr_paiza.1.desc: "Merchant houses of Samarkand and Kashgar petition the court: grant them the khan's tablet — the paiza that opens every relay station and waves aside every toll — and in return the caravan silver flows to the treasury before it flows anywhere else."
+ mr_paiza.1.entry: "Merchant houses petition for paizas"
+ mr_paiza.1.historical_info: "Under the Yuan, ortoq merchant partnerships operated on capital advanced by Mongol princes, their privileges signified by the paiza tablet — a system that enriched the court, and whose abuses periodically forced it to cancel the tablets altogether."
+ mr_paiza.1.a: "Grant the tablets. Let the silver flow."
+ mr_paiza.1.b: "The khan's trade rides with the khan's own clans."
+ mr_paiza.100.title: "The Ortoq's Bill"
+ mr_paiza.100.desc: "The tablets have multiplied, and so have the debts sworn in the khan's name. Relay masters feed merchant trains larger than tumens; herdsmen carry the cost. The court must decide what its own seal is worth."
+ mr_paiza.100.entry: "The ortoq system presents its costs"
+ mr_paiza.100.historical_info: "Yuan emperors repeatedly banned and restored ortoq privileges as the partnerships' tax farming and usury bred resentment — the paiza system proved as fiscally addictive as it was politically corrosive."
+ mr_paiza.100.a: "Cancel the concessions. The seal is not for sale."
+ mr_paiza.100.b: "The silver must flow."

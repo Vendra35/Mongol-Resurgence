@@ -1,0 +1,52 @@
+﻿namespace = mr_herds
+# mr_herds — SCAFFOLD (tools/new_flavor.py). Every event is
+# INERT until its `# ARM:` gate is replaced; the trigger
+# law and the eight traps are in the generator header.
+
+######################################
+# 1 — Zud - the killing winter
+######################################
+
+mr_herds.1 = {
+	type = country_event
+	title = mr_herds.1.title
+	desc = mr_herds.1.desc
+	outcome = neutral
+	# NO fire_only_once ON PURPOSE — the zud recurs; trap 2's documented
+	# exception for deliberately repeating events. The 2% monthly chance
+	# inside the DHE window paces it to roughly one winter a decade.
+
+	illustration_tags = {
+		10 = exterior
+		10 = angry
+	}
+
+	dynamic_historical_event = {
+		tag = MGO
+		from = 1370.1.1
+		to = 1650.1.1
+		monthly_chance = 2
+	}
+
+	# A herding disaster: only a horde that still lives by its herds
+	# feels the zud — the settle transition retires this pack
+	# thematically, by the same gate the exposure map priced.
+	trigger = {
+		government_type = government_type:steppe_horde
+	}
+
+	option = {
+		# Slaughter early — salt what the snow would take, sell the
+		# hides. The historical response of the careful.
+		name = mr_herds.1.a
+		historical_option = yes
+		add_gold = 250
+	}
+
+	option = {
+		# Endure: the Eternal Sky gives and takes. Hardship binds the
+		# tribes to the one who shares it.
+		name = mr_herds.1.b
+		add_horde_unity = horde_unity_mild_bonus
+	}
+}

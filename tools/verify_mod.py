@@ -78,10 +78,15 @@ for p in txt_files:
 check("braces balanced per file", len(txt_files), probs, min_count=5)
 
 # ---- localization DB ----
-loc_path = MOD + "/main_menu/localization/english/MR_l_english.yml"
-loc_src = read(loc_path)
+# ALL english loc files, not just MR_l_english.yml (2026-07-30): the
+# flavor packs ship per-pack loc files, and the single-file read made
+# every one of their keys invisible to the event-loc check — the same
+# assumed-shape class as the definitions.txt parser, found the same
+# day the first pack landed.
 loc_keys = {}
 dupes = []
+loc_src = "\n".join(read(_np(_lp)) for _lp in
+                    sorted(glob.glob(MOD + "/main_menu/localization/english/*.yml")))
 for m in re.finditer(r"^ ([A-Za-z0-9_.]+):", loc_src, re.M):
     k = m.group(1)
     if k in loc_keys: dupes.append(k)
