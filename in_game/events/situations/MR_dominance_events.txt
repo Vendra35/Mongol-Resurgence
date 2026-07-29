@@ -573,7 +573,7 @@ mr_dominance.104 = {
 				}
 				add_character_modifier = {
 					modifier = MR_historically_needed
-					years = 65
+					years = 70
 				}
 				# FIRST KHAN ONLY — the second and third generations
 				# (mr_dominance.120/.130) deliberately do NOT get this.
@@ -837,7 +837,7 @@ mr_dominance.120 = {
 				}
 				add_character_modifier = {
 					modifier = MR_historically_needed
-					years = 40
+					years = 72
 				}
 				add_trait = trait:conqueror
 				add_trait = trait:born_to_the_saddle
@@ -1091,7 +1091,7 @@ mr_dominance.130 = {
 				}
 				add_character_modifier = {
 					modifier = MR_historically_needed
-					years = 15
+					years = 20
 				}
 				add_trait = trait:tactical_genius
 				add_trait = trait:inspiring_leader
