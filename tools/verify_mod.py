@@ -225,13 +225,17 @@ check("hint tags defined + loc'd", len(hint_refs) + len(hints_def), probs, min_c
 # ---- scripted triggers resolve ----
 trig_def = set(re.findall(r"^([A-Za-z_0-9]+) = \{", strip_comments(read(MOD + "/in_game/common/scripted_triggers/MR_scripted_triggers.txt")), re.M))
 probs, count = [], 0
+# NO prefix whitelist (audit C2, 2026-07-30): the old 11-prefix filter
+# verified 33 call sites and silently skipped 88 — including the entire
+# Great Partition trigger set, the exact block with zero in-game
+# evidence. Every `mr_* = yes` call is now compared against the defined
+# set; the mod ships no scripted_effects, so the shape is unambiguous.
 for p, s in code.items():
     for m in re.finditer(r"\b(mr_[a-z_0-9]+|MR_percent_of_army_balance) = yes", strip_comments(s)):
         n = m.group(1)
-        if n.startswith(("mr_can_start", "mr_resurgence_end", "mr_imperial_end", "mr_dominance_end", "mr_chahar", "mr_torghut", "mr_dzungar", "mr_vanilla", "mr_resurgence_visible", "mr_imperial_visible", "mr_dominance_visible")) or n == "MR_percent_of_army_balance":
-            count += 1
-            if n not in trig_def: probs.append(f"{n} ({os.path.relpath(p, MOD)})")
-check("scripted trigger refs resolve", count, sorted(set(probs)), min_count=10)
+        count += 1
+        if n not in trig_def: probs.append(f"{n} ({os.path.relpath(p, MOD)})")
+check("scripted trigger refs resolve", count, sorted(set(probs)), min_count=100)
 
 # ---- modifiers: refs defined, defs used, loc'd ----
 mod_def = set(re.findall(r"^(MR_[A-Za-z_0-9]+) = \{", strip_comments(read(MOD + "/main_menu/common/static_modifiers/MR_modifiers.txt")), re.M))
@@ -257,6 +261,50 @@ for o in sorted(rule_opts):
     if "setting_" + o not in loc_keys: probs.append(f"setting_{o} loc missing")
     if "setting_" + o + "_desc" not in loc_keys: probs.append(f"setting_{o}_desc loc missing")
 check("game rule options: refs + loc", count, sorted(set(probs)), min_count=10)
+
+# ---- advances and reforms resolve (new content kind, audit C3) ----
+# a3b279b shipped the mod's first advances and reform with only BOM and
+# brace coverage; this closes the gap the same day. Encodes the
+# SAME-AGE LAW found as audit D1: 2748 of 2748 vanilla `requires`
+# entries name an advance of the SAME age, zero exceptions — a
+# cross-age chain likely dead-ends at the age boundary, silently.
+_ages = set(re.findall(r"^([a-z_0-9]+) = \{",
+                       strip_comments(read(VAN + "/in_game/common/age/00_default.txt")), re.M))
+_adv_age = {}
+for _p in (glob.glob(VAN + "/in_game/common/advances/*.txt")
+           + glob.glob(MOD + "/in_game/common/advances/*.txt")):
+    for _m in re.finditer(r"^([A-Za-z_0-9]+) = \{(.*?)^\}",
+                          strip_comments(read(_np(_p))), re.M | re.S):
+        _am = re.search(r"\bage = ([a-z_0-9]+)", _m.group(2))
+        _adv_age[_m.group(1)] = _am.group(1) if _am else None
+probs, count = [], 0
+for _p in glob.glob(MOD + "/in_game/common/advances/*.txt"):
+    for _m in re.finditer(r"^([A-Za-z_0-9]+) = \{(.*?)^\}",
+                          strip_comments(read(_np(_p))), re.M | re.S):
+        _k, _b = _m.group(1), _m.group(2)
+        count += 1
+        _age = re.search(r"\bage = ([a-z_0-9]+)", _b)
+        if not _age or _age.group(1) not in _ages:
+            probs.append(f"advance {_k}: age missing or unknown")
+        _rq = re.search(r"\brequires = ([A-Za-z_0-9]+)", _b)
+        if _rq:
+            if _rq.group(1) not in _adv_age:
+                probs.append(f"advance {_k}: requires {_rq.group(1)} — "
+                             "defined in neither tree")
+            elif _age and _adv_age[_rq.group(1)] != _age.group(1):
+                probs.append(f"advance {_k} ({_age.group(1)}) requires "
+                             f"{_rq.group(1)} ({_adv_age[_rq.group(1)]}) — "
+                             "cross-age, zero vanilla precedents")
+        for _lk in (_k, _k + "_desc"):
+            if _lk not in loc_keys: probs.append(f"{_lk} loc missing")
+for _p in glob.glob(MOD + "/in_game/common/government_reforms/*.txt"):
+    for _m in re.finditer(r"^([A-Za-z_0-9]+) = \{",
+                          strip_comments(read(_np(_p))), re.M):
+        count += 1
+        for _lk in (_m.group(1), _m.group(1) + "_desc"):
+            if _lk not in loc_keys: probs.append(f"{_lk} loc missing")
+check("advances and reforms resolve (age, same-age requires, loc)",
+      count, probs, min_count=4)
 
 # ---- wargoal loc ----
 wg = set(re.findall(r"^(MR_war_goal_[a-z_]+) = \{", strip_comments(read(MOD + "/in_game/common/wargoals/MR_wargoals.txt")), re.M))
@@ -307,19 +355,35 @@ _geo_src = ""
 for p_ in glob.glob(MOD + "/in_game/common/scripted_geography/*.txt"):
     _geo_src += strip_comments(read(_np(p_)))
 
+# BRACE-AWARE parse (audit C1, 2026-07-30): the old line walk required
+# a whole province block on ONE line, but 1337 of vanilla's 4150
+# province blocks are multi-line — it silently dropped 38% of the map
+# (16,948 memberships seen vs 27,279 real) and the goal-coverage check
+# below compared two lossy sets. Token-stack parse now, the same shape
+# as the 1066 sister project's _parse_defs (checked the same day:
+# already brace-aware). Comments stripped FIRST — comment words
+# otherwise become phantom members (the comment-token law). Proven on
+# a known positive: anatolia_region pulled from the westward wargoal
+# -> the coverage check fails.
 _region_locs, _area_locs, _prov_locs = {}, {}, {}
-_cur_r = _cur_a = None
-for _line in defs.split(chr(10)):
-    m = re.match(r"\s*([a-z_0-9]+_region)\s*=\s*\{", _line)
-    if m: _cur_r = m.group(1); _region_locs.setdefault(_cur_r, set()); _cur_a = None; continue
-    m = re.match(r"\s*([a-z_0-9]+_area)\s*=\s*\{", _line)
-    if m: _cur_a = m.group(1); _area_locs.setdefault(_cur_a, set()); continue
-    m = re.match(r"\s*([a-z_0-9]+_province)\s*=\s*\{([^}]*)\}", _line)
-    if m:
-        _l = set(m.group(2).split())
-        _prov_locs.setdefault(m.group(1), set()).update(_l)
-        if _cur_a: _area_locs[_cur_a] |= _l
-        if _cur_r: _region_locs[_cur_r] |= _l
+_toks = re.findall(r"[A-Za-z0-9_]+|=|\{|\}", strip_comments(defs))
+_stack = []
+_ti, _tn = 0, len(_toks)
+while _ti < _tn:
+    _t = _toks[_ti]
+    if _ti + 2 < _tn and _toks[_ti + 1] == "=" and _toks[_ti + 2] == "{":
+        _stack.append(_t)
+        _ti += 3
+        continue
+    if _t == "}":
+        if _stack: _stack.pop()
+        _ti += 1
+        continue
+    for _name in _stack:
+        if _name.endswith("_region"): _region_locs.setdefault(_name, set()).add(_t)
+        elif _name.endswith("_area"): _area_locs.setdefault(_name, set()).add(_t)
+        elif _name.endswith("_province"): _prov_locs.setdefault(_name, set()).add(_t)
+    _ti += 1
 
 def _expand(names):
     out = set()
@@ -451,6 +515,21 @@ if os.path.isdir(_SD):
             count += 1
             if _k.group(1) not in _mods:
                 probs.append(f"{_m.group(1)}: '{_k.group(1)}' is not a modifier tag the engine knows")
+    # Advances and reforms joined the scan 2026-07-30 (audit C3): the
+    # first mod-defined advance shipped while this check read only
+    # MR_modifiers.txt. Numeric-valued lines only, structural keys
+    # excluded — `age = age_2_renaissance` and `requires = x` are not
+    # modifier tags, `years = 2` is a reform field.
+    _STRUCT = {"age", "icon", "requires", "years", "monthly_chance"}
+    for _p2 in (glob.glob(MOD + "/in_game/common/advances/*.txt")
+                + glob.glob(MOD + "/in_game/common/government_reforms/*.txt")):
+        for _line in strip_comments(read(_np(_p2))).split(chr(10)):
+            _k = re.match(r"[ \t]+([a-z_0-9]+) = -?[0-9]", _line)
+            if not _k or _k.group(1) in _STRUCT: continue
+            count += 1
+            if _k.group(1) not in _mods:
+                probs.append(f"{os.path.basename(_p2)}: '{_k.group(1)}' "
+                             "is not a modifier tag the engine knows")
     check("modifier tags exist in engine docs", count, probs, min_count=50)
 
     # 2. on_action hooks
