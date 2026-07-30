@@ -55,6 +55,33 @@ mr_great_partition = {
 	}
 	on_start = {
 		set_global_variable = mr_partition_started
+		# --- THE KHAGHAN STOPS BEING THE AGGRESSOR ---
+		# MGE was set to ai_aggressive at its birth
+		# (MR_mongol_imperial.txt:851, MR_dominance_events.txt:415) for
+		# immersion, and it mattered little then because the railroad drove the
+		# wars. The railroad is over. An empire whose uluses are walking out
+		# does not go conquering, and one that keeps declaring while the
+		# schedule hands its ground away produces a map that churns instead of
+		# a map that settles.
+		#
+		# ai_defensive and NOT ai_cautious or ai_isolationist, deliberately:
+		# those two carry ai_require_cb_for_war = yes and could freeze a Khaghan
+		# who holds no casus belli into never fighting again, which is a worse
+		# failure than being too aggressive. ai_defensive only leans -
+		# aggressiveness_modifier -0.2, carefulness +0.25, twelve more months
+		# between wars, and defence and stability priorities
+		# (00_ai_personalities.txt, the ai_defensive block). Restored to
+		# aggressive in on_ending if the empire survives, so this is a phase of
+		# its life and not a one-way door.
+		every_country = {
+			limit = {
+				OR = {
+					tag = MGE
+					tag = MGO
+				}
+			}
+			set_personality = ai_personality:ai_defensive
+		}
 		set_variable = {
 			name = mr_partition_momentum
 			value = 0
@@ -825,6 +852,10 @@ mr_great_partition = {
 					mode = replace
 				}
 				trigger_event_non_silently = mr_partition.200
+				# The empire endured, so it stops behaving like an empire that did
+				# not. This is the other half of the on_start swap, and the reason
+				# that swap is safe to make at all.
+				set_personality = ai_personality:ai_aggressive
 			}
 		}
 	}
