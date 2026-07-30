@@ -58,6 +58,8 @@ mr_return_crimea = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:CRI
+				add_core = c:CRI
+				change_integration_level = core
 			}
 		}
 		# The Kuban and the Yedisan steppe come with the peninsula: the
@@ -69,6 +71,8 @@ mr_return_crimea = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:CRI
+				add_core = c:CRI
+				change_integration_level = core
 			}
 		}
 		if = {
@@ -87,7 +91,39 @@ mr_return_crimea = {
 				}
 			}
 		}
-		set_global_variable = mr_returned_crimea
+		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						scripted_geography:MR_geo_crimean_seat = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
+						}
+						scripted_geography:MR_geo_kuban_and_yedisan = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
+						}
+					}
+				}
+			}
+			set_global_variable = mr_returned_crimea
+		}
 	}
 }
 
@@ -107,6 +143,8 @@ mr_return_kazakh = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:KAZ
+				add_core = c:KAZ
+				change_integration_level = core
 			}
 		}
 		if = {
@@ -137,7 +175,32 @@ mr_return_kazakh = {
 				}
 			}
 		}
-		set_global_variable = mr_returned_kazakh
+		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					scripted_geography:MR_geo_kazakh_steppe = {
+						any_location_in_scripted_geography = {
+							mr_partition_takeable = yes
+						}
+					}
+				}
+			}
+			set_global_variable = mr_returned_kazakh
+		}
 	}
 }
 
@@ -161,6 +224,8 @@ mr_return_persia = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:IRA
+				add_core = c:IRA
+				change_integration_level = core
 			}
 		}
 		scripted_geography:MR_geo_caucasus = {
@@ -169,6 +234,8 @@ mr_return_persia = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:IRA
+				add_core = c:IRA
+				change_integration_level = core
 			}
 		}
 		# Eastern and western Khorasan - Herat and Mashhad - are Safavid,
@@ -181,6 +248,8 @@ mr_return_persia = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:IRA
+				add_core = c:IRA
+				change_integration_level = core
 			}
 		}
 		if = {
@@ -207,7 +276,44 @@ mr_return_persia = {
 				}
 			}
 		}
-		set_global_variable = mr_returned_persia
+		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						scripted_geography:MR_geo_persia = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
+						}
+						scripted_geography:MR_geo_caucasus = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
+						}
+						scripted_geography:MR_geo_safavid_khorasan = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
+						}
+					}
+				}
+			}
+			set_global_variable = mr_returned_persia
+		}
 	}
 }
 
@@ -223,12 +329,32 @@ mr_return_bashkiria = {
 				has_global_variable = mr_returned_bashkiria
 			}
 		}
+		# MEASURED 1670, first live run: this effect set its flag and moved
+		# NOTHING, on ground the Khaghan owned outright. BSH is
+		# country_type = pop in vanilla's setup - one of 448 pop-type tags,
+		# the nomad and tribe entities that hold POPS rather than locations -
+		# and change_location_owner into one is a silent no-op. Vanilla turns
+		# a country into a landholder with change_country_type = location when
+		# a horde settles (government_conversion_events.10). The Bashkirs need
+		# the same before they can be handed the southern Urals. Guarded
+		# because BSH is LANDLESS, not absent - its country object exists
+		# from 1337, which is exactly why this failure printed no error.
+		if = {
+			limit = {
+				country_exists = c:BSH
+			}
+			c:BSH = {
+				change_country_type = location
+			}
+		}
 		scripted_geography:MR_geo_bashkiria = {
 			every_location_in_scripted_geography = {
 				limit = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:BSH
+				add_core = c:BSH
+				change_integration_level = core
 			}
 		}
 		if = {
@@ -247,7 +373,32 @@ mr_return_bashkiria = {
 				}
 			}
 		}
-		set_global_variable = mr_returned_bashkiria
+		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					scripted_geography:MR_geo_bashkiria = {
+						any_location_in_scripted_geography = {
+							mr_partition_takeable = yes
+						}
+					}
+				}
+			}
+			set_global_variable = mr_returned_bashkiria
+		}
 	}
 }
 
@@ -291,6 +442,8 @@ mr_return_middle_volga = {
 						mr_partition_takeable = yes
 					}
 					change_location_owner = scope:mr_partition_heir
+					add_core = scope:mr_partition_heir
+					change_integration_level = core
 				}
 			}
 			# Twenty-five years of grace. This is the clause that makes the
@@ -314,7 +467,32 @@ mr_return_middle_volga = {
 					}
 				}
 			}
+			# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					scripted_geography:MR_geo_middle_volga = {
+						any_location_in_scripted_geography = {
+							mr_partition_takeable = yes
+						}
+					}
+				}
+			}
 			set_global_variable = mr_returned_middle_volga
+		}
 		}
 	}
 }
@@ -335,6 +513,8 @@ mr_return_nogai = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:NOG
+				add_core = c:NOG
+				change_integration_level = core
 			}
 		}
 		if = {
@@ -353,7 +533,32 @@ mr_return_nogai = {
 				}
 			}
 		}
-		set_global_variable = mr_returned_nogai
+		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					scripted_geography:MR_geo_nogai_steppe = {
+						any_location_in_scripted_geography = {
+							mr_partition_takeable = yes
+						}
+					}
+				}
+			}
+			set_global_variable = mr_returned_nogai
+		}
 	}
 }
 
@@ -398,6 +603,8 @@ mr_return_north = {
 						mr_partition_takeable = yes
 					}
 					change_location_owner = scope:mr_partition_heir
+					add_core = scope:mr_partition_heir
+					change_integration_level = core
 				}
 			}
 			scripted_geography:MR_geo_ural = {
@@ -406,6 +613,8 @@ mr_return_north = {
 						mr_partition_takeable = yes
 					}
 					change_location_owner = scope:mr_partition_heir
+					add_core = scope:mr_partition_heir
+					change_integration_level = core
 				}
 			}
 			scripted_geography:MR_geo_russian_lands = {
@@ -414,6 +623,8 @@ mr_return_north = {
 						mr_partition_takeable = yes
 					}
 					change_location_owner = scope:mr_partition_heir
+					add_core = scope:mr_partition_heir
+					change_integration_level = core
 				}
 			}
 			# The northern Pontic and the lower Don. Kursk and Sloboda Ukraine
@@ -427,6 +638,8 @@ mr_return_north = {
 						mr_partition_takeable = yes
 					}
 					change_location_owner = scope:mr_partition_heir
+					add_core = scope:mr_partition_heir
+					change_integration_level = core
 				}
 			}
 			# Twenty-five years of grace. This is the clause that makes the
@@ -448,7 +661,49 @@ mr_return_north = {
 					}
 				}
 			}
+			# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						scripted_geography:MR_geo_siberian_marches = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
+						}
+						scripted_geography:MR_geo_ural = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
+						}
+						scripted_geography:MR_geo_russian_lands = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
+						}
+						scripted_geography:MR_geo_pontic_frontier = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
+						}
+					}
+				}
+			}
 			set_global_variable = mr_returned_north
+		}
 		}
 	}
 }
@@ -471,6 +726,8 @@ mr_return_ottoman = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:TUR
+				add_core = c:TUR
+				change_integration_level = core
 			}
 		}
 		scripted_geography:MR_geo_western_reach = {
@@ -479,6 +736,8 @@ mr_return_ottoman = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:TUR
+				add_core = c:TUR
+				change_integration_level = core
 			}
 		}
 		if = {
@@ -506,7 +765,39 @@ mr_return_ottoman = {
 				}
 			}
 		}
-		set_global_variable = mr_returned_ottoman
+		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						scripted_geography:MR_geo_mesopotamia = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
+						}
+						scripted_geography:MR_geo_western_reach = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
+						}
+					}
+				}
+			}
+			set_global_variable = mr_returned_ottoman
+		}
 	}
 }
 
@@ -528,6 +819,8 @@ mr_return_manchuria = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:QNG
+				add_core = c:QNG
+				change_integration_level = core
 			}
 		}
 		if = {
@@ -559,7 +852,32 @@ mr_return_manchuria = {
 				}
 			}
 		}
-		set_global_variable = mr_returned_manchuria
+		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					scripted_geography:MR_geo_manchuria = {
+						any_location_in_scripted_geography = {
+							mr_partition_takeable = yes
+						}
+					}
+				}
+			}
+			set_global_variable = mr_returned_manchuria
+		}
 	}
 }
 
@@ -581,6 +899,8 @@ mr_return_dzungaria = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:OIR
+				add_core = c:OIR
+				change_integration_level = core
 			}
 		}
 		if = {
@@ -600,7 +920,32 @@ mr_return_dzungaria = {
 				}
 			}
 		}
-		set_global_variable = mr_returned_dzungaria
+		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					scripted_geography:MR_geo_dzungaria = {
+						any_location_in_scripted_geography = {
+							mr_partition_takeable = yes
+						}
+					}
+				}
+			}
+			set_global_variable = mr_returned_dzungaria
+		}
 	}
 }
 
@@ -621,6 +966,8 @@ mr_return_tibet = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:TIB
+				add_core = c:TIB
+				change_integration_level = core
 			}
 		}
 		if = {
@@ -639,7 +986,32 @@ mr_return_tibet = {
 				}
 			}
 		}
-		set_global_variable = mr_returned_tibet
+		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					scripted_geography:MR_geo_tibet = {
+						any_location_in_scripted_geography = {
+							mr_partition_takeable = yes
+						}
+					}
+				}
+			}
+			set_global_variable = mr_returned_tibet
+		}
 	}
 }
 
@@ -660,6 +1032,8 @@ mr_return_china = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:QNG
+				add_core = c:QNG
+				change_integration_level = core
 			}
 		}
 		scripted_geography:MR_geo_song_china = {
@@ -668,6 +1042,8 @@ mr_return_china = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:QNG
+				add_core = c:QNG
+				change_integration_level = core
 			}
 		}
 		if = {
@@ -696,7 +1072,39 @@ mr_return_china = {
 				}
 			}
 		}
-		set_global_variable = mr_returned_china
+		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					OR = {
+						scripted_geography:MR_geo_north_china = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
+						}
+						scripted_geography:MR_geo_song_china = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
+						}
+					}
+				}
+			}
+			set_global_variable = mr_returned_china
+		}
 	}
 }
 
@@ -736,6 +1144,8 @@ mr_return_korea = {
 						mr_partition_takeable = yes
 					}
 					change_location_owner = c:KOR
+					add_core = c:KOR
+					change_integration_level = core
 				}
 			}
 			if = {
@@ -757,7 +1167,32 @@ mr_return_korea = {
 					}
 				}
 			}
+			# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					scripted_geography:MR_geo_korea = {
+						any_location_in_scripted_geography = {
+							mr_partition_takeable = yes
+						}
+					}
+				}
+			}
 			set_global_variable = mr_returned_korea
+		}
 		}
 	}
 }
@@ -781,6 +1216,8 @@ mr_return_tarim = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:CHG
+				add_core = c:CHG
+				change_integration_level = core
 			}
 		}
 		if = {
@@ -799,6 +1236,31 @@ mr_return_tarim = {
 				}
 			}
 		}
-		set_global_variable = mr_returned_tarim
+		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					scripted_geography:MR_geo_tarim = {
+						any_location_in_scripted_geography = {
+							mr_partition_takeable = yes
+						}
+					}
+				}
+			}
+			set_global_variable = mr_returned_tarim
+		}
 	}
 }

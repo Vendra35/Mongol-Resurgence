@@ -95,7 +95,7 @@
  mr_imperial_timeout_tt: "#Y Or 1550 arrives.#! The Silk Road will not wait forever."
  mr_partition_khaghan_gone_tt: "#R The Khaghan is gone from the map.#! There is no centre left to hold anything."
  mr_partition_heartland_lost_tt: "#R [ShowLocationName('karakorum')] has slipped from the Khaghan's realm.#! An empire that cannot hold its own seat is a memory with an army."
- mr_partition_cohesion_spent_tt: "#R The uluses have gone their own way and the centre commands nothing beyond the Kherlen.#! Cohesion below 40."
+ mr_partition_cohesion_spent_tt: "#R The uluses have gone their own way and the Khaghan's writ no longer reaches past [ShowRegionName('mongolia_region')].#! Cohesion below 40."
  mr_partition_timeout_tt: "#Y Or 1720 arrives.#! The steppe has outlived its own ending; whatever stands then, stands."
  mr_partition_map_tt: "This is ulus ground — one of the successors that will inherit if the centre fails."
  mr_dominance_timeout_tt: "#Y Or 1650 arrives.#! The age of the horse archer ends with or without us."

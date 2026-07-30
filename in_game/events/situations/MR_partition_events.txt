@@ -248,83 +248,56 @@ mr_partition.100 = {
 			}
 			add_stability = stability_mild_penalty
 		}
+		# AUDIT 2026-07-30: these six blocks used to carry their OWN copy of
+		# the handover - change_location_owner straight to the tag, and
+		# nothing else. They were written before the partition had a
+		# schedule, and once it did the two paths disagreed in four ways:
+		# the kurultai never set the mr_returned_* flags, it limited on
+		# mr_in_claimant_realm instead of mr_partition_takeable so it could
+		# take a HUMAN vassal ground, it gave no cores, no grace modifier
+		# and no rank, and it knew only six of the fourteen theatres.
+		#
+		# Now it calls the same effects the schedule calls. One handover,
+		# one behaviour, one set of flags - and the kurultai keeps its own
+		# job, which is choosing WHICH ulus goes and paying for it.
+		# The chain is ordered by distance from Karakorum, the same order
+		# the collapse uses: the furthest ulus still held is the one the
+		# assembly is given.
 		if = {
 			limit = {
 				mr_ulus_crimea_held = yes
 			}
-			scripted_geography:MR_geo_crimean_seat = {
-				every_location_in_scripted_geography = {
-					limit = {
-						mr_in_claimant_realm = yes
-					}
-					change_location_owner = c:CRI
-				}
-			}
+			mr_return_crimea = yes
 		}
 		else_if = {
 			limit = {
 				mr_ulus_nogai_held = yes
 			}
-			scripted_geography:MR_geo_nogai_steppe = {
-				every_location_in_scripted_geography = {
-					limit = {
-						mr_in_claimant_realm = yes
-					}
-					change_location_owner = c:NOG
-				}
-			}
+			mr_return_nogai = yes
 		}
 		else_if = {
 			limit = {
 				mr_ulus_kazakh_held = yes
 			}
-			scripted_geography:MR_geo_kazakh_steppe = {
-				every_location_in_scripted_geography = {
-					limit = {
-						mr_in_claimant_realm = yes
-					}
-					change_location_owner = c:KAZ
-				}
-			}
+			mr_return_kazakh = yes
 		}
 		else_if = {
 			limit = {
 				mr_ulus_bashkiria_held = yes
 			}
-			scripted_geography:MR_geo_bashkiria = {
-				every_location_in_scripted_geography = {
-					limit = {
-						mr_in_claimant_realm = yes
-					}
-					change_location_owner = c:BSH
-				}
-			}
+			mr_return_bashkiria = yes
 		}
 		else_if = {
 			limit = {
 				mr_ulus_tarim_held = yes
 			}
-			scripted_geography:MR_geo_tarim = {
-				every_location_in_scripted_geography = {
-					limit = {
-						mr_in_claimant_realm = yes
-					}
-					change_location_owner = c:CHG
-				}
-			}
+			mr_return_tarim = yes
 		}
 		else_if = {
 			limit = {
 				mr_ulus_dzungaria_held = yes
 			}
-			scripted_geography:MR_geo_dzungaria = {
-				every_location_in_scripted_geography = {
-					limit = {
-						mr_in_claimant_realm = yes
-					}
-					change_location_owner = c:OIR
-				}
-			}
+			mr_return_dzungaria = yes
 		}
 	}
 	# --- Bind them to the centre ---

@@ -513,6 +513,40 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   `every_country` (the whole map — only when the ANSWER must be a country).
 - `owns` vs `controls`: events overwhelmingly use `owns` (ownership), `controls` is
   military occupation. Phase goals use `owns`.
+- **A CAMPAIGN IN PROGRESS CANNOT GAIN A COUNTRY TAG.** The country database is
+  minted once, when the campaign is created. A tag added to
+  `in_game/setup/countries/` afterwards does not exist in that save no matter
+  how many times the game is relaunched, and `change_location_owner = c:TAG`
+  into it is a **silent no-op with no error line**. MEASURED 2026-07-30 by
+  reading the player's own autosaves: KAZ sits at country id 2340 (the first id
+  after vanilla's exactly 2339 identity blocks) because its block predated the
+  campaign; IRA and QNG, added hours later, appear nowhere in a 679 MB save and
+  the console answers `tag IRA` with "country is not valid". **Any change to
+  `setup/countries` is a hard requirement to start a NEW campaign** — say so in
+  the testing guide, because this failure is invisible and unrecoverable.
+- **A `country_type = pop` country cannot own locations.** Vanilla's setup has
+  448 of them (the nomad and tribe entities that hold POPS, not ground) and BSH
+  is one. `change_location_owner` into a pop country is another silent no-op —
+  measured 2026-07-30: Ufa was still Mongol at 1670 with `mr_returned_bashkiria`
+  already set. Turn it into a landholder first, the way vanilla does when a
+  horde settles: `change_country_type = location`
+  (`government_conversion_events.10`). The legal values are
+  `location, pop, building, army, navy` (triggers.log:3294). `army` is fine —
+  that is what a steppe horde is.
+- **`change_location_owner` alone is HALF a handover.** Vanilla writes the
+  triple together, and its own situation-releases-successors code is the exact
+  precedent: `change_location_owner` + `add_core` + `change_integration_level =
+  core` (`fall_of_delhi.txt:299-301`, also `country_effects.txt:792-794`). Land
+  arriving without it sits at `integration_conquered` — separatism, low control,
+  low tax and manpower — which is why a "successor" handed 155 locations still
+  looks and plays like a corpse. All 22 MR handover loops shipped without it.
+- **An effect must never mark itself done unless it actually did something.**
+  The partition's fourteen theatres each set a `mr_returned_*` global at the end
+  regardless of whether a single location moved, so the one theatre whose tag
+  could not instantiate sealed itself shut for the rest of the campaign. Guard
+  the flag on the WORK, not on having run: each effect now sets its flag only
+  when its geography atoms hold no claimant ground any more. A silent failure is
+  survivable; one that marks itself done is not.
 - **A formable is NOT a tag registration; EU5 has TWO country registries.**
   `in_game/setup/countries/` (2339 tag blocks in 45 files) is what makes
   `c:TAG` resolvable at runtime; `main_menu/setup/start/10_countries.txt` is

@@ -348,8 +348,11 @@ mr_great_partition = {
 		}
 		if = {
 			limit = {
-				NOT = {
-					mr_ulus_kazakh_held = yes
+				OR = {
+					NOT = {
+						mr_ulus_kazakh_held = yes
+					}
+					has_global_variable = mr_returned_kazakh
 				}
 			}
 			change_variable = {
@@ -359,8 +362,11 @@ mr_great_partition = {
 		}
 		if = {
 			limit = {
-				NOT = {
-					mr_ulus_dzungaria_held = yes
+				OR = {
+					NOT = {
+						mr_ulus_dzungaria_held = yes
+					}
+					has_global_variable = mr_returned_dzungaria
 				}
 			}
 			change_variable = {
@@ -370,8 +376,11 @@ mr_great_partition = {
 		}
 		if = {
 			limit = {
-				NOT = {
-					mr_ulus_tarim_held = yes
+				OR = {
+					NOT = {
+						mr_ulus_tarim_held = yes
+					}
+					has_global_variable = mr_returned_tarim
 				}
 			}
 			change_variable = {
@@ -381,8 +390,11 @@ mr_great_partition = {
 		}
 		if = {
 			limit = {
-				NOT = {
-					mr_ulus_nogai_held = yes
+				OR = {
+					NOT = {
+						mr_ulus_nogai_held = yes
+					}
+					has_global_variable = mr_returned_nogai
 				}
 			}
 			change_variable = {
@@ -392,8 +404,11 @@ mr_great_partition = {
 		}
 		if = {
 			limit = {
-				NOT = {
-					mr_ulus_crimea_held = yes
+				OR = {
+					NOT = {
+						mr_ulus_crimea_held = yes
+					}
+					has_global_variable = mr_returned_crimea
 				}
 			}
 			change_variable = {
@@ -403,8 +418,11 @@ mr_great_partition = {
 		}
 		if = {
 			limit = {
-				NOT = {
-					mr_ulus_bashkiria_held = yes
+				OR = {
+					NOT = {
+						mr_ulus_bashkiria_held = yes
+					}
+					has_global_variable = mr_returned_bashkiria
 				}
 			}
 			change_variable = {
@@ -417,8 +435,11 @@ mr_great_partition = {
 		# losing it is still pressure.
 		if = {
 			limit = {
-				NOT = {
-					mr_ulus_sibir_held = yes
+				OR = {
+					NOT = {
+						mr_ulus_sibir_held = yes
+					}
+					has_global_variable = mr_returned_north
 				}
 			}
 			change_variable = {
@@ -430,6 +451,23 @@ mr_great_partition = {
 		# concessions is a variable and not a one-off change to the score:
 		# the recompute above starts from 100 each month and would erase
 		# any direct adjustment.
+		# A CEILING ON WHAT THE KURULTAI CAN BUY BACK. Measured 1670: the
+		# Khaghan had granted autonomy twice and bought a khan off once, and
+		# the score climbed from 65 to 80 and later to 100 while the map
+		# stayed permanently partitioned - the gauge and the map were
+		# pointing in opposite directions and the situation could never
+		# reach its cohesion-40 ending. Concessions still soften the fall,
+		# which is the whole point of paying them, but they can no longer
+		# erase a secession that has already happened.
+		if = {
+			limit = {
+				var:mr_partition_concessions > 15
+			}
+			set_variable = {
+				name = mr_partition_concessions
+				value = 15
+			}
+		}
 		change_variable = {
 			name = MR_cohesion_score
 			add = var:mr_partition_concessions

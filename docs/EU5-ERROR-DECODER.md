@@ -1,4 +1,4 @@
-# EU5 error.log — decoder
+﻿# EU5 error.log — decoder
 
 > **Purpose.** Every working session starts with log lines pasted from
 > `Documents/Paradox Interactive/Europa Universalis V/logs/error.log`. Each
@@ -233,3 +233,53 @@ decoded it** — signature, what it actually means, the fix, and whether it is
 fixable at all. If it turns out to be vanilla-side, say so explicitly and say
 how it was confirmed; that saves the next session from re-investigating a
 non-problem. Two entries above are exactly that.
+
+---
+
+## Added 2026-07-30, from the first Great Partition run
+
+### `jomini_script_system.cpp:252 — Event target link 'government_type' returned an unset scope` + `Invalid left side during comparison 'government_type'` at `common/country_interactions/propose_ruler.txt:29`
+
+**NOT OURS, and not fixable in that file — but WE caused it.** Line 29 is
+vanilla's own `every_country_in_diplomatic_range = { limit = { government_type =
+government_type:monarchy … } }`. The mod does not ship a
+`country_interactions/` directory at all. The error means one of the countries
+in that sweep **has no government type**, and the link returns nothing.
+
+That country is a partition heir. A tag brought onto the map by
+`change_location_owner` is instantiated from its `setup/countries` identity
+block alone, and an identity block sets no government type, no capital, no
+culture and no religion at runtime — CRI arrived **Orthodox** although its
+vanilla block declares `sunni`, and rendered as "Crimean Horde".
+
+**Fix:** author the heir after the spawn, the way vanilla does at
+`flavor_chi.txt:2545-2548` — `set_capital`, `change_country_type`,
+`change_government_type`, `change_heir_selection` — and only for tags that are
+genuinely landless. Doing it to a live 1337 country MOVES ITS CAPITAL.
+
+**Expect this signature from any mod that spawns a country and stops at the
+land.** It repeats forever, because the AI re-evaluates the interaction.
+
+### No error at all — `change_location_owner` moves nothing
+
+Three separate causes, none of which prints a line. All three were live in the
+same run:
+
+1. **The tag was added to `setup/countries` after the campaign was created.**
+   The country database is minted once. Confirmed by console: `tag IRA` answers
+   *"country is not valid"*. Only a new campaign fixes it.
+2. **The target is a `country_type = pop` country.** Pop countries hold pops,
+   not locations. 448 vanilla tags are pop-type; BSH is one.
+   `change_country_type = location` first.
+3. **The effect had already set its own "done" flag on an earlier failed run.**
+   Not an engine fault, but it turns either of the above into a permanent one.
+
+The diagnostic that separates them, in one look: check whether the *guard flag*
+exists in the Object Inspector's global state while the ground is still
+unchanged. If it does, the effect ran and the handover is what failed.
+
+**Note on error.log when chasing a silent failure:** the log rotates. In the run
+that produced these, six rotations covered fifteen real-time minutes — roughly
+thirty game years after the event being investigated. An absent line is not
+evidence of absence unless the log window covers the moment. Reproduce from the
+autosave immediately before.
