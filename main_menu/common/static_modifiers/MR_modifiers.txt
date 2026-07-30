@@ -414,10 +414,16 @@ MR_the_ulus_endures = {
 # cannot fight stops being a railroad. Giving the AI a 40%-chance option
 # that raises rebel growth would have undone that everywhere at once.
 # So defiance is paid in legitimacy and horde unity — currencies the AI
-# survives — and above all in the situation's OWN gauge: option B also
-# subtracts from mr_partition_concessions, so cohesion falls faster and
-# more uluses break away at the end. Same pressure, expressed where the
-# situation can actually resolve it.
+# survives — and in the cabinet and the control the ulus khans were
+# enforcing.
+#
+# REWRITTEN 2026-07-30: this used to say the cost also landed on the
+# situation's own gauge, through a mr_partition_concessions term that
+# option B subtracted from. That whole currency is gone. It let the
+# Khaghan BUY the cohesion score back while the map stayed permanently
+# partitioned — measured climbing 65 → 80 → 100 in a live run — and a
+# gauge that can be paid to disagree with the map is not a gauge. The
+# schedule was always the thing actually taking the empire apart.
 # AUDIT 2026-07-30: the block below used to carry
 # `monthly_rebel_growth = 0.005`, i.e. it did the one thing the comment
 # above it forbids, on an option the AI takes 40% of the time, for 25

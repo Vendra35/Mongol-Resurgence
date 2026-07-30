@@ -94,14 +94,6 @@ mr_great_partition = {
 			name = MR_cohesion_score
 			value = 100
 		}
-		# What the Khaghan has bought back at the kurultai. Cohesion is
-		# recomputed from scratch every month, so a decision that simply
-		# added to the score would be wiped on the next tick; concessions
-		# are a standing term the recompute adds back in.
-		set_variable = {
-			name = mr_partition_concessions
-			value = 0
-		}
 		set_variable = {
 			name = mr_partition_kurultai_cooldown
 			value = 0
@@ -169,7 +161,7 @@ mr_great_partition = {
 		# in the past, so every theatre would fire in month one and the
 		# whole arc would collapse into a single tick. The ORDER therefore
 		# carries the history, the elapsed-months clause sets the pace, and
-		# the year clause is a BACKSTOP ladder (1650 -> 1702, four years
+		# the year clause is a BACKSTOP ladder (1652 -> 1691, three years
 		# apart) that stops a late-opening campaign running past 1720. The
 		# real dates live in the comments and in the heirs themselves.
 		#
@@ -190,8 +182,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 48
-						current_date > 1650.1.1
+						var:mr_partition_momentum > 24
+						current_date > 1652.1.1
 					}
 				}
 				mr_return_crimea = yes
@@ -201,8 +193,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 96
-						current_date > 1654.1.1
+						var:mr_partition_momentum > 60
+						current_date > 1655.1.1
 					}
 				}
 				mr_return_kazakh = yes
@@ -212,7 +204,7 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 144
+						var:mr_partition_momentum > 96
 						current_date > 1658.1.1
 					}
 				}
@@ -224,8 +216,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 192
-						current_date > 1662.1.1
+						var:mr_partition_momentum > 132
+						current_date > 1661.1.1
 					}
 				}
 				mr_return_bashkiria = yes
@@ -235,8 +227,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 240
-						current_date > 1666.1.1
+						var:mr_partition_momentum > 168
+						current_date > 1664.1.1
 					}
 				}
 				mr_return_middle_volga = yes
@@ -246,8 +238,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 288
-						current_date > 1670.1.1
+						var:mr_partition_momentum > 204
+						current_date > 1667.1.1
 					}
 				}
 				mr_return_nogai = yes
@@ -257,8 +249,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 336
-						current_date > 1674.1.1
+						var:mr_partition_momentum > 240
+						current_date > 1670.1.1
 					}
 				}
 				mr_return_north = yes
@@ -268,8 +260,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 384
-						current_date > 1678.1.1
+						var:mr_partition_momentum > 348
+						current_date > 1679.1.1
 					}
 				}
 				mr_return_ottoman = yes
@@ -279,8 +271,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 432
-						current_date > 1682.1.1
+						var:mr_partition_momentum > 276
+						current_date > 1673.1.1
 					}
 				}
 				mr_return_manchuria = yes
@@ -290,8 +282,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 480
-						current_date > 1686.1.1
+						var:mr_partition_momentum > 312
+						current_date > 1676.1.1
 					}
 				}
 				mr_return_dzungaria = yes
@@ -301,8 +293,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 528
-						current_date > 1690.1.1
+						var:mr_partition_momentum > 384
+						current_date > 1682.1.1
 					}
 				}
 				mr_return_tibet = yes
@@ -312,8 +304,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 576
-						current_date > 1694.1.1
+						var:mr_partition_momentum > 420
+						current_date > 1685.1.1
 					}
 				}
 				mr_return_china = yes
@@ -324,8 +316,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 624
-						current_date > 1698.1.1
+						var:mr_partition_momentum > 456
+						current_date > 1688.1.1
 					}
 				}
 				mr_return_korea = yes
@@ -337,8 +329,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 672
-						current_date > 1702.1.1
+						var:mr_partition_momentum > 492
+						current_date > 1691.1.1
 					}
 				}
 				mr_return_tarim = yes
@@ -478,27 +470,10 @@ mr_great_partition = {
 		# concessions is a variable and not a one-off change to the score:
 		# the recompute above starts from 100 each month and would erase
 		# any direct adjustment.
-		# A CEILING ON WHAT THE KURULTAI CAN BUY BACK. Measured 1670: the
-		# Khaghan had granted autonomy twice and bought a khan off once, and
-		# the score climbed from 65 to 80 and later to 100 while the map
-		# stayed permanently partitioned - the gauge and the map were
-		# pointing in opposite directions and the situation could never
-		# reach its cohesion-40 ending. Concessions still soften the fall,
-		# which is the whole point of paying them, but they can no longer
-		# erase a secession that has already happened.
-		if = {
-			limit = {
-				var:mr_partition_concessions > 15
-			}
-			set_variable = {
-				name = mr_partition_concessions
-				value = 15
-			}
-		}
-		change_variable = {
-			name = MR_cohesion_score
-			add = var:mr_partition_concessions
-		}
+		# Nothing is added back any more. The kurultai used to buy the score
+		# up, and that is gone: a gauge that can be PAID to disagree with the
+		# map is not a gauge. What the assembly can still buy is time and
+		# order, and that is where its options pay now.
 		# Floor the score so the panel bar cannot render negative, and cap
 		# it so heavy concessions cannot overfill the bar past its max.
 		if = {
@@ -517,39 +492,6 @@ mr_great_partition = {
 			set_variable = {
 				name = MR_cohesion_score
 				value = 100
-			}
-		}
-		# AND THE GAUGE NEVER READS FULL AGAIN ONCE A THEATRE HAS GONE.
-		# The +15 ceiling above bounds what the kurultai can buy, but it does
-		# not bound what it can HIDE: the first secession costs 8 and a bought
-		# concession pays 15, so a Khaghan who had already lost Crimea could
-		# still show 100. 92 is 100 minus the smallest ulus weight in the
-		# table, so the rule states itself: once anything has left, the gauge
-		# can never show better than one ulus lost. Concessions still soften
-		# every fall after that; they can no longer erase the first one.
-		if = {
-			limit = {
-				var:MR_cohesion_score > 92
-				OR = {
-					has_global_variable = mr_returned_crimea
-					has_global_variable = mr_returned_kazakh
-					has_global_variable = mr_returned_persia
-					has_global_variable = mr_returned_bashkiria
-					has_global_variable = mr_returned_middle_volga
-					has_global_variable = mr_returned_nogai
-					has_global_variable = mr_returned_north
-					has_global_variable = mr_returned_ottoman
-					has_global_variable = mr_returned_manchuria
-					has_global_variable = mr_returned_dzungaria
-					has_global_variable = mr_returned_tibet
-					has_global_variable = mr_returned_china
-					has_global_variable = mr_returned_korea
-					has_global_variable = mr_returned_tarim
-				}
-			}
-			set_variable = {
-				name = MR_cohesion_score
-				value = 92
 			}
 		}
 		# --- THRESHOLD BEATS ---
@@ -865,7 +807,6 @@ mr_great_partition = {
 		remove_variable = mr_leading_country
 		remove_variable = MR_cohesion_score
 		remove_variable = mr_partition_momentum
-		remove_variable = mr_partition_concessions
 		remove_variable = mr_partition_kurultai_cooldown
 		remove_global_variable = mr_partition_beat_85_fired
 		remove_global_variable = mr_partition_beat_55_fired
@@ -921,12 +862,44 @@ mr_great_partition = {
 		}
 	}
 	map_color = {
+		# THE HEIRS ARE PART OF THE PICTURE, added 2026-07-30. This used to
+		# paint the Khaghan and grey out everything else, which made the
+		# situation map mode useless for the one thing the situation is
+		# about: watching who ends up with what. Now every partition heir
+		# keeps its own colour here, so the mode reads as the empire coming
+		# apart rather than as a blob shrinking against nothing.
+		#
+		# `value = this.owner.country_color` already resolves per owner, so
+		# widening the test is the whole change. `tag =` is the string
+		# compare that never errors while a tag is off the map, which
+		# matters because at least four of these are landless until their
+		# theatre fires.
+		#
+		# ACCEPTED COST: MOS/RUS, TUR, TIB and KOR hold ground far outside
+		# the partition, and it lights up too. Restricting to the twenty-
+		# three geography atoms would be exact, but it would mean writing
+		# that list a second time in the same file, and the map reads
+		# perfectly well as "these are the powers the empire came apart
+		# into".
 		if = {
 			limit = {
 				owner ?= {
 					OR = {
 						tag = MGO
 						tag = MGE
+						tag = CRI
+						tag = KAZ
+						tag = IRA
+						tag = BSH
+						tag = RUS
+						tag = MOS
+						tag = NOG
+						tag = TUR
+						tag = QNG
+						tag = OIR
+						tag = TIB
+						tag = KOR
+						tag = CHG
 					}
 				}
 			}

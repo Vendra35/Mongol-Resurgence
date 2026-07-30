@@ -220,15 +220,18 @@ mr_partition.100 = {
 		ai_chance = {
 			factor = 40
 		}
-		# The payment is made BEFORE the release, and guarded on an ulus
-		# actually being there to give away. Unguarded and placed after the
-		# chain it was an exploit: once all six had gone the chain matched
-		# nothing while the concession still paid, so every later kurultai
-		# handed out a free +25. Cohesion then pinned at 100 and the
-		# situation closed on the SURVIVAL branch, granting 'The Ulus
-		# Endures' to an empire that had lost every ulus it ever had.
-		# The guard has to run first, because the release makes its own
-		# condition false.
+		# WHAT THE ASSEMBLY PAYS FOR, rewritten 2026-07-30. It used to pay in
+		# cohesion, which is now impossible on purpose: a gauge that can be
+		# bought back while the map stays partitioned is a gauge that lies. It
+		# also made this option strictly bad once the buy-back was capped -
+		# permanent ground out, a few points of a number in.
+		#
+		# So the payment is the thing letting an ulus go PEACEFULLY actually
+		# buys: the assembly is satisfied and the realm that remains is
+		# steadier. That is also what happened - the uluses that separated by
+		# agreement cost the centre far less than the ones it tried to hold.
+		# Guarded on an ulus actually being there to give away, and the guard
+		# runs FIRST because the release makes its own condition false.
 		if = {
 			limit = {
 				OR = {
@@ -240,13 +243,8 @@ mr_partition.100 = {
 					mr_ulus_dzungaria_held = yes
 				}
 			}
-			situation:mr_great_partition = {
-				change_variable = {
-					name = mr_partition_concessions
-					add = 25
-				}
-			}
-			add_stability = stability_mild_penalty
+			add_stability = stability_mild_bonus
+			add_legitimacy = legitimacy_mild_bonus
 		}
 		# AUDIT 2026-07-30: these six blocks used to carry their OWN copy of
 		# the handover - change_location_owner straight to the tag, and
@@ -321,16 +319,11 @@ mr_partition.100 = {
 			mode = add_and_extend
 		}
 		add_horde_unity = horde_unity_mild_penalty
-		# The real cost, and the one the AI can actually feel. Deepened
-		# from 10 to 15 in the same audit that removed the rebel growth:
-		# the pressure the unrest line was carrying has to land
-		# somewhere, and this is the gauge the situation itself reads.
-		situation:mr_great_partition = {
-			change_variable = {
-				name = mr_partition_concessions
-				subtract = 15
-			}
-		}
+		# The cost is the modifier above and nothing else now. It used to also
+		# push cohesion down through the concessions term; that term is gone,
+		# and the schedule was always the thing actually taking the map apart.
+		# Refusing the assembly buys exactly what it says: the map stays whole
+		# this year, and the centre pays for it in order and legitimacy.
 	}
 	# --- Buy the khan's loyalty ---
 	# Delays the question rather than answering it: a smaller concession
@@ -343,10 +336,16 @@ mr_partition.100 = {
 			factor = 20
 		}
 		add_gold = -500
+		# And the khan is quiet for twice as long. The cooldown counts up to 60
+		# in the situation on_monthly and is reset to 0 when the kurultai
+		# fires; seeding it at -60 instead buys ten years before the assembly
+		# asks again rather than five. This is what paying a khan actually got
+		# you, and unlike the old +10 to a score it is something the Khaghan
+		# can feel.
 		situation:mr_great_partition = {
-			change_variable = {
-				name = mr_partition_concessions
-				add = 10
+			set_variable = {
+				name = mr_partition_kurultai_cooldown
+				value = -60
 			}
 		}
 	}
