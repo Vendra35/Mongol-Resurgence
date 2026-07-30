@@ -20,6 +20,8 @@ MR_mongol_warrior_spirit = {
 	stability_investment = 1
 	monthly_rebel_growth = -0.1
 	character_mil_child_education = 0.75
+	global_pop_assimilation_speed = 50
+	global_pop_assimilation_speed_modifier = 1
 	expected_army_size = 20
 }
 
@@ -157,7 +159,7 @@ MR_mongol_world_order = {
 	global_manpower_modifier = 0.2
 	monthly_prestige = 0.1
 	diplomatic_reputation = -2
-	cultures_capacity = 3
+	cultures_capacity = 5
 	global_max_bureaucracy_slots = 3
 	allow_bureaucracy = yes
 }
@@ -272,6 +274,7 @@ MR_mongol_historical_modifier = {
 	global_integration_speed_modifier = 1
 	annexation_speed_base = 3
 	subject_loyalty = 50
+	global_pop_assimilation_speed_modifier = 1
 	monthly_horde_unity = 1
 	stability_investment = 0.5
 	monthly_rebel_growth = -0.1
@@ -287,6 +290,7 @@ MR_mongol_historical_modifier_2 = {
 	siege_ability = 0.1
 	global_manpower_modifier = 0.1
 	global_integration_speed_modifier = 1
+	global_pop_assimilation_speed_modifier = 1
 	character_mil_child_education = 1
 	expected_army_size_modifier = 1
 	monthly_complacency = -10
@@ -303,6 +307,7 @@ MR_imperial_historical_modifier = {
 	global_manpower_modifier = 0.25
 	army_maintenance_efficiency = 0.25
 	global_integration_speed_modifier = 2
+	global_pop_assimilation_speed_modifier = 2
 	annexation_speed_base = 4
 	bias_for_militarist_policies = 100
 	aggressiveness_modifier = 1
@@ -325,6 +330,7 @@ MR_dominance_historical_modifier = {
 	army_light_cavalry_power = 0.25
 	global_manpower_modifier = 0.25
 	global_integration_speed_modifier = 3
+	global_pop_assimilation_speed_modifier = 3
 	annexation_speed_base = 5
 	bias_for_militarist_policies = 100
 	monthly_rebel_growth = -0.1
@@ -432,7 +438,7 @@ MR_kurultai_mandate = {
 	monthly_legitimacy = 0.5
 	monthly_prestige = 0.1
 	num_local_governors = 1
-	cultures_capacity = 5
+	cultures_capacity = 8
 }
 
 # --- The Western Ulus Restored (mr_imperial.201, 25 years) ---

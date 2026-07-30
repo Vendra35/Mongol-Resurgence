@@ -570,13 +570,13 @@ mongol_dominance = {
 						OR = {
 							AND = {
 								has_game_rule = MR_buff_enabled
-								months_since_war >= 12
+								months_since_war >= 6
 							}
 							AND = {
 								NOT = {
 									has_game_rule = MR_buff_enabled
 								}
-								months_since_war >= 24
+								months_since_war >= 12
 							}
 						}
 						situation:mongol_dominance = {
@@ -1257,7 +1257,7 @@ mongol_dominance = {
 				}
 				trigger_event_silently = {
 					id = mr_dominance.140
-					years = 30
+					years = 5
 				}
 			}
 		}
