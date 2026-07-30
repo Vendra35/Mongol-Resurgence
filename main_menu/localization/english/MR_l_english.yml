@@ -301,7 +301,7 @@
  # either — dead in both mods. The engine reads rank_empire_horde /
  # rank_kingdom_horde, never <tag>_<rank>.)
  rank_empire_horde: "Empire"
- MGE: "Great Mongol State"
+ MGE: "Mongol Empire"
  MGE_ADJ: "Mongol"
  MGE_f: "Mongol Empire"
  MGE_f_desc: "The restored empire of the Great Khans — the Yeke Mongol Ulus — forged from the fractured tribes of the steppe under the iron will of a new Chinggisid. Its disciplined hordes and imperial administration now stand as the dominant power across Asia and beyond."

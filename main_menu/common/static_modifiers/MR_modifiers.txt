@@ -39,7 +39,7 @@ MR_unified_mongol_banner = {
 	character_mil_child_education = 0.75
 	num_local_governors = 1
 	expected_army_size_modifier = 1
-	has_complacency_effects = no
+	monthly_complacency = -10
 }
 
 # --- Situation 1 Failure (AI) ---
@@ -133,7 +133,6 @@ MR_mongol_preparing_for_conquest = {
 # (MR_the_sleeping_horde was removed: Phase 2 starts the moment Phase 1
 # ends, so there was no dormant interval for it to cover. See the note in
 # MR_mongol_resurgence.txt's on_ended.)
-
 # --- Situation 3: Pax Mongolica ---
 MR_pax_mongolica = {
 	game_data = {
@@ -290,7 +289,7 @@ MR_mongol_historical_modifier_2 = {
 	global_integration_speed_modifier = 1
 	character_mil_child_education = 1
 	expected_army_size_modifier = 1
-	has_complacency_effects = no
+	monthly_complacency = -10
 }
 
 # Historical Phase 2 Buff
