@@ -709,13 +709,23 @@ mr_chahar_visible = {
 }
 
 # Ends when one power holds the Mongolian heartland outright.
+# Wrapped per the header rule (one custom_tooltip per requirement):
+# the three late-steppe end triggers shipped UNWRAPPED and the panel
+# rendered their raw clause trees — with the government_type scope
+# compare naming SWEDEN, the first tag the country database registers
+# (_scandinavia.txt:1, behind the BOM), as the fallback subject of the
+# unbound any_country iteration. Found in game 2026-07-30; evaluation
+# was always correct, the defect was display-only.
 mr_chahar_end_trigger = {
-	any_country = {
-		culture = {
-			has_culture_group = culture_group:mongolian_group
+	custom_tooltip = {
+		text = mr_chahar_end_tt
+		any_country = {
+			culture = {
+				has_culture_group = culture_group:mongolian_group
+			}
+			owns = location:karakorum
+			has_presence_in = scripted_geography:MR_geo_north_china
 		}
-		owns = location:karakorum
-		has_presence_in = scripted_geography:MR_geo_north_china
 	}
 }
 
@@ -768,17 +778,25 @@ mr_torghut_visible = {
 }
 
 # Ends once a steppe power actually reaches the Volga.
+# Wrapped per the header rule — see mr_chahar_end_trigger's comment
+# for the Sweden-fallback render this fixes.
 mr_torghut_end_trigger = {
 	# The trek must actually have happened: the Urals beat gates the
 	# end, so a horde that already owned the Volga cannot end this the
 	# month it starts.
-	has_global_variable = mr_torghut_urals
-	any_country = {
-		culture = {
-			has_culture_group = culture_group:mongolian_group
+	custom_tooltip = {
+		text = mr_torghut_end_trek_tt
+		has_global_variable = mr_torghut_urals
+	}
+	custom_tooltip = {
+		text = mr_torghut_end_volga_tt
+		any_country = {
+			culture = {
+				has_culture_group = culture_group:mongolian_group
+			}
+			government_type = government_type:steppe_horde
+			owns = location:sarai_al_jadid
 		}
-		government_type = government_type:steppe_horde
-		owns = location:sarai_al_jadid
 	}
 }
 
@@ -812,20 +830,28 @@ mr_dzungar_visible = {
 	}
 }
 
+# Wrapped per the header rule — see mr_chahar_end_trigger's comment
+# for the Sweden-fallback render this fixes.
 mr_dzungar_end_trigger = {
 	# Strictly stronger than the consolidation beat, so the situation
 	# cannot end the month the beat fires. The Dzungar steppe is the
 	# KAZAKH steppe (zhetysu, khorasan_region) — not the Pontic
 	# steppes_region.
-	has_global_variable = mr_dzungar_consolidated
-	any_country = {
-		culture = {
-			has_culture_group = culture_group:mongolian_group
+	custom_tooltip = {
+		text = mr_dzungar_end_beat_tt
+		has_global_variable = mr_dzungar_consolidated
+	}
+	custom_tooltip = {
+		text = mr_dzungar_end_hold_tt
+		any_country = {
+			culture = {
+				has_culture_group = culture_group:mongolian_group
+			}
+			government_type = government_type:steppe_horde
+			has_presence_in = scripted_geography:MR_geo_dzungaria
+			has_presence_in = scripted_geography:MR_geo_tarim
+			has_presence_in = scripted_geography:MR_geo_zhetysu
 		}
-		government_type = government_type:steppe_horde
-		has_presence_in = scripted_geography:MR_geo_dzungaria
-		has_presence_in = scripted_geography:MR_geo_tarim
-		has_presence_in = scripted_geography:MR_geo_zhetysu
 	}
 }
 

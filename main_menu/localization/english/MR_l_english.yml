@@ -99,6 +99,11 @@
  mr_partition_map_tt: "This is ulus ground — one of the successors that will inherit if the centre fails."
  mr_dominance_timeout_tt: "#Y Or 1650 arrives.#! The age of the horse archer ends with or without us."
  mr_chahar_timeout_tt: "#Y Or 1634 arrives.#! Ligdan's claim dies with him."
+ mr_chahar_end_tt: "#Y A Mongol power holds Karakorum#! and a foothold in North China."
+ mr_torghut_end_trek_tt: "#Y The trek has crossed the Urals.#!"
+ mr_torghut_end_volga_tt: "#Y A Mongol steppe horde holds Sarai#! on the Volga."
+ mr_dzungar_end_beat_tt: "#Y The khanate is consolidated#! — fixed towns, written law, a standing army."
+ mr_dzungar_end_hold_tt: "#Y A Mongol steppe horde holds Dzungaria, the Tarim basin and Zhetysu.#!"
  mr_torghut_timeout_tt: "#Y Or 1630 arrives.#! The trek ends where it ends."
  mr_dzungar_timeout_tt: "#Y Or 1650 arrives.#!"
 
