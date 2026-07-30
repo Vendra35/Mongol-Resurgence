@@ -776,6 +776,8 @@
  mr_yam_riders_desc: "The Yam relay once carried a rider from the Danube to Karakorum faster than any rumor. Rebuilt, it feeds our armies before they hunger and remounts them before they slow — distance itself becomes our weapon again."
  MR_yassa_code: "The Yassa Code"
  MR_yassa_code_desc: "The law of the steppe, written down at last — one code over horde and settled land alike, binding khan and herdsman, general and governor."
+ MR_the_keshig_system: "The Keshig System"
+ MR_the_keshig_system_desc: "More than mere bodyguards, the Keshig are the iron core of the khanate. By raising the banners of our finest horsemen, we forge an unbreakable vanguard whose thundering hooves shall dictate the fate of empires."
 
  # --- Flavor wave 1 (envoys / herds / paiza packs + inert court scaffold; 2026-07-30). House rule: ALL loc lives in THIS file — the per-pack files the generator drafts get folded here and deleted. ---
  STATIC_MODIFIER_NAME_MR_defiance_of_the_south: "Defiance of the South"

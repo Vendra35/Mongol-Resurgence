@@ -6,7 +6,6 @@
 # government_reforms/country_specific.txt:1108). Shapes cloned from
 # vanilla's own steppe line country_CHG.txt (chained requires, age
 # placement, cavalry magnitudes) and country_TUS.txt.
-
 mr_legacy_of_the_yassa = {
 	age = age_2_renaissance
 	potential = {
@@ -15,11 +14,10 @@ mr_legacy_of_the_yassa = {
 			has_or_had_tag = MGE
 		}
 	}
-
+	unlock_government_reform = MR_yassa_code
 	requires = regiment_reinforcement_speed_renaissance
-
-	monthly_legitimacy = 0.1
-	monthly_horde_unity = 0.1
+	monthly_legitimacy = 0.5
+	monthly_horde_unity = 0.5
 }
 
 mr_horse_lords_reborn = {
@@ -30,9 +28,8 @@ mr_horse_lords_reborn = {
 			has_or_had_tag = MGE
 		}
 	}
-
+	unlock_government_reform = MR_the_keshig_system
 	requires = mr_legacy_of_the_yassa
-
 	army_light_cavalry_power = 0.2
 	army_heavy_cavalry_power = 0.2
 }
@@ -45,7 +42,6 @@ mr_yam_riders = {
 			has_or_had_tag = MGE
 		}
 	}
-
 	# NOT mr_horse_lords_reborn: 2748/2748 vanilla requires name a
 	# SAME-age advance, zero exceptions (audit D1, 2026-07-30) — a
 	# cross-age chain likely dead-ends when age 3 opens. Vanilla's own
@@ -53,7 +49,6 @@ mr_yam_riders = {
 	# roots on crown_power_advance_discovery (0_age_of_discovery.txt:
 	# 323), not on its own age-2 predecessor.
 	requires = crown_power_advance_discovery
-
 	army_light_cavalry_maintenance_cost_modifier = -0.2
 	army_light_cavalry_reinforce_cost_modifier = -0.33
 }

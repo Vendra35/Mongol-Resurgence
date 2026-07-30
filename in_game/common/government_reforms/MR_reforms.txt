@@ -7,7 +7,6 @@
 # field ON PURPOSE — the timariot precedent — so the reform SURVIVES the
 # horde's settle-to-monarchy transition, which the user ruled historical
 # (the Yuan did exactly this in 1272) and left unblocked (2026-07-30).
-
 MR_yassa_code = {
 	unique = yes
 	potential = {
@@ -15,12 +14,36 @@ MR_yassa_code = {
 			has_or_had_tag = MGO
 			has_or_had_tag = MGE
 		}
-		has_advance = mr_legacy_of_the_yassa
+		## has_advance = mr_legacy_of_the_yassa // Unlocked from advance not like this. See Mongol Resurgence\in_game\common\advances\MR_advances.txt
 	}
 	country_modifier = {
 		army_light_cavalry_power = 0.1
 		army_light_cavalry_maintenance_cost_modifier = -0.1
 		land_morale_modifier = 0.05
+		government_reform_slots = 1
+	}
+	years = 2
+}
+## The Keshig System — the unique reform mr_horse_lords_reborn unlocks.
+MR_the_keshig_system = {
+	major = yes
+	unique = yes
+	potential = {
+		OR = {
+			has_or_had_tag = MGO
+			has_or_had_tag = MGE
+		}
+		## has_advance = mr_horse_lords_reborn // Unlocked from advance not like this. See Mongol Resurgence\in_game\common\advances\MR_advances.txt
+	}
+	country_modifier = {
+		num_of_banner_cavalry = 33
+		army_light_cavalry_power = 0.15
+		army_light_cavalry_maintenance_cost_modifier = -0.2
+		army_light_cavalry_reinforce_cost_modifier = -0.33
+		army_heavy_cavalry_power = 0.15
+		army_heavy_cavalry_maintenance_cost_modifier = -0.2
+		army_heavy_cavalry_reinforce_cost_modifier = -0.33
+		army_movement_speed = 0.33
 		government_reform_slots = 1
 	}
 	years = 2

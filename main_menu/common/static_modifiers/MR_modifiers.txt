@@ -39,6 +39,7 @@ MR_unified_mongol_banner = {
 	character_mil_child_education = 0.75
 	num_local_governors = 1
 	expected_army_size_modifier = 1
+	has_complacency_effects = no
 }
 
 # --- Situation 1 Failure (AI) ---
@@ -289,6 +290,7 @@ MR_mongol_historical_modifier_2 = {
 	global_integration_speed_modifier = 1
 	character_mil_child_education = 1
 	expected_army_size_modifier = 1
+	has_complacency_effects = no
 }
 
 # Historical Phase 2 Buff

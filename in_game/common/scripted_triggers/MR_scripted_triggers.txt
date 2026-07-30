@@ -894,7 +894,6 @@ MR_percent_of_army_balance = {
 	}
 }
 
-
 # =================================================================
 # THE GREAT PARTITION - ULUS INTEGRITY
 # =================================================================
@@ -914,7 +913,6 @@ MR_percent_of_army_balance = {
 # `any_location_in_scripted_geography` + `owner ?=` is the attested
 # shape (see mr_p3_volga_cleared); the bare `owner =` link errors on
 # ownerless locations.
-
 mr_ulus_heartland_held = {
 	NOT = {
 		scripted_geography:MR_geo_heartland = {
@@ -1111,7 +1109,6 @@ mr_partition_end_trigger = {
 # regions — the partition has no goal regions, it has a dying centre.
 #
 # The claimant itself is excluded from both; it gets its own beat.
-
 # Shares a border with the Khaghan: the collapse is an opportunity.
 mr_partition_is_neighbour = {
 	NOR = {
@@ -1149,4 +1146,3 @@ mr_partition_is_spectator = {
 		has_presence_in = sub_continent:middle_east
 	}
 }
-
