@@ -492,6 +492,39 @@ mr_great_partition = {
 				value = 100
 			}
 		}
+		# AND THE GAUGE NEVER READS FULL AGAIN ONCE A THEATRE HAS GONE.
+		# The +15 ceiling above bounds what the kurultai can buy, but it does
+		# not bound what it can HIDE: the first secession costs 8 and a bought
+		# concession pays 15, so a Khaghan who had already lost Crimea could
+		# still show 100. 92 is 100 minus the smallest ulus weight in the
+		# table, so the rule states itself: once anything has left, the gauge
+		# can never show better than one ulus lost. Concessions still soften
+		# every fall after that; they can no longer erase the first one.
+		if = {
+			limit = {
+				var:MR_cohesion_score > 92
+				OR = {
+					has_global_variable = mr_returned_crimea
+					has_global_variable = mr_returned_kazakh
+					has_global_variable = mr_returned_persia
+					has_global_variable = mr_returned_bashkiria
+					has_global_variable = mr_returned_middle_volga
+					has_global_variable = mr_returned_nogai
+					has_global_variable = mr_returned_north
+					has_global_variable = mr_returned_ottoman
+					has_global_variable = mr_returned_manchuria
+					has_global_variable = mr_returned_dzungaria
+					has_global_variable = mr_returned_tibet
+					has_global_variable = mr_returned_china
+					has_global_variable = mr_returned_korea
+					has_global_variable = mr_returned_tarim
+				}
+			}
+			set_variable = {
+				name = MR_cohesion_score
+				value = 92
+			}
+		}
 		# --- THRESHOLD BEATS ---
 		# Fired as cohesion falls PAST each mark, once each, via a global
 		# flag — the same shape the earlier phases use for mr_beat_*_fired.

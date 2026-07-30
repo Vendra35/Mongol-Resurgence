@@ -84,6 +84,23 @@ mr_return_crimea = {
 			# superpower still carrying PERMANENT phase rewards is lunch, and
 			# without it the map churns straight back to a blob.
 			c:CRI = {
+				# MEASURED: a tag brought onto the map by change_location_owner is
+				# instantiated from its setup/countries identity block alone, and that block
+				# authors NOTHING at runtime - no capital, no government, no culture, no
+				# religion. CRI arrived ORTHODOX although its vanilla block declares sunni,
+				# names rendered as "County of Kazakh", and vanilla propose_ruler.txt:29
+				# errors forever on a country whose government_type link is unset. Vanilla
+				# authors its own spawns the same way, at flavor_chi.txt:2545-2548.
+				#
+				# The capital is set AFTER the sweep, because a country cannot be seated in
+				# ground it does not own yet, and every key here was verified to lie INSIDE
+				# this heir grant - the obvious guesses do not: bakhchisaray does not exist,
+				# ufa is in perm_area, turkestan is in transoxiana_area, gulja goes to KAZ.
+				#
+				# DO NOT add these calls for MOS, RUS, NOG, TUR, TIB or KOR. Those are live
+				# 1337 countries with working capitals and governments; set_capital on them
+				# MOVES a living capital.
+				set_capital = location:qarasuvbazar
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
 					years = 25
@@ -160,6 +177,24 @@ mr_return_kazakh = {
 			# rank_empire_horde to "Empire" globally, while rank_kingdom_horde
 			# still renders vanilla's "Horde".
 			c:KAZ = {
+				# MEASURED: a tag brought onto the map by change_location_owner is
+				# instantiated from its setup/countries identity block alone, and that block
+				# authors NOTHING at runtime - no capital, no government, no culture, no
+				# religion. CRI arrived ORTHODOX although its vanilla block declares sunni,
+				# names rendered as "County of Kazakh", and vanilla propose_ruler.txt:29
+				# errors forever on a country whose government_type link is unset. Vanilla
+				# authors its own spawns the same way, at flavor_chi.txt:2545-2548.
+				#
+				# The capital is set AFTER the sweep, because a country cannot be seated in
+				# ground it does not own yet, and every key here was verified to lie INSIDE
+				# this heir grant - the obvious guesses do not: bakhchisaray does not exist,
+				# ufa is in perm_area, turkestan is in transoxiana_area, gulja goes to KAZ.
+				#
+				# DO NOT add these calls for MOS, RUS, NOG, TUR, TIB or KOR. Those are live
+				# 1337 countries with working capitals and governments; set_capital on them
+				# MOVES a living capital.
+				set_capital = location:shavgar
+				change_government_type = government_type:steppe_horde
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
 					years = 25
@@ -261,6 +296,24 @@ mr_return_persia = {
 			# superpower still carrying PERMANENT phase rewards is lunch, and
 			# without it the map churns straight back to a blob.
 			c:IRA = {
+				# MEASURED: a tag brought onto the map by change_location_owner is
+				# instantiated from its setup/countries identity block alone, and that block
+				# authors NOTHING at runtime - no capital, no government, no culture, no
+				# religion. CRI arrived ORTHODOX although its vanilla block declares sunni,
+				# names rendered as "County of Kazakh", and vanilla propose_ruler.txt:29
+				# errors forever on a country whose government_type link is unset. Vanilla
+				# authors its own spawns the same way, at flavor_chi.txt:2545-2548.
+				#
+				# The capital is set AFTER the sweep, because a country cannot be seated in
+				# ground it does not own yet, and every key here was verified to lie INSIDE
+				# this heir grant - the obvious guesses do not: bakhchisaray does not exist,
+				# ufa is in perm_area, turkestan is in transoxiana_area, gulja goes to KAZ.
+				#
+				# DO NOT add these calls for MOS, RUS, NOG, TUR, TIB or KOR. Those are live
+				# 1337 countries with working capitals and governments; set_capital on them
+				# MOVES a living capital.
+				set_capital = location:isfahan
+				change_government_type = government_type:monarchy
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
 					years = 25
@@ -366,6 +419,23 @@ mr_return_bashkiria = {
 			# superpower still carrying PERMANENT phase rewards is lunch, and
 			# without it the map churns straight back to a blob.
 			c:BSH = {
+				# MEASURED: a tag brought onto the map by change_location_owner is
+				# instantiated from its setup/countries identity block alone, and that block
+				# authors NOTHING at runtime - no capital, no government, no culture, no
+				# religion. CRI arrived ORTHODOX although its vanilla block declares sunni,
+				# names rendered as "County of Kazakh", and vanilla propose_ruler.txt:29
+				# errors forever on a country whose government_type link is unset. Vanilla
+				# authors its own spawns the same way, at flavor_chi.txt:2545-2548.
+				#
+				# The capital is set AFTER the sweep, because a country cannot be seated in
+				# ground it does not own yet, and every key here was verified to lie INSIDE
+				# this heir grant - the obvious guesses do not: bakhchisaray does not exist,
+				# ufa is in perm_area, turkestan is in transoxiana_area, gulja goes to KAZ.
+				#
+				# DO NOT add these calls for MOS, RUS, NOG, TUR, TIB or KOR. Those are live
+				# 1337 countries with working capitals and governments; set_capital on them
+				# MOVES a living capital.
+				set_capital = location:sterlitamak
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
 					years = 25
@@ -837,6 +907,24 @@ mr_return_manchuria = {
 			# also kinder mechanically than putting a Manchuria-sized realm
 			# straight onto an empire's governing burden.
 			c:QNG = {
+				# MEASURED: a tag brought onto the map by change_location_owner is
+				# instantiated from its setup/countries identity block alone, and that block
+				# authors NOTHING at runtime - no capital, no government, no culture, no
+				# religion. CRI arrived ORTHODOX although its vanilla block declares sunni,
+				# names rendered as "County of Kazakh", and vanilla propose_ruler.txt:29
+				# errors forever on a country whose government_type link is unset. Vanilla
+				# authors its own spawns the same way, at flavor_chi.txt:2545-2548.
+				#
+				# The capital is set AFTER the sweep, because a country cannot be seated in
+				# ground it does not own yet, and every key here was verified to lie INSIDE
+				# this heir grant - the obvious guesses do not: bakhchisaray does not exist,
+				# ufa is in perm_area, turkestan is in transoxiana_area, gulja goes to KAZ.
+				#
+				# DO NOT add these calls for MOS, RUS, NOG, TUR, TIB or KOR. Those are live
+				# 1337 countries with working capitals and governments; set_capital on them
+				# MOVES a living capital.
+				set_capital = location:shenyang
+				change_government_type = government_type:monarchy
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
 					years = 25
@@ -913,6 +1001,23 @@ mr_return_dzungaria = {
 			# without it the map churns straight back to a blob.
 			# No rank call: vanilla already starts OIR at rank_empire.
 			c:OIR = {
+				# MEASURED: a tag brought onto the map by change_location_owner is
+				# instantiated from its setup/countries identity block alone, and that block
+				# authors NOTHING at runtime - no capital, no government, no culture, no
+				# religion. CRI arrived ORTHODOX although its vanilla block declares sunni,
+				# names rendered as "County of Kazakh", and vanilla propose_ruler.txt:29
+				# errors forever on a country whose government_type link is unset. Vanilla
+				# authors its own spawns the same way, at flavor_chi.txt:2545-2548.
+				#
+				# The capital is set AFTER the sweep, because a country cannot be seated in
+				# ground it does not own yet, and every key here was verified to lie INSIDE
+				# this heir grant - the obvious guesses do not: bakhchisaray does not exist,
+				# ufa is in perm_area, turkestan is in transoxiana_area, gulja goes to KAZ.
+				#
+				# DO NOT add these calls for MOS, RUS, NOG, TUR, TIB or KOR. Those are live
+				# 1337 countries with working capitals and governments; set_capital on them
+				# MOVES a living capital.
+				set_capital = location:hoboksar
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
 					years = 25
@@ -1057,6 +1162,26 @@ mr_return_china = {
 			# Emperor of China from 1644. The ratchet lifts QNG from the kingdom
 			# rank the Manchuria handover gave it.
 			c:QNG = {
+				# MEASURED: a tag brought onto the map by change_location_owner is
+				# instantiated from its setup/countries identity block alone, and that block
+				# authors NOTHING at runtime - no capital, no government, no culture, no
+				# religion. CRI arrived ORTHODOX although its vanilla block declares sunni,
+				# names rendered as "County of Kazakh", and vanilla propose_ruler.txt:29
+				# errors forever on a country whose government_type link is unset. Vanilla
+				# authors its own spawns the same way, at flavor_chi.txt:2545-2548.
+				#
+				# The capital is set AFTER the sweep, because a country cannot be seated in
+				# ground it does not own yet, and every key here was verified to lie INSIDE
+				# this heir grant - the obvious guesses do not: bakhchisaray does not exist,
+				# ufa is in perm_area, turkestan is in transoxiana_area, gulja goes to KAZ.
+				#
+				# DO NOT add these calls for MOS, RUS, NOG, TUR, TIB or KOR. Those are live
+				# 1337 countries with working capitals and governments; set_capital on them
+				# MOVES a living capital.
+				#
+				# Beijing in 1644: the Qing move their seat out of Mukden the year
+				# they take China, which is the year this theatre lands.
+				set_capital = location:dadu
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
 					years = 25
@@ -1229,6 +1354,23 @@ mr_return_tarim = {
 			# superpower still carrying PERMANENT phase rewards is lunch, and
 			# without it the map churns straight back to a blob.
 			c:CHG = {
+				# MEASURED: a tag brought onto the map by change_location_owner is
+				# instantiated from its setup/countries identity block alone, and that block
+				# authors NOTHING at runtime - no capital, no government, no culture, no
+				# religion. CRI arrived ORTHODOX although its vanilla block declares sunni,
+				# names rendered as "County of Kazakh", and vanilla propose_ruler.txt:29
+				# errors forever on a country whose government_type link is unset. Vanilla
+				# authors its own spawns the same way, at flavor_chi.txt:2545-2548.
+				#
+				# The capital is set AFTER the sweep, because a country cannot be seated in
+				# ground it does not own yet, and every key here was verified to lie INSIDE
+				# this heir grant - the obvious guesses do not: bakhchisaray does not exist,
+				# ufa is in perm_area, turkestan is in transoxiana_area, gulja goes to KAZ.
+				#
+				# DO NOT add these calls for MOS, RUS, NOG, TUR, TIB or KOR. Those are live
+				# 1337 countries with working capitals and governments; set_capital on them
+				# MOVES a living capital.
+				set_capital = location:yarkand
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
 					years = 25
