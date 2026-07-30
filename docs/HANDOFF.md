@@ -141,3 +141,61 @@ rank reads "Persian Tribes").
    mod.
 7. **What the heirs are called**, and whether their country panels show
    a government type and a sane capital.
+
+---
+
+# UPDATE — after the first live Great Partition run (same day)
+
+**Three more commits.** `821665b` decline tiers + grace + ranks + the last three
+theatres; `e5b4b31` the three silent failures the live run exposed. Working tree
+clean, 34 checks green.
+
+## What the run proved WORKS — do not re-investigate
+
+The schedule fires. `mr_partition_takeable` is sound (the Kuban and Yedisan,
+which only the schedule can reach, went Crimean). The backstop date ladder is
+what actually fires everything — the momentum clause has never fired anything in
+a real campaign, because the situation opened 1650 and the backstops run
+1650→1702. The grace modifier and the rank calls apply. KAZ revives from
+landless.
+
+## THE LAW THAT COST THE MOST TO LEARN
+
+**A campaign in progress cannot gain a country tag.** The country database is
+minted once, at campaign creation. IRA and QNG were added to `setup/countries`
+after that save existed, so `c:IRA` does not exist in it at all and
+`change_location_owner` into it did nothing, silently. Console `tag IRA` →
+*"country is not valid"*. **Any change under `setup/countries` means a new
+campaign is required to test it.**
+
+## STILL UNWRITTEN — the heir identity pass
+
+Specified in full, not yet in the code. The spec files are in the session
+scratchpad under `agents/`, `-f99-09-FINAL-heir-identity-spec.md` being the
+merged one, with a verified per-heir table.
+
+The heirs arrive with **no government type, no capital, no culture, no
+religion** — an identity block sets none of those at runtime. That is why CRI
+came out **Orthodox** despite its block saying `sunni`, why names render as
+"County of Kazakh", and why vanilla's `propose_ruler.txt:29` now errors forever
+(see the decoder).
+
+**THE TRAP:** five of the heirs are live 1337 countries with working capitals —
+**MOS/RUS, NOG, TUR, TIB, KOR — DO NOT call `set_capital` on them.** Verified
+capital keys for the ones that do need it: CRI `qarasuvbazar`, KAZ `shavgar`,
+IRA `isfahan`, BSH `sterlitamak`, QNG `shenyang` then `dadu`, OIR `hoboksar`,
+CHG `yarkand`. Several obvious guesses are wrong: `bakhchisaray` does not exist,
+`ufa` is in `perm_area` and outside BSH's grant, `turkestan` is in
+`transoxiana_area`, `gulja` goes to KAZ.
+
+Also still open: the pacing table (the player finds the western theatres late),
+the AI personality swap at partition start, whether to strip the permanent Phase
+1–3 rewards, and successor map colours in the situation map mode.
+
+## NEXT TEST — fresh campaign, in this order
+
+1. Does Persia produce IRA on its backstop? (New campaign is the whole point.)
+2. Does Ufa go Bashkir? (`change_country_type = location` fix.)
+3. Do the successors hold their ground instead of dissolving? (cores fix.)
+4. Does cohesion fall monotonically and reach 40? (ratchet + concessions cap.)
+5. Do OIR (+40y) and CHG (+56y) spawn? Both are `country_type = army`, untested.
