@@ -1,0 +1,94 @@
+﻿# =================================================================
+# MONGOL RESURGENCE - KEEP THE KHAGHAN A HORDE
+# =================================================================
+# MEASURED IN GAME (2026-07-30): the AI claimant settles into a
+# monarchy partway through the railroad and its army collapses.
+# The cause is vanilla's own generic action:
+#
+#   generic_actions/government_conversions.txt : steppe_horde_to_monarchy
+#     ai_tick = monthly
+#     ai_will_do = { value = 100 }   # vanilla's comment: "They always
+#                                    #  want to do this"
+#
+# It only needs peace, a city capital of the country's own culture and
+# 25% control at home; it then arms a 15-year timer and
+# government_conversion_events.10 does the actual
+# `change_government_type = government_type:monarchy`.
+#
+# WHAT THAT COSTS THE RAILROAD. The whole steppe advance tree is
+# gated `government = steppe_horde` (advances/government_steppe_horde.txt),
+# so a settled Khaghan loses horse_lords and with it
+# `unlock_unit = a_steppe_horse_archers`, `unlock_unit = a_a_urughs`
+# and `always_allow_army_levies = yes`, plus the kurultai building and
+# the -0.5 levy maintenance behind it. Vanilla says so itself in the
+# action's own tooltip (warn_about_loss_of_content_tt). An AI Khaghan
+# that settles in 1500 cannot beat Ming China in Phase 3, which is the
+# one war the railroad exists to win. MR's OWN advances and the two
+# reforms carry no `government =` field and survive either way — the
+# loss is entirely vanilla's steppe tree.
+#
+# WHY THIS FILE AND NOT AN OVERRIDE. A mod file whose path AND name
+# match a vanilla file replaces that file whole, deleting everything
+# it does not repeat, silently. The database operation prefixes exist
+# precisely to avoid that: they edit ONE entry and leave the vanilla
+# file alone. Attested in a working published mod on this machine —
+# REAI Rational Empire AI:
+#   in_game/common/generic_actions/zz_REAI_parliament_addon.txt:1
+#     TRY_REPLACE:call_parliament = { ... }
+#   in_game/common/building_types/zz_REAI_building_adjustments_addon.txt:2
+#     TRY_INJECT:castle = { important_for_AI = yes }
+# INJECT adds fields to a vanilla entry; REPLACE swaps the entry out.
+# We must CHANGE an existing `potential` block, not add a field, so
+# TRY_REPLACE is the operation. Every measured use of these prefixes
+# sits under in_game/common/ (599 REPLACE:, 295 TRY_INJECT:, 190
+# INJECT:, 116 TRY_REPLACE: across 20 workshop mods) and none under
+# setup/. See ../1066 Test Mod/.claude/skills/verify-vanilla-override.
+#
+# WHY horde_list AND NOT steppe_horde_to_monarchy. The action entry is
+# ~60 lines; this list entry is six. Replacing the smaller one freezes
+# six lines of vanilla instead of sixty, and it stops the AI without
+# touching the human player's button — the ruling was that a player
+# who wants to settle may, the AI may not. The vanilla entry is
+# reproduced below verbatim; only the potential gains the exclusion.
+# generic_action_ai_lists/government_transition_list.txt is vanilla's
+# file for this list.
+#
+# THE GATE. Four conditions, and each one earns its place:
+#   is_ai              a human Khaghan keeps the choice
+#   tag MGO/MGE        dual-tag, because a human can legally form MGE
+#                      mid-Phase-2 under the Vanilla buff rule
+#   NOT mr_railroad_off  the master switch, per house rule
+#   NOT complete/failed  the lock has to END. mr_railroad_complete is
+#                      the normal release, at the close of Phase 3 —
+#                      the phase that fights Ming China. But if the
+#                      railroad collapses that flag never arrives, so
+#                      mr_railroad_failed releases it too; without
+#                      that clause a failed campaign leaves the AI a
+#                      horde forever.
+# =================================================================
+TRY_REPLACE:horde_list = {
+	potential = {
+		government_type = government_type:steppe_horde
+		NOT = {
+			AND = {
+				is_ai = yes
+				OR = {
+					tag = MGO
+					tag = MGE
+				}
+				NOT = {
+					has_game_rule = mr_railroad_off
+				}
+				NOT = {
+					has_global_variable = mr_railroad_complete
+				}
+				NOT = {
+					has_global_variable = mr_railroad_failed
+				}
+			}
+		}
+	}
+	actions = {
+		steppe_horde_to_monarchy
+	}
+}

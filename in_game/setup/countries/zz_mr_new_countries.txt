@@ -25,3 +25,53 @@ KAZ = {
 	# test must confirm KAZ actually spawns.
 	is_historic = yes
 }
+
+# =================================================================
+# THE SETTLED HEIRS (Great Partition, 2026-07-30)
+# =================================================================
+# Same law as KAZ above: a tag with a coat of arms, a name and a
+# formable but NO identity block anywhere is "Unknown country" to
+# country_manager.cpp:206, and change_location_owner cannot
+# instantiate it. Measured in game 2026-07-30: KAZ, given this exact
+# treatment, spawned correctly as a live country — so the route is
+# no longer a guess.
+#
+# Only TWO of the thirteen partition heirs need this. TUR, TIB, KOR,
+# MOS, MNG, CHI, CRI, NOG, BSH, CHG and OIR all carry identity blocks
+# in vanilla's own setup/countries; RUS does not, but the schedule
+# only ever names it behind country_exists, so it is never
+# instantiated from nothing.
+
+# Safavid Persia. IRA is vanilla's "Persia" tag (country_names
+# :4818) with IRA_f as its formable, and no identity block.
+# culture: farsi_culture, the Persian culture vanilla gives the
+# Muzaffarids and the Injuids (persia.txt). religion: shia — the
+# Safavids imposed Twelver Shi'ism from 1501, and vanilla already
+# ships a shia country in the same file (CHB, the Chobanids).
+IRA = {
+	color = map_IRA
+	color2 = rgb { 16 41 202 }
+
+	culture_definition = farsi_culture
+	religion_definition = shia
+
+	is_historic = yes
+}
+
+# The Qing. QNG is vanilla's "Qīng" (country_names:3034), no
+# formable and no identity block. The Manchus rose in Manchuria in
+# 1616 and took Beijing in 1644, so the partition hands them BOTH
+# theatres, thirty-two years apart, exactly as it happened.
+# culture: jurchen_culture — the Manchus are the Jurchens renamed,
+# and it is the only culture in that family vanilla defines.
+# religion: tungusic_shamanism, which vanilla gives to SIB, the
+# Sibe, their nearest surviving relatives (east_asia.txt).
+QNG = {
+	color = map_QNG
+	color2 = rgb { 16 41 202 }
+
+	culture_definition = jurchen_culture
+	religion_definition = tungusic_shamanism
+
+	is_historic = yes
+}

@@ -5,8 +5,18 @@
 # taking it never consumes a slot (vanilla does the same at :1099; the
 # 1066 sister project proved the pattern in game). NO `government =`
 # field ON PURPOSE — the timariot precedent — so the reform SURVIVES the
-# horde's settle-to-monarchy transition, which the user ruled historical
-# (the Yuan did exactly this in 1272) and left unblocked (2026-07-30).
+# horde's settle-to-monarchy transition, which is historical (the Yuan
+# did exactly this in 1272).
+#
+# RULING REVISED 2026-07-30, after the first Great Partition game test.
+# The transition was left unblocked that morning; the same evening it
+# was measured doing real damage — an AI Khaghan that settles loses
+# vanilla's whole steppe advance tree, horse archers included, and
+# cannot fight Ming China in Phase 3. The AI is now held as a horde
+# until mr_railroad_complete by
+# generic_action_ai_lists/zz_MR_government_transition_addon.txt. A
+# HUMAN claimant is still free to settle whenever they like, which is
+# exactly why these two reforms must keep surviving the transition.
 MR_yassa_code = {
 	unique = yes
 	potential = {

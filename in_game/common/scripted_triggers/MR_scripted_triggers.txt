@@ -939,12 +939,44 @@ MR_percent_of_army_balance = {
 # `any_location_in_scripted_geography` + `owner ?=` is the attested
 # shape (see mr_p3_volga_cleared); the bare `owner =` link errors on
 # ownerless locations.
+#
+# THE OWNERLESS TRAP (found in the first Great Partition game test,
+# 2026-07-30). These eight triggers used to ask
+# `NOT = { mr_in_claimant_realm = yes }` directly on the location.
+# mr_in_claimant_realm opens with `has_owner = yes`, so negating it
+# turns "this ground has no owner" into "this ground is lost" — and
+# every atom below contains ground that can NEVER have an owner:
+# default.map lists 918 lakes, 1868 impassable mountains and 153
+# non_ownable locations, and definitions.txt files them inside the
+# ordinary area/region tree. mongolia_region alone holds 50 of them
+# (buir_nuur_province carries lake_buir, which is what the end-
+# condition tooltip was showing). Measured across the eight atoms:
+# heartland 50/263, kazakh 28/183, tarim 34/88, siberian marches
+# 34/101, dzungaria 12/48, crimea 4/18, nogai 3/98, bashkiria 2/28.
+# Not one of them could ever read "held", so mr_partition_end_trigger
+# was true on the situation's first tick, cohesion computed to 0, and
+# the endgame opened and resolved inside a single month.
+#
+# The fix is the shape the paragraph above already promised and the
+# mr_p2_*/mr_p3_* goal triggers already use: reach the owner through
+# `owner ?=`, which makes an ownerless location simply not match.
+# That is also why the Phase 1-3 goals were never hit by this — they
+# were written this way from the start.
 mr_ulus_heartland_held = {
 	NOT = {
 		scripted_geography:MR_geo_heartland = {
 			any_location_in_scripted_geography = {
-				NOT = {
-					mr_in_claimant_realm = yes
+				owner ?= {
+					NOR = {
+						AND = {
+							country_exists = c:MGO
+							top_overlord_or_this ?= c:MGO
+						}
+						AND = {
+							country_exists = c:MGE
+							top_overlord_or_this ?= c:MGE
+						}
+					}
 				}
 			}
 		}
@@ -955,8 +987,17 @@ mr_ulus_kazakh_held = {
 	NOT = {
 		scripted_geography:MR_geo_kazakh_steppe = {
 			any_location_in_scripted_geography = {
-				NOT = {
-					mr_in_claimant_realm = yes
+				owner ?= {
+					NOR = {
+						AND = {
+							country_exists = c:MGO
+							top_overlord_or_this ?= c:MGO
+						}
+						AND = {
+							country_exists = c:MGE
+							top_overlord_or_this ?= c:MGE
+						}
+					}
 				}
 			}
 		}
@@ -967,8 +1008,17 @@ mr_ulus_nogai_held = {
 	NOT = {
 		scripted_geography:MR_geo_nogai_steppe = {
 			any_location_in_scripted_geography = {
-				NOT = {
-					mr_in_claimant_realm = yes
+				owner ?= {
+					NOR = {
+						AND = {
+							country_exists = c:MGO
+							top_overlord_or_this ?= c:MGO
+						}
+						AND = {
+							country_exists = c:MGE
+							top_overlord_or_this ?= c:MGE
+						}
+					}
 				}
 			}
 		}
@@ -979,8 +1029,17 @@ mr_ulus_crimea_held = {
 	NOT = {
 		scripted_geography:MR_geo_crimean_seat = {
 			any_location_in_scripted_geography = {
-				NOT = {
-					mr_in_claimant_realm = yes
+				owner ?= {
+					NOR = {
+						AND = {
+							country_exists = c:MGO
+							top_overlord_or_this ?= c:MGO
+						}
+						AND = {
+							country_exists = c:MGE
+							top_overlord_or_this ?= c:MGE
+						}
+					}
 				}
 			}
 		}
@@ -991,8 +1050,17 @@ mr_ulus_bashkiria_held = {
 	NOT = {
 		scripted_geography:MR_geo_bashkiria = {
 			any_location_in_scripted_geography = {
-				NOT = {
-					mr_in_claimant_realm = yes
+				owner ?= {
+					NOR = {
+						AND = {
+							country_exists = c:MGO
+							top_overlord_or_this ?= c:MGO
+						}
+						AND = {
+							country_exists = c:MGE
+							top_overlord_or_this ?= c:MGE
+						}
+					}
 				}
 			}
 		}
@@ -1003,8 +1071,17 @@ mr_ulus_dzungaria_held = {
 	NOT = {
 		scripted_geography:MR_geo_dzungaria = {
 			any_location_in_scripted_geography = {
-				NOT = {
-					mr_in_claimant_realm = yes
+				owner ?= {
+					NOR = {
+						AND = {
+							country_exists = c:MGO
+							top_overlord_or_this ?= c:MGO
+						}
+						AND = {
+							country_exists = c:MGE
+							top_overlord_or_this ?= c:MGE
+						}
+					}
 				}
 			}
 		}
@@ -1015,8 +1092,17 @@ mr_ulus_tarim_held = {
 	NOT = {
 		scripted_geography:MR_geo_tarim = {
 			any_location_in_scripted_geography = {
-				NOT = {
-					mr_in_claimant_realm = yes
+				owner ?= {
+					NOR = {
+						AND = {
+							country_exists = c:MGO
+							top_overlord_or_this ?= c:MGO
+						}
+						AND = {
+							country_exists = c:MGE
+							top_overlord_or_this ?= c:MGE
+						}
+					}
 				}
 			}
 		}
@@ -1031,10 +1117,43 @@ mr_ulus_sibir_held = {
 	NOT = {
 		scripted_geography:MR_geo_siberian_marches = {
 			any_location_in_scripted_geography = {
-				NOT = {
-					mr_in_claimant_realm = yes
+				owner ?= {
+					NOR = {
+						AND = {
+							country_exists = c:MGO
+							top_overlord_or_this ?= c:MGO
+						}
+						AND = {
+							country_exists = c:MGE
+							top_overlord_or_this ?= c:MGE
+						}
+					}
 				}
 			}
+		}
+	}
+}
+
+# --- Can the partition take this ground? ---------------------------
+# LOCATION scope. Written once because the partition schedule asks it
+# fourteen times, and it used to be eight copies of the same five
+# lines carrying the same eleven-line comment.
+#
+# Two conditions, and the second is the one with a ruling behind it.
+# AUDIT 2026-07-29 (D6, revised with the user): the collapse IS this
+# situation's purpose and the claimant has YEARS of visible
+# counterplay, so a human Khaghan comes apart like anyone else —
+# gating on is_ai would make the endgame a silent no-op for the
+# player. Who stays protected is the BYSTANDER: a human VASSAL's land
+# is never taken, because they had no counterplay at all.
+# `tag =` is the string compare that never errors on an off-map tag.
+mr_partition_takeable = {
+	mr_in_claimant_realm = yes
+	owner ?= {
+		OR = {
+			is_ai = yes
+			tag = MGO
+			tag = MGE
 		}
 	}
 }
@@ -1046,11 +1165,16 @@ mr_ulus_sibir_held = {
 # ends when its goal is met, which under the Terminator pace can be
 # decades before its 1650 deadline; a fixed start date would leave a
 # fast campaign idling for seventy years. Phase 3's on_ending fires
-# a delayed event (years = 30) that sets mr_partition_ready, so the
-# opening tracks when the empire was actually finished:
-#   Phase 3 done 1580 -> opens 1610 -> resolves ~1650-1670
-#   Phase 3 done 1650 -> opens 1650 -> resolves ~1690
-# The situation's own window (1600-1720) is only the outer bound.
+# a delayed event (mr_dominance.140, years = 5) that sets
+# mr_partition_ready, so the opening tracks when the empire was
+# actually finished. The delay was 30 years until the user's balance
+# pass shortened it to 5; the `current_date > 1600` clause below is
+# what actually sets the floor now, so a fast campaign lands on 1600
+# and a slow one opens five years after it wins:
+#   Phase 3 done 1560 -> flag 1565 -> opens 1600 (the floor)
+#   Phase 3 done 1650 -> flag 1655 -> opens 1655
+# The schedule runs 56 years from the opening, so even the latest
+# start finishes inside the situation's own 1600-1720 window.
 mr_can_start_partition = {
 	NOT = {
 		has_game_rule = mr_railroad_off
@@ -1103,10 +1227,35 @@ mr_partition_visible = {
 	}
 }
 
-# The empire has come apart when the Khaghan no longer holds the
-# heartland AND has lost at least one outer ulus outright, or when
-# the tag is gone entirely. Time expiry is the third way out, so
+# THREE ways the empire comes apart, and they are deliberately not
+# the same kind of thing. Time expiry is the fourth way out, so
 # on_ending's "held" branch stays reachable.
+#
+# 1. The tag is gone from the map. Nothing left to hold anything.
+# 2. KARAKORUM has left the realm. The seat, not the region — the
+#    same clause Phase 1 uses to say the heartland is won, read
+#    backwards. This used to be `NOT = { mr_ulus_heartland_held }`,
+#    i.e. ANY of 263 heartland locations outside the realm, which
+#    after the ownerless fix would still end a century-long endgame
+#    over one lost border village.
+# 3. COHESION HAS RUN OUT (user ruling 2026-07-30). Karakorum alone
+#    is not enough and cannot be: it sits deeper in Asia than any
+#    European power can reach, so an empire that has lost every
+#    western ulus but kept its seat would never collapse — it would
+#    idle to the 1720 timeout and collect the survival reward. The
+#    cohesion floor is the clause that makes the outer uluses matter,
+#    and it is the AND the old comment here promised but the code
+#    never had.
+#
+# mr_ulus_heartland_held keeps its job: it is worth 30 cohesion in
+# on_monthly, so losing part of Mongolia is heavy pressure rather
+# than an instant ending.
+#
+# var: at situation scope is how situations read their own variables
+# in can_end (great_pestilence.txt:14-18 does exactly this); the
+# has_variable guard is attested at the same scope in
+# black_death.txt:158 and costs nothing, and an unset variable
+# reading back as 0 would be this bug all over again.
 mr_partition_end_trigger = {
 	OR = {
 		custom_tooltip = {
@@ -1119,8 +1268,15 @@ mr_partition_end_trigger = {
 		custom_tooltip = {
 			text = mr_partition_heartland_lost_tt
 			NOT = {
-				mr_ulus_heartland_held = yes
+				location:karakorum = {
+					mr_in_claimant_realm = yes
+				}
 			}
+		}
+		custom_tooltip = {
+			text = mr_partition_cohesion_spent_tt
+			has_variable = MR_cohesion_score
+			var:MR_cohesion_score < 40
 		}
 	}
 }

@@ -1,0 +1,480 @@
+﻿# =================================================================
+# THE GREAT PARTITION - HISTORY RESUMES, ONE THEATRE AT A TIME
+# =================================================================
+# One effect per theatre the restored empire gives back, written
+# ONCE and called from TWO places, the same way mr_p2_*_cleared is
+# one trigger read by both an end condition and a panel score:
+#
+#   MR_great_partition.txt  on_monthly  - on that theatre's schedule
+#   MR_great_partition.txt  on_ending   - the final sweep, when the
+#                                         empire is over and whatever
+#                                         is left goes home at once
+#
+# Before this file the handover lived inline in on_ending in six
+# copies of the same eleven lines, each carrying the same eleven-line
+# comment. Adding the settled world would have made that fourteen
+# copies in two places. Now a theatre's boundary, its heir and its
+# guard flag are named in exactly one place.
+#
+# EACH EFFECT IS IDEMPOTENT. The global flag is checked inside, not
+# by the caller, so on_ending can simply call all fourteen and the
+# ones that already fired do nothing. A theatre also never fires
+# twice, which matters: without the flag a reconquest would be
+# snapped back out of the Khaghan's hands every month.
+#
+# WHO IT TAKES FROM is mr_partition_takeable (scripted_triggers):
+# claimant realm, and never a HUMAN vassal's ground. See the D6
+# ruling there.
+#
+# WHY THESE HEIRS. Every one is the power that actually held that
+# ground around 1650-1700 — not the 1337 owner, and not a 1337
+# khanate. This situation exists to close the alternate timeline
+# back onto the real map, so a Golden Horde reappearing in 1650
+# would be a second piece of alternate history, and a Mongol empire
+# that "collapses" while still running from Shiraz to Canton is not
+# a collapse at all. The dates in each comment are the real ones.
+#
+# change_location_owner brings a defined-but-landless tag onto the
+# map by itself — no formable needed (vanilla revives SKE this way,
+# flavor_swe_dan.txt:4-5) — CONFIRMED IN GAME 2026-07-30 when KAZ
+# spawned. Every tag below either ships an identity block in vanilla
+# or gets one in zz_mr_new_countries.txt, except RUS, which is only
+# ever named behind country_exists.
+# =================================================================
+
+# --- 1. THE CRIMEAN KHANATE (1441) -------------------------------
+# Haci Giray's ulus: furthest from Karakorum, and the Chinggisid
+# state that outlived every other one, to 1783.
+mr_return_crimea = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_crimea
+			}
+		}
+		scripted_geography:MR_geo_crimean_seat = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:CRI
+			}
+		}
+		set_global_variable = mr_returned_crimea
+	}
+}
+
+# --- 2. THE KAZAKH KHANATE (1465) --------------------------------
+# Kerey and Janibek break away onto the Desht-i Kipchak. The largest
+# surviving steppe state and the true heir of the Kipchak world.
+mr_return_kazakh = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_kazakh
+			}
+		}
+		scripted_geography:MR_geo_kazakh_steppe = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:KAZ
+			}
+		}
+		set_global_variable = mr_returned_kazakh
+	}
+}
+
+# --- 3. SAFAVID PERSIA (1501) ------------------------------------
+# Ismail I takes Tabriz and Persia is Persia again. The Caucasus
+# comes with it: Safavid ground from 1501 to 1722. Note the
+# deliberate overlap — armenian_highlands_area sits inside
+# caucasus_region AND inside MR_geo_western_reach, the Ottoman
+# theatre. Persia runs first and takes it, which is the eastern side
+# of the 1639 Treaty of Zuhab line. Historically honest either way.
+mr_return_persia = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_persia
+			}
+		}
+		scripted_geography:MR_geo_persia = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:IRA
+			}
+		}
+		scripted_geography:MR_geo_caucasus = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:IRA
+			}
+		}
+		set_global_variable = mr_returned_persia
+	}
+}
+
+# --- 4. THE BASHKIRS (1662) --------------------------------------
+# Under Moscow from the 1550s and in revolt for most of the next
+# century and a half. RUNS BEFORE BOTH RUSSIAN SWEEPS: bashkiria_area
+# is parented to ural_region, so MR_geo_ural contains it and a
+# Russia that moved first would swallow the Bashkirs whole.
+mr_return_bashkiria = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_bashkiria
+			}
+		}
+		scripted_geography:MR_geo_bashkiria = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:BSH
+			}
+		}
+		set_global_variable = mr_returned_bashkiria
+	}
+}
+
+# --- 5. THE MIDDLE VOLGA (1552, 1556) ----------------------------
+# Kazan falls to Ivan IV in 1552, Astrakhan in 1556 — the moment the
+# steppe stopped being the steppe's. RUS first, because by this date
+# Muscovy has normally formed Russia; MOS is the fallback. Neither is
+# ever instantiated from nothing: no country_exists, no handover, and
+# the ground simply stays Mongol. This is also why RUS needs no
+# identity block while IRA and QNG do.
+mr_return_middle_volga = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_middle_volga
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:RUS
+			}
+			c:RUS = {
+				save_scope_as = mr_partition_heir
+			}
+		}
+		else_if = {
+			limit = {
+				country_exists = c:MOS
+			}
+			c:MOS = {
+				save_scope_as = mr_partition_heir
+			}
+		}
+		if = {
+			limit = {
+				exists = scope:mr_partition_heir
+			}
+			scripted_geography:MR_geo_middle_volga = {
+				every_location_in_scripted_geography = {
+					limit = {
+						mr_partition_takeable = yes
+					}
+					change_location_owner = scope:mr_partition_heir
+				}
+			}
+			set_global_variable = mr_returned_middle_volga
+		}
+	}
+}
+
+# --- 6. THE NOGAI HORDE (1557) -----------------------------------
+# The Greater/Lesser split, and then Kalmyk pressure pushing them off
+# the Volga through the 1630s.
+mr_return_nogai = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_nogai
+			}
+		}
+		scripted_geography:MR_geo_nogai_steppe = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:NOG
+			}
+		}
+		set_global_variable = mr_returned_nogai
+	}
+}
+
+# --- 7. RUSSIA IN THE NORTH (1582-1598) --------------------------
+# Yermak crosses the Urals in 1582 and the Sibir Khanate is finished
+# by 1598. This is exactly why Sibir feeds cohesion but yields no
+# successor of its own: by this window that ground is Russian, and
+# producing a Sibir Khanate here would be a second piece of alternate
+# history inside the situation whose whole point is ending the first
+# one. Runs after Bashkiria and the middle Volga — MR_geo_ural
+# contains both.
+mr_return_north = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_north
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:RUS
+			}
+			c:RUS = {
+				save_scope_as = mr_partition_heir
+			}
+		}
+		else_if = {
+			limit = {
+				country_exists = c:MOS
+			}
+			c:MOS = {
+				save_scope_as = mr_partition_heir
+			}
+		}
+		if = {
+			limit = {
+				exists = scope:mr_partition_heir
+			}
+			scripted_geography:MR_geo_siberian_marches = {
+				every_location_in_scripted_geography = {
+					limit = {
+						mr_partition_takeable = yes
+					}
+					change_location_owner = scope:mr_partition_heir
+				}
+			}
+			scripted_geography:MR_geo_ural = {
+				every_location_in_scripted_geography = {
+					limit = {
+						mr_partition_takeable = yes
+					}
+					change_location_owner = scope:mr_partition_heir
+				}
+			}
+			scripted_geography:MR_geo_russian_lands = {
+				every_location_in_scripted_geography = {
+					limit = {
+						mr_partition_takeable = yes
+					}
+					change_location_owner = scope:mr_partition_heir
+				}
+			}
+			set_global_variable = mr_returned_north
+		}
+	}
+}
+
+# --- 8. THE OTTOMANS (1638) --------------------------------------
+# Murad IV takes Baghdad back in 1638, and Anatolia was never
+# anything else after 1453. TUR carries its own identity block in
+# vanilla, so this works whether the Ottomans survived the railroad
+# or have to come back from nothing.
+mr_return_ottoman = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_ottoman
+			}
+		}
+		scripted_geography:MR_geo_mesopotamia = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:TUR
+			}
+		}
+		scripted_geography:MR_geo_western_reach = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:TUR
+			}
+		}
+		set_global_variable = mr_returned_ottoman
+	}
+}
+
+# --- 9. THE MANCHUS IN MANCHURIA (1616) --------------------------
+# Nurhaci proclaims the Later Jin in 1616. The Qing get their
+# homeland well before they get China, which is the order it
+# happened in — and the reason Manchuria and China are two theatres
+# and not one.
+mr_return_manchuria = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_manchuria
+			}
+		}
+		scripted_geography:MR_geo_manchuria = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:QNG
+			}
+		}
+		set_global_variable = mr_returned_manchuria
+	}
+}
+
+# --- 10. THE DZUNGAR KHANATE (1634) ------------------------------
+# Erdeni Batur founds the last steppe empire. If the standalone
+# mr_dzungar_khanate situation already seated OIR here, this finds no
+# claimant ground and passes silently — the two never fight over the
+# same land, which is why the Dzungars need no special ordering.
+mr_return_dzungaria = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_dzungaria
+			}
+		}
+		scripted_geography:MR_geo_dzungaria = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:OIR
+			}
+		}
+		set_global_variable = mr_returned_dzungaria
+	}
+}
+
+# --- 11. THE GANDEN PHODRANG (1642) ------------------------------
+# The Fifth Dalai Lama's state, installed by Gushi Khan — a Mongol,
+# which is why Tibet leaving the Khaghan's realm reads less as a
+# defeat than as a devolution.
+mr_return_tibet = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_tibet
+			}
+		}
+		scripted_geography:MR_geo_tibet = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:TIB
+			}
+		}
+		set_global_variable = mr_returned_tibet
+	}
+}
+
+# --- 12. THE QING TAKE CHINA (1644) ------------------------------
+# Beijing falls to the Manchus in 1644 and the Ming are finished.
+# Deliberately QNG and not MNG or CHI even when those still exist:
+# this schedule is the 1650-1700 map, and in 1650 China is Qing.
+mr_return_china = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_china
+			}
+		}
+		scripted_geography:MR_geo_north_china = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:QNG
+			}
+		}
+		scripted_geography:MR_geo_song_china = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:QNG
+			}
+		}
+		set_global_variable = mr_returned_china
+	}
+}
+
+# --- 13. KOREA (1392) --------------------------------------------
+# Goryeo submitted in 1259 and was NEVER annexed, which is why the
+# Phase 3 goal accepts a Korean SUBJECT — so in this timeline Korea
+# usually leaves by the overlord letting go, not by losing land.
+# cancel_subject is run BY the overlord with the subject as its
+# argument (_hardcoded.txt:4808); make_independent does not exist.
+# The sweep afterwards picks up whatever Korean ground the Khaghan
+# held directly. Once KOR is independent its own locations stop
+# matching mr_partition_takeable, so the two steps cannot fight.
+mr_return_korea = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_korea
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:KOR
+			}
+			c:KOR = {
+				if = {
+					limit = {
+						is_subject = yes
+					}
+					overlord ?= {
+						cancel_subject = prev
+					}
+				}
+			}
+			scripted_geography:MR_geo_korea = {
+				every_location_in_scripted_geography = {
+					limit = {
+						mr_partition_takeable = yes
+					}
+					change_location_owner = c:KOR
+				}
+			}
+			set_global_variable = mr_returned_korea
+		}
+	}
+}
+
+# --- 14. CHAGATAI IN THE TARIM (1680) ----------------------------
+# Yarkent stayed Chagatayid until 1705; Galdan took Kashgar in 1680
+# and the Khojas inherited it. Last on the schedule, because it is
+# the nearest thing to the heartland that still becomes somebody
+# else — the heartland itself never secedes, it just stops being an
+# empire.
+mr_return_tarim = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_tarim
+			}
+		}
+		scripted_geography:MR_geo_tarim = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:CHG
+			}
+		}
+		set_global_variable = mr_returned_tarim
+	}
+}

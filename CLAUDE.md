@@ -119,14 +119,16 @@ AI find-target and fallback, failsafe handover, `tooltip`/
 | `mr_chahar_reunification` | MR_late_steppe.txt | 1604–1634 | one banner over the heartland |
 | `mr_torghut_migration` | MR_late_steppe.txt | 1616–1630 | a horde reaches the Volga (post-trek) |
 | `mr_dzungar_khanate` | MR_late_steppe.txt | 1634–1650 | consolidated + Dzungaria/Tarim/Zhetysu |
-| `mr_great_partition` | MR_great_partition.txt | opens on a flag, 1600–1720 | the Khaghan is gone from the map, or Mongolia has left his realm |
+| `mr_great_partition` | MR_great_partition.txt | opens on a flag, 1600–1720 | the Khaghan is gone from the map, **Karakorum** has left his realm, or `MR_cohesion_score < 40` |
 
 - **THE GREAT PARTITION (`mr_great_partition`)** — the endgame, and the
   railroad's mirror. Phases 1–3 gather the four khanates; this runs the same
-  seats in reverse. It opens on the flag `mr_partition_ready`, set 30 years
-  after Phase 3 succeeds by the delayed `mr_dominance.140`, NOT on a calendar
-  date: Phase 3 can close any time 1550–1650 and a fixed start would leave a
-  fast campaign idling for decades. `MR_cohesion_score` counts DOWN from 100 as
+  seats in reverse. It opens on the flag `mr_partition_ready`, set **5 years**
+  after Phase 3 succeeds by the delayed `mr_dominance.140` (was 30 until the
+  user's balance pass), NOT on a calendar date: Phase 3 can close any time
+  1550–1650 and a fixed start would leave a fast campaign idling for decades.
+  With the delay that short, `current_date > 1600` in `mr_can_start_partition`
+  is what actually sets the floor. `MR_cohesion_score` counts DOWN from 100 as
   uluses leave the realm, `mr_partition_concessions` is what the kurultai has
   bought back (a standing term, because the score is recomputed from scratch
   monthly). Three threshold beats (85/55/40) reach three DISJOINT audiences —
@@ -140,7 +142,52 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   CHG — not the 1337 khanates**: a Golden Horde in 1650 would be a second piece
   of alternate history, and the point of this situation is the alternate
   timeline closing back onto the real map. They come back with plain
-  `change_location_owner`; a landless-but-defined tag needs no formable.
+  `change_location_owner`; a landless-but-defined tag needs no formable
+  (CONFIRMED IN GAME 2026-07-30: `is_historic` KAZ spawned — audit D2 closed).
+  **FOURTEEN theatres, not six, and they run on a CLOCK** (added 2026-07-30
+  after the first game test). The steppe six were only half the map: a
+  "collapsed" empire still ran from Shiraz to Canton, because Persia, Iraq,
+  Anatolia, all of China, Korea, Tibet, Manchuria and the Volga had no heir
+  at all. Now each theatre returns to the power that actually held it around
+  1650–1700 — CRI, KAZ, **IRA**, BSH, **RUS/MOS**, NOG, **TUR**, **QNG**
+  (Manchuria first at +32y, China at +48y, as it happened), OIR, **TIB**,
+  **KOR**, CHG — one scripted effect each in
+  `in_game/common/scripted_effects/MR_partition_effects.txt`, called from BOTH
+  `on_monthly` (on schedule) and `on_ending` (the final sweep), each guarded
+  by its own `mr_returned_*` global so nothing fires twice. Only IRA and QNG
+  needed new identity blocks; RUS is only ever named behind `country_exists`.
+  **The clock is `mr_partition_momentum`**, a counter that existed from the
+  start and was read by nothing. ORDER IS HISTORY, PACE IS THE CAMPAIGN: the
+  real dates cannot be the gate, because the situation opens at 1600 at the
+  earliest and Crimea 1441 / Kazakh 1465 / Safavid 1501 / Joseon 1392 are all
+  in the past — every theatre would fire in month one. So elapsed months
+  (+4y → +56y, four apart) set the pace and a backstop year ladder
+  (1650 → 1702) keeps a late campaign inside the 1720 window.
+  **Overlap order is load-bearing**: `kazan_area`, `bolghar_area` and
+  `bashkiria_area` are all parented to `ural_region`, so `MR_geo_ural`
+  CONTAINS the middle Volga and Bashkiria — those two run first or Russia
+  swallows the Bashkirs. Same reason `MR_geo_pontic` (steppes+caucasus) and
+  `MR_geo_xinjiang` (dzungaria+tarim) are NEVER used as partition theatres:
+  each contains two successors. Hence the two new atoms, `MR_geo_caucasus`
+  and `MR_geo_middle_volga`.
+  **Why the clock had to exist at all**: cohesion falls only when the Khaghan
+  LOSES ground and nothing in this mod makes a restored empire lose any, so
+  the endgame was a 120-year no-op — and it was circular, since
+  `cb_MR_carve_the_ulus`, the one lever pointed at the Mongols, is granted at
+  cohesion 55, which you could only reach by having already lost five uluses.
+  Now the schedule drives the secessions, the secessions drive cohesion, and
+  cohesion fires the beats and the CB: 100 → 92 → 80 (beat 85) → 72 → 62 →
+  54 (beat 55, CB) → 42 → 30 (beat 40, end).
+  `on_ending`'s survival branch now also requires cohesion ≥ 70, or a gutted
+  empire timing out at 1720 would collect `MR_the_ulus_endures`.
+  **Its end trigger is three clauses, and the pair matters**: Karakorum out of
+  the realm (the SEAT, read backwards from Phase 1's clause) OR
+  `MR_cohesion_score < 40`. Karakorum alone can never fire in practice — it
+  sits deeper in Asia than any European power reaches — so an empire that lost
+  every western ulus but kept its seat would idle to the 1720 timeout and
+  collect the survival reward; the cohesion floor is what makes the outer
+  uluses matter. `mr_ulus_heartland_held` is no longer an end condition, only
+  a 30-point cohesion input.
 - Event namespaces: `mr_dominance` (lifecycle + AI events 992–999),
   `mr_imperial` (campaign arc), `mr_history` (historical DHEs, 1337–1526,
   all firing ON their real dates via `monthly_chance = 100`; `.9` is Delhi's
@@ -156,10 +203,12 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   (on_ending sets terminals directly; events set them redundantly).
 - Every situation `can_end`s on **goal OR time expiry**; `on_ending` branches on the
   goal trigger, never on side-signals.
-- **Game rules** (PD_config shape, `main_menu/common/game_rules/`), FOUR rules:
+- **Game rules** (PD_config shape, `main_menu/common/game_rules/`), FIVE rules:
   master switch `mr_railroad` (on/off — all content checks
   `NOT mr_railroad_off`); `MR_mongol_resurgence_auto_conquest` (gates the P1
   completion failsafe); `MR_imperial_auto_conquest` (gates P2 + P3 failsafes);
+  `MR_partition_schedule` (gates the Great Partition's timed secessions —
+  default ON, because with it off the endgame is a no-op); and
   `MR_mongol_buff_rule` (`MR_buff_disabled`/`_historical`/`_enabled`=Terminator
   — selects the phase buff AND the reward tier AND the railroad war pace).
   The old `MR_timeline_pacing_rule` was REMOVED (the Mongol window IS the
@@ -441,6 +490,56 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   `every_country` (the whole map — only when the ANSWER must be a country).
 - `owns` vs `controls`: events overwhelmingly use `owns` (ownership), `controls` is
   military occupation. Phase goals use `owns`.
+- **`in_game/common/scripted_effects/` exists and is the answer to copy-pasted
+  effect blocks** (vanilla ships 10+ files there; parameters are `$name$`
+  substitution, `___test_effects.txt`). Note the trap: a scripted EFFECT and a
+  scripted TRIGGER are both called as `X = yes` and nothing in the text tells
+  them apart, so any tool resolving call sites must load BOTH definition sets —
+  `verify_mod.py` failed exactly this way the first time the mod used one.
+- **Every region contains ground that can NEVER have an owner, so a NEGATED
+  ownership test reads it as lost.** `default.map` files 918 `lakes`, 1868
+  `impassable_mountains` and 153 `non_ownable` locations, and
+  `definitions.txt` puts them inside the ordinary province → area → region
+  tree: `mongolia_region` alone holds 50 (`buir_nuur_province` carries
+  `lake_buir`). A location-scope realm test that opens `has_owner = yes` is
+  therefore only safe in the POSITIVE. Negated inside an iterator —
+  `any_location_in_scripted_geography = { NOT = { mr_in_claimant_realm = yes } }`
+  — "nobody can ever own this" becomes "we have lost this", and it is true on
+  turn one, forever. **Shipped that way in all eight `mr_ulus_*_held` triggers
+  and measured in game 2026-07-30: the Great Partition opened and resolved
+  inside a single month.** The safe shape is the one the phase goals used all
+  along, `owner ?= { … }`, which makes an ownerless location simply not match;
+  `any_ownable_location_in_scripted_geography` also exists (triggers.log:1631)
+  but only excludes UNOWNABLE ground, not merely-unowned. `verify_mod.py`
+  fails on any reintroduction and carries a canary of the shipped shape.
+- **A mod file whose path AND name match a vanilla file replaces it whole**,
+  deleting everything it does not repeat, with no error. Under
+  `in_game/common/` the escape is the database operation prefixes —
+  `TRY_REPLACE:<key> = { … }` swaps ONE vanilla entry, `TRY_INJECT:<key>` adds
+  fields to one. Attested in a working published mod on this machine (REAI:
+  `generic_actions/zz_REAI_parliament_addon.txt:1`,
+  `building_types/zz_REAI_building_adjustments_addon.txt:2`); measured across
+  20 workshop mods as 599 `REPLACE:` / 295 `TRY_INJECT:` / 190 `INJECT:` /
+  116 `TRY_REPLACE:`, **every one under `in_game/common/` and none under
+  `setup/`**. Vanilla itself never uses them — this is a mod-side mechanism.
+  Pick the SMALLEST entry that does the job: MR holds the AI Khaghan to the
+  steppe by replacing `horde_list` (6 lines) rather than
+  `steppe_horde_to_monarchy` (60). Full method:
+  `../1066 Test Mod/.claude/skills/verify-vanilla-override/`.
+- **Vanilla will settle the AI horde out from under the railroad.**
+  `generic_actions/government_conversions.txt : steppe_horde_to_monarchy` is
+  `ai_tick = monthly` with `ai_will_do = { value = 100 }` and vanilla's own
+  comment *"They always want to do this"*; it needs only peace, a city capital
+  of the country's culture and 25% home control, then arms a 15-year timer
+  that `government_conversion_events.10` cashes in. The whole steppe advance
+  tree is gated `government = steppe_horde`, so a settled Khaghan loses
+  `horse_lords` and with it `a_steppe_horse_archers`, `a_a_urughs` and
+  `always_allow_army_levies` — measured in game: it then cannot beat Ming
+  China in Phase 3. MR's own advances and reforms carry no `government =`
+  field on purpose and survive the transition either way. The AI is held
+  until `mr_railroad_complete` (or `mr_railroad_failed`, or the master switch
+  is off) by `generic_action_ai_lists/zz_MR_government_transition_addon.txt`;
+  a HUMAN claimant keeps the choice.
 - **End conditions are a CHECKLIST: one `custom_tooltip` per requirement, each
   text ONE line.** The situation panel renders one tick per custom_tooltip, so
   a single tooltip wrapped around every clause fights the widget — Phase 3

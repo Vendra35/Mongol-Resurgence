@@ -724,3 +724,290 @@ Click tour, ~10 minutes, observer or MGO hands-on:
 6. 1430+: "The Karakorum Debate" (fires for MGO or MGE — the multi-tag probe); each option leaves its 20-year modifier.
 7. EVERY event window shows the historical-info text (the explicit-field fix — if any is blank, say which).
 8. Carried from the audit: KAZ actually spawns in the Great Partition (is_historic probe); mr_yam_riders researchable at the 1437 age boundary; MGE proclamation still works if the AI settled first; the "Great Mongol Empire" map label while still a horde.
+
+##### 30.07.2026 GREAT PARTITION ILK OYUN ICI TEST + FIX PASS #####
+
+Son uc commitlik blok (Great Partition endgame'i, ~1.600 satir) ilk defa oyun
+gordu. Yazar uc bulgu bildirdi; ikisi TEK kok nedene indi. Harness 33 -> 34
+kontrol, hepsi yesil.
+
+## YAZARIN BULGULARI (TEST RESULTS, 30.07)
+
+1. Mogol AI ulkesi steppe horde'dan cikip monarchy'ye geciyor, levyleri
+   cok zayifliyor, Great Chen'i yenemiyor. Sebep olarak steppe_horse_archers
+   kaybi tahmin edildi.
+2. Great Partition'in end requirement'i situation acilir acilmaz TIKLI
+   geliyor (ekran goruntusu: "Any Location in MR_geo_heartland" yesil, ornek
+   lokasyon Buir Nuur).
+3. Bu yuzden dagilma da aninda oluyor ve halefler eksik/parcali cikiyor
+   (Kirim hic gelmiyor).
+
+## KOK NEDEN: SAHIPSIZ ARAZI (#2 ve #3 ayni hata)
+
+Sekiz `mr_ulus_*_held` trigger'i lokasyon uzerinde dogrudan
+`NOT = { mr_in_claimant_realm = yes }` soruyordu. O trigger
+`has_owner = yes` ile basliyor, dolayisiyla negatiflenince "bunun sahibi
+HICBIR ZAMAN olamaz" cumlesi "burayi kaybettik" anlamina geliyor.
+
+OLCULDU (default.map + definitions.txt taranarak): motor 918 `lakes`,
+1868 `impassable_mountains` ve 153 `non_ownable` lokasyonu siradan
+province -> area -> region agacinin ICINE koyuyor. Sekiz atomun HEPSINDE var:
+
+    MR_geo_heartland         263 lokasyon /  50 sahiplenilemez
+    MR_geo_kazakh_steppe     183 /  28
+    MR_geo_tarim              88 /  34
+    MR_geo_siberian_marches  101 /  34
+    MR_geo_dzungaria          48 /  12
+    MR_geo_crimean_seat       18 /   4
+    MR_geo_nogai_steppe       98 /   3
+    MR_geo_bashkiria          28 /   2
+
+Tooltip'te gorunen ornek lokasyon bunun kaniti:
+`buir_nuur_province = { buir_nuur barun_xiabaer khalkh tamsabulag lake_buir }`
+(definitions.txt:2906) ve `lake_buir` default.map'in lakes blogunda (:1063).
+
+Sonuc zinciri, tek ay icinde: heartland asla "held" okunamiyor ->
+`mr_partition_end_trigger` ilk tikte true -> situation acilir acilmaz
+kapaniyor; kohezyon 100-30-12-12-12-10-8-8-8 = 0 -> uc esik olayi (85/55/40)
+ayni anda; `on_ending`'de alti halefin de ikinci klozu (`NOT = { ..._held }`)
+true -> hepsi birakilmaya calisiliyor ama sadece MGE'nin FIILEN sahip oldugu
+toprak el degistirdigi icin harita parcali cikiyor ve MGE'nin o an tutmadigi
+Kirim'dan hicbir sey dogmuyor.
+
+NEDEN FAZ 1-3 ETKILENMEDI: onlarin hedef trigger'lari (`mr_p2_*_cleared` vb.)
+bastan beri `owner ?= { ... }` seklini kullaniyor; `?=` sahipsiz lokasyonu
+eslesmez yapiyor. Dosyanin kendi yorumu (satir 939-941) ulus trigger'larinin
+da bu sekli kullandigini IDDIA ediyordu ama kod oyle degildi.
+
+## DUZELTMELER
+
+- (#2/#3 KOK) Sekiz `mr_ulus_*_held` trigger'i `owner ?=` sekline gecirildi,
+  hedef trigger'larla birebir ayni yapi. `mr_in_claimant_realm` duruyor:
+  `on_ending`'in devir limitlerinde ve Faz 1 koltuk klozunda POZITIF
+  kullaniliyor, oralarda dogru.
+
+- (#2 TASARIM, yazar karari) `mr_partition_end_trigger` uc kloz oldu:
+  tag haritadan silinmis, VEYA `location:karakorum` realm disi, VEYA
+  `MR_cohesion_score < 40`. Eski hali "263 heartland lokasyonundan HERHANGI
+  biri disarida" idi; duzeltmeden sonra bile tek bir sinir koyu yuzyillik
+  endgame'i bitirirdi. Yazarin gerekcesiyle kohezyon klozu eklendi: Karakurum
+  Avrupa'dan cok uzak, tek basina birakilirsa imparatorluk ASLA yikilmaz,
+  1720'ye kadar bekleyip hayatta kalma odulunu alirdi. `mr_ulus_heartland_held`
+  artik end condition degil, sadece 30 puanlik kohezyon girdisi.
+  Yeni loc: `mr_partition_cohesion_spent_tt`. `var:` situation scope'unda
+  can_end icinde okunuyor (great_pestilence.txt:14-18 birebir bunu yapiyor),
+  `has_variable` guard'i ayni scope'ta black_death.txt:158'de attested.
+
+- (#1) Sucluyu vanilla'da bulduk: `generic_actions/government_conversions.txt`
+  icindeki `steppe_horde_to_monarchy`, `ai_tick = monthly` +
+  `ai_will_do = { value = 100 }` ve vanilla'nin kendi yorumu
+  "#They always want to do this". Sartlari: barista olmak, kendi kulturunde
+  sehir baskent, %25 home control. Sonra 15 yillik sayac kuruyor,
+  `government_conversion_events.10` gelince `change_government_type`.
+  Kayip dogrulandi: butun bozkir advance agaci `government = steppe_horde`
+  ile kilitli (advances/government_steppe_horde.txt), yani `horse_lords` ve
+  onunla `a_steppe_horse_archers`, `a_a_urughs`, `always_allow_army_levies`,
+  kurultai binasi ve -0.5 levy maintenance gidiyor. Vanilla bunu kendi
+  tooltip'inde soyluyor (warn_about_loss_of_content_tt). MGO_f/MGE_f
+  formable'lari SUCSUZ - hicbiri hukumet tipi degistirmiyor.
+  COZUM: `in_game/common/generic_action_ai_lists/`
+  `zz_MR_government_transition_addon.txt`, `TRY_REPLACE:horde_list`.
+  Kapi: is_ai + tag MGO/MGE + NOT mr_railroad_off + NOT mr_railroad_complete
+  + NOT mr_railroad_failed. Son kloz sart: rayli yol cokerse
+  mr_railroad_complete hic gelmez ve AI sonsuza kadar kilitli kalirdi.
+  Insan oyuncunun butonu duruyor - yazarin karari.
+
+- (HARNESS 33 -> 34) Yeni kontrol: `mr_in_claimant_realm never negated in
+  place`. Iterator icinde negatiflenmis realm testini yakaliyor ve gonderilen
+  hatanin BIREBIR seklini canary olarak tasiyor, boylece pattern sessizce
+  bozulursa kontrol vacuous gecemiyor.
+
+- (DOKUMAN) CLAUDE.md: mimari tablosu + Great Partition maddesi guncellendi,
+  UC yeni hard rule eklendi (sahipsiz arazi, TRY_REPLACE/TRY_INJECT ile
+  vanilla entry duzenleme, vanilla'nin AI hordeyi yerlestirmesi).
+  MR_reforms.txt: sabahki "bu gecis serbest" karari revize edildi.
+
+## DOGRULANANLAR (iyi haber)
+
+- (D2 KAPANDI) KAZ haritaya GELDI - ekran goruntusunde "County of Kazakh".
+  `is_historic` kimlik blogu olan landless bir tag `change_location_owner`
+  ile gercekten instantiate oluyor. Bu, 29.07 denetiminin acik biraktigi
+  probu kapatiyor.
+- Situation aciliyor, on_ending calisiyor, halefler dogup toprak aliyor,
+  end-condition paneli checklist olarak render oluyor.
+
+## HALA ACIK / SONRAKI TESTTE BAKILACAK
+
+- `TRY_REPLACE:` prefix'i olculen klasorler arasinda `generic_action_ai_lists`
+  YOK (olcum: advances, prices, laws, generic_actions, static_modifiers,
+  building_types). Ayni `in_game/common/` sinifinda oldugu icin calismasi
+  bekleniyor ama TEYIT EDILMEDI. TEST: AI Kaghan Faz 3 bitmeden monarchy'ye
+  gecerse prefix tutmamistir; o zaman hedef `generic_actions/` altinda
+  `TRY_REPLACE:steppe_horde_to_monarchy` olur (REAI'nin call_parliament ile
+  birebir kanitladigi klasor) ya da talibe vanilla degiskeni
+  `is_about_to_reform_government` kurulur.
+- MEVCUT KAYIT YENI TEST ICIN KULLANILAMAZ. `mr_partition_collapsed` global'i
+  o save'de zaten set ve `mr_can_start_partition` onu reddediyor - situation
+  bir daha acilmaz. Ayrica AI zaten donusum aksiyonunu almissa 15 yillik sayac
+  iptal edilemez. Great Partition ve horde kilidi YENI OYUNDA test edilmeli.
+- Haleflerin rutbesi/hukumeti: KAZ "County of Kazakh", CHG "Chagatai Tribal
+  Kingdom" olarak dogdu. Vanilla setup girdilerinde ne rank ne government var,
+  MR de vermiyor. Kozmetik ama dort hanligin ilcelik olarak dogmasi garip
+  duruyor - istenirse `set_country_rank_effect` ile duzeltilebilir. KARAR
+  BEKLIYOR.
+- Kirim'in cikmamasinin sebebi teyit edilmeli: kloz true idi, demek ki MGE o
+  an crimea_area'yi tutmuyordu (release sadece Kaghan'in realm'indeki topragi
+  aliyor). crimea_area steppes_region icinde, yani Faz 3 hedefiydi - Faz 3
+  bittikten sonraki 30+ yilda kaybedilmis olabilir. Sonraki testte MGE'nin
+  Kirim'i tutup tutmadigina bakilacak.
+
+##### 30.07.2026 (AYNI GUN, IKINCI TUR) GREAT PARTITION: TARIH GERI GELIYOR #####
+
+Yazarin ekran goruntusu uzerinden iki soru daha cikti ve ikisi de tasarim
+duzeyindeydi. Harness 34 -> 34 kontrol (biri genisletildi), hepsi yesil.
+
+## SORU 1: HALEFLERIN TOPRAKLARINDAKI GRI DELIKLER - HATA DEGIL, OLCULDU
+
+Yazar "KAZ ve CHG'nin aldigi topraklarin yarisi bos kalmis, normalde orasi
+doluydu" dedi. default.map + definitions.txt + setup/start/10_countries.txt
+uzerinden sayildi:
+
+    atom                      toplam  sahiplenilemez  1337'de sahipsiz  gri
+    MR_geo_tarim (CHG)            88        34               7         %47
+    MR_geo_siberian_marches      101        34               0         %34
+    MR_geo_dzungaria (OIR)        48        12               0         %25
+    MR_geo_crimean_seat (CRI)     18         4               0         %22
+    MR_geo_heartland             263        50               0         %19
+    MR_geo_kazakh_steppe (KAZ)   183        28               0         %15
+    MR_geo_bashkiria (BSH)        28         2               0          %7
+    MR_geo_nogai_steppe (NOG)     98         3               0          %3
+
+Tarim'in neredeyse yarisi Taklamakan, Karakorum/Altun daglari ve Bosten/Lop
+golleri; motor bunlari `lakes` / `impassable_mountains` / `non_ownable`
+bloklarinda tutuyor (toplam 918 + 1868 + 153 lokasyon) ama definitions.txt
+onlari siradan province -> area -> region agacinin ICINE koyuyor. MGE de o
+topraklara hicbir zaman sahip degildi; delikler bolunmeden ONCE de oradaydi,
+tek renkli devasa mavi blobun icinde goze batmiyorlardi. change_location_owner
+her seyi dogru devretti - devredilecek toprak zaten o kadardi.
+
+KIRIM DA CIKMIS. Bir onceki turda "MGE Kirim'i tutmuyordu" diye tahmin
+etmistim, yanlis: CRI cikti ama MR_geo_crimean_seat sadece crimea_area, yani
+14 sahiplenilebilir lokasyon - listenin en kucugu, tasarim geregi
+(cografya dosyasi yedisan_area'yi bilerek disarida birakiyor).
+
+## SORU 2: YERLESIK DUNYA HIC GERI GELMIYORDU - GERCEK EKSIK
+
+Yazar "pers, anadolu falan niye ayrilmiyor, moğol patladiginda cikacak
+ulkeler tarihi devam ettirsin" dedi. Haklidiv: halef listesi sadece alti
+bozkir tag'iydi. MGE Faz 3 sonunda Persia'yi, Irak'i, Anadolu ayagini, Cin'in
+tamamini, Kore'yi, Tibet'i, Mancurya'yi ve Volga'yi tutuyor ve BUNLARIN HEPSI
+bolunmeden sonra da MGE'de kaliyordu. "Buyuk Dagilma"dan sonra haritada hala
+Siraz'dan Kanton'a uzanan bir imparatorluk duruyordu.
+
+Ustune, olcunce daha kotu bir sey cikti: mevcut haliyle bu situation'da
+COGU OYUNDA HICBIR SEY OLMUYOR. Kohezyon sadece Kaghan fiilen toprak
+kaybettiginde dusuyor, modda MGE'ye toprak kaybettiren hicbir sey yok (faz
+odulleri kalici buff, Faz 3 failsafe'i eksigi tamamliyor). Ve kisir dongu:
+Mogollara yonelmis tek koz olan cb_MR_carve_the_ulus kohezyon 55'te
+veriliyor, 55'in altina inmek icinse once bes ulus kaybetmis olman lazim.
+Imparatorlugu kirmaya yarayan alet, imparatorluk kirildiktan sonra
+dagitiliyordu. Sonuc: 1720 timeout -> MR_the_ulus_endures -> harita ayni.
+
+## YAZARIN UC KARARI (30.07)
+
+1. Kapsam: on uc degil, ON DORT tiyatro birden - bozkir alti + yerlesik sekiz.
+2. Kopus bicimi: KADEMELI, on_monthly icinde. Imparatorluk gozun onunde erisin.
+3. Takvim: yil VEYA gecen sure, hangisi once.
+
+3 numarada bir duzeltme yapmak zorunda kaldim ve yazara bildirildi: yil klozu
+GERCEK tarih OLAMAZ. Situation en erken 1600'de aciliyor ve gercek tarihlerin
+neredeyse hepsi (Kirim 1441, Kazak 1465, Safevi 1501, Kazan 1552, Nogay 1557,
+Joseon 1392) gecmiste kaliyor - hepsi ilk ay patlardi ve yay tek tike
+cokerdi. Cozum: SIRA tarihi tasiyor, gecen ay sayaci hizi belirliyor, yil
+klozu ise bir BACKSTOP merdiveni (1650 -> 1702, dorder yil) ve sadece gec
+acilan bir kampanyanin 1720 penceresini asmasini engelliyor.
+
+## NE YAPILDI
+
+- YENI: `in_game/common/scripted_effects/MR_partition_effects.txt`. Tiyatro
+  basina bir scripted effect (mr_return_crimea ... mr_return_tarim), her biri
+  kendi `mr_returned_*` global bayragini iceriden kontrol ediyor (idempotent).
+  BIR kez yazildi, IKI yerden cagriliyor: on_monthly (takvim) ve on_ending
+  (son supurge). Onceki halinde ayni on bir satir alti kez on_ending'in
+  icinde kopyalanmisti; on dorde cikinca iki yerde yirmi sekiz kopya olacakti.
+  NOT: EU5'te scripted_effects VAR (vanilla 10+ dosya, `$param$` destekli) -
+  bu mod bugune kadar hic kullanmamisti.
+
+- Tiyatroler ve mirascilar (hepsi 1650-1700'de o topragi FIILEN tutan guc):
+    +4y  Kirim (1441)                  CRI
+    +8y  Kazak (1465)                  KAZ
+    +12y Safevi Persia (1501) + Kafkas IRA
+    +16y Baskurt (1662)                BSH
+    +20y Orta Volga (1552/56)          RUS, yoksa MOS
+    +24y Nogay (1557)                  NOG
+    +28y Kuzeyde Rusya (1582-98)       RUS/MOS  (Sibirya + Ural + Rus topraklari)
+    +32y Osmanli (1638 Bagdat)         TUR      (Irak + Anadolu + Ermeni yaylasi)
+    +36y Mancurya (1616 Nurhaci)       QNG
+    +40y Congar (1634 Erdeni Batur)    OIR
+    +44y Tibet (1642 Ganden Podrang)   TIB
+    +48y Cin (1644 Qing Pekin'de)      QNG
+    +52y Kore (1392 Joseon)            KOR  (once cancel_subject, sonra supurge)
+    +56y Tarim (1680 Galdan Kasgar)    CHG
+
+- SIRALAMA YUK TASIYOR: kazan_area, bolghar_area ve bashkiria_area'nin
+  ust bolgesi ural_region, yani MR_geo_ural orta Volga'yi VE Baskurdistan'i
+  ICERIYOR. Baskurt (+16) ve orta Volga (+20) kuzey supurgesinden (+28) once
+  kosuyor; sira bozulursa Rusya Baskurtlari yutuyor. Ayni sebeple
+  MR_geo_pontic (steppes+caucasus) ve MR_geo_xinjiang (dzungaria+tarim)
+  tiyatro olarak HIC kullanilmiyor - her biri iki halefi iceriyor.
+
+- YENI ATOM (2): `MR_geo_caucasus` ve `MR_geo_middle_volga`. Ihtiyac duyulan
+  diger on iki cografya zaten dosyada vardi - atom dosyasinin varlik sebebi
+  tam olarak buydu.
+
+- YENI KIMLIK BLOGU (2): IRA (farsi_culture + shia; MZF/INJ ve CHB'den
+  attested) ve QNG (jurchen_culture + tungusic_shamanism; SIB'den attested).
+  RUS'a gerek yok, cunku sadece country_exists arkasinda adlandiriliyor.
+  TUR, TIB, KOR, MOS, MNG, CHI ve alti bozkir tag'i vanilla'da zaten kimlik
+  blogu tasiyor.
+
+- YENI GAME RULE: `MR_partition_schedule` (varsayilan ACIK). Kapatan oyuncu
+  kesintisiz world conquest yapabiliyor.
+
+- on_ending YENIDEN YAZILDI: cokus dali artik on dort effect'i sirayla
+  cagiran tek bir supurge. Ve hayatta kalma dali artik kohezyon >= 70 de
+  istiyor - yoksa Karakurum'un uzerinde 45 kohezyonla oturan bir Kaghan
+  1720'de timeout'a girip kalici MR_the_ulus_endures odulunu aliyordu.
+
+- on_ended on dort bayragi temizliyor; harita kirmizi cizgisi (tooltip) artik
+  on dort tiyatronun hepsini kapsiyor.
+
+- HARNESS: "scripted trigger refs resolve" -> "scripted trigger/effect refs
+  resolve". Bir scripted EFFECT ile bir scripted TRIGGER'in cagri sekli
+  ikisi de `X = yes` ve metinde ayirt edilemiyor; kontrol iki tanim kumesini
+  birden yukluyor, ustune bir de "tanimli ama hic cagrilmayan effect" ters
+  yon kontrolu ekledi.
+
+## BEKLENEN KOHEZYON MERDIVENI (tam imparatorluktan)
+
+    100 -> 92 (+4y) -> 80 (+8y, beat 85) -> 72 (+16y) -> 62 (+24y)
+        -> 54 (+28y, beat 55 ve carve CB) -> 42 (+40y) -> 30 (+56y,
+           beat 40 ve end trigger)
+
+Yani 1600'de acilan bir kampanyada dagilma ~1656'da tamamlaniyor. Situation
+artik kendi kendini bitiriyor ve butun ara mekanikleri (esik olaylari,
+kurultai, komsulara verilen CB) gercekten devreye giriyor.
+
+## SONRAKI TESTTE BAKILACAKLAR
+
+- Takvim gercekten calisiyor mu: situation acildiktan ~4 yil sonra Kirim,
+  ~8 yil sonra Kazak kopmali. Kopmuyorsa ilk suphe var:mr_partition_momentum
+  karsilastirmasi.
+- IRA ve QNG haritaya geliyor mu (KAZ'in D2 probunun aynisi, iki yeni tag).
+- KOR vassal ise cancel_subject calisiyor mu (overlord ?= { cancel_subject =
+  prev } - bu modda ilk kullanim).
+- Kohezyon merdiveni yukaridaki gibi mi iniyor, esik olaylari ve carve CB'si
+  siralamada dogru yerde mi ateşleniyor.
+- Halef rutbeleri hala acik: "County of Kazakh", "Chagatai Tribal Kingdom".
+  KARAR BEKLIYOR.
+- MEVCUT KAYIT YINE KULLANILAMAZ: mr_partition_collapsed o save'de set.

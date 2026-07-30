@@ -227,20 +227,36 @@ probs = [f"{h} referenced but not defined" for h in sorted(hint_refs - hints_def
 probs += [f"{h} loc missing" for h in sorted(hints_def) if h not in loc_keys]
 check("hint tags defined + loc'd", len(hint_refs) + len(hints_def), probs, min_count=6)
 
-# ---- scripted triggers resolve ----
+# ---- scripted triggers and effects resolve ----
 trig_def = set(re.findall(r"^([A-Za-z_0-9]+) = \{", strip_comments(read(MOD + "/in_game/common/scripted_triggers/MR_scripted_triggers.txt")), re.M))
+# `X = yes` is the call shape for BOTH a scripted trigger and a scripted
+# effect, and nothing in the text distinguishes them, so both definition
+# sets have to be loaded. The mod shipped no scripted_effects until the
+# Great Partition schedule (2026-07-30); the comment that used to say so
+# was a load-bearing assumption and is now wrong, which is why the
+# directory is globbed rather than named.
+eff_def = set()
+eff_files = sorted(_np(p) for p in glob.glob(MOD + "/in_game/common/scripted_effects/*.txt"))
+for p_ in eff_files:
+    eff_def |= set(re.findall(r"^([A-Za-z_0-9]+) = \{", strip_comments(read(p_)), re.M))
+defined = trig_def | eff_def
 probs, count = [], 0
 # NO prefix whitelist (audit C2, 2026-07-30): the old 11-prefix filter
 # verified 33 call sites and silently skipped 88 — including the entire
 # Great Partition trigger set, the exact block with zero in-game
-# evidence. Every `mr_* = yes` call is now compared against the defined
-# set; the mod ships no scripted_effects, so the shape is unambiguous.
+# evidence. Every `mr_* = yes` call is now compared against the defined set.
 for p, s in code.items():
     for m in re.finditer(r"\b(mr_[a-z_0-9]+|MR_percent_of_army_balance) = yes", strip_comments(s)):
         n = m.group(1)
         count += 1
-        if n not in trig_def: probs.append(f"{n} ({os.path.relpath(p, MOD)})")
-check("scripted trigger refs resolve", count, sorted(set(probs)), min_count=100)
+        if n not in defined: probs.append(f"{n} ({os.path.relpath(p, MOD)})")
+# A scripted effect nobody calls is dead code and the classic symptom of a
+# renamed call site, so the definitions are checked in both directions.
+called = set()
+for p, s in code.items():
+    called |= set(re.findall(r"\b(mr_[a-z_0-9]+) = yes", strip_comments(s)))
+probs += [f"{n} defined in scripted_effects but never called" for n in sorted(eff_def - called)]
+check("scripted trigger/effect refs resolve", count, sorted(set(probs)), min_count=100)
 
 # ---- modifiers: refs defined, defs used, loc'd ----
 mod_def = set(re.findall(r"^(MR_[A-Za-z_0-9]+) = \{", strip_comments(read(MOD + "/main_menu/common/static_modifiers/MR_modifiers.txt")), re.M))
@@ -342,6 +358,37 @@ for p_, s_ in code.items():
 # printed the FILE count while scanning zero occurrences. Prohibition
 # checks count the pattern itself; zero occurrences IS the target state.
 check("no any_owned_location with a bare geo predicate", count, sorted(set(probs)), min_count=0)
+
+# ---- ownerless ground must never read as "lost" ----
+# MEASURED IN GAME 2026-07-30 (first Great Partition test). The eight
+# mr_ulus_*_held triggers asked `NOT = { mr_in_claimant_realm = yes }`
+# directly on a location. That trigger opens with has_owner = yes, so
+# negating it turns "nobody can EVER own this" into "we have lost this" —
+# and default.map files 918 lakes, 1868 impassable mountains and 153
+# non_ownable locations inside the ordinary area/region tree, 50 of them
+# in mongolia_region alone. Every ulus read as lost from the first tick:
+# the endgame opened and resolved inside one month, cohesion computed to
+# zero, and half the successors spawned onto a map nobody had lost yet.
+#
+# The realm test is safe in the POSITIVE (an effect limit picking our own
+# ground, which is what on_ending does). Negated inside an iterator it
+# must go through `owner ?=`, which makes an ownerless location simply
+# not match — the shape mr_p2_*/mr_p3_*_cleared used all along, which is
+# why the Phase 1-3 goals were never hit by this.
+_BAD_REALM = re.compile(r"(?:NOT|NOR)\s*=\s*\{\s*mr_in_claimant_realm\s*=\s*yes\s*\}", re.S)
+_REALM_CANARY = "any_location_in_scripted_geography = {\n\tNOT = {\n\t\tmr_in_claimant_realm = yes\n\t}\n}"
+probs, count = [], 0
+# The canary is the exact shape that shipped. Without it a pattern that
+# quietly stopped matching would report a clean run forever — the vacuous
+# pass this harness exists to prevent.
+if not _BAD_REALM.search(_REALM_CANARY):
+    probs.append("CANARY FAILED: the pattern no longer matches the shape that shipped — fix the pattern, not the canary")
+for p_, s_ in code.items():
+    body = strip_comments(s_)
+    count += body.count("mr_in_claimant_realm")
+    for _m in _BAD_REALM.finditer(body):
+        probs.append(os.path.relpath(p_, MOD) + ": negated mr_in_claimant_realm reads ownerless ground as lost — use the owner ?= shape")
+check("mr_in_claimant_realm never negated in place", count, sorted(set(probs)), min_count=10)
 
 # ---- geography: regions/areas/locations exist in definitions ----
 defs = read(VAN + "/in_game/map_data/definitions.txt")

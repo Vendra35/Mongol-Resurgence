@@ -342,3 +342,50 @@ MR_geo_bashkiria = {
 		bashkiria_area
 	}
 }
+
+# =================================================================
+# THE GREAT PARTITION - THE SETTLED THEATRES
+# =================================================================
+# The steppe atoms above answer "which ulus is this". These two
+# answer the other half of the same situation: which SETTLED ground
+# goes back to the power that actually held it around 1650-1700.
+# Almost every theatre the partition needs is already named in this
+# file — persia, mesopotamia, western_reach, north_china,
+# song_china, manchuria, tibet, korea, russian_lands, ural,
+# siberian_marches — which is the whole reason the file exists. Only
+# two boundaries were missing, and both exist because an atom that
+# already covered the ground drew the WRONG line for this job.
+#
+# The Caucasus. MR_geo_pontic is steppes_region + caucasus_region in
+# ONE atom, and steppes_region contains crimea_area, astrakhan_area,
+# majar_area and lower_yik_area — the Crimean and Nogai successors.
+# Handing MR_geo_pontic to the Safavids would therefore swallow two
+# khanates whole. The Caucasus alone is what Persia held (Safavid
+# from 1501 to 1722), so it needs its own boundary.
+#
+# NOTE the overlap that is deliberate: armenian_highlands_area sits
+# inside caucasus_region and is also a member of MR_geo_western_reach
+# (the Ottoman theatre). Whichever fires first takes it, and the
+# schedule puts Persia before the Ottomans — which is the 1639 Treaty
+# of Zuhab line, Safavid east and Ottoman west, close enough that the
+# race is historically honest either way.
+MR_geo_caucasus = {
+	region = {
+		caucasus_region
+	}
+}
+
+# The middle Volga: Kazan and Bolghar, taken by Moscow in 1552 and
+# 1556. MR_geo_volga is kazan + bolghar + BASHKIRIA and is a Phase 3
+# goal, so it cannot be reused here — Bashkiria is its own successor
+# (BSH) and Russia must not take it on the way past. Note kazan_area
+# and bolghar_area are parented to ural_region, not to a Volga region
+# of their own; MR_geo_ural therefore CONTAINS this atom, and the
+# partition schedule deliberately runs Bashkiria and the middle Volga
+# BEFORE the Urals so the bigger atom only ever sweeps the remainder.
+MR_geo_middle_volga = {
+	area = {
+		kazan_area
+		bolghar_area
+	}
+}

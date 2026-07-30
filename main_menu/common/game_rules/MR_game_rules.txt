@@ -68,3 +68,26 @@ MR_mongol_buff_rule = {
 		flag = general_rule
 	}
 }
+
+# --- The Great Partition: does history resume on schedule? ---
+# Gates the partition's TIMED secessions — the fourteen theatres
+# that hand the empire back to the powers that actually held that
+# ground around 1650-1700. It is the same kind of switch as the
+# per-phase conquest automation above: the situation still opens,
+# still scores cohesion and still ends, but with the schedule off
+# nothing secedes until the empire genuinely comes apart.
+#
+# Default ON, because with it off the endgame is a 120-year no-op in
+# most games: cohesion only falls when the Khaghan actually LOSES
+# ground, and nothing in the mod makes a restored empire lose any.
+# OFF is for a player running a world conquest who does not want the
+# map taken back on a timer.
+MR_partition_schedule = {
+	default = MR_partition_schedule_yes
+	MR_partition_schedule_yes = {
+		flag = general_rule
+	}
+	MR_partition_schedule_no = {
+		flag = general_rule
+	}
+}
