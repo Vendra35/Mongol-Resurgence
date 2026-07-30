@@ -168,34 +168,66 @@ after that save existed, so `c:IRA` does not exist in it at all and
 *"country is not valid"*. **Any change under `setup/countries` means a new
 campaign is required to test it.**
 
-## STILL UNWRITTEN — the heir identity pass
+## EVERYTHING PLANNED IS NOW WRITTEN
 
-Specified in full, not yet in the code. The spec files are in the session
-scratchpad under `agents/`, `-f99-09-FINAL-heir-identity-spec.md` being the
-merged one, with a verified per-heir table.
+Nine commits today. The last four closed every item this page used to list
+as open:
 
-The heirs arrive with **no government type, no capital, no culture, no
-religion** — an identity block sets none of those at runtime. That is why CRI
-came out **Orthodox** despite its block saying `sunni`, why names render as
-"County of Kazakh", and why vanilla's `propose_ruler.txt:29` now errors forever
-(see the decoder).
+- **Heir identity.** Eight capitals, set after the sweep and each verified to
+  lie inside that heir's own grant — CRI `qarasuvbazar`, KAZ `shavgar`,
+  IRA `isfahan`, BSH `sterlitamak`, QNG `shenyang` then `dadu` when it takes
+  China, OIR `hoboksar`, CHG `yarkand`. Government type for the three tags that
+  have none in the 1337 setup: KAZ `steppe_horde`, IRA and QNG `monarchy`.
+  **MOS/RUS, NOG, TUR, TIB and KOR are deliberately untouched** — live 1337
+  countries whose capitals `set_capital` would MOVE. Every block says so.
+- **Cores.** All 22 handover loops now write vanilla's triple —
+  `change_location_owner` + `add_core` + `change_integration_level = core`
+  (`fall_of_delhi.txt:299-301`). They previously moved land and nothing else,
+  so every successor arrived at `integration_conquered`.
+- **Pop countries.** BSH is `country_type = pop`; a pop country holds pops, not
+  locations, and the handover was a silent no-op. `change_country_type = location`
+  runs first now.
+- **The silent-failure seal.** Effects no longer set their `mr_returned_*` flag
+  unless the ground actually went, so a failed handover retries instead of
+  sealing itself shut for the campaign.
+- **The cohesion currency is gone.** `mr_partition_concessions` deleted whole,
+  along with the two clamps that only existed to contain it. Cohesion is now
+  exactly 100 minus what has been lost, ratcheted, with nothing adding back.
+- **The kurultai pays in real things.** A: the ulus goes peacefully, stability
+  and legitimacy for the realm that remains. B: the modifier is the whole cost.
+  C: gold buys ten years of quiet instead of five (cooldown seeded at -60).
+  Its release chain calls the same `mr_return_*` effects the schedule calls, so
+  there is one handover path, not two.
+- **Pacing.** Steps cut 4 years → 3, order re-cut to the historical anchors.
+  The arc runs 1652–1691 instead of 1650–1702.
+- **AI personality.** `ai_defensive` when the partition opens, restored to
+  `ai_aggressive` in the survival branch. NOT `ai_cautious`/`ai_isolationist` —
+  those carry `ai_require_cb_for_war = yes` and could freeze a CB-less Khaghan.
+- **Successor map colours** in the situation map mode.
 
-**THE TRAP:** five of the heirs are live 1337 countries with working capitals —
-**MOS/RUS, NOG, TUR, TIB, KOR — DO NOT call `set_capital` on them.** Verified
-capital keys for the ones that do need it: CRI `qarasuvbazar`, KAZ `shavgar`,
-IRA `isfahan`, BSH `sterlitamak`, QNG `shenyang` then `dadu`, OIR `hoboksar`,
-CHG `yarkand`. Several obvious guesses are wrong: `bakhchisaray` does not exist,
-`ufa` is in `perm_area` and outside BSH's grant, `turkestan` is in
-`transoxiana_area`, `gulja` goes to KAZ.
+## THE ONLY THING STILL OPEN
 
-Also still open: the pacing table (the player finds the western theatres late),
-the AI personality swap at partition start, whether to strip the permanent Phase
-1–3 rewards, and successor map colours in the situation map mode.
+**The permanent Phase 1–3 reward modifiers** — The Kurultai's Mandate, The
+Sacred Capital Restored, Master Of The Steppe, The Yeke Mongol Ulus Restored,
+Mongol World Order. Their own tooltips promise permanence, and they are a large
+part of why a collapsing Khaghan is still unbeatable. Strip, weaken or leave —
+undecided, and it wants a measurement first: read what they actually give in
+`main_menu/common/static_modifiers/MR_modifiers.txt` before ruling.
 
-## NEXT TEST — fresh campaign, in this order
+## NEXT SESSION — test first, in this order, on a FRESH campaign
 
-1. Does Persia produce IRA on its backstop? (New campaign is the whole point.)
-2. Does Ufa go Bashkir? (`change_country_type = location` fix.)
-3. Do the successors hold their ground instead of dissolving? (cores fix.)
-4. Does cohesion fall monotonically and reach 40? (ratchet + concessions cap.)
-5. Do OIR (+40y) and CHG (+56y) spawn? Both are `country_type = army`, untested.
+An old save cannot test any of it: IRA and QNG cannot exist in a country
+database minted before they were added, and the schedule's flags may already be
+set there.
+
+1. **Does Persia produce IRA on its backstop (1658)?** This is the whole point
+   of the new campaign.
+2. **Does Ufa go Bashkir (1661)?** The `change_country_type = location` fix.
+3. **Do the successors hold together** instead of dissolving into separatism?
+   The cores fix.
+4. **Does cohesion fall monotonically and reach 40?** Ratchet, no buy-back.
+5. **Do OIR (+26y) and CHG (+41y) spawn?** Both are `country_type = army` and
+   neither has ever been reached in a test.
+6. **Do the heirs come out with the right religion, government and name?** CRI
+   should be Sunni now, not Orthodox; check the country panel, and check whether
+   the `propose_ruler.txt:29` error stops.

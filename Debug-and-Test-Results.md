@@ -1146,3 +1146,86 @@ lazim.
 - QNG'nin arma dosyasi yok, uretilmis arma cizecek (vanilla 280 karali tag'i
   armasiz gonderiyor, hata basmiyor). Isteniyorsa CHI armasi yeniden
   kullanilabilir - vanilla'nin kendi tercihi bu.
+
+##### 30.07.2026 (DORDUNCU TUR) ILK CANLI PARTITION KAYDININ COZULMESI #####
+
+Yazar 1650'de acilan gercek bir kampanyada partition'i izledi ve Object
+Inspector'dan degisken degerlerini verdi. Bir ajan yazarin autosave'lerini
+acip okudu. Bu turda tahmin yok; her bulgu ya kayittan ya save'den.
+
+## OLCULEN DURUM (momentum 131, sonra 240; yil 1670)
+
+    mr_partition_momentum      131 -> 240
+    MR_cohesion_score           80
+    mr_partition_concessions    10        <- her seyin anahtari
+    mr_leading_country          MGE
+
+## DORT BULGU
+
+1. TAKVIM CALISIYOR ama HER SEYI BACKSTOP TARIHLERI ATESLEDI. Momentum klozu
+   bu kampanyada hicbir seyi ateslemedi - dort yillik adimlar merdivenin hep
+   gerisinde kaldi. 1670'te tikli olan alti bayrak tam olarak backstop'lari
+   1670 ve oncesi olanlar: 1650/1654/1658/1662/1666/1670.
+
+2. PERS TETIKLENDI AMA HICBIR SEY TASIMADI. 1658.2'de calisti, 875 talip
+   lokasyonunu supurdu, hicbirini tasimadi. Sebep: 679 MB'lik save'de IRA
+   ULKE NESNESI YOK. Konsol: "tag IRA -> country is not valid".
+   ULKE VERITABANI KAMPANYA KURULURKEN BIR KEZ BASILIYOR. IRA ve QNG
+   bloklari o kampanyadan sonra eklendi, dolayisiyla o kayitta hic var
+   olmadilar. KAZ calisiyor cunku onun blogu kampanyadan onceydi - id 2340'ta
+   oturuyor, vanilla'nin tam 2339 kimlik blogundan sonraki ilk id.
+   BU KAYITTA DUZELTILEMEZ. Yeni kampanya sart.
+
+3. UFA HALA MOGOL, mr_returned_bashkiria SET. Kampanya yasiyla aciklanmiyor:
+   BSH vanilla tag'i, id 2253. Sebep BASKA ve gercek: BSH
+   country_type = pop. Pop tipi ulkeler (vanilla'da 448 tane) POP sahibi,
+   lokasyon sahibi degil; change_location_owner onlara sessizce hicbir sey
+   yapmiyor.
+
+4. KOHEZYON GERI YUKSELIYOR. Kurultai'nin iki secenegi concessions'a ekliyordu
+   (+25 otonomi, +10 altin) ve skor 100 - kayip + concessions olarak
+   hesaplaniyordu. Aritmetik birebir: 100 - 8 (Kirim) - 12 (Kazak) - 10
+   (Nogay) + 10 = 80. Momentum 260'ta 100'e donmesi art arda kurultai.
+   Ve kurultai'nin KENDI release kodu vardi - takvimden once yazilmis,
+   bayrak kurmayan, mr_in_claimant_realm ile sinirli (yani INSAN vassalinin
+   topragini alabilen), core vermeyen, on dort tiyatronun sadece altisini
+   bilen bir kopya. Nogay'i o birakti, momentum 288 hic gecilmeden.
+
+## YANLIS CIKAN IKI OKUMAM (kayit icin)
+
+- "Nogay zaten haritadaydi, canli vanilla ulkesi" - HAYIR. NOG'un 1337 blogu
+  var ama Faz 3 sonunda topraklari Mogol'daydi; onu kurultai birakti.
+- "mr_partition_takeable olu olabilir" - HAYIR. Yazar Kuban ve Yedisan'in
+  Kirim renginde oldugunu dogruladi, oraya SADECE takvim gidebiliyor.
+  Trigger saglam.
+
+## YAZILANLAR
+
+- 22 devir dongusunun hepsine vanilla ucluau: change_location_owner +
+  add_core + change_integration_level = core (fall_of_delhi.txt:299-301,
+  bir situation'in ardil devlet cikarmasi). Oncesinde add_core sayisi
+  dosyada SIFIRDI - her halef integration_conquered seviyesinde,
+  ayrilikcilikla doguyordu.
+- BSH'ye once change_country_type = location.
+- Bayrak artik sadece atomda talip topragi kalmadiysa dusuyor. Sessiz
+  basarisizlik bir daha kalici olamaz.
+- mr_partition_concessions KOMPLE SILINDI - degisken, seed, temizlik, aylik
+  terim, ve onu zapt etmek icin konulan +15 tavani ile 92 tabani. Kohezyon
+  artik tam olarak 100 - kayip, mandal, geri ekleyen hicbir sey yok.
+- Kurultai kendi release kopyasini birakti, takvimin effect'lerini cagiriyor.
+  Uc secenek gercek seyler oduyor: A istikrar+mesruiyet (ulus barisçil
+  gidiyor), B modifier'in kendisi, C on yillik sessizlik (cooldown -60).
+- Sekiz halefe baskent, uc tanesine hukumet tipi. MOS/RUS, NOG, TUR, TIB,
+  KOR'a BILEREK dokunulmadi - yasayan 1337 ulkeleri.
+- Hiz: adim 4 -> 3 yil, sira tarihsel capalara gore yeniden kesildi.
+  Yay 1652-1691 (onceden 1650-1702). Rusya 1664 ve 1670.
+- Partition acilinca Kagan ai_defensive, hayatta kalirsa ai_aggressive.
+- Situation harita modunda halefler kendi renklerini koruyor.
+
+## HALA ACIK
+
+- Kalici Faz 1-3 odul modifierlari: strip mi, zayiflat mi, birak mi. Once
+  ne verdiklerinin olculmesi lazim.
+- OIR (+26y) ve CHG (+41y) hic test edilmedi, ikisi de country_type = army.
+- Haleflerin dini/ismi: CRI ortodoks doguyordu, baskent + hukumet tipi
+  yazildi ama duzelip duzelmedigi olculmedi.
