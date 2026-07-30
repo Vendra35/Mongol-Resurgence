@@ -537,7 +537,7 @@ mongol_dominance = {
 						NOT = {
 							has_game_rule = MR_buff_enabled
 						}
-						var:mr_dom_conquest_cooldown > 60
+						var:mr_dom_conquest_cooldown > 36
 					}
 				}
 				any_country = {

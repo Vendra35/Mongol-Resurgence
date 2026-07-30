@@ -353,7 +353,7 @@ mongol_imperial = {
 						}
 						relative_defensive_alliance_strength = {
 							target = c:MGO
-							value < 1.5
+							value < 1.2
 						}
 						OR = {
 							has_presence_in = scripted_geography:MR_geo_khorasan
