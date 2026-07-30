@@ -180,6 +180,29 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   54 (beat 55, CB) → 42 → 30 (beat 40, end).
   `on_ending`'s survival branch now also requires cohesion ≥ 70, or a gutted
   empire timing out at 1720 would collect `MR_the_ulus_endures`.
+  **What the Khaghan is left holding: 379 locations, computed and independently
+  re-computed** — `mongolia_region` 213 (Karakorum) + transoxiana 96 + khwarazm
+  32 + badakhshan 38 (Samarkand). **Nothing at all in `steppes_region`.** Three
+  atoms added 2026-07-30 for exactly that (`MR_geo_safavid_khorasan`,
+  `MR_geo_kuban_and_yedisan`, `MR_geo_pontic_frontier`), FOLDED into the
+  persia / crimea / north theatres rather than given slots of their own — three
+  more slots would push the ladder to 17 entries and 1714 and buy nothing. The
+  rump is the real 1700 map: Khalkha Mongolia, and Bukhara and Khiva, which
+  were ruled by **Chinggisids** (Janids to 1747, Arabshahids to 1740). Two of
+  the seven railroad seats survive, Karakorum and Samarkand; Sarai al-Jadid
+  goes because New Sarai had been a ruin since 1395 and a 42-location exclave
+  4000 km from Karakorum is not a settlement.
+  **The Khaghan feels it**: three decline tiers (`MR_the_centre_cannot_hold` /
+  `MR_the_uluses_drift` / `MR_khaghan_in_name_only`) granted inside the 85/55/40
+  beats that already fire, each replacing the last, all three removed at the top
+  of `on_ending` on EVERY exit — a pressure gauge, not a phase reward. **And the
+  successors get 25 years of `MR_ulus_of_its_own`**, which is the clause that
+  makes the schedule mean anything: a 14-location Crimea beside a superpower
+  carrying permanent phase rewards is lunch, and the map churns back to a blob.
+  Ranks are set at the handover with vanilla's `set_country_rank_effect` (an
+  upgrade-only ratchet): IRA/TUR/RUS-or-MOS/QNG to empire, KAZ and QNG's first
+  Manchurian step to kingdom; CRI, NOG, BSH, OIR, CHG, TIB and KOR already
+  carry the right rank in vanilla's setup.
   **Its end trigger is three clauses, and the pair matters**: Karakorum out of
   the realm (the SEAT, read backwards from Phase 1's clause) OR
   `MR_cohesion_score < 40`. Karakorum alone can never fire in practice — it
@@ -490,6 +513,54 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   `every_country` (the whole map — only when the ANSWER must be a country).
 - `owns` vs `controls`: events overwhelmingly use `owns` (ownership), `controls` is
   military occupation. Phase goals use `owns`.
+- **A formable is NOT a tag registration; EU5 has TWO country registries.**
+  `in_game/setup/countries/` (2339 tag blocks in 45 files) is what makes
+  `c:TAG` resolvable at runtime; `main_menu/setup/start/10_countries.txt` is
+  what gives a country land, a ruler and a starting RANK. `common/formable_countries/`
+  is neither — it supplies name/flag/adjective/colour to a country that already
+  exists, and 94 of vanilla's 143 formable target tags appear in no registry at
+  all. So a formable does not save you: `change_location_owner = c:IRA` still
+  needs the identity block (measured here as `country_manager.cpp:206 Unknown
+  country`, and measured fixed when KAZ spawned 2026-07-30). Corollary: a spawn
+  by `change_location_owner` never runs the formable's `form_effect`, so
+  anything that effect would have done — rank, modifiers — must be done by hand.
+- **Rank is never automatic, and rank alone will not fix a bad country name.**
+  `set_country_rank_effect = { rank = country_rank:rank_X }` is vanilla's
+  upgrade-only ratchet (its `limit` is `country_rank_level < 2/3/4`), it
+  bypasses the rank's own `allow` block (vanilla sets `rank_kingdom` on
+  one-location revolters, `fall_of_delhi.txt:167`), and nothing in the engine
+  promotes or demotes on its own. But the DISPLAYED name comes from two chained
+  first-match tables — `country_name_construction.txt` picks the shape,
+  `country_ranks.txt` picks the noun — and **`government type` decides more of
+  it than rank does**. `rank_empire_tribe` ("Tribes") outranks every culture
+  branch, so a tribe-government heir promoted to empire renders "Persian
+  Tribes". A spawned tag with no authored government is the root cause of
+  "County of Kazakh", and rank only moves it to "Sultanate of Kazakh".
+  Note also `MR_l_english.yml` overrides `rank_empire_horde` to "Empire"
+  GLOBALLY, which is why MGE reads right — and why vanilla OIR, a steppe horde
+  that starts at `rank_empire`, reads "Oirat Empire" from 1337.
+- **Some modifier tags silently no-op on the wrong government.**
+  `monthly_legitimacy` and `monthly_horde_unity` bite only where
+  `government_power` is that resource (`government_types/00_default.txt:100`),
+  and there is no universal fallback — `monthly_government_power` is 0 of 2437
+  tags. `horde_unity_hit_at_ruler_death` is worse: it is a NEGATIVE-is-worse
+  tag whose steppe-horde base is `-50`, and the engine applies the succession
+  hit only while the total is below zero (`_hardcoded.txt:3539`), so vanilla's
+  `+50` in `horde_civil_war.txt:68` CANCELS the penalty. Writing `+50` to
+  "punish" a Khaghan makes his successions painless.
+  `ai_months_between_wars` is an additive DELTA, not an absolute count
+  (`00_ai_personalities.txt:2-3`, and `:26` writes `-12`).
+  `global_hostile_attrition` is `already_percent = yes` — `1` means one point,
+  not 100%.
+- **`add_country_modifier` takes a `size` multiplier, but do not reach for it
+  to build a scaling debuff.** "size multiplies every value in the modifier" is
+  inferred, never stated by `effects.log`, and a wrong inference corrupts every
+  tag in the block at once. The guarded-swap variants need either a numeric
+  `var:X = var:Y` (ZERO vanilla attestations — all three vanilla uses compare
+  COUNTRIES) or `set_to_largest_and_extend`, attested only with a finite
+  duration. Use a **tier ladder**: literal modifiers of increasing strength
+  swapped with `mode = replace` as a variable crosses thresholds. Each tier is
+  individually citable and individually readable in the tooltip.
 - **`in_game/common/scripted_effects/` exists and is the answer to copy-pasted
   effect blocks** (vanilla ships 10+ files there; parameters are `$name$`
   substitution, `___test_effects.txt`). Note the trap: a scripted EFFECT and a

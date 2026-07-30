@@ -418,11 +418,27 @@ MR_the_ulus_endures = {
 # subtracts from mr_partition_concessions, so cohesion falls faster and
 # more uluses break away at the end. Same pressure, expressed where the
 # situation can actually resolve it.
+# AUDIT 2026-07-30: the block below used to carry
+# `monthly_rebel_growth = 0.005`, i.e. it did the one thing the comment
+# above it forbids, on an option the AI takes 40% of the time, for 25
+# years. Two comments in this mod contradicted each other over it - the
+# option's own comment at MR_partition_events.txt:331 said the realm
+# "pays for the refusal in unrest". The rule wins; the line is gone.
+#
+# WHAT REPLACED IT, and why not the obvious thing. subject_loyalty is a
+# DEAD lever on this claimant: six MR modifiers already push it +25,
+# +50 or +100, several of them permanent phase rewards, so a -15 moves
+# nothing a player would notice. The substitutes are levers with no
+# counterweight anywhere in the mod - the cabinet the ulus khans staff,
+# and the control they were enforcing - plus a deeper cut to the
+# situation's OWN gauge, which is where the comment above always said
+# the real cost belonged.
 MR_kurultai_defied = {
 	game_data = {
 		category = country
 	}
-	monthly_rebel_growth = 0.005
+	country_cabinet_efficiency = -0.2
+	global_max_control = -0.05
 	monthly_legitimacy = -0.5
 	monthly_horde_unity = -0.5
 }
@@ -547,4 +563,168 @@ MR_path_of_the_qadis = {
 		category = country
 	}
 	monthly_gold_income = 10
+}
+
+# =================================================================
+# THE GREAT PARTITION - THE KHAGHAN'S DECLINE (three tiers)
+# =================================================================
+# The strain of holding an empire that has stopped answering. Granted
+# by the situation inside the three threshold beats it already fires
+# (85 / 55 / 40), each tier replacing the one before it, and REMOVED
+# in on_ending: this is a pressure gauge, not a phase reward, and
+# unlike MR_the_ulus_endures it must not outlive the situation.
+#
+# WHY THREE LITERAL BLOCKS AND NOT ONE SCALED MODIFIER. The engine
+# does take a `size` multiplier on add_country_modifier, and a single
+# block scaled by cohesion would be prettier. It was rejected on
+# evidence: "size multiplies every value in the modifier" is inferred,
+# never stated by effects.log, and a wrong inference there silently
+# corrupts every tag at once. The guarded-swap variants need either a
+# numeric `var:X = var:Y` comparison (ZERO vanilla attestations - all
+# three vanilla uses compare COUNTRIES) or `set_to_largest_and_extend`
+# with an infinite duration (attested only with years = 50). Three
+# literal blocks are individually citable and individually readable in
+# the tooltip, which is worth more here than elegance.
+#
+# NOT ONE UNREST TAG IN ANY OF THE THREE. No monthly_rebel_growth, no
+# global_separatism, no local_unrest, no pop_join_rebel_threshold, and
+# deliberately NOT `has_complacency_effects = yes` either - that
+# switch routes into pop_join_rebel_threshold = 0.1 through
+# auto_modifiers/country.txt:456, which quietly imports the whole
+# vanilla decline family the house rule exists to keep out.
+#
+# TWO LEVERS DELIBERATELY ABSENT, because they are DEAD on this
+# claimant: subject_loyalty (MR_unified_mongol_banner already gives a
+# permanent +25 and MR_great_khan another +100, so subjects sit pinned
+# at the cap and a -25 moves nothing) and aggressiveness_modifier
+# (netted against +1 from MR_great_khan and +1 from
+# MR_imperial_historical_modifier). ai_months_between_wars and
+# carefulness_modifier do that job with no counterweight.
+#
+# Vanilla citations below: country.txt = main_menu/common/static_modifiers/country.txt,
+# hcw = in_game/common/disasters/horde_civil_war.txt,
+# coup = in_game/common/disasters/coup_attempt.txt,
+# succ = in_game/common/disasters/succession_crisis.txt,
+# aip = in_game/common/ai_personalities/00_ai_personalities.txt.
+
+# --- Tier 1, cohesion below 85: the first crack ---
+MR_the_centre_cannot_hold = {
+	game_data = {
+		category = country
+	}
+	global_crown_estate_power = -0.2		# hcw:66
+	country_cabinet_efficiency = -0.2		# coup:26
+	court_spending_efficiency = -0.2		# coup:27
+	global_max_control = -0.1			# country.txt:1675
+	global_levy_size_modifier = -0.1		# country.txt:8666
+	discipline = -0.05				# country.txt:3093
+	monthly_prestige = -0.2				# country.txt:9694
+}
+
+# --- Tier 2, cohesion below 55: the uluses stop answering ---
+# ai_months_between_wars is an additive DELTA, not an absolute count:
+# 00_ai_personalities.txt:2-3 says the values stack additively, and
+# :26 writes -12, which is impossible for an absolute month figure.
+# +12 here is ai_defensive's own value (aip:75).
+#
+# horde_unity_hit_at_ruler_death must be NEGATIVE to hurt. The steppe
+# horde base is -50 (government_types/00_default.txt:106) and the
+# engine applies the succession loss only while the TOTAL is below
+# zero (_hardcoded.txt:3539-3545). Vanilla's horde_civil_war.txt:68
+# writes +50 precisely to net the total to zero and CANCEL the loss -
+# it is disaster mitigation. Writing +50 here would make the Khaghan's
+# successions painless, the exact opposite of a partition.
+MR_the_uluses_drift = {
+	game_data = {
+		category = country
+	}
+	global_crown_estate_power = -0.33		# country.txt:7420
+	country_cabinet_efficiency = -0.33		# country.txt:1191
+	court_spending_efficiency = -0.2		# coup:27
+	global_max_control = -0.1			# country.txt:1675
+	global_levy_size_modifier = -0.33		# country.txt:11803
+	army_reinforce_efficiency = -0.25		# country.txt:8860
+	discipline = -0.1				# hcw:65
+	land_morale_modifier = -0.1			# country.txt:7359
+	monthly_war_exhaustion = 0.15			# country.txt:8665
+	monthly_horde_unity = -0.05			# country.txt:8858
+	horde_unity_hit_at_ruler_death = -25
+	antagonism_received_modifier = 0.2		# country.txt:559
+	carefulness_modifier = 0.25			# aip:73
+	ai_months_between_wars = 12			# aip:75
+	blocked_from_creating_subjects = yes		# succ:59
+}
+
+# --- Tier 3, cohesion below 40: Khaghan in name only ---
+MR_khaghan_in_name_only = {
+	game_data = {
+		category = country
+	}
+	global_crown_estate_power = -0.5		# country.txt:9698
+	country_cabinet_efficiency = -0.33		# country.txt:1191
+	court_spending_efficiency = -0.2		# coup:27
+	global_max_control = -0.1			# country.txt:1675
+	global_levy_size_modifier = -0.45		# country.txt:8430
+	global_mercenaries_modifier = -0.75		# country.txt:8431
+	army_maintenance_efficiency = -0.25		# country.txt:5413
+	army_reinforce_efficiency = -0.25		# country.txt:8860
+	army_tradition_decay = 0.001			# country.txt:7421
+	discipline = -0.1				# hcw:65
+	land_morale_modifier = -0.1			# country.txt:7359
+	monthly_war_exhaustion = 0.15			# country.txt:8665
+	monthly_horde_unity = -0.05			# country.txt:8858
+	horde_unity_hit_at_ruler_death = -25
+	monthly_prestige = -0.5				# country.txt:4867
+	monthly_diplomats = -0.2			# country.txt:6076
+	antagonism_received_modifier = 0.5		# country.txt:9696
+	global_integration_speed_modifier = -0.5	# country.txt:5144
+	annexation_speed_modifier = -0.15		# country.txt:2555
+	global_war_score_efficiency = -0.1		# country.txt:1930
+	stability_cost_efficiency = -0.33		# country.txt:8981
+	carefulness_modifier = 0.3			# aip:94
+	ai_months_between_wars = 24			# aip:141
+	blocked_from_creating_subjects = yes		# succ:59
+}
+
+# =================================================================
+# THE GREAT PARTITION - A SUCCESSOR'S FIRST GENERATION
+# =================================================================
+# Twenty-five years of grace for an ulus that has just walked out of
+# the Khaghan's realm. This is the lever that makes the schedule mean
+# anything: without it a fourteen-location Crimea sitting next to a
+# superpower carrying PERMANENT phase rewards is simply lunch, and the
+# map churns straight back to a blob.
+#
+# Shape and content follow vanilla's own and only literal
+# newly-independent modifier, sco_independence_from_england
+# (country.txt:5906-5914); the 25-year grant shape is
+# iro_strong_tribal_unity (flavor_IRO.txt:811).
+#
+# DEFENSIVE, NOT OFFENSIVE, on purpose - a successor should be
+# expensive to reconquer, not able to go conquering. And NO
+# monthly_legitimacy or monthly_horde_unity, however tempting: those
+# bite only where government_power is legitimacy or horde_unity
+# respectively (government_types/00_default.txt:100), and these heirs
+# arrive with no authored government type at all, so either could be a
+# silent no-op. There is no universal fallback - monthly_government_power
+# returns 0 of 2437 tags in modifiers.log. Every line below is live on
+# any government.
+#
+# global_hostile_attrition is already_percent = yes
+# (00_modifier_types.txt:5352): 1 means one point of attrition, not
+# 100%. Do not "fix" it to 0.01.
+MR_ulus_of_its_own = {
+	game_data = {
+		category = country
+	}
+	monthly_prestige = 0.5				# country.txt:5910
+	global_monthly_control = 0.005			# country.txt:5913
+	global_defensive = 0.25				# country.txt:6085
+	fort_maintenance_efficiency = 0.4		# country.txt:6084
+	global_hostile_attrition = 1			# country.txt:6095
+	global_garrison_size_modifier = 0.25		# country.txt:12462
+	global_levy_size_modifier = 0.2			# country.txt:5040
+	levy_recovery_modifier = 0.33			# country.txt:770
+	discipline = 0.1				# country.txt:2933
+	land_morale_modifier = 0.1			# country.txt:3140
 }

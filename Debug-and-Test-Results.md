@@ -1011,3 +1011,138 @@ kurultai, komsulara verilen CB) gercekten devreye giriyor.
 - Halef rutbeleri hala acik: "County of Kazakh", "Chagatai Tribal Kingdom".
   KARAR BEKLIYOR.
 - MEVCUT KAYIT YINE KULLANILAMAZ: mr_partition_collapsed o save'de set.
+
+##### 30.07.2026 (UCUNCU TUR) COKUS DEBUFFU, HALEF KORUMASI, RUTBE, SON UC TIYATRO #####
+
+Ultracode workflow: 6 paralel arastirma + her birine ayri bir DUSMAN dogrulayici
++ tek sentez = 13 ajan, 0 hata, ~2.08M token, 799 tool cagrisi. Dogrulayicilar
+toplam 58 iddiayi curuttu ve sentez ajani curutulenlerin tarafini tuttu.
+Harness 34 -> 34, hepsi yesil.
+
+## ARASTIRMANIN DUZELTTIGI DORT SEY
+
+- `size` CARPANI ILE OLCEKLENEN TEK MODIFIER REDDEDILDI. add_country_modifier
+  gercekten `size` aliyor ama "size modifierdaki her degeri carpar" iddiasi
+  CIKARIM, effects.log hicbir yerde soylemiyor - yanlis cikarim butun taglari
+  ayni anda sessizce bozar. Korumali takas varyantlari da olmuyor: biri sayisal
+  `var:X = var:Y` istiyor (vanilla'da SIFIR ornek - uc kullanimin ucu de ULKE
+  karsilastiriyor), digeri `set_to_largest_and_extend`, o da sadece SONLU sure
+  ile attested. Secilen: UC KADEMELI MERDIVEN, mode = replace ile takas.
+- `horde_unity_hit_at_ruler_death` ISARETI TERS. steppe_horde tabani -50
+  (government_types/00_default.txt:106) ve motor kaybi sadece TOPLAM sifirin
+  altindayken uyguluyor (_hardcoded.txt:3539-3545). Vanilla'nin
+  horde_civil_war.txt:68'deki +50'si tam olarak toplami sifira cekip cezayi
+  IPTAL ediyor - felaket hafifletmesi. Kaghan'a +50 yazmak veraset gecislerini
+  agrisiz yapardi, yani tam tersi. -25 yazildi.
+- `ai_months_between_wars` MUTLAK DEGIL, TOPLAMSAL DELTA
+  (00_ai_personalities.txt:2-3 acikca soyluyor, :26 -12 yaziyor ki mutlak ay
+  sayisi olarak imkansiz). difficulty.txt'deki 60/24/6 kuresel taban, kopyalanacak
+  rakam degil. Kademe 2'ye +12 (ai_defensive), kademe 3'e +24 (ai_isolationist).
+- IKI KOL OLU CIKTI. `subject_loyalty` MR_unified_mongol_banner'in KALICI +25'i
+  ve MR_great_khan'in +100'u yuzunden tavana yapisik - -25 hicbir seyi
+  oynatmiyor. `aggressiveness_modifier` de MR_great_khan +1 ve
+  MR_imperial_historical_modifier +1'e karsi netleniyor. Ikisi de kullanilmadi;
+  yerlerine `ai_months_between_wars` ve `carefulness_modifier`, bunlarin karsi
+  agirligi yok.
+
+## YAZILANLAR
+
+- UC KADEMELI COKUS (MR_modifiers.txt): MR_the_centre_cannot_hold (<85),
+  MR_the_uluses_drift (<55), MR_khaghan_in_name_only (<40). Mevcut 85/55/40
+  esik beat'lerinin ICINDE veriliyor - o bloklar zaten claimant'a scope'lu,
+  zaten kendi global bayragiyla korunmus, zaten bir kez atesleniyor; yeni
+  aylik tarama YOK. Ucu de on_ending'in EN BASINDA, her iki daldan da once
+  kaldiriliyor: bu bir basinc gostergesi, faz odulu degil.
+  HICBIRINDE tek bir isyan tag'i yok - monthly_rebel_growth, global_separatism,
+  local_unrest, pop_join_rebel_threshold hicbiri. `has_complacency_effects`
+  de bilerek yok: o anahtar auto_modifiers/country.txt:456 uzerinden
+  pop_join_rebel_threshold = 0.1'e baglaniyor, yani vanilla'nin butun
+  gerileme ailesini arka kapidan iceri aliyor.
+  56 tag'in hepsi harness'in "modifier tags exist in engine docs" kontrolunden
+  gecti (301 item).
+
+- HALEF KORUMASI: MR_ulus_of_its_own, 25 yil, on dort tiyatronun her birinde.
+  Sekli vanilla'nin tek gercek "yeni bagimsiz ulke" modifier'i
+  sco_independence_from_england (country.txt:5906-5914), 25 yillik verme sekli
+  iro_strong_tribal_unity (flavor_IRO.txt:811). SAVUNMACI, saldirgan degil.
+  monthly_legitimacy ve monthly_horde_unity BILEREK YOK: o taglar sadece
+  government_power o kaynak olan ulkelerde isliyor ve haleflerin hukumet tipi
+  hic yazilmamis durumda - evrensel karsiligi da yok (monthly_government_power
+  modifiers.log'da 0/2437).
+  Bu kol takvimin anlamli olmasini saglayan sey: 14 lokasyonluk bir Kirim'in
+  yaninda KALICI faz odulleri tasiyan bir super guc varsa takvim toprak verir,
+  AI ertesi ay geri alir.
+
+- RUTBE: vanilla'nin set_country_rank_effect'i (yalnizca-yukselten mandal,
+  country_rank_level < N korumali). IRA / TUR / RUS-veya-MOS / QNG(Cin) ->
+  empire; KAZ ve QNG'nin ilk Mancurya adimi -> kingdom. CRI, NOG, BSH, OIR,
+  CHG, TIB, KOR zaten vanilla setup'inda dogru rutbede - onlara cagri yok.
+  KAZ bilerek kingdom: MR_l_english.yml:311 rank_empire_horde'u KURESEL olarak
+  "Empire" yapiyor, rank_kingdom_horde'a dokunulmamis, yani kingdom KAZ
+  "Kazakh Horde" okunuyor.
+  KORE'ye bilerek cagri yok: promote edilse rank_empire_korean cikardi, o da
+  1897.
+
+- SON UC TIYATRO (kullanicinin steppes_region tespiti). Uc yeni atom,
+  MEVCUT tiyatrolara katlanarak - uc yeni slot merdiveni 17 girise ve 1714'e
+  tasirdi, uc yeni bayrak, uc yeni on_ended temizligi ve oyuncuya gorunen kural
+  aciklamasinin yeniden yazilmasini isterdi:
+    MR_geo_safavid_khorasan  (dogu+bati Khorasan, 96)  -> IRA, slot 3
+    MR_geo_kuban_and_yedisan (yedisan+pryazovia+matrega, 64) -> CRI, slot 1
+    MR_geo_pontic_frontier   (kursk+sloboda+zaporizhzhia+lower_don+azov, 145)
+                                                        -> RUS/MOS, slot 7
+  Ve situation'in tooltip blogundaki atom listesine ucu de eklendi - o liste
+  CLAUDE.md'nin saydigi altinci tuketici ve en cok atlanan yer.
+
+## SONUC: KAGHAN'IN ELINDE KALAN 379 LOKASYON (bagimsiz olarak iki kez hesaplandi)
+
+    mongolia_region  213   dokuz alanin hepsi, Karakurum icinde
+    khorasan_region  166   transoxiana 96 (Semerkant) + khwarazm 32
+                           + badakhshan 38
+    steppes_region     0
+
+  Yedi raylı-yol koltugundan IKISI kaliyor: Karakurum ve Semerkant. Ucu de
+  gercekten Cinggisid: Halha Mogolistan, Buhara (Canogullari 1747'ye kadar) ve
+  Hive (Arabsahiler 1740'a kadar). Sarai al-Jadid gidiyor cunku Yeni Sarai
+  1395'ten beri harabe ve Karakurum'a 4000 km uzakta 42 lokasyonluk bir eksklav
+  tarihsel bir yerlesim degil - Anno 1644 modu da sarai_al_jadid'i Rusya'ya
+  veriyor.
+
+  NOT: 379 bir TABAN, kesin rakam degil. 684/379 hesabi ATOM BIRLESIMININ
+  artigi; 29 atomun disinda fethedilen her sey (Hindistan, Misir, Avrupa) hic
+  geri verilmiyor ve mr_partition_takeable bir INSAN vassalinin topragini
+  bilerek hic almiyor.
+
+## BULUNAN CANLI KURAL IHLALI (KARAR BEKLIYOR, DOKUNULMADI)
+
+MR_modifiers.txt:425 -> MR_kurultai_defied icinde `monthly_rebel_growth = 0.005`,
+ve TAM USTUNDE 14 satirlik bir yorum (411-424) "bedel bilerek isyan DEGIL...
+AI'a %40 sansli bir secenekle isyan buyumesi vermek her seyi ayni anda
+bozardi" diyor. Kod yorumun yasakladigi seyi yapiyor. Canli:
+MR_partition_events.txt:340'ta ai_chance 40 olan secenege 25 yil veriliyor, ve
+o secenegin kendi yorumu da (satir 331) "realm pays for the refusal in unrest"
+diyor - yani modun ici iki yorumla kendisiyle celisiyor.
+Kardes dort ornek: MR_imperial_failure_ai/_player ve
+MR_dominance_failure_ai/_player (+0.0025). Bunlar BASARISIZLIK durumu
+modifierlari, yani raylı yol zaten bitmis - savunulabilir, ama ayni ruling
+lazim.
+
+## HALA ACIK
+
+- HALEFLERIN HUKUMET TIPI VE BASKENTI YAZILMAMIS. "County of Kazakh"in kok
+  sebebi bu; rutbe onu ancak "Sultanate of Kazakh"a tasir. Isim asil hukumet
+  tipinden geliyor. Vanilla kendi cozumunu gosteriyor: spawn sonrasi
+  set_capital + change_country_type + change_government_type
+  (flavor_chi.txt:2543-2550, late_ming_crisis.txt:307-313). MR'in uc partition
+  dosyasinda bu ucunden HICBIRI yok, add_core ve set_new_ruler da yok.
+- `rank_empire_tribe` = "Tribes" ve butun kultur dallarinin ustunde. Hukumet
+  tipi yazilmadigi surece empire'a cikan bir halef "Persian Tribes" okunabilir.
+- `horde_unity_hit_at_ruler_death = -25` buyuklugu attested degil (vanilla'da
+  sadece -50 taban ve +50 hafifletme var). Veraset kaybi cok sertse -10 yap.
+- MR_l_english.yml:311'in kuresel rank_empire_horde -> "Empire" override'i
+  vanilla OIR'i de etkiliyor (OIR 10_countries.txt:48920'de rank_empire ile
+  basliyor), yani "Oirat Empire" partition hic calismadan once haritada.
+  Onceden var olan bir yan etki, bu turun urunu degil. Karar bekliyor.
+- QNG'nin arma dosyasi yok, uretilmis arma cizecek (vanilla 280 karali tag'i
+  armasiz gonderiyor, hata basmiyor). Isteniyorsa CHI armasi yeniden
+  kullanilabilir - vanilla'nin kendi tercihi bu.

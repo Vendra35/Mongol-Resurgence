@@ -389,3 +389,68 @@ MR_geo_middle_volga = {
 		bolghar_area
 	}
 }
+
+# --- THE LAST THREE, added 2026-07-30 after the arithmetic was run ---
+# With only the first fourteen theatres the Khaghan was left holding
+# 684 ownable locations, and 209 of them were the residue of
+# steppes_region: Kursk, Sloboda Ukraine, Zaporizhzhia, the lower Don,
+# Azov, the Kuban and Yedisan. steppes_region is parented to
+# eastern_europe, its far end is next to Moldavia, and not one of those
+# areas was held by a Mongol or Tatar STATE in 1650-1700 - the Anno
+# 1644 reference mod gives sarai_al_jadid itself to Russia, and New
+# Sarai had been a ruin since Timur burned it in 1395. A rump Khaghan
+# with an exclave 4000 km from Karakorum, cut off by ground that all
+# leaves in the same century, is not a historical settlement.
+#
+# The other 96 were eastern and western Khorasan - Herat and Mashhad,
+# which were Safavid, not Bukharan.
+#
+# These three atoms are FOLDED INTO EXISTING THEATRES rather than given
+# schedule slots of their own: three more slots would push the ladder
+# to 17 entries and 1714, need three more flags, three more on_ended
+# cleanups and a rewrite of the player-facing rule description, and buy
+# nothing the fold does not.
+#
+# What the Khaghan is left with afterwards is 379 locations in two
+# contiguous blobs: mongolia_region (Karakorum) and transoxiana +
+# khwarazm + badakhshan (Samarkand). Both were under genuine Chinggisid
+# rule for the whole 1650-1700 window - Bukhara under the Janids to
+# 1747, Khiva under the Arabshahids to 1740 - which is exactly what
+# this situation is for.
+
+# Safavid Khorasan. Folded into mr_return_persia (slot 3).
+MR_geo_safavid_khorasan = {
+	area = {
+		eastern_khorasan_area
+		western_khorasan_area
+	}
+}
+
+# The Kuban and the Yedisan steppe. Folded into mr_return_crimea
+# (slot 1) - the Yedisan horde was a Crimean/Ottoman vassal by this
+# period, which the MR_geo_nogai_steppe comment above already says.
+MR_geo_kuban_and_yedisan = {
+	area = {
+		yedisan_area
+		pryazovia_area
+		matrega_area
+	}
+}
+
+# The northern Pontic and the lower Don. Folded into mr_return_north
+# (slot 7), which is already the Russian sweep. Kursk and Sloboda
+# Ukraine were literally settled from Muscovy in the 1650s;
+# Zaporizhzhia is Cossack ground under Russian protection from 1654;
+# Azov and the lower Don are Don Cossack and Ottoman. lower_don_area
+# carries sarai_al_jadid, and giving up a khanate seat is the point:
+# the Khaghan keeps Karakorum and Samarkand, the two seats a Chinggisid
+# dynasty actually still held in 1700.
+MR_geo_pontic_frontier = {
+	area = {
+		kursk_area
+		sloboda_ukraine_area
+		zaporizhzhia_area
+		lower_don_area
+		azov_area
+	}
+}

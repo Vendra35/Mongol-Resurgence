@@ -483,6 +483,16 @@ mr_great_partition = {
 					}
 				}
 				trigger_event_non_silently = mr_partition.1
+				# THE STRAIN, TIER 1. Granted here rather than in a monthly sweep of
+				# its own: this beat is already guarded by its own global flag,
+				# already scoped to the claimant, and already fires exactly once.
+				# Three literal tiers rather than one modifier scaled by cohesion -
+				# the reasoning is on the modifier itself.
+				add_country_modifier = {
+					modifier = MR_the_centre_cannot_hold
+					years = -1
+					mode = replace
+				}
 			}
 			every_country = {
 				limit = {
@@ -507,6 +517,17 @@ mr_great_partition = {
 					}
 				}
 				trigger_event_non_silently = mr_partition.2
+				# TIER 2, replacing tier 1. remove_country_modifier on a modifier that
+				# was never granted is safe - vanilla does it unconditionally in an
+				# else branch (scripted_effects/country_effects.txt:1625) - so a
+				# cohesion crash that clears 85 and 55 inside one tick still lands on
+				# exactly one tier.
+				remove_country_modifier = MR_the_centre_cannot_hold
+				add_country_modifier = {
+					modifier = MR_the_uluses_drift
+					years = -1
+					mode = replace
+				}
 			}
 			# The vultures gather. Every neighbour gets the carve CB at
 			# this mark and keeps it for the rest of the window — this is
@@ -564,6 +585,15 @@ mr_great_partition = {
 					}
 				}
 				trigger_event_non_silently = mr_partition.3
+				# TIER 3, replacing tier 2. As far as the ladder goes: the situation
+				# ends at cohesion 40, so this is the last thing the Khaghan feels
+				# before on_ending resolves the partition.
+				remove_country_modifier = MR_the_uluses_drift
+				add_country_modifier = {
+					modifier = MR_khaghan_in_name_only
+					years = -1
+					mode = replace
+				}
 			}
 			every_country = {
 				limit = {
@@ -630,6 +660,25 @@ mr_great_partition = {
 		}
 	}
 	on_ending = {
+		# --- LIFT THE STRAIN ---
+		# First, before either branch, so it happens on EVERY exit -
+		# collapse, cohesion timeout and survival alike. The three decline
+		# tiers are a pressure gauge for a situation that is running, not a
+		# phase reward: unlike MR_the_ulus_endures below they must not
+		# outlive it. All three are removed unconditionally because at most
+		# one is ever held and removing a modifier that was never granted
+		# is safe (scripted_effects/country_effects.txt:1625).
+		every_country = {
+			limit = {
+				OR = {
+					tag = MGE
+					tag = MGO
+				}
+			}
+			remove_country_modifier = MR_the_centre_cannot_hold
+			remove_country_modifier = MR_the_uluses_drift
+			remove_country_modifier = MR_khaghan_in_name_only
+		}
 		# Branch on the goal trigger, never on a side-signal - the same rule
 		# every other phase follows.
 		#
@@ -761,6 +810,9 @@ mr_great_partition = {
 					is_in_scripted_geography = scripted_geography:MR_geo_north_china
 					is_in_scripted_geography = scripted_geography:MR_geo_song_china
 					is_in_scripted_geography = scripted_geography:MR_geo_korea
+					is_in_scripted_geography = scripted_geography:MR_geo_safavid_khorasan
+					is_in_scripted_geography = scripted_geography:MR_geo_kuban_and_yedisan
+					is_in_scripted_geography = scripted_geography:MR_geo_pontic_frontier
 				}
 			}
 			custom_tooltip = mr_partition_map_tt

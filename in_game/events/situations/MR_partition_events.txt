@@ -328,9 +328,15 @@ mr_partition.100 = {
 		}
 	}
 	# --- Bind them to the centre ---
-	# The map stays whole and nothing is bought: cohesion keeps falling
-	# at the rate it was already falling, and the realm pays for the
-	# refusal in unrest.
+	# The map stays whole and nothing is bought. AUDIT 2026-07-30: this
+	# comment used to say the realm "pays for the refusal in unrest",
+	# and MR_kurultai_defied was written to match - which broke the
+	# mod's own hardest rule, on an option the AI takes 40% of the time.
+	# The refusal is paid in the cabinet, in control, in legitimacy and
+	# horde unity, and above all in the situation's own gauge: cohesion
+	# now falls FASTER than it was falling, so more uluses clear their
+	# thresholds when the empire finally comes apart. Same pressure,
+	# expressed where the situation can actually resolve it.
 	option = {
 		name = mr_partition.100.b
 		ai_chance = {
@@ -342,13 +348,14 @@ mr_partition.100 = {
 			mode = add_and_extend
 		}
 		add_horde_unity = horde_unity_mild_penalty
-		# The real cost, and the one the AI can actually feel: cohesion
-		# now falls faster than it was falling, so more uluses clear
-		# their thresholds when the empire finally comes apart.
+		# The real cost, and the one the AI can actually feel. Deepened
+		# from 10 to 15 in the same audit that removed the rebel growth:
+		# the pressure the unrest line was carrying has to land
+		# somewhere, and this is the gauge the situation itself reads.
 		situation:mr_great_partition = {
 			change_variable = {
 				name = mr_partition_concessions
-				subtract = 10
+				subtract = 15
 			}
 		}
 	}

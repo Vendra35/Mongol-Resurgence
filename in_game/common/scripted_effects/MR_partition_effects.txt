@@ -60,6 +60,33 @@ mr_return_crimea = {
 				change_location_owner = c:CRI
 			}
 		}
+		# The Kuban and the Yedisan steppe come with the peninsula: the
+		# Yedisan horde was a Crimean and Ottoman vassal by this period,
+		# which the geography atom's own comment already says.
+		scripted_geography:MR_geo_kuban_and_yedisan = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:CRI
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:CRI
+			}
+			# Twenty-five years of grace. This is the clause that makes the
+			# schedule mean anything: a fourteen-location Crimea next to a
+			# superpower still carrying PERMANENT phase rewards is lunch, and
+			# without it the map churns straight back to a blob.
+			c:CRI = {
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
+			}
+		}
 		set_global_variable = mr_returned_crimea
 	}
 }
@@ -80,6 +107,34 @@ mr_return_kazakh = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:KAZ
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:KAZ
+			}
+			# Twenty-five years of grace. This is the clause that makes the
+			# schedule mean anything: a fourteen-location Crimea next to a
+			# superpower still carrying PERMANENT phase rewards is lunch, and
+			# without it the map churns straight back to a blob.
+			# A khanate, not an empire - the same rank vanilla gives GLH and
+			# TIM. It also keeps the NAME readable: MR_l_english.yml overrides
+			# rank_empire_horde to "Empire" globally, while rank_kingdom_horde
+			# still renders vanilla's "Horde".
+			c:KAZ = {
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
+				if = {
+					limit = {
+						country_rank_level < 3
+					}
+					set_country_rank_effect = {
+						rank = country_rank:rank_kingdom
+					}
+				}
 			}
 		}
 		set_global_variable = mr_returned_kazakh
@@ -116,6 +171,42 @@ mr_return_persia = {
 				change_location_owner = c:IRA
 			}
 		}
+		# Eastern and western Khorasan - Herat and Mashhad - are Safavid,
+		# not Bukharan, so they come with Persia rather than staying with
+		# the Khaghan. Empire rank because IRA_f's own form_effect sets it,
+		# and a change_location_owner spawn never runs a form_effect.
+		scripted_geography:MR_geo_safavid_khorasan = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:IRA
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:IRA
+			}
+			# Twenty-five years of grace. This is the clause that makes the
+			# schedule mean anything: a fourteen-location Crimea next to a
+			# superpower still carrying PERMANENT phase rewards is lunch, and
+			# without it the map churns straight back to a blob.
+			c:IRA = {
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
+				if = {
+					limit = {
+						country_rank_level < 4
+					}
+					set_country_rank_effect = {
+						rank = country_rank:rank_empire
+					}
+				}
+			}
+		}
 		set_global_variable = mr_returned_persia
 	}
 }
@@ -138,6 +229,22 @@ mr_return_bashkiria = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:BSH
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:BSH
+			}
+			# Twenty-five years of grace. This is the clause that makes the
+			# schedule mean anything: a fourteen-location Crimea next to a
+			# superpower still carrying PERMANENT phase rewards is lunch, and
+			# without it the map churns straight back to a blob.
+			c:BSH = {
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
 			}
 		}
 		set_global_variable = mr_returned_bashkiria
@@ -186,6 +293,27 @@ mr_return_middle_volga = {
 					change_location_owner = scope:mr_partition_heir
 				}
 			}
+			# Twenty-five years of grace. This is the clause that makes the
+			# schedule mean anything: a fourteen-location Crimea next to a
+			# superpower still carrying PERMANENT phase rewards is lunch, and
+			# without it the map churns straight back to a blob.
+			# Tsardom from 1547. The ratchet makes this a no-op if Russia is
+			# already an empire, and again when the northern sweep repeats it.
+			scope:mr_partition_heir = {
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
+				if = {
+					limit = {
+						country_rank_level < 4
+					}
+					set_country_rank_effect = {
+						rank = country_rank:rank_empire
+					}
+				}
+			}
 			set_global_variable = mr_returned_middle_volga
 		}
 	}
@@ -207,6 +335,22 @@ mr_return_nogai = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:NOG
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:NOG
+			}
+			# Twenty-five years of grace. This is the clause that makes the
+			# schedule mean anything: a fourteen-location Crimea next to a
+			# superpower still carrying PERMANENT phase rewards is lunch, and
+			# without it the map churns straight back to a blob.
+			c:NOG = {
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
 			}
 		}
 		set_global_variable = mr_returned_nogai
@@ -272,6 +416,38 @@ mr_return_north = {
 					change_location_owner = scope:mr_partition_heir
 				}
 			}
+			# The northern Pontic and the lower Don. Kursk and Sloboda Ukraine
+			# were settled from Muscovy in the 1650s, Zaporizhzhia is Cossack
+			# under Russian protection from 1654, and the lower Don carries
+			# sarai_al_jadid - a khanate seat the Khaghan gives up, because by
+			# 1650 New Sarai had been a ruin for 250 years.
+			scripted_geography:MR_geo_pontic_frontier = {
+				every_location_in_scripted_geography = {
+					limit = {
+						mr_partition_takeable = yes
+					}
+					change_location_owner = scope:mr_partition_heir
+				}
+			}
+			# Twenty-five years of grace. This is the clause that makes the
+			# schedule mean anything: a fourteen-location Crimea next to a
+			# superpower still carrying PERMANENT phase rewards is lunch, and
+			# without it the map churns straight back to a blob.
+			scope:mr_partition_heir = {
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
+				if = {
+					limit = {
+						country_rank_level < 4
+					}
+					set_country_rank_effect = {
+						rank = country_rank:rank_empire
+					}
+				}
+			}
 			set_global_variable = mr_returned_north
 		}
 	}
@@ -305,6 +481,31 @@ mr_return_ottoman = {
 				change_location_owner = c:TUR
 			}
 		}
+		if = {
+			limit = {
+				country_exists = c:TUR
+			}
+			# Twenty-five years of grace. This is the clause that makes the
+			# schedule mean anything: a fourteen-location Crimea next to a
+			# superpower still carrying PERMANENT phase rewards is lunch, and
+			# without it the map churns straight back to a blob.
+			# Padishah and Kayser-i Rum since 1453; vanilla starts TUR at duchy.
+			c:TUR = {
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
+				if = {
+					limit = {
+						country_rank_level < 4
+					}
+					set_country_rank_effect = {
+						rank = country_rank:rank_empire
+					}
+				}
+			}
+		}
 		set_global_variable = mr_returned_ottoman
 	}
 }
@@ -327,6 +528,35 @@ mr_return_manchuria = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:QNG
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:QNG
+			}
+			# Twenty-five years of grace. This is the clause that makes the
+			# schedule mean anything: a fourteen-location Crimea next to a
+			# superpower still carrying PERMANENT phase rewards is lunch, and
+			# without it the map churns straight back to a blob.
+			# Kingdom here and empire at the China handover 12 game-years
+			# later, which is the order it happened in: Nurhaci's Later Jin in
+			# 1616, the Qing empire proclaimed in 1636, Beijing in 1644. It is
+			# also kinder mechanically than putting a Manchuria-sized realm
+			# straight onto an empire's governing burden.
+			c:QNG = {
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
+				if = {
+					limit = {
+						country_rank_level < 3
+					}
+					set_country_rank_effect = {
+						rank = country_rank:rank_kingdom
+					}
+				}
 			}
 		}
 		set_global_variable = mr_returned_manchuria
@@ -353,6 +583,23 @@ mr_return_dzungaria = {
 				change_location_owner = c:OIR
 			}
 		}
+		if = {
+			limit = {
+				country_exists = c:OIR
+			}
+			# Twenty-five years of grace. This is the clause that makes the
+			# schedule mean anything: a fourteen-location Crimea next to a
+			# superpower still carrying PERMANENT phase rewards is lunch, and
+			# without it the map churns straight back to a blob.
+			# No rank call: vanilla already starts OIR at rank_empire.
+			c:OIR = {
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
+			}
+		}
 		set_global_variable = mr_returned_dzungaria
 	}
 }
@@ -374,6 +621,22 @@ mr_return_tibet = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:TIB
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:TIB
+			}
+			# Twenty-five years of grace. This is the clause that makes the
+			# schedule mean anything: a fourteen-location Crimea next to a
+			# superpower still carrying PERMANENT phase rewards is lunch, and
+			# without it the map churns straight back to a blob.
+			c:TIB = {
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
 			}
 		}
 		set_global_variable = mr_returned_tibet
@@ -405,6 +668,32 @@ mr_return_china = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:QNG
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:QNG
+			}
+			# Twenty-five years of grace. This is the clause that makes the
+			# schedule mean anything: a fourteen-location Crimea next to a
+			# superpower still carrying PERMANENT phase rewards is lunch, and
+			# without it the map churns straight back to a blob.
+			# Emperor of China from 1644. The ratchet lifts QNG from the kingdom
+			# rank the Manchuria handover gave it.
+			c:QNG = {
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
+				if = {
+					limit = {
+						country_rank_level < 4
+					}
+					set_country_rank_effect = {
+						rank = country_rank:rank_empire
+					}
+				}
 			}
 		}
 		set_global_variable = mr_returned_china
@@ -449,6 +738,25 @@ mr_return_korea = {
 					change_location_owner = c:KOR
 				}
 			}
+			if = {
+				limit = {
+					country_exists = c:KOR
+				}
+				# Twenty-five years of grace. This is the clause that makes the
+				# schedule mean anything: a fourteen-location Crimea next to a
+				# superpower still carrying PERMANENT phase rewards is lunch, and
+				# without it the map churns straight back to a blob.
+				# No rank call on purpose. KOR starts at rank_kingdom, which is
+				# right - Joseon was a kingdom and a tributary. Promoting it would
+				# render rank_empire_korean, i.e. a Korean Empire, which is 1897.
+				c:KOR = {
+					add_country_modifier = {
+						modifier = MR_ulus_of_its_own
+						years = 25
+						mode = add
+					}
+				}
+			}
 			set_global_variable = mr_returned_korea
 		}
 	}
@@ -473,6 +781,22 @@ mr_return_tarim = {
 					mr_partition_takeable = yes
 				}
 				change_location_owner = c:CHG
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:CHG
+			}
+			# Twenty-five years of grace. This is the clause that makes the
+			# schedule mean anything: a fourteen-location Crimea next to a
+			# superpower still carrying PERMANENT phase rewards is lunch, and
+			# without it the map churns straight back to a blob.
+			c:CHG = {
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
 			}
 		}
 		set_global_variable = mr_returned_tarim
