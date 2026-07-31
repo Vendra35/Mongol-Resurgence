@@ -1475,3 +1475,38 @@ kapanir. Gelmezlerse elle research_advance listesi gerekir.
 
 Sonrasi: OIR (1673), TIB (1676), MCH'nin Cin adimi (1682, toprak-once sirasi
 ve "Qing Empire" + CHI bayragi), KOR (1685), CHG (1688).
+
+## IRA VE MCH DOGRU GELDI - TEKNOLOJI TAHMINI TUTTU (31.07)
+
+Yazar: "duzgun geldiler". Baslangic blogu olmadan doganlar tam olarak bu
+ikisiydi (0 advance + harita korlugu). Simdi ikisi de komsulariyla ayni
+seviyede geliyor.
+
+MEKANIZMA KAPANDI: "yetisme" diye bir sey yok. Baslangic blogu olan tag
+kampanya kurulurken ulke nesnesi olarak yaratiliyor ve topraksiz da olsa
+dunyanin cag ilerlemesini yasiyor; sadece kimlik blogu olan tag toprak
+verilene kadar HIC var olmuyor. research_advance listesine gerek kalmadi.
+
+## KORE TIYATROSU OLU IDI - YAPISAL, ON DORDUN TEK ISTISNASI
+
+Yazar Kore'nin cikmadigini bildirdi. Sebep kayit degil - KOR vanilla'da
+kayitli (east_asia.txt:1; ilk grep'in kacirmasinin sebebi o satirdaki BOM,
+bilinen tuzak).
+
+GERCEK SEBEP: mr_return_korea'da SUPURME, lutuf modifieri ve bayrak
+kontrolunun HEPSI `country_exists = c:KOR` blogunun icine gomulmustu. Diger
+on uc tiyatroda supurme o kontrolun DISINDA, cunku change_location_owner'in
+kayitli-ama-topraksiz bir tag'i YARATABILMESI gerekiyor. Faz 3 Kore'yi ya
+VASSAL olarak ya da ilhak ederek aliyor; ilhak ettiyse country_exists yanlis
+oluyor, supurme hic calismiyor, Kore hic geri gelmiyor - ve bayrak da iceride
+oldugu icin her ay bosuna tekrar deniyor.
+
+Duzeltildi: country_exists blogu artik SADECE cancel_subject cagrisini
+sariyor (o gercekten ulkenin var olmasini istiyor), geri kalani disarida.
+
+TARAMA YAPILDI: dosyadaki 22 supurmenin hepsi girinti derinligine gore
+tarandi. Kore disinda ic ice olan bes tane var (middle_volga ve
+mr_return_north'un dordu) ve BESI DE KASITLI: hepsi Rusya tiyatrosu, once
+RUS-veya-MOS'u scope:mr_partition_heir'e cozuyor ve ancak biri hayattaysa
+supuruyor. RUS'un kimlik blogu YOK, yani sifirdan yaratilmamasi gerekiyor.
+Kore tek yanlisti.

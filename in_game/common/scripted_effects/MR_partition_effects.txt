@@ -1567,61 +1567,72 @@ mr_return_korea = {
 					}
 				}
 			}
-			scripted_geography:MR_geo_korea = {
-				every_location_in_scripted_geography = {
-					limit = {
-						mr_partition_takeable = yes
-					}
-					change_location_owner = c:KOR
-					add_core = c:KOR
-					change_integration_level = core
+		}
+		# THE SWEEP LIVES OUTSIDE THE country_exists GUARD, and it is the only
+		# thing in this file that ever did not. Korea was written the other way
+		# because the cancel_subject call above genuinely needs the country to
+		# exist - but wrapping the WHOLE body in that guard made the theatre
+		# dead in exactly the campaign it matters in. Phase 3 accepts a Korean
+		# SUBJECT or an outright conquest, so a Khaghan that annexed Joseon
+		# leaves country_exists = c:KOR false, the sweep never runs, and Korea
+		# never comes back. change_location_owner INSTANTIATES a registered
+		# landless tag by itself - KOR's identity block is east_asia.txt:1 - so
+		# the sweep must be reachable whether or not the country is on the map,
+		# which is how the other thirteen theatres are built.
+		scripted_geography:MR_geo_korea = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:KOR
+				add_core = c:KOR
+				change_integration_level = core
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:KOR
+			}
+			# Twenty-five years of grace. This is the clause that makes the
+			# schedule mean anything: a fourteen-location Crimea next to a
+			# superpower still carrying PERMANENT phase rewards is lunch, and
+			# without it the map churns straight back to a blob.
+			# No rank call on purpose. KOR starts at rank_kingdom, which is
+			# right - Joseon was a kingdom and a tributary. Promoting it would
+			# render rank_empire_korean, i.e. a Korean Empire, which is 1897.
+			c:KOR = {
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
 				}
 			}
-			if = {
-				limit = {
-					country_exists = c:KOR
-				}
-				# Twenty-five years of grace. This is the clause that makes the
-				# schedule mean anything: a fourteen-location Crimea next to a
-				# superpower still carrying PERMANENT phase rewards is lunch, and
-				# without it the map churns straight back to a blob.
-				# No rank call on purpose. KOR starts at rank_kingdom, which is
-				# right - Joseon was a kingdom and a tributary. Promoting it would
-				# render rank_empire_korean, i.e. a Korean Empire, which is 1897.
-				c:KOR = {
-					add_country_modifier = {
-						modifier = MR_ulus_of_its_own
-						years = 25
-						mode = add
-					}
-				}
-			}
-			# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
-			#
-			# MEASURED 1658, first live run: this family set its flag and moved
-			# nothing. c:IRA had no country object, because a campaign in progress
-			# cannot gain a tag added to setup/countries after the campaign was
-			# created - the country database is minted once. The flag then sealed
-			# the theatre for the rest of the campaign and Persia stayed Mongol
-			# forever. A silent failure is survivable; one that marks itself done
-			# is not.
-			#
-			# The test is the atom itself. If any claimant ground here is still
-			# takeable the handover did not happen, so the effect retries next
-			# month. If the atom never had any - the Khaghan did not own it - the
-			# guard passes at once and the theatre is correctly recorded settled.
-			if = {
-				limit = {
-					NOT = {
-						scripted_geography:MR_geo_korea = {
-							any_location_in_scripted_geography = {
-								mr_partition_takeable = yes
-							}
+		}
+		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
+		#
+		# MEASURED 1658, first live run: this family set its flag and moved
+		# nothing. c:IRA had no country object, because a campaign in progress
+		# cannot gain a tag added to setup/countries after the campaign was
+		# created - the country database is minted once. The flag then sealed
+		# the theatre for the rest of the campaign and Persia stayed Mongol
+		# forever. A silent failure is survivable; one that marks itself done
+		# is not.
+		#
+		# The test is the atom itself. If any claimant ground here is still
+		# takeable the handover did not happen, so the effect retries next
+		# month. If the atom never had any - the Khaghan did not own it - the
+		# guard passes at once and the theatre is correctly recorded settled.
+		if = {
+			limit = {
+				NOT = {
+					scripted_geography:MR_geo_korea = {
+						any_location_in_scripted_geography = {
+							mr_partition_takeable = yes
 						}
 					}
 				}
-				set_global_variable = mr_returned_korea
 			}
+			set_global_variable = mr_returned_korea
 		}
 	}
 }
