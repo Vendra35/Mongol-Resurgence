@@ -255,13 +255,21 @@ mr_great_partition = {
 					}
 				}
 				mr_return_middle_volga = yes
-				c:MGE = {
-					if = {
-						limit = {
-							has_country_modifier = MR_volga_pastures
+				# The Khaghan may be MGO, not MGE - a failed proclamation is a
+				# path mr_can_start_partition explicitly tolerates. A bare
+				# c:MGE scope opener therefore errors every month this step is
+				# due, and the modifier never comes off the MGO-tagged Khaghan
+				# either. every_country over both tags is the shape the rest of
+				# this file already uses.
+				every_country = {
+					limit = {
+						OR = {
+							tag = MGE
+							tag = MGO
 						}
-						remove_country_modifier = MR_volga_pastures
+						has_country_modifier = MR_volga_pastures
 					}
+					remove_country_modifier = MR_volga_pastures
 				}
 			}
 			# --- 6. THE NOGAI HORDE (1557) - the Greater/Lesser split, then
@@ -331,13 +339,21 @@ mr_great_partition = {
 					}
 				}
 				mr_return_dzungaria = yes
-				c:MGE = {
-					if = {
-						limit = {
-							has_country_modifier = MR_dzungar_legacy
+				# The Khaghan may be MGO, not MGE - a failed proclamation is a
+				# path mr_can_start_partition explicitly tolerates. A bare
+				# c:MGE scope opener therefore errors every month this step is
+				# due, and the modifier never comes off the MGO-tagged Khaghan
+				# either. every_country over both tags is the shape the rest of
+				# this file already uses.
+				every_country = {
+					limit = {
+						OR = {
+							tag = MGE
+							tag = MGO
 						}
-						remove_country_modifier = MR_dzungar_legacy
+						has_country_modifier = MR_dzungar_legacy
 					}
+					remove_country_modifier = MR_dzungar_legacy
 				}
 			}
 			# --- 11. THE GANDEN PHODRANG (1642) - the Fifth Dalai Lama's state,
@@ -770,12 +786,26 @@ mr_great_partition = {
 			remove_country_modifier = MR_the_centre_cannot_hold
 			remove_country_modifier = MR_the_uluses_drift
 			remove_country_modifier = MR_khaghan_in_name_only
-			## Permanent modifier removal.
-			remove_country_modifier = MR_kurultai_mandate
-			remove_country_modifier = MR_empire_fulfilled
-			remove_country_modifier = MR_mongol_world_order
-			remove_country_modifier = MR_unified_mongol_banner
 		}
+		# THE PERMANENT REWARDS ARE STRIPPED ONLY WHEN THE EMPIRE FALLS.
+		# They used to be removed here, above the branch, on EVERY exit -
+		# so an empire that WON the endgame lost MR_unified_mongol_banner,
+		# MR_empire_fulfilled, MR_mongol_world_order and the kurultai's
+		# mandate, all four of which say "(Permanent.)" in their own
+		# tooltips (MR_l_english.yml:165, 173, 183). Winning the hardest
+		# situation in the mod and being punished for it reads as a broken
+		# reward system, not as a design.
+		#
+		# It was also asymmetric by GAME RULE, which is what made it a bug
+		# rather than a taste: MR_mongol_historical_modifier_2 - the
+		# Historical tier's Phase 1 reward, and Historical is the default -
+		# was never in the list, so the default rule kept its reward while
+		# the Terminator rule lost one. Nothing in the design says the
+		# tiers should differ in what survives.
+		#
+		# The stripping now lives inside the COLLAPSE branch below, where
+		# it means what it says: the empire came apart, so the trophies of
+		# the empire go with it.
 		# Branch on the goal trigger, never on a side-signal - the same rule
 		# every other phase follows.
 		#
@@ -797,6 +827,31 @@ mr_great_partition = {
 				}
 			}
 			set_global_variable = mr_partition_collapsed
+			# THE TROPHIES GO WITH THE EMPIRE. Moved here from above the
+			# branch, where it also stripped them from a Khaghan who WON.
+			# Removing a modifier that was never granted is safe
+			# (scripted_effects/country_effects.txt:1625), so no guards.
+			# And ai_defensive is undone here too: on_start applies it to
+			# every Khaghan, and only the survival branch used to restore
+			# ai_aggressive - so a rump that collapsed kept +12
+			# ai_months_between_wars and +0.25 carefulness for the rest of
+			# the game, with nothing left in the mod to remove it. A rump
+			# khanate should be cautious by circumstance, not by a permanent
+			# personality the situation forgot to take back.
+			every_country = {
+				limit = {
+					OR = {
+						tag = MGE
+						tag = MGO
+					}
+				}
+				remove_country_modifier = MR_kurultai_mandate
+				remove_country_modifier = MR_empire_fulfilled
+				remove_country_modifier = MR_mongol_world_order
+				remove_country_modifier = MR_unified_mongol_banner
+				remove_country_modifier = MR_mongol_historical_modifier_2
+				set_personality = ai_personality:ai_aggressive
+			}
 			# THE FINAL SWEEP. Whatever the schedule has not already handed
 			# back goes home now, all at once.
 			#

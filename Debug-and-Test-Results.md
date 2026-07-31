@@ -1643,3 +1643,59 @@ MR_mongol_preparing_for_conquest'te var.
 Uc aciklamaya da ikinci bir satir eklendi: Vanilla -> oyuncu icin onerilen,
 Historical -> AI icin onerilen ama oyuncunun elinde zaten guclu, Terminator ->
 oyuncunun elinde meydan okuma degil guc fantezisi.
+
+## YAYIN ONCESI KILITLENME TARAMASI - DORT DUZELTME (31.07)
+
+Ajan raporu: KALICI KILITLENME YOK. MR_mongol_preparing_for_conquest
+(savas ilanini bloklayan modifier) uc fazin da her cikisinda, DALDAN ONCE
+kaldiriliyor - yazarin en cok korktugu durum hicbir yoldan ulasilabilir degil.
+Dort basarisizlik yolunun dordu de terminal kuruyor, yedi situation'in
+yedisinde de tarih kacisi var, on alti mr_returned_* bayraginin hepsi eslesiyor.
+
+Bulunan dort gercek hata duzeltildi:
+
+1. ENDGAME'I KAZANAN KAGAN CEZALANDIRILIYORDU. on_ending daldan ONCE
+   MR_unified_mongol_banner, MR_empire_fulfilled, MR_mongol_world_order ve
+   MR_kurultai_mandate'i soküyordu - yani HAYATTA KALMA dalinda da. Dordunun
+   de tooltip'inde "(Permanent.)" yaziyor. Ustelik KURAL KADEMESINE GORE
+   ASIMETRIKTI: MR_mongol_historical_modifier_2 (Historical kademesinin Faz 1
+   odulu, ve Historical varsayilan) listede yoktu, yani varsayilan kural
+   odulunu koruyor Terminator kaybediyordu. Sokme artik COKUS dalinin icinde.
+
+2. CUNGAR SITUATION'I KAGAN'IN USTUNE ACILIYORDU. mr_can_start_dzungar,
+   Chahar ve Torghut'un tasidigi MGO/MGE dislama klozunu tasimiyordu. Kagan
+   mongol kulturlu, Faz 3 boyunca steppe_horde tutuluyor, ve Faz 2 hedefi
+   Sincan'i almasini SART kosuyor - yani ucu de esleşiyordu. Basarili her
+   kampanyada 1634'te, Faz 3'un icinde, Cungar situation'i Kagan'i "Cungar"
+   sayarak aciliyor, bitis sarti (dzungaria+tarim+zhetysu) zaten saglandigi
+   icin neredeyse aninda tamamlaniyor ve MR_dzungar_legacy'yi rayli yol
+   claimant'ina odüyordu. Ayni koruma eklendi.
+
+3. KORUMASIZ c:MGE SCOPE ACICI (iki yerde). MGO-fallback yolunda (basarisiz
+   ilan - mr_can_start_partition'in acikca tolere ettigi bir yol) her ay hata
+   basiyordu, ve modifier MGO'lu Kagan'dan hic kalkmiyordu. every_country
+   uzerinden iki tag'e cevrildi.
+
+4. COKUS DALINDA ai_defensive GERI ALINMIYORDU. on_start her Kagan'a
+   veriyordu, sadece hayatta kalma dali ai_aggressive'e donuyordu - yani
+   cokmus bir kalinti oyunun sonuna kadar +12 ai_months_between_wars ve
+   +0.25 carefulness tasiyordu. Cokus dalina da eklendi.
+
+## KARAR BEKLEYENLER (yayini engellemez)
+
+- Faz 1'in cb_MR_steppe_unification'i 25 YIL veriliyor ama faz 1420'ye kadar
+  suruyor -> ~1393'te bitiyor. Faz 2 bu hatayi zaten duzeltmis (kendi yorumu
+  soyluyor), Faz 1'de kalmis. AI'i etkilemez (PD deseninde declare CB'ye
+  sahip olmayi gerektirmiyor) ama INSAN claimant 1393-1420 arasi elle savas
+  ilan edemez.
+- P2/P3 failsafe'leri claimant'ta at_war = no istiyor, bes yillik pencerede,
+  ve rayli yol claimant'i 4-12 ayda bir savasa sokuyor. FAZ 1 BU KAPIYI
+  BILEREK KALDIRMIS (kendi yorumu: "sonsuz savas dongusunde sikisan AI
+  failsafe'i engeller"), P2/P3'te kalmis.
+- Bes DHE olayi (mr_envoys.1/.2, mr_herds.1, mr_paiza.1) ana anahtari
+  kontrol etmiyor. Biri bunun bilerek oldugunu yaziyor. Ama CLAUDE.md'nin
+  "tum icerik NOT mr_railroad_off kontrol eder" ifadesi bu haliyle YANLIS -
+  ya olaylar kapilanmali ya ifade duzeltilmeli.
+- cb_MR_carve_the_ulus 80 yil veriliyor, situation'i ~60 yil asiyor - hayatta
+  KALAN bir Kagan'a karsi bile.
+- Great Partition, alti situation icinde hint_tag'i olmayan tek situation.

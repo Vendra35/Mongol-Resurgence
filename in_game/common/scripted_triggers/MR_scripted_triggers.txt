@@ -810,6 +810,28 @@ mr_can_start_dzungar = {
 	NOT = {
 		has_global_variable = mr_dzungar_started
 	}
+	# THE KHAGHAN IS NOT A DZUNGAR. Chahar and Torghut both carry an
+	# exclusion like this one; this situation did not, and the omission
+	# fired in every SUCCESSFUL campaign. The claimant is mongolian-culture
+	# by construction, is held as a steppe_horde right through Phase 3 by
+	# zz_MR_government_transition_addon.txt, and Phase 2's own goal REQUIRES
+	# it to hold Xinjiang - so all three clauses below matched the restored
+	# empire itself. The Dzungar situation then opened in 1634, inside
+	# Phase 3's window, with the Khaghan cast as the Dzungar; its end
+	# trigger wants dzungaria + tarim + zhetysu, which the Khaghan already
+	# holds, so it completed almost at once and paid MR_dzungar_legacy and
+	# its prestige to the railroad claimant. A standalone situation's
+	# reward is not the railroad's to collect, and two situations must not
+	# claim the same ground.
+	NOT = {
+		any_country = {
+			OR = {
+				tag = MGO
+				tag = MGE
+			}
+			has_presence_in = scripted_geography:MR_geo_xinjiang
+		}
+	}
 	any_country = {
 		culture = {
 			has_culture_group = culture_group:mongolian_group
