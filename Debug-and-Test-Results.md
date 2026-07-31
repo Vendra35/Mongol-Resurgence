@@ -1423,3 +1423,28 @@ susturmuyordu, susturan sey baslangic blogu.
 - "County of Kazakh" gitti mi
 - Cin adiminda toprak-once sirasi ve "Qing Empire" + CHI bayragi
 - OIR (+26y) ve CHG (+41y) hala hic gorulmedi
+
+## BASKURT TIYATROSU: YAZARIN KARARI + GERI CEKILEN BIR OLCUM (31.07)
+
+YAZARIN KARARI: Baskurtlar kendi slotunu almiyor. Rusya zaten aliyor, cunku
+mr_return_north MR_geo_ural'i supuruyor ve ural_region bashkiria_area'yi
+ICERIYOR. Harita yine dogru cozuluyor, sadece bir tiyatro sonra ve baska
+bir bayrak altinda. Diger tiyatrolarin momentum/backstop tarihleri bos slota
+gore yeniden kesilmisti, oyle kaliyor.
+
+GERI CEKILEN OLCUM: "BSH pop tipi oldugu icin spawn edilemiyor" teshisinin
+DAYANDIGI KANIT gecersiz. Kanit olarak Ufa'nin Mogol kalmasi gosterilmisti;
+ama `ufa` PERM_AREA'da ve MR_geo_bashkiria sadece bashkiria_area. Ufa atomun
+icinde hic olmadi, kimseye teklif edilmedi. Pop-ulke YASASI ayakta kaliyor
+(vanilla'dan attested: government_conversion_events.10), sadece oyun ici
+kaniti geri cekiliyor.
+
+DAHA MUHTEMEL SEBEP (kimse okumamis): BSH'nin kendi baskenti khaiylmysh
+khorasan_region / desht_kipchak_area'da - atomun disinda, ural_region'in bile
+disinda. Ve vanilla'nin kabile-yerlesme yolu tam buna kapili:
+laws/00_tribes.txt:184-195, permanent_settlement_policy ->
+allow = { capital = { OR = { owner = root  has_owner = no } } }
+sonra on_fully_activated = { change_country_type = location }.
+Yani vanilla bir pop ulkesini landholder yapmadan once BASKENTININ kendisinde
+ya da sahipsiz olmasini sart kosuyor. Bir gun canlandirilirsa TIP'ten degil
+BASKENT'ten baslanacak.

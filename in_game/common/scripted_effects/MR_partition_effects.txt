@@ -512,16 +512,33 @@ mr_return_bashkiria = {
 				has_global_variable = mr_returned_bashkiria
 			}
 		}
-		# MEASURED 1670, first live run: this effect set its flag and moved
-		# NOTHING, on ground the Khaghan owned outright. BSH is
-		# country_type = pop in vanilla's setup - one of 448 pop-type tags,
-		# the nomad and tribe entities that hold POPS rather than locations -
-		# and change_location_owner into one is a silent no-op. Vanilla turns
-		# a country into a landholder with change_country_type = location when
-		# a horde settles (government_conversion_events.10). The Bashkirs need
-		# the same before they can be handed the southern Urals. Guarded
-		# because BSH is LANDLESS, not absent - its country object exists
-		# from 1337, which is exactly why this failure printed no error.
+		# THIS THEATRE IS OFF BY THE AUTHOR'S RULING (2026-07-31). Its call in
+		# on_monthly is commented out and MR_great_partition.txt carries the
+		# reasoning; Russia takes the ground anyway, because MR_geo_ural
+		# contains bashkiria_area. The effect stays here, wired into on_ending,
+		# so nothing dangles - and by then there is normally nothing left to
+		# take, so it passes silently.
+		#
+		# THE OLD DIAGNOSIS IS RETRACTED. It read: "measured 1670, this effect
+		# set its flag and moved NOTHING; BSH is a pop country and
+		# change_location_owner into one is a silent no-op". The pop-country
+		# LAW is real and separately attested - vanilla turns a country into a
+		# landholder with change_country_type = location when a horde settles
+		# (government_conversion_events.10) - but THE EVIDENCE CITED FOR IT HERE
+		# WAS INVALID: the observation was Ufa staying Mongol, and `ufa` is in
+		# PERM_AREA while MR_geo_bashkiria is bashkiria_area alone. Ufa was
+		# never in the atom and was never offered to anyone.
+		#
+		# The likelier cause, if this is ever revived: BSH's own capital
+		# khaiylmysh sits in khorasan_region / desht_kipchak_area - outside
+		# this atom and outside ural_region entirely - and vanilla's settling
+		# path gates precisely on that (laws/00_tribes.txt:184-195,
+		# permanent_settlement_policy: change_country_type = location fires
+		# only when `capital = { owner = root OR has_owner = no }`).
+		# Start from the capital, not from the type.
+		#
+		# The guard below is still right on its own terms: BSH is LANDLESS,
+		# not absent - its country object exists from 1337.
 		if = {
 			limit = {
 				country_exists = c:BSH

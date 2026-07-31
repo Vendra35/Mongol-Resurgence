@@ -211,10 +211,31 @@ mr_great_partition = {
 				mr_return_ottoman = yes
 				mr_return_persia = yes
 			}
-			# --- 4. THE BASHKIRS (1662) - under Moscow from the 1550s and in
-			# revolt for a century after. BEFORE both Russian sweeps:
-			# MR_geo_ural contains bashkiria_area.
-			# Bashkiria cant be spawned because they are pop based country even tho we change them the settled we cannot spawn them. So I change others momentum and current_dates according to that.
+			# --- 4. THE BASHKIRS (1662) - DELIBERATELY OFF. AUTHOR'S RULING
+			# 2026-07-31: Bashkiria does not get a slot of its own. Russia
+			# takes the ground on schedule anyway, because mr_return_north
+			# sweeps MR_geo_ural and ural_region CONTAINS bashkiria_area - so
+			# the map still resolves correctly, one theatre later and under a
+			# different flag. The other theatres' momentum and backstop dates
+			# were re-cut around the empty slot.
+			#
+			# WHY IT WAS TURNED OFF: BSH never appeared when its step ran. The
+			# reason recorded at the time was "BSH is a pop country and cannot
+			# be spawned even after change_country_type" - and that is NOT
+			# proven. Re-examined 2026-07-31:
+			#   - The evidence cited for it was Ufa staying Mongol. But `ufa`
+			#     is in PERM_AREA, and MR_geo_bashkiria is bashkiria_area
+			#     alone, so Ufa was never in the atom and was never offered to
+			#     anyone. It proves nothing either way.
+			#   - A likelier cause is that BSH's own capital, khaiylmysh, sits
+			#     in khorasan_region / desht_kipchak_area - outside the atom
+			#     and outside ural_region entirely. Vanilla's own settling
+			#     path gates exactly on that: laws/00_tribes.txt:184-195,
+			#     permanent_settlement_policy, allows change_country_type =
+			#     location only when `capital = { owner = root OR has_owner =
+			#     no }`. Ours is neither.
+			# So the theatre is off by CHOICE, not because the engine refused.
+			# If it is ever revived, start from the capital, not from the type.
 			# if = {
 			# 	limit = {
 			# 		OR = {

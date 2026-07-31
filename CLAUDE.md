@@ -623,7 +623,21 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   `main_menu/setup/start/10_countries.txt`** (451 occurrences) — NOT
   `country_type`, and NOT in `in_game/setup/countries/`, where the string
   occurs zero times in all 45 files. Grepping the identity tree for
-  `country_type` finds nothing and reads as "BSH is fine". `change_location_owner` into a pop country is another silent no-op —
+  `country_type` finds nothing and reads as "BSH is fine".
+  **CORRECTION 2026-07-31 — the measurement once cited here was invalid.**
+  The line used to read "measured 2026-07-30: Ufa was still Mongol at 1670
+  with `mr_returned_bashkiria` already set". But `ufa` is in `perm_area` and
+  `MR_geo_bashkiria` is `bashkiria_area` alone, so Ufa was never inside the
+  atom and was never offered to anyone — it proves nothing about pop
+  countries. The LAW stands on its vanilla attestation (a pop country holds
+  pops, not ground; `change_country_type = location` is how vanilla settles a
+  horde, `government_conversion_events.10`); only the in-game evidence is
+  withdrawn. Note the related gate nobody had read: vanilla lets a tribe
+  settle only when its capital is its own or ownerless
+  (`laws/00_tribes.txt:184-195`, `permanent_settlement_policy`), and BSH's
+  capital `khaiylmysh` sits in `desht_kipchak_area`, outside `ural_region`
+  entirely. The Bashkir theatre is now OFF by ruling, not by engine refusal;
+  Russia takes the ground because `MR_geo_ural` contains `bashkiria_area`. `change_location_owner` into a pop country is another silent no-op —
   measured 2026-07-30: Ufa was still Mongol at 1670 with `mr_returned_bashkiria`
   already set. Turn it into a landholder first, the way vanilla does when a
   horde settles: `change_country_type = location`
