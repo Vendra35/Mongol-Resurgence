@@ -143,14 +143,22 @@ mr_return_crimea = {
 				# MOVES a living capital.
 				set_capital = location:qarasuvbazar
 
-				# IDENTITY BY HAND — see the file header. Haci Giray founded
-				# this ulus in 1441 and the Girays were Chinggisids, so the
-				# dynasty is Borjigin. crimean/sunni are CRI's own database
-				# entry (steppes.txt:16-17); it arrived ORTHODOX without this.
+				# IDENTITY BY HAND — see the file header. crimean/sunni are
+				# CRI's own database entry (steppes.txt:16-17); it arrived
+				# ORTHODOX without this.
+				#
+				# THE RULER IS DATED TO WHEN THIS THEATRE ACTUALLY FIRES, NOT
+				# to the khanate's real founding. Every theatre header carries
+				# the true historical date because that is what fixes the
+				# ORDER, but the alternate timeline delays the events
+				# themselves: this one lands in 1652. Haci Giray founded the
+				# ulus in 1441 and would be two centuries dead. The Crimean
+				# khan of 1652 is Islam III Giray (1644-1654), aged 48. The
+				# Girays were Chinggisids, so the house is still Borjigin.
 				create_character = {
 					estate = estate_type:nobles_estate
-					first_name = Haci
-					age = 35
+					first_name = Islam
+					age = 48
 					culture = culture:crimean
 					religion = religion:sunni
 					dynasty = dynasty:borjigin_dynasty
@@ -261,15 +269,16 @@ mr_return_kazakh = {
 				# MOVES a living capital.
 				set_capital = location:shavgar
 
-				# IDENTITY BY HAND — see the file header. Salqam-Jangir Khan
-				# ruled the Kazakhs 1643-1652, which is when this theatre
-				# lands; the Kazakh khans were Jochid Chinggisids, so Borjigin.
+				# IDENTITY BY HAND — see the file header. This theatre fires in
+				# 1655 and Salqam-Jangir Khan is the Kazakh ruler of exactly
+				# that decade, so the name needed no adjusting. The Kazakh
+				# khans were Jochid Chinggisids, hence Borjigin.
 				# cuman_culture/sunni are KAZ's own entry in
 				# zz_mr_new_countries.txt.
 				create_character = {
 					estate = estate_type:nobles_estate
 					first_name = Jangir
-					age = 35
+					age = 45
 					culture = culture:cuman_culture
 					religion = religion:sunni
 					dynasty = dynasty:borjigin_dynasty
@@ -406,8 +415,9 @@ mr_return_persia = {
 				# MOVES a living capital.
 				set_capital = location:isfahan
 
-				# IDENTITY BY HAND — see the file header. Abbas II ruled Safavid
-				# Persia 1642-1666, the window this theatre lands in.
+				# IDENTITY BY HAND — see the file header. This theatre fires in
+				# 1658 and Abbas II ruled Safavid Persia 1642-1666, so he is
+				# already the right man; he was 26 in 1658.
 				# NO dynasty line on purpose: safavid_dynasty is not in
 				# 04_dynasties.txt, it is created at runtime by
 				# create_dynasty_from_location in flavor_ira.txt:3141, so naming
@@ -417,7 +427,7 @@ mr_return_persia = {
 				create_character = {
 					estate = estate_type:nobles_estate
 					first_name = Abbas
-					age = 35
+					age = 26
 					culture = culture:farsi_culture
 					religion = religion:shia
 					adm = { 50 80 }
@@ -557,15 +567,19 @@ mr_return_bashkiria = {
 				# MOVES a living capital.
 				set_capital = location:sterlitamak
 
-				# IDENTITY BY HAND — see the file header. Aldar Isyangildin is
-				# the Bashkir batyr of this era. No dynasty line: vanilla ships
-				# no Bashkir house in 04_dynasties.txt and inventing one would
-				# be a second piece of alternate history. bashkir/sunni are
-				# BSH's own database entry (steppes.txt:53-54).
+				# IDENTITY BY HAND — see the file header. Dated to when this
+				# theatre fires, 1661: Sary Mergen led the Bashkir uprising of
+				# 1662-1664, the revolt this handover IS. (Aldar Isyangildin,
+				# the other obvious name, was born around 1670 and belongs to
+				# the 1704-1740 risings — half a century too late.)
+				# No dynasty line: vanilla ships no Bashkir house in
+				# 04_dynasties.txt and inventing one would be a second piece of
+				# alternate history. bashkir/sunni are BSH's own database entry
+				# (steppes.txt:53-54).
 				create_character = {
 					estate = estate_type:nobles_estate
-					first_name = Aldar
-					age = 35
+					first_name = Sary
+					age = 40
 					culture = culture:bashkir
 					religion = religion:sunni
 					adm = { 30 60 }
@@ -1070,15 +1084,22 @@ mr_return_manchuria = {
 				# MOVES a living capital.
 				set_capital = location:shenyang
 
-				# IDENTITY BY HAND — see the file header. Nurhaci founded the
-				# Later Jin in 1616, which is the year this theatre lands, and
-				# aisin_gioro_dynasty is the Qing house, present in vanilla's
-				# 04_dynasties.txt. MEASURED: without change_religion this heir
-				# arrived TENGRI, the Mongol faith, not Tungusic Shamanist.
+				# IDENTITY BY HAND — see the file header. MEASURED: without
+				# change_religion this heir arrived TENGRI, the Mongol faith,
+				# not Tungusic Shamanist.
+				#
+				# DATED TO WHEN THIS THEATRE FIRES, 1670 — not to 1616, the
+				# real Later Jin. Nurhaci died in 1626 and would be long gone;
+				# the Qing ruler of 1670 is the Kangxi Emperor (1661-1722),
+				# who was sixteen and already ruling in person. He is an Aisin
+				# Gioro, so the dynasty line was already right.
+				# WATCH IN TESTING: sixteen is young enough that a regency
+				# would hurt a brand-new country inside its 25-year grace. If
+				# one appears, raise the age rather than change the man.
 				create_character = {
 					estate = estate_type:nobles_estate
-					first_name = Nurhaci
-					age = 35
+					first_name = Kangxi
+					age = 16
 					culture = culture:jurchen_culture
 					religion = religion:tungusic_shamanism
 					dynasty = dynasty:aisin_gioro_dynasty
@@ -1190,15 +1211,19 @@ mr_return_dzungaria = {
 				# MOVES a living capital.
 				set_capital = location:hoboksar
 
-				# IDENTITY BY HAND — see the file header. Erdeni Batur founded
-				# the Dzungar Khanate in 1634 — the date in this theatre's own
-				# header — and the Choros were its ruling clan; choros_dynasty
-				# is in vanilla's 04_dynasties.txt. oirat_culture/tengri are
-				# OIR's own database entry (east_asia.txt:3274-3275).
+				# IDENTITY BY HAND — see the file header. oirat_culture/tengri
+				# are OIR's own database entry (east_asia.txt:3274-3275).
+				#
+				# DATED TO WHEN THIS THEATRE FIRES, 1673 — not to 1634.
+				# Erdeni Batur founded the khanate in 1634 and died in 1653;
+				# the Dzungar ruler of 1673 is Galdan Boshugtu Khan
+				# (1671-1697), aged 29, the man who actually made the Dzungars
+				# the last steppe empire. Also a Choros, so the dynasty line
+				# was already right.
 				create_character = {
 					estate = estate_type:nobles_estate
-					first_name = Erdeni
-					age = 35
+					first_name = Galdan
+					age = 29
 					culture = culture:oirat_culture
 					religion = religion:tengri
 					dynasty = dynasty:choros_dynasty
@@ -1634,8 +1659,12 @@ mr_return_tarim = {
 				# MOVES a living capital.
 				set_capital = location:yarkand
 
-				# IDENTITY BY HAND — see the file header. Abdullah Khan ruled
-				# Yarkand 1638-1669; the Yarkand khans were Chagatayids, so the
+				# IDENTITY BY HAND — see the file header.
+				#
+				# DATED TO WHEN THIS THEATRE FIRES, 1688 — the last of the
+				# fourteen. Abdullah Khan ruled Yarkand 1638-1669 and is a
+				# generation too early; the khan of 1688 is Muhammad Amin
+				# (1682-1692). The Yarkand khans were Chagatayids, so the
 				# house is Borjigin. mongolian_culture/tengri are CHG's own
 				# database entry (east_asia.txt:2223-2224) — NOTE the real
 				# Yarkand Khanate was Muslim by this date; using the tag's own
@@ -1643,8 +1672,8 @@ mr_return_tarim = {
 				# design call, not a bug fix.
 				create_character = {
 					estate = estate_type:nobles_estate
-					first_name = Abdullah
-					age = 35
+					first_name = Muhammad
+					age = 40
 					culture = culture:mongolian_culture
 					religion = religion:tengri
 					dynasty = dynasty:borjigin_dynasty
