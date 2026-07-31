@@ -1838,3 +1838,61 @@ FIRSAT, verilen bir hediye degil.
 
 Bayraklar: mr_beat_dadu_fired (Faz 2), mr_beat_baghdad_fired ve
 mr_beat_rus_fired (Faz 3), ucu de kendi fazinin on_ended'inda temizleniyor.
+
+## HABER OLAYLARI DENETIMI - UC BULGU, UCU DE DUZELTILDI (31.07)
+
+Yazarin uc sorusu, ucu de hakliydi.
+
+### 1. historical_info BIR EVENT ALANI, SADECE LOC ANAHTARI DEGIL
+
+reformation.17 (D008_reformation.txt:5) bunu acikca gosteriyor: olayin govdesinde
+`historical_info = reformation.17.historical_info` satiri var. Loc anahtarini
+yazmak TEK BASINA hicbir sey yapmiyor.
+OLCUM: modda 31 historical_info loc anahtari, 25 beyan. Eksik olan 6'sinin
+hepsi bu turda eklediklerimdi - yani oyunda hic gorunmuyorlardi. Yedisine de
+alan beyan edildi (.1'e loc anahtari da yazilmamisti, harness yakaladi).
+
+### 2. IKI METIN BIZIM SENARYOMUZA DEGIL 13. YUZYILA AITTI
+
+- mr_distant.4 (Bagdat) "halife oldu" diyordu. Hilafet 1258'de bitti, Faz 3'ten
+  UC YUZYIL once - bizim zaman cizgimizde Bagdat'ta oldurulecek halife YOK.
+  Yeniden yazildi: sehir ikinci kez dusuyor ve dehset olayin kendisinde degil
+  HATIRASINDA. "Bu sehre bozkir geldiginde olan seyin bir adi var, ve o ad uc
+  yuz yillik."
+- mr_distant.6 (Rus) "prensler birlik olamadi" diyordu. 1550-1650'de Rus
+  topraklari dagilmis beylikler degil, TEK bir devlet. Yeniden yazildi ve
+  daha korkutucu oldu: "bu sefer bolunecek prens yoktu. Tek bir devlet duruyordu
+  ve fark etmedi."
+- mr_distant.1'deki "dedelerimizin korkmayi ogrendigi ad" da 1420 icin cok
+  yakindi (1240'tan ~180 yil), "kayitlarimizin bize korkmayi ogrettigi ad"
+  oldu.
+13. yuzyil malzemesi historical_info kutularinda kaldi, ki zaten oraya ait.
+
+### 3. IKI OLAY ARKA ARKAYA GELIYORDU
+
+.2 Faz 2'nin on_ending'inde, .3 Faz 3'un on_start'inda. Faz 2 bitince Faz 3
+ertesi tikte aciliyor (monthly_spawn_chance_unique), yani oyuncu "tabiiyet
+et" ile "artik sinir" mesajlarini DORT HAFTA arayla aliyordu - ayni vurus iki
+kez. .3 on_start'tan cikarilip Faz 3'un on_monthly'sine, momentum >= 216 (18
+yil) esigine ve ADI KONMUS DARBELERDEN SONRAYA tasindi. Faz 3'u daha hizli
+bitiren kampanya .3'u hic gormuyor ve dogrudan .7'ye (yollar aciliyor)
+geciyor, ki dogru olan da bu.
+
+## SON ZAMAN CIZELGESI
+
+  Faz 2 on_start                          .1  soylenti
+  Faz 2 on_monthly, dadu alininca         .5  Mandate el degistiriyor
+  Faz 2 on_ending (MGE ilan)              .2  elci tabiiyet istiyor
+  Faz 3 on_monthly, bagdat alininca       .4  Bagdat
+  Faz 3 on_monthly, rus topraginda varlik .6  Rus topraklari
+  Faz 3 on_monthly, momentum >= 216       .3  artik sinir
+  Faz 3 on_ending BASARI                  .7  yollar aciliyor
+
+Yedisinde de fire_only_once, aylik olanlarin dordunde de kendi bayragi
+(kurulum 1 / okuma 1 / temizlik 1), ve .7 yalnizca basari dalinda.
+
+## YANLIS ALARM: "Unrecognized loc key mr_distant.4/5/6/7"
+
+Dosya damgalari: MR_distant_events.txt 18:36:27, MR_l_english.yml 18:37:33,
+log 18:36:27. Oyun, olaylari yazdigim an ile loc'u yazdigim an arasindaki 66
+saniyede acilmis. Olaylar vardi, metinleri henuz yoktu. Kod hatasi degil.
