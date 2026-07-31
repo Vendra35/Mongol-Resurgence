@@ -291,7 +291,6 @@ MR_geo_russian_foothold = {
 # still feeds the cohesion score (mr_ulus_sibir_held) — losing it is
 # pressure — it just yields no khanate. Russia takes that ground,
 # which is what happened.
-
 # The Kazakh Khanate (KAZ), 1465-1847 — the largest surviving
 # steppe state and the true heir of the Desht-i Kipchak. Zhetysu
 # (Semirechye) is included because it was Kazakh ground in this
@@ -417,7 +416,6 @@ MR_geo_middle_volga = {
 # rule for the whole 1650-1700 window - Bukhara under the Janids to
 # 1747, Khiva under the Arabshahids to 1740 - which is exactly what
 # this situation is for.
-
 # Safavid Khorasan. Folded into mr_return_persia (slot 3).
 MR_geo_safavid_khorasan = {
 	area = {

@@ -41,7 +41,6 @@
 # or gets one in zz_mr_new_countries.txt, except RUS, which is only
 # ever named behind country_exists.
 # =================================================================
-
 # --- 1. THE CRIMEAN KHANATE (1441) -------------------------------
 # Haci Giray's ulus: furthest from Karakorum, and the Chinggisid
 # state that outlived every other one, to 1783.
@@ -478,7 +477,7 @@ mr_return_bashkiria = {
 # Muscovy has normally formed Russia; MOS is the fallback. Neither is
 # ever instantiated from nothing: no country_exists, no handover, and
 # the ground simply stays Mongol. This is also why RUS needs no
-# identity block while IRA and QNG do.
+# identity block while IRA and MCH-Manchu(QNG) do.
 mr_return_middle_volga = {
 	if = {
 		limit = {
@@ -538,31 +537,31 @@ mr_return_middle_volga = {
 				}
 			}
 			# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
-		#
-		# MEASURED 1658, first live run: this family set its flag and moved
-		# nothing. c:IRA had no country object, because a campaign in progress
-		# cannot gain a tag added to setup/countries after the campaign was
-		# created - the country database is minted once. The flag then sealed
-		# the theatre for the rest of the campaign and Persia stayed Mongol
-		# forever. A silent failure is survivable; one that marks itself done
-		# is not.
-		#
-		# The test is the atom itself. If any claimant ground here is still
-		# takeable the handover did not happen, so the effect retries next
-		# month. If the atom never had any - the Khaghan did not own it - the
-		# guard passes at once and the theatre is correctly recorded settled.
-		if = {
-			limit = {
-				NOT = {
-					scripted_geography:MR_geo_middle_volga = {
-						any_location_in_scripted_geography = {
-							mr_partition_takeable = yes
+			#
+			# MEASURED 1658, first live run: this family set its flag and moved
+			# nothing. c:IRA had no country object, because a campaign in progress
+			# cannot gain a tag added to setup/countries after the campaign was
+			# created - the country database is minted once. The flag then sealed
+			# the theatre for the rest of the campaign and Persia stayed Mongol
+			# forever. A silent failure is survivable; one that marks itself done
+			# is not.
+			#
+			# The test is the atom itself. If any claimant ground here is still
+			# takeable the handover did not happen, so the effect retries next
+			# month. If the atom never had any - the Khaghan did not own it - the
+			# guard passes at once and the theatre is correctly recorded settled.
+			if = {
+				limit = {
+					NOT = {
+						scripted_geography:MR_geo_middle_volga = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
 						}
 					}
 				}
+				set_global_variable = mr_returned_middle_volga
 			}
-			set_global_variable = mr_returned_middle_volga
-		}
 		}
 	}
 }
@@ -732,48 +731,48 @@ mr_return_north = {
 				}
 			}
 			# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
-		#
-		# MEASURED 1658, first live run: this family set its flag and moved
-		# nothing. c:IRA had no country object, because a campaign in progress
-		# cannot gain a tag added to setup/countries after the campaign was
-		# created - the country database is minted once. The flag then sealed
-		# the theatre for the rest of the campaign and Persia stayed Mongol
-		# forever. A silent failure is survivable; one that marks itself done
-		# is not.
-		#
-		# The test is the atom itself. If any claimant ground here is still
-		# takeable the handover did not happen, so the effect retries next
-		# month. If the atom never had any - the Khaghan did not own it - the
-		# guard passes at once and the theatre is correctly recorded settled.
-		if = {
-			limit = {
-				NOT = {
-					OR = {
-						scripted_geography:MR_geo_siberian_marches = {
-							any_location_in_scripted_geography = {
-								mr_partition_takeable = yes
+			#
+			# MEASURED 1658, first live run: this family set its flag and moved
+			# nothing. c:IRA had no country object, because a campaign in progress
+			# cannot gain a tag added to setup/countries after the campaign was
+			# created - the country database is minted once. The flag then sealed
+			# the theatre for the rest of the campaign and Persia stayed Mongol
+			# forever. A silent failure is survivable; one that marks itself done
+			# is not.
+			#
+			# The test is the atom itself. If any claimant ground here is still
+			# takeable the handover did not happen, so the effect retries next
+			# month. If the atom never had any - the Khaghan did not own it - the
+			# guard passes at once and the theatre is correctly recorded settled.
+			if = {
+				limit = {
+					NOT = {
+						OR = {
+							scripted_geography:MR_geo_siberian_marches = {
+								any_location_in_scripted_geography = {
+									mr_partition_takeable = yes
+								}
 							}
-						}
-						scripted_geography:MR_geo_ural = {
-							any_location_in_scripted_geography = {
-								mr_partition_takeable = yes
+							scripted_geography:MR_geo_ural = {
+								any_location_in_scripted_geography = {
+									mr_partition_takeable = yes
+								}
 							}
-						}
-						scripted_geography:MR_geo_russian_lands = {
-							any_location_in_scripted_geography = {
-								mr_partition_takeable = yes
+							scripted_geography:MR_geo_russian_lands = {
+								any_location_in_scripted_geography = {
+									mr_partition_takeable = yes
+								}
 							}
-						}
-						scripted_geography:MR_geo_pontic_frontier = {
-							any_location_in_scripted_geography = {
-								mr_partition_takeable = yes
+							scripted_geography:MR_geo_pontic_frontier = {
+								any_location_in_scripted_geography = {
+									mr_partition_takeable = yes
+								}
 							}
 						}
 					}
 				}
+				set_global_variable = mr_returned_north
 			}
-			set_global_variable = mr_returned_north
-		}
 		}
 	}
 }
@@ -888,14 +887,14 @@ mr_return_manchuria = {
 				limit = {
 					mr_partition_takeable = yes
 				}
-				change_location_owner = c:QNG
-				add_core = c:QNG
+				change_location_owner = c:MCH
+				add_core = c:MCH
 				change_integration_level = core
 			}
 		}
 		if = {
 			limit = {
-				country_exists = c:QNG
+				country_exists = c:MCH
 			}
 			# Twenty-five years of grace. This is the clause that makes the
 			# schedule mean anything: a fourteen-location Crimea next to a
@@ -906,7 +905,7 @@ mr_return_manchuria = {
 			# 1616, the Qing empire proclaimed in 1636, Beijing in 1644. It is
 			# also kinder mechanically than putting a Manchuria-sized realm
 			# straight onto an empire's governing burden.
-			c:QNG = {
+			c:MCH = {
 				# MEASURED: a tag brought onto the map by change_location_owner is
 				# instantiated from its setup/countries identity block alone, and that block
 				# authors NOTHING at runtime - no capital, no government, no culture, no
@@ -1122,7 +1121,7 @@ mr_return_tibet = {
 
 # --- 12. THE QING TAKE CHINA (1644) ------------------------------
 # Beijing falls to the Manchus in 1644 and the Ming are finished.
-# Deliberately QNG and not MNG or CHI even when those still exist:
+# Deliberately MCH=QNG and not MNG or CHI even when those still exist:
 # this schedule is the 1650-1700 map, and in 1650 China is Qing.
 mr_return_china = {
 	if = {
@@ -1131,13 +1130,29 @@ mr_return_china = {
 				has_global_variable = mr_returned_china
 			}
 		}
+		if = {
+			limit = {
+				country_exists = c:MCH
+			}
+			## # Proclamation of the Qing
+			## This is vanilla's official way of forming QNG. Look game\in_game\events\DHE\flavor_MCH.txt:985-1038 lines. It is the only way to get the QNG tag. 
+			c:MCH = {
+				form_country = formable_country:CHI_f
+				hidden_effect = {
+					change_country_flag = CHI
+				}
+				change_country_adjective = QNG_ADJ
+				change_country_name = QNG
+				change_country_color = map_QNG
+			}
+		}
 		scripted_geography:MR_geo_north_china = {
 			every_location_in_scripted_geography = {
 				limit = {
 					mr_partition_takeable = yes
 				}
-				change_location_owner = c:QNG
-				add_core = c:QNG
+				change_location_owner = c:MCH
+				add_core = c:MCH
 				change_integration_level = core
 			}
 		}
@@ -1146,14 +1161,14 @@ mr_return_china = {
 				limit = {
 					mr_partition_takeable = yes
 				}
-				change_location_owner = c:QNG
-				add_core = c:QNG
+				change_location_owner = c:MCH
+				add_core = c:MCH
 				change_integration_level = core
 			}
 		}
 		if = {
 			limit = {
-				country_exists = c:QNG
+				country_exists = c:MCH
 			}
 			# Twenty-five years of grace. This is the clause that makes the
 			# schedule mean anything: a fourteen-location Crimea next to a
@@ -1161,7 +1176,7 @@ mr_return_china = {
 			# without it the map churns straight back to a blob.
 			# Emperor of China from 1644. The ratchet lifts QNG from the kingdom
 			# rank the Manchuria handover gave it.
-			c:QNG = {
+			c:MCH = {
 				# MEASURED: a tag brought onto the map by change_location_owner is
 				# instantiated from its setup/countries identity block alone, and that block
 				# authors NOTHING at runtime - no capital, no government, no culture, no
@@ -1293,31 +1308,31 @@ mr_return_korea = {
 				}
 			}
 			# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
-		#
-		# MEASURED 1658, first live run: this family set its flag and moved
-		# nothing. c:IRA had no country object, because a campaign in progress
-		# cannot gain a tag added to setup/countries after the campaign was
-		# created - the country database is minted once. The flag then sealed
-		# the theatre for the rest of the campaign and Persia stayed Mongol
-		# forever. A silent failure is survivable; one that marks itself done
-		# is not.
-		#
-		# The test is the atom itself. If any claimant ground here is still
-		# takeable the handover did not happen, so the effect retries next
-		# month. If the atom never had any - the Khaghan did not own it - the
-		# guard passes at once and the theatre is correctly recorded settled.
-		if = {
-			limit = {
-				NOT = {
-					scripted_geography:MR_geo_korea = {
-						any_location_in_scripted_geography = {
-							mr_partition_takeable = yes
+			#
+			# MEASURED 1658, first live run: this family set its flag and moved
+			# nothing. c:IRA had no country object, because a campaign in progress
+			# cannot gain a tag added to setup/countries after the campaign was
+			# created - the country database is minted once. The flag then sealed
+			# the theatre for the rest of the campaign and Persia stayed Mongol
+			# forever. A silent failure is survivable; one that marks itself done
+			# is not.
+			#
+			# The test is the atom itself. If any claimant ground here is still
+			# takeable the handover did not happen, so the effect retries next
+			# month. If the atom never had any - the Khaghan did not own it - the
+			# guard passes at once and the theatre is correctly recorded settled.
+			if = {
+				limit = {
+					NOT = {
+						scripted_geography:MR_geo_korea = {
+							any_location_in_scripted_geography = {
+								mr_partition_takeable = yes
+							}
 						}
 					}
 				}
+				set_global_variable = mr_returned_korea
 			}
-			set_global_variable = mr_returned_korea
-		}
 		}
 	}
 }

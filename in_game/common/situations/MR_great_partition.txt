@@ -200,7 +200,7 @@ mr_great_partition = {
 				mr_return_kazakh = yes
 			}
 			# --- 3. SAFAVID PERSIA (1501) - Ismail I takes Tabriz. The Caucasus
-			# comes with it, Safavid ground to 1722.
+			# comes with it, Safavid ground to 1722. Also Ottoman Anatolia Murad IV takes Baghdad back.
 			if = {
 				limit = {
 					OR = {
@@ -208,11 +208,24 @@ mr_great_partition = {
 						current_date > 1658.1.1
 					}
 				}
+				mr_return_ottoman = yes
 				mr_return_persia = yes
 			}
 			# --- 4. THE BASHKIRS (1662) - under Moscow from the 1550s and in
 			# revolt for a century after. BEFORE both Russian sweeps:
 			# MR_geo_ural contains bashkiria_area.
+			# Bashkiria cant be spawned because they are pop based country even tho we change them the settled we cannot spawn them. So I change others momentum and current_dates according to that.
+			# if = {
+			# 	limit = {
+			# 		OR = {
+			# 			var:mr_partition_momentum > 132
+			# 			current_date > 1661.1.1
+			# 		}
+			# 	}
+			# 	mr_return_bashkiria = yes
+			# }
+			# --- 5. THE MIDDLE VOLGA (1552, 1556) - Kazan and Astrakhan fall to
+			# Ivan IV. Also before the northern sweep, same reason.
 			if = {
 				limit = {
 					OR = {
@@ -220,26 +233,23 @@ mr_great_partition = {
 						current_date > 1661.1.1
 					}
 				}
-				mr_return_bashkiria = yes
-			}
-			# --- 5. THE MIDDLE VOLGA (1552, 1556) - Kazan and Astrakhan fall to
-			# Ivan IV. Also before the northern sweep, same reason.
-			if = {
-				limit = {
-					OR = {
-						var:mr_partition_momentum > 168
-						current_date > 1664.1.1
+				mr_return_middle_volga = yes
+				c:MGE = {
+					if = {
+						limit = {
+							has_country_modifier = MR_volga_pastures
+						}
+						remove_country_modifier = MR_volga_pastures
 					}
 				}
-				mr_return_middle_volga = yes
 			}
 			# --- 6. THE NOGAI HORDE (1557) - the Greater/Lesser split, then
 			# Kalmyk pressure off the Volga in the 1630s.
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 204
-						current_date > 1667.1.1
+						var:mr_partition_momentum > 168
+						current_date > 1664.1.1
 					}
 				}
 				mr_return_nogai = yes
@@ -249,30 +259,31 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 240
-						current_date > 1670.1.1
+						var:mr_partition_momentum > 204
+						current_date > 1667.1.1
 					}
 				}
 				mr_return_north = yes
 			}
 			# --- 8. THE OTTOMANS (1638) - Murad IV takes Baghdad back; Anatolia
-			# was never anything else after 1453.
-			if = {
-				limit = {
-					OR = {
-						var:mr_partition_momentum > 348
-						current_date > 1679.1.1
-					}
-				}
-				mr_return_ottoman = yes
-			}
+			# was never anything else after 1453. // I disable Ottoamns here and move them in the Iran code block up, because when Iran takes persia, Ottoman should take anatolia as well.
+			# Otherwise bordergore will happen.
+			# if = {
+			# 	limit = {
+			# 		OR = {
+			# 			var:mr_partition_momentum > 348
+			# 			current_date > 1679.1.1
+			# 		}
+			# 	}
+			# 	mr_return_ottoman = yes
+			# }
 			# --- 9. THE MANCHUS AT HOME (1616) - Nurhaci proclaims the Later
 			# Jin. Their homeland first, China later, as it happened.
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 276
-						current_date > 1673.1.1
+						var:mr_partition_momentum > 240
+						current_date > 1670.1.1
 					}
 				}
 				mr_return_manchuria = yes
@@ -282,19 +293,27 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 312
-						current_date > 1676.1.1
+						var:mr_partition_momentum > 276
+						current_date > 1673.1.1
 					}
 				}
 				mr_return_dzungaria = yes
+				c:MGE = {
+					if = {
+						limit = {
+							has_country_modifier = MR_dzungar_legacy
+						}
+						remove_country_modifier = MR_dzungar_legacy
+					}
+				}
 			}
 			# --- 11. THE GANDEN PHODRANG (1642) - the Fifth Dalai Lama's state,
 			# installed by Gushi Khan, himself a Mongol.
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 384
-						current_date > 1682.1.1
+						var:mr_partition_momentum > 312
+						current_date > 1676.1.1
 					}
 				}
 				mr_return_tibet = yes
@@ -304,8 +323,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 420
-						current_date > 1685.1.1
+						var:mr_partition_momentum > 384
+						current_date > 1682.1.1
 					}
 				}
 				mr_return_china = yes
@@ -316,8 +335,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 456
-						current_date > 1688.1.1
+						var:mr_partition_momentum > 420
+						current_date > 1685.1.1
 					}
 				}
 				mr_return_korea = yes
@@ -329,8 +348,8 @@ mr_great_partition = {
 			if = {
 				limit = {
 					OR = {
-						var:mr_partition_momentum > 492
-						current_date > 1691.1.1
+						var:mr_partition_momentum > 456
+						current_date > 1688.1.1
 					}
 				}
 				mr_return_tarim = yes
@@ -435,20 +454,20 @@ mr_great_partition = {
 				subtract = 8
 			}
 		}
-		if = {
-			limit = {
-				OR = {
-					NOT = {
-						mr_ulus_bashkiria_held = yes
-					}
-					has_global_variable = mr_returned_bashkiria
-				}
-			}
-			change_variable = {
-				name = MR_cohesion_score
-				subtract = 8
-			}
-		}
+		# if = {
+		# 	limit = {
+		# 		OR = {
+		# 			NOT = {
+		# 				mr_ulus_bashkiria_held = yes
+		# 			}
+		# 			has_global_variable = mr_returned_bashkiria
+		# 		}
+		# 	}
+		# 	change_variable = {
+		# 		name = MR_cohesion_score
+		# 		subtract = 8
+		# 	}
+		# }
 		# The Siberian frontier yields no successor khanate — the Sibir
 		# Khanate fell in 1598 and that ground is Russian by now — but
 		# losing it is still pressure.
@@ -463,7 +482,7 @@ mr_great_partition = {
 			}
 			change_variable = {
 				name = MR_cohesion_score
-				subtract = 8
+				subtract = 16
 			}
 		}
 		# Everything the kurultai has conceded is added back. This is why
@@ -718,6 +737,11 @@ mr_great_partition = {
 			remove_country_modifier = MR_the_centre_cannot_hold
 			remove_country_modifier = MR_the_uluses_drift
 			remove_country_modifier = MR_khaghan_in_name_only
+			## Permanent modifier removal.
+			remove_country_modifier = MR_kurultai_mandate
+			remove_country_modifier = MR_empire_fulfilled
+			remove_country_modifier = MR_mongol_world_order
+			remove_country_modifier = MR_unified_mongol_banner
 		}
 		# Branch on the goal trigger, never on a side-signal - the same rule
 		# every other phase follows.
@@ -896,10 +920,13 @@ mr_great_partition = {
 						tag = NOG
 						tag = TUR
 						tag = QNG
+						tag = MCH
+						tag = CHI
 						tag = OIR
 						tag = TIB
 						tag = KOR
 						tag = CHG
+						tag = OGE
 					}
 				}
 			}

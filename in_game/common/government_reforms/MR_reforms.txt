@@ -34,9 +34,9 @@ MR_yassa_code = {
 	}
 	years = 2
 }
+
 ## The Keshig System — the unique reform mr_horse_lords_reborn unlocks.
 MR_the_keshig_system = {
-	major = yes
 	unique = yes
 	potential = {
 		OR = {
