@@ -1,0 +1,186 @@
+# =================================================================
+# THE GREAT PARTITION'S HEIRS - THEIR START BLOCKS
+# =================================================================
+# THIS FILE CARRIES NO BOM, AND THAT IS LOAD-BEARING. It is the only
+# tree in the game that refuses one: 0 of vanilla's 25 files in
+# main_menu/setup/start/ begin with efbbbf, while 45 of 45 in
+# in_game/setup/countries/ do. A BOM here is read as a token
+# (pdx_persistent_reader.cpp:289 "Unexpected token: <invisible>") and
+# the whole file goes SILENTLY INERT. tools/verify_mod.py's BOM check
+# exempts this folder and asserts the opposite for it.
+#
+# THE FILENAME IS ALSO LOAD-BEARING. A mod file named 10_countries.txt
+# would REPLACE vanilla's entire 50k-line file and empty the map. The
+# folder merges its files instead, at country level: vanilla itself
+# extends SWE from three separate files (10_countries.txt:17,
+# 25_area_preferences.txt:8, 26_ai_personalities.txt:9), and
+# 26_ai_personalities.txt is the additive precedent this file copies -
+# same `countries = { countries = { ... } }` wrapper, no BOM, a name
+# of its own. 28_ sorts after vanilla's highest, 27_armies.txt.
+#
+# WHY THIS FILE EXISTS AT ALL. KAZ, IRA and MCH had identity blocks in
+# in_game/setup/countries/ and no start block here - a combination
+# that occurs ZERO times in vanilla: 2337 of 2337 real tags have both,
+# and the only three exceptions are the engine's reserved DUMMY, PIR
+# and MER. The engine said so at every campaign start, ten lines per
+# tag (initialize_from_bookmark.cpp :495 no government type, :498/:517
+# heir-selection, :520 religious_school, :525/:528 capital and its
+# discovery, :1558 marriage_law, :1576 heir_religion_law, :169 society
+# values, :1719 parliament_type).
+#
+# AND THE LINES WERE NOT COSMETIC. :495 is the root cause of "County
+# of Kazakh" - the displayed name is composed by two chained
+# first-match tables that both branch on government type, and a
+# country with none falls through to the county default. :528 is why
+# the author measured IRA and the Manchu heir spawning with no map
+# knowledge and no advances at all, in an age-5 campaign.
+#
+# THE PROOF THAT THIS IS THE FIX, from the author's own game: CRI came
+# out FINE while IRA and MCH did not - and CRI is the one that already
+# has a landless start block (10_countries.txt:4195-4222, with
+# starting_technology_level = 3 and include = "expl_mongols"). These
+# three blocks give the other three what CRI always had.
+#
+# `is_historic = yes` stays in the identity blocks. It silences a
+# DIFFERENT line, :592, and does not touch the ten above.
+#
+# NOTE FOR THE NEXT SESSION: setup is read ONCE, when a campaign is
+# created. A save made before this file existed cannot gain these
+# fields. Testing this needs a NEW CAMPAIGN.
+# =================================================================
+
+countries = {
+	countries = {
+
+		# The Kazakh Khanate. Landless at 1337 and revived by the Great
+		# Partition around 1655. Shape copied from TIM (10_countries.txt
+		# :48847), vanilla's own landless Muslim steppe horde: the horde
+		# template plus a religious_school and nothing else. NOTE TIM
+		# carries religious_school with NO sharia_law law of its own -
+		# writing one would need legal_code_law = sharia_law_policy in the
+		# same block or the engine removes it at init (government.cpp:3535,
+		# a law group whose potential is has_policy = X needs X shipped
+		# alongside).
+		#
+		# `type` is deliberately OMITTED here, on all three blocks. TIM,
+		# CHB, MGE and OIR all write `type = army` - but KAZ's handover was
+		# MEASURED WORKING in game 2026-07-30 with no start block and so no
+		# type at all, and ODO (10_countries.txt:49955) shows omitting it is
+		# vanilla-attested. Do not add one without a reason.
+		#
+		# capital: shavgar, which is khorasan_region / zhetysu_area, and
+		# expl_mongols grants khorasan_region - so the capital is inside the
+		# discovery, which is exactly what :528 demands. It is also the
+		# capital the partition itself sets, so the mod names one seat per
+		# heir and not two.
+		KAZ = {
+			own_control_core = { }
+			our_cores_conquered_by_others = { }
+
+			starting_technology_level = 3
+			include = "expl_mongols"
+			include = "eurasian_horde_not_present"
+
+			government = {
+				ruler = random
+
+				# MEASURED IN GAME 2026-07-31, first launch with this file:
+				# "government.cpp:3544 Removing invalid policy 'polygyny' for
+				# 'KAZ Kazakh' 2340 at game start". The horde template hands
+				# out marriage_law = polygyny, whose potential is
+				# `is_country_religion_pagan OR hindu OR indian culture group`
+				# (01_common.txt:1686-1692) — and KAZ is SUNNI, so the engine
+				# throws the law away. Both of vanilla's Muslim users of this
+				# same template override it for exactly this reason: CHB with
+				# muslim_marriage (10_countries.txt:57721), TIM with
+				# monogamous_marriage (:48857). muslim_marriage's potential is
+				# just `religion.group = religion_group:muslim`
+				# (01_common.txt:1656) and its modifiers are identical to
+				# polygyny's, so it is a straight swap.
+				#
+				# THE GENERAL RULE, worth carrying: a law arriving from an
+				# include is NOT guaranteed to fit the country that includes
+				# it. Anything religion-gated has to be restated to match.
+				laws = {
+					marriage_law = muslim_marriage
+				}
+			}
+
+			court_language = kipchak_language
+			religious_school = hanafi_school
+			country_rank = rank_duchy
+			capital = shavgar
+		}
+
+		# Safavid Persia. Shape copied from FEZ (10_countries.txt:19464),
+		# a landless Muslim monarchy on the same template.
+		# muslim_monarchy_not_present supplies the sliders, the parliament,
+		# both laws and starting_technology_level - but NOT `type` and NOT
+		# `heir_selection`, so both are written inline, exactly as FEZ does.
+		# The school is jafari, the Twelver school, with the matching
+		# sharia_law policy: CHB (10_countries.txt:57710) is vanilla's own
+		# shia country and pairs them the same way.
+		#
+		# capital: isfahan, persia_region / iraq_ajam_area, and
+		# expl_middle_east grants persia_region.
+		IRA = {
+			own_control_core = { }
+			our_cores_conquered_by_others = { }
+
+			starting_technology_level = 3
+			include = "expl_middle_east"
+			include = "muslim_monarchy_not_present"
+
+			government = {
+				type = monarchy
+				heir_selection = cognatic_primogeniture
+				ruler = random
+
+				laws = {
+					sharia_law = jafari_policy
+				}
+			}
+
+			court_language = persian_language
+			religious_school = jafari_school
+			country_rank = rank_duchy
+			capital = isfahan
+		}
+
+		# The Manchus - Later Jin in 1616, the Qing in 1644. Shape copied
+		# from DNG (10_countries.txt:49828), one of vanilla's Jianzhou
+		# Jurchen tribes. jianzhou_tribe_not_present supplies `type = tribe`,
+		# the sliders, the parliament, both laws, the jianzhou_jurchen_reform
+		# and starting_technology_level = 2 - but no heir_selection, so
+		# ritual_selection is written inline the way DNG and ODO do.
+		#
+		# NO religious_school line: tungusic_shamanism has none. Vanilla
+		# ships religious_schools for exactly six religions (sunni, shia,
+		# sufi, ibadi, hinduism, jain), which is why the author's log
+		# printed :520 twice and not three times.
+		#
+		# NO block-level `dynasty` either: aisin_gioro_dynasty is already
+		# assigned to a country at 10_countries.txt:49977, and the partition
+		# gives the Manchu founder that house at runtime anyway.
+		#
+		# capital: shenyang, manchuria_region / liaodong_area, and
+		# expl_manchurian_tribe grants manchuria_region. Same seat the
+		# partition sets.
+		MCH = {
+			own_control_core = { }
+			our_cores_conquered_by_others = { }
+
+			include = "expl_manchurian_tribe"
+			include = "jianzhou_tribe_not_present"
+
+			government = {
+				ruler = random
+				heir_selection = ritual_selection
+			}
+
+			country_rank = rank_duchy
+			capital = shenyang
+		}
+
+	}
+}
