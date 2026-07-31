@@ -3,9 +3,9 @@
 	"id":	"mongolresurgence",
 	"version":	"1.0.0",
 	"supported_game_version":	"1.3.X",
-	"short_description":	"A three-phase alternate history in which the Mongol tribes reunify after the fall of the Yuan and launch a new wave of conquest westward.",
-	"tags":	["Historical", "Events", "Gameplay"],
+	"short_description":	"After the Yuan fall in 1368 the Mongol tribes reunify and ride west again - and when the empire comes apart, the map returns to the real powers of 1700.",
+	"tags":	["Advancements", "Alternative history", "Characters", "Events", "Gameplay", "Government and Estates", "Historical"],
 	"relationships":	[],
 	"game_custom_data":	{
-}
+	}
 }
