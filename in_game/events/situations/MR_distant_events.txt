@@ -111,6 +111,20 @@ mr_distant.2 = {
 	}
 	option = {
 		name = mr_distant.2.b
+		# THE HISTORICAL ANSWER, for THIS audience. historical_option is a
+		# separate feature from historical_info above - that one is the
+		# content of the info box, this one marks which choice history
+		# actually made. The two are independent: 398 vanilla events declare
+		# historical_info with no historical_option anywhere in them.
+		#
+		# Refusal is the historical answer here because of WHO receives this
+		# event. The powers that submitted - the Rus principalities, the
+		# Seljuks of Rum, Georgia, Armenia - were the ones with a Mongol army
+		# in front of them, and they are the neighbour ring, which this event
+		# deliberately excludes. The outer ring is western Europe, Egypt and
+		# India: Europe was never made to answer, the Mamluks refused and won
+		# at Ain Jalut, and Delhi fought the raids off for a century.
+		historical_option = yes
 		# Refuse. Pride, bought with risk.
 		add_prestige = prestige_mild_bonus
 		add_country_modifier = {
