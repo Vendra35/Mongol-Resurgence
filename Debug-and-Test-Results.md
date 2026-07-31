@@ -1896,3 +1896,40 @@ Yedisinde de fire_only_once, aylik olanlarin dordunde de kendi bayragi
 Dosya damgalari: MR_distant_events.txt 18:36:27, MR_l_english.yml 18:37:33,
 log 18:36:27. Oyun, olaylari yazdigim an ile loc'u yazdigim an arasindaki 66
 saniyede acilmis. Olaylar vardi, metinleri henuz yoktu. Kod hatasi degil.
+
+## UZAKTAKI OYUNCUYA EYLEM VERILDI (31.07)
+
+TESPIT: yedi haber olayinin yedisi de "iste haber, tamam"a bagliydi. Elci gelip
+tabiiyet istiyor ve oyuncunun tek secenegi "sessizligi geri gotursunler".
+Cevaplayamadigin bir olay bildirimden ibarettir, ve cok gelirse oyuncu okumadan
+tiklamayi ogrenir - o zaman yazilan her sey bosa gider. Eksik NICELIK degil
+EYLEMDI.
+
+mr_distant.2 (elcilik) artik IKI cevap veriyor - ve bu, modda fetih disinda
+kalan bir ulkenin bir sey KARAR VERDIGI tek yer:
+
+  a) Boyun eg   -> prestige_mild_penalty + MR_tribute_to_the_khan, 25 yil
+                   stability_investment = 1, diplomatic_reputation = -2
+                   Sessizligi gururla satin aliyorsun.
+  b) Reddet     -> prestige_mild_bonus + MR_defied_the_khan, 25 yil
+                   land_morale_modifier = 0.1, diplomatic_reputation = 2
+                   Gururu riskle satin aliyorsun.
+
+Ikisi de KUCUK ve SIMETRIK. Bu bir denge kolu degil, seyirci icin bir lezzet
+secimi, ve hicbiri "dogru" cevap degil - tarihte de oyleydi: Rus prensleri,
+Rum Selcuklulari, Ermenistan ve Gurcistan boyun egdi; Memlukler ve Macarlar
+reddetti.
+
+ai_chance agirlikli: savastaki AI boyun egmeye 2 kat meyilli, savasta olmayan
+reddetmeye. Zayifin boyun egmesi ve guclunun egmemesi tarihte de kararin
+buyuk kismiydi.
+
+IKISINDE DE monthly_rebel_growth VE global_separatism YOK. Modun claimant icin
+tuttugu kural burada da tutuldu: revolt yonetemeyen bir AI'a, hic anlamadigi
+bir diplomatik secim yuzunden isyan verilmez.
+
+## SONRAYA BIRAKILDI
+
+AYN CALUT ANI: Mogollari YENEN oyuncuya modun hicbir sey soylemedigi tespit
+edildi. Oyuncunun en cok takdir bekledigi an bu ve mod sessiz. Kancasi savas
+sonucu (on_action tarafi), once var oldugunun olculmesi gerekiyor.

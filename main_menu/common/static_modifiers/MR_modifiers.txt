@@ -734,3 +734,44 @@ MR_ulus_of_its_own = {
 	discipline = 0.1				# country.txt:2933
 	land_morale_modifier = 0.1			# country.txt:3140
 }
+
+# =================================================================
+# THE KHAN'S DEMAND - the two answers a distant power could give
+# =================================================================
+# Granted by mr_distant.2's options, and the only place in this mod
+# where a country OUTSIDE the conquest gets to decide anything. The
+# Mongol envoys really did put this question to everyone within reach,
+# and the answers really did differ: the Rus principalities, the
+# Seljuks of Rum, Armenia and Georgia submitted; the Mamluks and the
+# Hungarians refused.
+#
+# Deliberately SMALL and deliberately SYMMETRIC. This is a flavour
+# choice for a spectator, not a balance lever - you buy quiet with
+# pride, or pride with risk, and neither answer is the right one.
+# Twenty-five years each, which is a reign.
+#
+# NO monthly_rebel_growth and no global_separatism on either. The rule
+# this mod holds for the claimant is worth holding here too: an AI
+# that cannot manage revolts should not be handed them for making a
+# diplomatic choice it was never going to understand.
+MR_tribute_to_the_khan = {
+	game_data = {
+		category = country
+	}
+	# The tribute buys exactly one thing, and it is the thing it bought
+	# historically: nobody is burning your cities this year.
+	stability_investment = 0.25
+	# And costs exactly one thing. Everyone saw you kneel.
+	diplomatic_reputation = -2
+}
+
+MR_defied_the_khan = {
+	game_data = {
+		category = country
+	}
+	# Defiance is popular, and an army that has been told it will not
+	# be sold fights better. Same magnitude the mod uses for its other
+	# small morale modifiers.
+	land_morale_modifier = 0.1
+	diplomatic_reputation = 2
+}

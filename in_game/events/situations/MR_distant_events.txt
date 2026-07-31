@@ -75,17 +75,55 @@ mr_distant.2 = {
 	title = mr_distant.2.title
 	desc = mr_distant.2.desc
 	historical_info = mr_distant.2.historical_info
-	outcome = negative
+	outcome = neutral
 	fire_only_once = yes
 	major = yes
 	illustration_tags = {
 		10 = interior
 		10 = regular
 	}
+	# TWO ANSWERS, AND THIS IS THE ONLY PLACE IN THE MOD WHERE A COUNTRY
+	# OUTSIDE THE CONQUEST DECIDES ANYTHING. Every other distant event is
+	# a notification; a notification the player cannot answer is a thing
+	# they learn to click through. The envoys really did put this question
+	# to everyone within reach and the answers really did differ - the Rus
+	# princes, the Seljuks of Rum, Armenia and Georgia submitted; the
+	# Mamluks and the Hungarians refused - so both answers are written as
+	# real ones and neither is correct.
 	option = {
 		name = mr_distant.2.a
+		# Submit. Quiet, bought with pride.
+		add_prestige = prestige_mild_penalty
+		add_country_modifier = {
+			modifier = MR_tribute_to_the_khan
+			years = 25
+			mode = add
+		}
 		ai_chance = {
-			factor = 100
+			factor = 50
+			# The weak submitted and the strong did not, which is most of
+			# what decided it. An AI already at war has even less room.
+			modifier = {
+				factor = 2
+				at_war = yes
+			}
+		}
+	}
+	option = {
+		name = mr_distant.2.b
+		# Refuse. Pride, bought with risk.
+		add_prestige = prestige_mild_bonus
+		add_country_modifier = {
+			modifier = MR_defied_the_khan
+			years = 25
+			mode = add
+		}
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				at_war = no
+			}
 		}
 	}
 }

@@ -878,7 +878,8 @@
  mr_distant.1.historical_info: "The first reports of the Mongols reached the Latin West garbled beyond use, tangled up with the legend of Prester John and a rumour that a Christian king in the east was marching to relieve the Holy Land. It took the better part of a generation for anyone in Europe to work out what they were actually hearing about."
  mr_distant.2.title: "The Khan's Envoys"
  mr_distant.2.desc: "They did not ask for an audience. They rode to the gate, waited to be brought in, and delivered what they had been sent to deliver, in a tone suggesting they had said it before and would not be saying it twice.\n\n#I By the strength of the Eternal Sky. This is an order sent to you. Wherever you may be, submit to us and come to serve us, and we shall know your submission. And if you do not - what do we know? God knows.#!\n\nThey are already mounted, waiting for a reply we are not sure we can give."
- mr_distant.2.a: "Let them carry silence back with them."
+ mr_distant.2.a: "Then we will send what they ask for."
+ mr_distant.2.b: "Let them carry silence back with them."
  mr_distant.2.historical_info: "The wording is close to Guyug Khan's reply to Pope Innocent IV, carried west by Giovanni da Pian del Carpine in 1246. The Mongols wrote to everyone in that voice, and to them it was not a threat but a statement of the order of the world."
  mr_distant.3.title: "No Longer a Rumour"
  mr_distant.3.desc: "The reports have stopped disagreeing with each other, which is how we know they are true. The empire of the steppe stands on the roads to Persia and to the Levant, and the powers that stood between us and it stand there no longer.\n\nThere is nothing to decide yet. There is only the fact, and however long we have to look at it before it becomes our own frontier."
@@ -903,3 +904,9 @@
  mr_distant.7.desc: "An odd consequence of a single empire: there is now one set of tolls between here and the eastern ocean, one safe-conduct that is honoured the whole way, and one law on the road that is enforced without interest in who you are.\n\nOur merchants have noticed before our councils have. Some of them are already gone."
  mr_distant.7.a: "Send someone we can trust to look."
  mr_distant.7.historical_info: "The Pax Mongolica was real and brief. Rubruck reached Karakorum in 1254, the Polos reached Khanbaliq in 1275, Ibn Battuta crossed nearly the whole of it, and a Yuan embassy under Rabban Bar Sauma reached Rome and Paris in 1287."
+
+ # --- the Khan's demand ---------------------------------------------------
+ STATIC_MODIFIER_NAME_MR_tribute_to_the_khan: "Tribute to the Khan"
+ STATIC_MODIFIER_DESC_MR_tribute_to_the_khan: "We answered the envoys as most of those who were asked answered them. The carts go east once a year and the cities are not burned, and every court in the world knows the price we agreed to."
+ STATIC_MODIFIER_NAME_MR_defied_the_khan: "Defiance of the Khan"
+ STATIC_MODIFIER_DESC_MR_defied_the_khan: "We sent the envoys home with nothing. Whether that was courage or arithmetic will be decided by people who were not in the room - but the army stands taller for it, and so does our name."
