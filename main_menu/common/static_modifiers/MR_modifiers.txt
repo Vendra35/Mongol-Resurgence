@@ -100,6 +100,20 @@ MR_empire_fulfilled = {
 }
 
 # --- Situation 2 Failure (AI) ---
+# THE ONE DELIBERATE EXCEPTION TO THE NO-REBEL-GROWTH RULE.
+# CLAUDE.md states it absolutely: no MR content may raise
+# monthly_rebel_growth or global_separatism on the claimant, because an
+# AI Khaghan does not manage revolts and a railroad that collapses into
+# unrest it cannot suppress stops being a railroad.
+#
+# The four failure modifiers below break that rule on purpose, and the
+# reason is that the railroad is ALREADY OVER when they land. There is
+# nothing left for the unrest to derail. An empire that was assembled by
+# force and then failed should look like one, and +0.0025 is the
+# smallest statement of that available.
+# AUTHOR'S RULING 2026-07-31: they stay. The rule keeps its absolute
+# wording for everything that runs DURING the railroad, which is what it
+# was written to protect.
 MR_imperial_failure_ai = {
 	game_data = {
 		category = country

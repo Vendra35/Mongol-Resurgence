@@ -1933,3 +1933,48 @@ bir diplomatik secim yuzunden isyan verilmez.
 AYN CALUT ANI: Mogollari YENEN oyuncuya modun hicbir sey soylemedigi tespit
 edildi. Oyuncunun en cok takdir bekledigi an bu ve mod sessiz. Kancasi savas
 sonucu (on_action tarafi), once var oldugunun olculmesi gerekiyor.
+
+## GUNUN SON DORT KARARI (31.07)
+
+1. CHG SUNNI OLDU. Tag'in kendi kaydi tengri, ama o 1337 Cagatay ulusu
+   hakkinda bir ifade ve 1688'de uc yuzyil bayat. Tarim'in Cagataylilari
+   nesiller once Muslumanlasti; Yarkend, 1680'de hanligi tamamen ele gecirecek
+   kadar guclu bir hoca cevresi olan Musluman bir hanlikti. Bu situation
+   alternatif zaman cizgisini GERCEK haritaya kapatmak icin var, ve 1688'de
+   Tengrist bir Yarkend o degil. Kultur mongolian_culture kaldi: hanedan
+   gercekten Cingizliydi ve vanilla'da Cagatay kulturu yok.
+   OIR'in tengri'sine DOKUNULMADI.
+
+2. horde_unity_hit_at_ruler_death = -25 acik birakildi, yazar aklinda tutuyor.
+
+3. rank_empire_horde OVERRIDE'I KALIYOR - OLCUM KARARI DEGISTIRDI, asagida.
+
+4. DORT BASARISIZLIK MODIFIERINDEKI rebel growth KALIYOR. Kural mutlak
+   ifadesini koruyor ama modifierlarin basina acik bir istisna notu yazildi:
+   rayli yol o modifierlar dustugunde ZATEN BITMIS durumda, yani huzursuzlugun
+   raydan cikaracagi bir sey yok. Kural rayli yol SIRASINDA calisan her seyi
+   korumaya devam ediyor, ki yazilma sebebi oydu.
+
+## historical_info OYUNDA DOGRULANDI
+
+Yazar mr_distant.1'i konsoldan spamladi ve ekran goruntusunu verdi: bilgi
+kutusu GORUNUYOR, ve o olayda hicbir historical_option yok. Yani
+historical_info tek basina calisiyor ve vanilla'nin historical_option'siz 398
+olayi olu degil. Iki alan bagimsiz, olculdu ve dogrulandi.
+
+## rank_empire_horde: OLCUM SONUCU "DOKUNMA"
+
+Yazar duzeltilmesini istemisti; olcum bunu tersine cevirdi ve bu kaydediliyor.
+MR_l_english.yml:311 rank_empire_horde'u kuresel olarak "Horde" -> "Empire"
+yapiyor. 1337 setup'inda rank_empire VE steppe_horde olan vanilla tag sayisi
+OLCULDU: iki tane, MGE ve OIR. MGE zaten modun kendi merkezi ve "Empire"
+okumasi GEREKIYOR. Yani override'in istenmeyen etkisi TEK bir ulkede: OIR
+"Oirat Horde" yerine "Oirat Empire" okuyor.
+
+Duzeltmenin maliyeti: isim, country_ranks.txt'teki ILK-ESLESEN tablodan
+geliyor ve CLAUDE.md bu sinif icin acikca "eklenen dal zaten eslesen dalin
+ARDINA duser, enjeksiyonla duzeltilemeyebilir" diyor - yani pratikte dosyanin
+tamamini override etmek gerekir. Tek bir vanilla ulkesinde tek bir kelime
+icin, hem de vanilla'nin kendisi OIR'e zaten rank_empire verdigi ve
+"Oirat Empire"in tarihsel olarak savunulabilir oldugu bir durumda, bu takas
+kotu. KALIYOR.

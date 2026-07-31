@@ -1693,17 +1693,25 @@ mr_return_tarim = {
 				# fourteen. Abdullah Khan ruled Yarkand 1638-1669 and is a
 				# generation too early; the khan of 1688 is Muhammad Amin
 				# (1682-1692). The Yarkand khans were Chagatayids, so the
-				# house is Borjigin. mongolian_culture/tengri are CHG's own
-				# database entry (east_asia.txt:2223-2224) — NOTE the real
-				# Yarkand Khanate was Muslim by this date; using the tag's own
-				# entry is the conservative choice and the alternative is a
-				# design call, not a bug fix.
+				# house is Borjigin.
+				#
+				# RELIGION IS SUNNI, NOT THE TAG'S OWN ENTRY. CHG's database
+				# block says tengri (east_asia.txt:2224), which is a statement
+				# about the Chagatai ulus in 1337 - and by 1688 it is three
+				# centuries stale. The Chagatayids of the Tarim converted
+				# generations before this theatre fires; Yarkand was a Muslim
+				# khanate with a khoja establishment powerful enough to take it
+				# over outright in 1680. This situation exists to close the
+				# alternate timeline back onto the REAL map, and a Tengrist
+				# Yarkand in 1688 is not it. AUTHOR'S RULING 2026-07-31.
+				# Culture stays mongolian_culture: the ruling house genuinely
+				# was Chinggisid, and vanilla ships no Chagatai culture.
 				create_character = {
 					estate = estate_type:nobles_estate
 					first_name = Muhammad
 					age = 40
 					culture = culture:mongolian_culture
-					religion = religion:tengri
+					religion = religion:sunni
 					dynasty = dynasty:borjigin_dynasty
 					adm = { 40 70 }
 					dip = { 40 70 }
@@ -1712,10 +1720,10 @@ mr_return_tarim = {
 					save_scope_as = mr_yarkand_khan
 				}
 				set_new_ruler = scope:mr_yarkand_khan
-				change_religion = religion:tengri
+				change_religion = religion:sunni
 				change_religion_for_ruler_and_family = {
 					country = c:CHG
-					religion = religion:tengri
+					religion = religion:sunni
 				}
 				change_culture = culture:mongolian_culture
 				add_country_modifier = {
