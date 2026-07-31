@@ -602,9 +602,17 @@ mongol_imperial = {
 					has_global_variable = mr_failsafe_p2_fired
 				}
 				country_exists = c:MGO
+				# NO at_war GATE. Phase 1 removed its own on purpose - its
+				# comment says an AI "stuck in an endless war loop" would
+				# prevent the failsafe from ever firing - and Phases 2 and 3
+				# kept theirs. That is the worst possible pairing, because the
+				# railroad ITSELF pushes the claimant into a war every 4-12
+				# months, and the failsafe window is only five years. A
+				# claimant at war for all sixty of those months never gets
+				# handed the ground the phase then fails for not holding: the
+				# safety net switched off exactly when it was needed.
 				c:MGO = {
 					is_ai = yes
-					at_war = no
 				}
 			}
 			set_global_variable = mr_failsafe_p2_fired

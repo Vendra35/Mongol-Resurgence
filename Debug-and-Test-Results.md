@@ -1699,3 +1699,42 @@ Bulunan dort gercek hata duzeltildi:
 - cb_MR_carve_the_ulus 80 yil veriliyor, situation'i ~60 yil asiyor - hayatta
   KALAN bir Kagan'a karsi bile.
 - Great Partition, alti situation icinde hint_tag'i olmayan tek situation.
+
+## KARAR BEKLEYEN HER SEY KAPATILDI + GAME RULE METIN SINIRI (31.07)
+
+OLCULEN UI SINIRI (yazarin ekran goruntusu): game rule secenek aciklamalari
+belli bir uzunluktan sonra "..." ile KESILIYOR. Olculen degerler (renk
+etiketleri cikarilmis gorunur karakter):
+    262 / 282 / 338  -> tam goruniyor
+    435              -> KESILIYOR (Great Partition)
+Guvenli butce: ~300 gorunur karakter, en fazla 3 parca. Bes aciklama yeniden
+yazildi, hepsi artik 192-239 arasinda.
+
+Great Partition aciklamasinin asil sorunu uzunluk degildi: "Fourteen theatres"
+diyordu (artik on alti), "the Bashkirs"i sayiyordu (yazarin karariyla kapali),
+ve Buhara ile Badahsan yoktu. On dort tiyatroluk liste metnin yarisiydi ve her
+tiyatro eklendiginde bayatlayan kisimdi - liste tamamen cikarildi.
+
+## DORT ACIK MADDE KAPATILDI
+
+1. Faz 1'in cb_MR_steppe_unification'i 25 -> 130 YIL. Faz 1368-1420 arasi
+   suruyor, 25 yillik verme ~1393'te bitiyordu. Faz 2 ayni hatayi kendinde
+   bulup duzeltmis (kendi yorumu soyluyor), Faz 1'de kalmis. AI'i etkilemiyordu
+   ama INSAN claimant fazin son 27 yilinda elle savas ilan edemiyordu.
+2. P2 ve P3 failsafe'lerinden at_war = no KAPISI KALDIRILDI. Faz 1 bunu
+   BILEREK kaldirmis ("sonsuz savas dongusunde sikisan AI failsafe'i
+   engeller"), P2/P3 tutmus - ve rayli yolun kendisi claimant'i 4-12 ayda bir
+   savasa sokuyor, pencere ise bes yil. Guvenlik agi tam ihtiyac aninda
+   kapaliydi.
+3. BES DHE OLAYI KAPILANDI (mr_envoys.1/.2, mr_herds.1, mr_paiza.1). Gerekce:
+   ana anahtar KAPALIYKEN de MGO var olabiliyor, cunku vanilla kendi MGO_f
+   formable'ini gonderiyor - yani modu kapatmis bir oyuncu bu olaylari
+   goruyordu. CLAUDE.md'nin "tum icerik NOT mr_railroad_off kontrol eder"
+   ifadesi artik gercekten dogru; o satir da duzeltildi.
+4. cb_MR_carve_the_ulus SITUATION'LA BIRLIKTE OLUYOR. 80 yil veriliyordu,
+   situation en gec 1720'de bitiyor - komsular partition cozuldukten sonra
+   onlarca yil, hatta HAYATTA KALAN bir Kagan'a karsi bile CB tasiyordu.
+   on_ending'in en ustunde, her iki daldan da once geri aliniyor
+   (remove_casus_belli, vanilla coalition.txt:137 / religious_leagues.txt:151).
+5. Great Partition'a hint eklendi - alti situation icinde hint'i olmayan tek
+   situation oydu.

@@ -34,6 +34,7 @@
 # bound only.
 # =================================================================
 mr_great_partition = {
+	hint_tag = hint_mr_great_partition
 	monthly_spawn_chance = monthly_spawn_chance_unique
 	can_start = {
 		mr_can_start_partition = yes
@@ -786,6 +787,36 @@ mr_great_partition = {
 			remove_country_modifier = MR_the_centre_cannot_hold
 			remove_country_modifier = MR_the_uluses_drift
 			remove_country_modifier = MR_khaghan_in_name_only
+		}
+		# THE CARVE CB DIES WITH THE SITUATION, on every exit. It was
+		# granted for 80 years at the cohesion-55 beat, and the situation
+		# itself cannot run past 1720 - so neighbours kept a casus belli
+		# against the Khaghan for decades after the partition resolved,
+		# including against one who SURVIVED it. The whole justification
+		# for the CB is that the empire is coming apart; once it is not,
+		# the licence should end with it. remove_casus_belli is country
+		# scope with a target, vanilla uses it the same way at
+		# international_organizations/coalition.txt:137 and
+		# religious_leagues.txt:151.
+		every_country = {
+			limit = {
+				country_exists = c:MGE
+				has_casus_belli_on = c:MGE
+			}
+			remove_casus_belli = {
+				target = c:MGE
+				type = casus_belli:cb_MR_carve_the_ulus
+			}
+		}
+		every_country = {
+			limit = {
+				country_exists = c:MGO
+				has_casus_belli_on = c:MGO
+			}
+			remove_casus_belli = {
+				target = c:MGO
+				type = casus_belli:cb_MR_carve_the_ulus
+			}
 		}
 		# THE PERMANENT REWARDS ARE STRIPPED ONLY WHEN THE EMPIRE FALLS.
 		# They used to be removed here, above the branch, on EVERY exit -

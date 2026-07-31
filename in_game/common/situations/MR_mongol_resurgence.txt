@@ -182,10 +182,20 @@ mongol_resurgence = {
 						this = prev
 					}
 				}
+				# 130 YEARS, NOT 25. The phase runs 1368-1420 and a 25-year
+				# grant expired around 1393, a quarter of the way in - the
+				# same defect Phase 2 already found and fixed in itself
+				# (MR_mongol_imperial.txt:151, "the old 50-year grant expired
+				# mid-phase"), left standing here. The AI declare path does
+				# not appear to need possession, so this was invisible in an
+				# all-AI game; a HUMAN claimant simply lost the ability to
+				# declare the war by hand for the last twenty-seven years of
+				# the phase. 130 covers the whole window with room for a late
+				# start, which is the figure Phases 2 and 3 use.
 				add_casus_belli = {
 					target = prev
 					type = casus_belli:cb_MR_steppe_unification
-					years = 25
+					years = 130
 				}
 			}
 		}

@@ -727,13 +727,15 @@ mongol_dominance = {
 				NOT = {
 					has_global_variable = mr_failsafe_p3_fired
 				}
+				# NO at_war GATE - see the note in Phase 2's failsafe. The
+				# railroad keeps the claimant at war by design, and a five-year
+				# window is easily spent inside one.
 				any_country = {
 					OR = {
 						tag = MGO
 						tag = MGE
 					}
 					is_ai = yes
-					at_war = no
 				}
 			}
 			set_global_variable = mr_failsafe_p3_fired

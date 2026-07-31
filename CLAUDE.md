@@ -259,7 +259,11 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   goal trigger, never on side-signals.
 - **Game rules** (PD_config shape, `main_menu/common/game_rules/`), FIVE rules:
   master switch `mr_railroad` (on/off — all content checks
-  `NOT mr_railroad_off`); `MR_mongol_resurgence_auto_conquest` (gates the P1
+  `NOT mr_railroad_off`, and that is now literally true: five DHE events
+  (`mr_envoys.1/.2`, `mr_herds.1`, `mr_paiza.1`) were ungated on the reasoning
+  that flavour plays under any setting, but MGO can exist with the switch OFF
+  because vanilla ships its own `MGO_f`, so they fired for a player who had
+  turned this mod off. Gated 2026-07-31); `MR_mongol_resurgence_auto_conquest` (gates the P1
   completion failsafe); `MR_imperial_auto_conquest` (gates P2 + P3 failsafes);
   `MR_partition_schedule` (gates the Great Partition's timed secessions —
   default ON, because with it off the endgame is a no-op); and

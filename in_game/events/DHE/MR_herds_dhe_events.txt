@@ -33,6 +33,17 @@ mr_herds.1 = {
 	# feels the zud — the settle transition retires this pack
 	# thematically, by the same gate the exposure map priced.
 	trigger = {
+		# The master switch gates this event like every other piece of MR
+		# content. It used to be omitted here on the reasoning that story
+		# flavour should play under any rule setting - but MGO can exist
+		# with the switch OFF, because vanilla ships its own MGO_f formable
+		# that a player can form by hand, so these events fired for someone
+		# who had explicitly turned this mod's content off. CLAUDE.md also
+		# states that all content checks this rule, and that statement is
+		# only true once these are gated.
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
 		government_type = government_type:steppe_horde
 	}
 
