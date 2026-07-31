@@ -1,233 +1,147 @@
-﻿# HANDOFF — resume here
+# HANDOFF — resume here
 
-Written 2026-07-30, end of the Great Partition work session. Read this
-first, then `Debug-and-Test-Results.md` from the bottom up.
-
----
-
-## State: everything is committed, working tree clean
-
-```
-821665b  Great Partition: the Khaghan feels it, the heirs survive it, the steppe goes home
-f95e454  Great Partition: fix the ownerless-ground bug, and make history resume
-8e5f064  Balance pass: faster P3 war pace, cheaper conquest, wider assimilation
-```
-
-`tools/verify_mod.py` — 34 checks, all green. **Nothing below has been
-tested in game.**
+Written 2026-07-31. Read this first, then `Debug-and-Test-Results.md` from the
+bottom up (the 31.07 entry is the current one).
 
 ---
 
 ## The one thing that must not be forgotten
 
-**An existing save cannot test any of this.** `mr_partition_collapsed`
-is already set in the save where the endgame was observed, and
-`mr_can_start_partition` refuses to reopen a resolved partition. The
-Great Partition and the horde lock both need a **fresh campaign**.
+**A NEW CAMPAIGN IS MANDATORY.** This session added
+`main_menu/setup/start/28_MR_countries.txt` and moved an identity block from
+QNG to MCH. Setup is read exactly once, when a campaign is created. No existing
+save — not even yesterday's — can show any of it.
 
 ---
 
-## What was done, in one paragraph each
+## What this session did
 
-**The bug that started it.** All eight `mr_ulus_*_held` triggers negated
-`mr_in_claimant_realm` on a location. That trigger opens with
-`has_owner = yes`, so the negation read "nobody can ever own this" as
-"we have lost this" — and every geography atom contains lakes,
-impassable mountains and non-ownable ground (heartland 50/263, tarim
-34/88). The partition therefore opened and resolved inside one month.
-Fixed to the `owner ?=` shape the phase goals always used.
-`verify_mod.py` now fails on any reintroduction and carries a canary.
+Yesterday's live run left three symptoms. They turned out to have **one root
+cause**, and the author's own observation is what proved it: *"it didn't happen
+to Crimea, but it happened to IRA and MCH."*
 
-**History resumes.** Fourteen theatres return to the power that held
-them around 1650-1700, on a clock driven by `mr_partition_momentum`
-with a backstop year ladder. One scripted effect each in
-`in_game/common/scripted_effects/MR_partition_effects.txt`, called from
-both `on_monthly` (on schedule) and `on_ending` (final sweep).
+**The root cause.** KAZ, IRA and QNG had identity blocks in
+`in_game/setup/countries/` and **no start block** in
+`main_menu/setup/start/10_countries.txt`. That combination occurs **zero times
+in vanilla** — 2337 of 2337 real tags have both, and the only three exceptions
+are the engine's reserved DUMMY/PIR/MER. Government type, heir selection,
+capital, **map discovery**, laws, society values, parliament type,
+`religious_school` and `starting_technology_level` all live in the start block.
+CRI has a landless one (`10_countries.txt:4195-4222`); that is the entire
+difference.
 
-**The Khaghan feels it.** Three decline tiers on the 85/55/40 beats,
-removed at the top of `on_ending`. **The heirs survive it.**
-`MR_ulus_of_its_own`, 25 years, on all fourteen. **Ranks** set with
-vanilla's upgrade-only ratchet on five of them.
+**Fixed.** New file `main_menu/setup/start/28_MR_countries.txt`, **no BOM**,
+additive filename, shapes copied from vanilla's own landless blocks — KAZ from
+TIM (`:48847`), IRA from FEZ (`:19464`), MCH from DNG (`:49828`). Each
+capital verified to lie inside its own discovery template.
 
-**The steppe goes home.** Three more atoms folded into existing
-theatres. The Khaghan ends with **379 locations**: `mongolia_region`
-213 plus transoxiana 96, khwarazm 32, badakhshan 38. Nothing in
-`steppes_region`. Two seats survive, Karakorum and Samarkand.
+**QNG is not a tag.** Vanilla's Qing is MCH renamed (`flavor_MCH.txt`
+:1024-1030). The old QNG registration worked only by luck: it spawned, matched
+`MCH_f`'s jurchen potential because it held all of Manchuria, and the AI formed
+Later Jin. The block now sits on MCH — which also buys the real Manchu coat of
+arms, `map_MCH`, the six `country_MCH.txt` advances and the `flavor_MCH` chain.
 
-**The horde stays a horde.** `TRY_REPLACE:horde_list` in
-`in_game/common/generic_action_ai_lists/zz_MR_government_transition_addon.txt`
-blocks vanilla's `steppe_horde_to_monarchy` for an AI MGO/MGE until
-`mr_railroad_complete` (or `_failed`, or the master switch is off).
+**`form_country` re-tags when the target tag is free.** Measured on both
+branches in one campaign. So the China theatre now runs **land first, seat and
+rank next, proclamation last**, holding the country by `save_scope_as` rather
+than by tag. That also makes it immune to vanilla's own `flavor_mch.17`
+(`tag = MCH`, `monthly_chance = 100`), which can proclaim the Qing sixteen
+years early on its own.
+
+**A handover is not a release**, so `religion_definition` and
+`culture_definition` are never read — they are release-time fields. Seven heirs
+now write their identity by hand: `create_character` + `set_new_ruler` +
+`change_religion` + `change_religion_for_ruler_and_family` + `change_culture`,
+with historical names and `age = 35` rather than `birth_date`.
+
+**Harness 34 → 36**, all green:
+- the BOM check is **inverted** for `main_menu/setup/start/` (the one tree that
+  refuses a BOM — a BOM there makes the file silently inert);
+- **new:** `land is only handed to registered tags` — every
+  `change_location_owner = c:X` must name a tag with an identity block.
+  Formable targets (MGO) and `define_unique_country_tag` mints are exempt,
+  because neither creates a country from nothing. **Break-tested**: pointing a
+  handover at an unregistered tag is caught;
+- **new:** `mod-registered tags have a start block`.
 
 ---
 
-## UNFINISHED: heir government type and capital
+## TEST LIST — a FRESH campaign, in this order
 
-A second workflow was running when the session ended. Its run id:
-
-```
-Workflow({scriptPath: "<session>/workflows/scripts/mr-heir-identity-wf_8c20f1b8-f99.js",
-          resumeFromRunId: "wf_8c20f1b8-f99"})
-```
-
-Completed agents replay from cache; check
-`<session>/subagents/workflows/wf_8c20f1b8-f99/journal.jsonl` for what
-already finished before assuming anything is lost. If the run is gone,
-the four research briefs are in the script file and can simply be
-re-run.
-
-**The question it was answering.** The heirs arrive with **no authored
-government type and no authored capital**, because a tag brought onto
-the map by `change_location_owner` is instantiated from its
-`setup/countries` identity block alone and that block sets neither.
-This is the root cause of "County of Kazakh" — rank only moves it to
-"Sultanate of Kazakh"; **government type decides the noun, not rank**.
-The user's ruling: author both.
-
-**THE TRAP, and the reason this needed research rather than a quick
-edit.** Nine of the fourteen heir tags are already alive on the 1337
-map with their own capitals and governments — MOS, TUR, TIB, KOR, CHG,
-OIR, CRI, NOG, BSH. Calling `set_capital` or `change_government_type`
-on those would **move a living country's capital and rewrite its
-government**. Only tags that spawn from nothing need authoring, and the
-spec must mark the rest DO NOT TOUCH.
-
-Other things that workflow was checking: whether an uncored 2050-location
-QNG is a problem, whether a spawned country gets a ruler at all, and
-what each heir literally renders as (`rank_empire_tribe` is "Tribes"
-and outranks every culture branch, so a tribe-government heir at empire
-rank reads "Persian Tribes").
+1. ~~**Does the init log go quiet?**~~ **DONE — MEASURED 2026-07-31.** All ten
+   `initialize_from_bookmark.cpp` lines are gone for KAZ, IRA and MCH on a
+   fresh campaign. One follow-up was needed and is also fixed and re-measured:
+   `government.cpp:3544 Removing invalid policy 'polygyny' for 'KAZ Kazakh'`
+   — the horde template's `marriage_law = polygyny` is gated on a pagan/hindu/
+   indian country and KAZ is Sunni, so it is overridden with `muslim_marriage`
+   the way vanilla's CHB and TIM override it. **A law arriving from an
+   `include` is not guaranteed to fit the country that includes it.**
+   That error also proved the additive file is genuinely loaded and merged:
+   `polygyny` could only have reached KAZ through it.
+2. **Do IRA and MCH spawn LEVEL WITH THEIR NEIGHBOURS?** This is the whole
+   point of the new file, and it is a falsifiable prediction, not a hope.
+   MEASURED by the author across earlier runs: **CRI came out of the Mongols
+   already caught up**, while IRA and the Manchu heir were always behind. The
+   only difference between them was the start block — so the mechanism is not
+   a "catch-up" at all, it is simply EXISTING: a tag with a start block is
+   instantiated at campaign creation and rides the world's age progression for
+   313 years even while landless, whereas a tag with only an identity block
+   does not exist until the moment it is handed land, and therefore starts
+   from nothing.
+   **Prediction: IRA and MCH now behave exactly like CRI.** If they do not,
+   the mechanism is something else and the fallback is a curated
+   `research_advance` list per heir (the only advance-granting effect EU5 has;
+   no bulk grant is safe — the four `*_advance_definition` iterators have zero
+   vanilla uses and nothing can filter them by age).
+   Note `starting_technology_level` is NOT the lever here: it is an age-1-only
+   knob (`0_age_of_traditions.txt:1`), 25 advances across 6 files carry it, and
+   its only values are 1-4. MCH sits at 2 because
+   `jianzhou_tribe_not_present` says so, which is where every Jurchen tribe on
+   the map starts.
+3. **Are the heirs the right faith?** CRI Sunni, MCH Tungusic Shamanist, IRA
+   Shia — not Orthodox, not Tengri.
+4. **Are the rulers named?** Haci, Jangir, Abbas, Aldar, Nurhaci, Erdeni,
+   Abdullah — not generated strangers.
+5. **What do the heirs render as?** "County of Kazakh" should be gone now that
+   they have a government type. Check the country panel for each.
+6. **Does the Qing take Manchuria at +32y and China at +48y?** MCH must appear
+   at the Manchuria step now, not by forming Later Jin off a QNG spawn. And
+   after the China step it should read "Qīng Empire" with the CHI flag.
+7. Still never observed: **OIR (+26y) and CHG (+41y)**.
+8. Still unmeasured: the **permanent Phase 1–3 reward modifiers** — strip,
+   weaken or leave. Read what they actually give in
+   `main_menu/common/static_modifiers/MR_modifiers.txt` before ruling.
 
 ---
 
 ## Open decisions, none blocking
 
-- **`horde_unity_hit_at_ruler_death = -25`** is an unattested magnitude
-  — vanilla only ever writes the `-50` base and a `+50` mitigation.
-  Halve it to `-10` if the succession loss plays too hard.
+- **CHG's religion.** The tag's own database entry is `tengri`
+  (`east_asia.txt:2224`) and that is what the partition writes. The real
+  Yarkand Khanate was Muslim by 1650. Changing it is a design call, not a bug
+  fix.
+- **`horde_unity_hit_at_ruler_death = -25`** is still an unattested magnitude.
 - **`MR_l_english.yml:311` overrides `rank_empire_horde` to "Empire"
-  GLOBALLY.** That is what makes MGE read right, but vanilla OIR starts
-  at `rank_empire`, so "Oirat Empire" is on the map from 1337 with the
-  mod installed. Pre-existing; decide whether it is intended.
-- **The four sibling rebel-growth lines** in
-  `MR_imperial_failure_ai/_player` and `MR_dominance_failure_ai/_player`
-  (+0.0025). These are failure-state modifiers — the railroad is
-  already over when they land — so they are defensible, but they want
-  the same explicit ruling `MR_kurultai_defied` just got.
-- **QNG ships no coat of arms**, so it will draw a generated one.
-  Vanilla ships 280 landed tags the same way and errors nothing.
-  Reusing the CHI arms is vanilla's own choice if fidelity matters.
+  GLOBALLY**, so vanilla OIR reads "Oirat Empire" from 1337. Pre-existing.
+- **The four sibling rebel-growth lines** in `MR_imperial_failure_ai/_player`
+  and `MR_dominance_failure_ai/_player` (+0.0025) still want an explicit
+  ruling.
 
 ---
 
-## In-game test list, in priority order
+## For the 1066 Test Mod (found while auditing it, NOT fixed — that repo's call)
 
-1. **Does the schedule fire?** ~4 years after the partition opens
-   Crimea should go, ~8 years Kazakh. If nothing moves, suspect the
-   `var:mr_partition_momentum` comparison first.
-2. **Do IRA and QNG reach the map?** Same probe KAZ passed. Two new
-   identity blocks in `zz_mr_new_countries.txt`.
-3. **Does the AI Khaghan stay a horde?** If it converts to monarchy
-   before Phase 3 ends, the `TRY_REPLACE:` prefix did not take in
-   `generic_action_ai_lists` — that folder is one step beyond where the
-   prefixes have been measured. Plan B is `TRY_REPLACE:steppe_horde_to_monarchy`
-   under `generic_actions/`, the folder REAI proves.
-4. **Does the end-condition panel show three unticked lines** at the
-   opening, and does the cohesion bar start at 100?
-5. **Does the cohesion ladder run** 100 → 92 → 80 (beat 85) → 72 → 62
-   → 54 (beat 55, and neighbours get `cb_MR_carve_the_ulus`) → 42 → 30
-   (beat 40, and the situation ends)?
-6. **`cancel_subject` on Korea** — first use of that construct in this
-   mod.
-7. **What the heirs are called**, and whether their country panels show
-   a government type and a sane capital.
-
----
-
-# UPDATE — after the first live Great Partition run (same day)
-
-**Three more commits.** `821665b` decline tiers + grace + ranks + the last three
-theatres; `e5b4b31` the three silent failures the live run exposed. Working tree
-clean, 34 checks green.
-
-## What the run proved WORKS — do not re-investigate
-
-The schedule fires. `mr_partition_takeable` is sound (the Kuban and Yedisan,
-which only the schedule can reach, went Crimean). The backstop date ladder is
-what actually fires everything — the momentum clause has never fired anything in
-a real campaign, because the situation opened 1650 and the backstops run
-1650→1702. The grace modifier and the rank calls apply. KAZ revives from
-landless.
-
-## THE LAW THAT COST THE MOST TO LEARN
-
-**A campaign in progress cannot gain a country tag.** The country database is
-minted once, at campaign creation. IRA and QNG were added to `setup/countries`
-after that save existed, so `c:IRA` does not exist in it at all and
-`change_location_owner` into it did nothing, silently. Console `tag IRA` →
-*"country is not valid"*. **Any change under `setup/countries` means a new
-campaign is required to test it.**
-
-## EVERYTHING PLANNED IS NOW WRITTEN
-
-Nine commits today. The last four closed every item this page used to list
-as open:
-
-- **Heir identity.** Eight capitals, set after the sweep and each verified to
-  lie inside that heir's own grant — CRI `qarasuvbazar`, KAZ `shavgar`,
-  IRA `isfahan`, BSH `sterlitamak`, QNG `shenyang` then `dadu` when it takes
-  China, OIR `hoboksar`, CHG `yarkand`. Government type for the three tags that
-  have none in the 1337 setup: KAZ `steppe_horde`, IRA and QNG `monarchy`.
-  **MOS/RUS, NOG, TUR, TIB and KOR are deliberately untouched** — live 1337
-  countries whose capitals `set_capital` would MOVE. Every block says so.
-- **Cores.** All 22 handover loops now write vanilla's triple —
-  `change_location_owner` + `add_core` + `change_integration_level = core`
-  (`fall_of_delhi.txt:299-301`). They previously moved land and nothing else,
-  so every successor arrived at `integration_conquered`.
-- **Pop countries.** BSH is `country_type = pop`; a pop country holds pops, not
-  locations, and the handover was a silent no-op. `change_country_type = location`
-  runs first now.
-- **The silent-failure seal.** Effects no longer set their `mr_returned_*` flag
-  unless the ground actually went, so a failed handover retries instead of
-  sealing itself shut for the campaign.
-- **The cohesion currency is gone.** `mr_partition_concessions` deleted whole,
-  along with the two clamps that only existed to contain it. Cohesion is now
-  exactly 100 minus what has been lost, ratcheted, with nothing adding back.
-- **The kurultai pays in real things.** A: the ulus goes peacefully, stability
-  and legitimacy for the realm that remains. B: the modifier is the whole cost.
-  C: gold buys ten years of quiet instead of five (cooldown seeded at -60).
-  Its release chain calls the same `mr_return_*` effects the schedule calls, so
-  there is one handover path, not two.
-- **Pacing.** Steps cut 4 years → 3, order re-cut to the historical anchors.
-  The arc runs 1652–1691 instead of 1650–1702.
-- **AI personality.** `ai_defensive` when the partition opens, restored to
-  `ai_aggressive` in the survival branch. NOT `ai_cautious`/`ai_isolationist` —
-  those carry `ai_require_cb_for_war = yes` and could freeze a CB-less Khaghan.
-- **Successor map colours** in the situation map mode.
-
-## THE ONLY THING STILL OPEN
-
-**The permanent Phase 1–3 reward modifiers** — The Kurultai's Mandate, The
-Sacred Capital Restored, Master Of The Steppe, The Yeke Mongol Ulus Restored,
-Mongol World Order. Their own tooltips promise permanence, and they are a large
-part of why a collapsing Khaghan is still unbeatable. Strip, weaken or leave —
-undecided, and it wants a measurement first: read what they actually give in
-`main_menu/common/static_modifiers/MR_modifiers.txt` before ruling.
-
-## NEXT SESSION — test first, in this order, on a FRESH campaign
-
-An old save cannot test any of it: IRA and QNG cannot exist in a country
-database minted before they were added, and the schedule's flags may already be
-set there.
-
-1. **Does Persia produce IRA on its backstop (1658)?** This is the whole point
-   of the new campaign.
-2. **Does Ufa go Bashkir (1661)?** The `change_country_type = location` fix.
-3. **Do the successors hold together** instead of dissolving into separatism?
-   The cores fix.
-4. **Does cohesion fall monotonically and reach 40?** Ratchet, no buy-back.
-5. **Do OIR (+26y) and CHG (+41y) spawn?** Both are `country_type = army` and
-   neither has ever been reached in a test.
-6. **Do the heirs come out with the right religion, government and name?** CRI
-   should be Sunni now, not Orthodox; check the country panel, and check whether
-   the `propose_ruler.txt:29` error stops.
+- **DEFINITE:** `ABS` and `FAT` have no `parliament_type`. They are the only
+  two landed country blocks in the entire game, mod or vanilla, in that state
+  — the 2026-07-30 fix restated three of the four things a template supplies
+  and missed the fourth. The string `parliament` appears nowhere in
+  `build_setup.py` or its `verify_mod.py`.
+- **SUSPECT:** nine landed tags whose capital they neither own nor claim
+  (`AAL ETA FDL FRI HLG JLM ORM QUN SLD`) — vanilla ships nine of the same
+  class, and all nine still discover their capital, so it is tolerated.
+  `CAPITAL_FIXES` exists and was not applied to them.
+- **SUSPECT:** `DUB` and `ULD` write `starting_technology_level = 3` over
+  `gaelic_tribe`'s own `2`; all 29 vanilla users of that template write none.
+- **SUSPECT:** nothing in either tool joins the identity registry to the start
+  blocks. The correspondence holds by discipline. MR now has that check —
+  porting it back is four lines.

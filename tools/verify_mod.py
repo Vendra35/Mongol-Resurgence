@@ -66,8 +66,20 @@ def strip_comments(s):
     return re.sub(r"#.*", "", s)
 
 # ---- 1. BOM ----
-probs = [os.path.relpath(p, MOD) for p in all_files if open(p, "rb").read(3) != b"\xef\xbb\xbf"]
-check("BOM on every file", len(all_files), probs, min_count=10)
+# main_menu/setup/start/ is the ONE tree that refuses a BOM: 0 of vanilla's 25
+# files there carry one, while 45 of 45 in in_game/setup/countries/ do. A BOM
+# there is read as a token (pdx_persistent_reader.cpp:289 "Unexpected token:
+# <invisible>") and the file goes silently inert — which once made a sibling
+# project conclude that additive setup files cannot redefine a country, when
+# the file had simply never been parsed. So the rule is INVERTED there, not
+# waived: a missing BOM everywhere else is a finding, and a PRESENT BOM here is.
+_NO_BOM_TREE = "/main_menu/setup/start/"
+_bom_required = [p for p in all_files if _NO_BOM_TREE not in p]
+_bom_forbidden = [p for p in all_files if _NO_BOM_TREE in p]
+probs = [os.path.relpath(p, MOD) for p in _bom_required if open(p, "rb").read(3) != b"\xef\xbb\xbf"]
+probs += [os.path.relpath(p, MOD) + " (setup/start takes NO BOM — the file would be inert)"
+          for p in _bom_forbidden if open(p, "rb").read(3) == b"\xef\xbb\xbf"]
+check("BOM present outside setup/start, absent inside", len(all_files), probs, min_count=10)
 
 # ---- 2. braces balanced ----
 probs = []
@@ -823,6 +835,94 @@ probs = []
 for e in re.findall(r"^\s+(mr_dominance\.\d+)$", oa, re.M):
     if e not in event_defs: probs.append(f"on_action fires undefined {e}")
 check("on_action events defined", len(re.findall(r"mr_dominance\.\d+", oa)), probs, min_count=2)
+
+# ---- a tag we hand LAND to must be a REGISTERED tag ----
+# THE CHECK THAT WAS MISSING. change_location_owner has to CREATE the country
+# if it is not on the map, and it can only do that from an identity block under
+# in_game/setup/countries/. Without one it is a SILENT no-op
+# (country_manager.cpp:206 "Unknown country"). Measured twice in game: IRA and
+# QNG in a save that predated their blocks, and then c:MCH in 1670, where
+# mr_return_manchuria ran and no country appeared.
+#
+# THE DISTINCTION THIS CHECK ENCODES, and why it is scoped to this one effect:
+# form_country CONVERTS a country that already exists, so a formable target
+# needs no registration at all — 94 of vanilla's 143 formable targets are in no
+# registry, MGO among them, and MCH's ONLY registration is the MCH_f formable.
+# So "is it a legal tag" is the wrong question and would pass MCH. The right
+# question is "can this call bring it into being", and only creation sites are
+# scanned. A country_exists guard does not help either: it stops the error
+# line, it does not make the tag exist.
+_tag_re = re.compile(r"^\s*([A-Z][A-Z0-9]{2,4})\s*=\s*\{", re.M)
+_registry = set()
+_reg_files = sorted(_np(p) for p in glob.glob(VAN + "/in_game/setup/countries/*.txt")) \
+           + sorted(_np(p) for p in glob.glob(MOD + "/in_game/setup/countries/*.txt"))
+for p in _reg_files:
+    _registry |= set(_tag_re.findall(open(p, encoding="utf-8-sig", errors="ignore").read()))
+assert "CRI" in _registry and len(_registry) > 2000, \
+    f"tag registry scan is broken — only {len(_registry)} tags found"
+# Two legitimate ways to exist without an identity block, both exempted:
+#   define_unique_country_tag mints a tag at runtime (vanilla's BAH, MLW, GJR,
+#     JNP and SIKH are in no registry at all, yet sikhism.txt:1108 asks
+#     country_exists = c:SIKH);
+#   the mod itself forms the tag with form_country, which CONVERTS a country
+#     that already exists. That is how MGO is born here (MGO_f, the ~1375 birth
+#     failsafe) and it is why MGO needs no block. Resolved through the
+#     formable's own `tag =` field, because the key does not always match it:
+#     RUM_f is tag = TUR.
+_dynamic = set(re.findall(r"define_unique_country_tag\s*=\s*([A-Z][A-Z0-9]{2,4})",
+                          "".join(strip_comments(s) for s in code.values())))
+_formable_tag = {}
+for p in sorted(_np(q) for q in glob.glob(VAN + "/in_game/common/formable_countries/*.txt")) \
+       + sorted(_np(q) for q in glob.glob(MOD + "/in_game/common/formable_countries/*.txt")):
+    _fsrc = strip_comments(open(p, encoding="utf-8-sig", errors="ignore").read())
+    for fm in re.finditer(r"^([A-Za-z0-9_]+)\s*=\s*\{", _fsrc, re.M):
+        _tail = _fsrc[fm.end():fm.end() + 4000]
+        _mt = re.search(r"\btag\s*=\s*([A-Z][A-Z0-9]{2,4})\b", _tail)
+        if _mt:
+            _formable_tag[fm.group(1)] = _mt.group(1)
+_formed = {_formable_tag[k] for k in re.findall(
+    r"form_country\s*=\s*formable_country:([A-Za-z0-9_]+)",
+    "".join(strip_comments(s) for s in code.values())) if k in _formable_tag}
+assert _formable_tag.get("MGO_f") == "MGO" and "MGO" in _formed, \
+    "formable resolution is broken - MGO_f should resolve to MGO and be formed by this mod"
+probs, _cnt = [], 0
+for p, s in code.items():
+    for m in re.finditer(r"change_location_owner\s*=\s*c:([A-Z][A-Z0-9]{2,4})\b", strip_comments(s)):
+        _cnt += 1
+        if m.group(1) not in _registry and m.group(1) not in _dynamic and m.group(1) not in _formed:
+            probs.append(f"{os.path.relpath(p, MOD)}: change_location_owner = c:{m.group(1)} - "
+                         "that tag has no identity block anywhere and this mod never forms it, "
+                         "so the call is a silent no-op")
+# Canary: the exact shipped bug must still be caught by this scanner.
+assert [1 for m in re.finditer(r"change_location_owner\s*=\s*c:([A-Z][A-Z0-9]{2,4})\b",
+                               "change_location_owner = c:ZZQ")
+        if m.group(1) not in _registry], "creation-site scanner is broken — canary not flagged"
+check("land is only handed to registered tags", _cnt, probs, min_count=20)
+
+# ---- every tag the mod registers also has a START block ----
+# The other half of the same law, and the reason for main_menu/setup/start/
+# 28_MR_countries.txt. An identity block with no start block occurs ZERO times
+# in vanilla among real tags (2337 of 2337 have both); the only three without
+# one are the engine's reserved DUMMY, PIR and MER. The engine answers a
+# missing start block with ten lines per tag at every campaign creation
+# (initialize_from_bookmark.cpp :495 government type, :498/:517 heir-selection,
+# :520 religious_school, :525/:528 capital and its discovery, :1558
+# marriage_law, :1576 heir_religion_law, :169 society values, :1719
+# parliament_type) and the tag spawns with no advances and no map knowledge.
+_mod_tags = set()
+for p in sorted(_np(p) for p in glob.glob(MOD + "/in_game/setup/countries/*.txt")):
+    _mod_tags |= set(_tag_re.findall(open(p, encoding="utf-8-sig", errors="ignore").read()))
+_start_src = ""
+for p in sorted(_np(p) for p in glob.glob(VAN + "/main_menu/setup/start/*.txt")) \
+       + sorted(_np(p) for p in glob.glob(MOD + "/main_menu/setup/start/*.txt")):
+    _start_src += open(p, encoding="utf-8-sig", errors="ignore").read()
+_start_tags = set(re.findall(r"^\s*([A-Z][A-Z0-9]{2,4})\s*=\s*\{", strip_comments(_start_src), re.M))
+assert "SWE" in _start_tags and len(_start_tags) > 2000, \
+    f"start-block scan is broken — only {len(_start_tags)} tags found"
+probs = [f"{t} has an identity block but no start block — ten init errors per campaign, "
+         "and it spawns with no advances and no map knowledge"
+         for t in sorted(_mod_tags - _start_tags)]
+check("mod-registered tags have a start block", len(_mod_tags), probs, min_count=1)
 
 print()
 if fails:

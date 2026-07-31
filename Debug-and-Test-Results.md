@@ -1229,3 +1229,197 @@ acip okudu. Bu turda tahmin yok; her bulgu ya kayittan ya save'den.
 - OIR (+26y) ve CHG (+41y) hic test edilmedi, ikisi de country_type = army.
 - Haleflerin dini/ismi: CRI ortodoks doguyordu, baskent + hukumet tipi
   yazildi ama duzelip duzelmedigi olculmedi.
+
+##### 31.07.2026 YENI KAMPANYA: UC SESSIZ HATANIN KOKU TEK YERDE #####
+
+Yazar yeni bir kampanya kurdu, bookmark init hatalarini ve bir 1667 observer
+save'ini Object Inspector'la okudu. Dort paralel Opus ajani (bookmark yagmuru,
+spawn-sonrasi kimlik, MCH/QNG/CHI formable semantigi, 1066 modu denetimi)
+~790k token. Bu turda tahmin yok: her bulgu ya oyun kaydindan ya vanilla'dan.
+
+## OLCULEN UC SEMPTOM
+
+1. Her kampanya kurulusunda KAZ/IRA/QNG icin 10'ar satir
+   initialize_from_bookmark hatasi (hukumet tipi, veraset, dini okul, baskent,
+   baskent kesfi, marriage_law, heir_religion_law, toplum degerleri,
+   parlamento).
+2. IRA ve MCH cag 5-6'da SIFIR advance ve SIFIR harita bilgisiyle dogdu.
+   KIRIM'DA OLMADI - yazarin bu ayrimi teshisin anahtari cikti.
+3. Kirim ORTODOKS dogdu, Mancu halefi TENGRI dogdu, ikisinin de hukumdari
+   rastgele uretildi.
+
+## TEK KOK NEDEN
+
+Kimlik blogu var, BASLANGIC BLOGU YOK. Vanilla'da bu kombinasyon SIFIR kez
+geciyor: 2337 gercek tag'in 2337'sinde ikisi de var, sadece motorun rezerve
+DUMMY/PIR/MER'inde yok. Hukumet tipi, veraset, baskent, KESIF, yasalar,
+toplum degerleri, parlamento, religious_school ve starting_technology_level
+hepsi main_menu/setup/start/10_countries.txt'te yasiyor.
+
+Kirim'in duzgun cikmasinin sebebi de bu: CRI'nin 10_countries.txt:4195-4222'de
+topraksiz bir baslangic blogu VAR (starting_technology_level = 3 +
+include = "expl_mongols"). KAZ/IRA/QNG'de yoktu.
+
+`is_historic = yes` bu on satiri susturmuyor - o sadece :592'yi susturuyor.
+12 satirdan 10'a dusmenin aciklamasi tam olarak bu.
+
+## MCH ZINCIRI (yazarin oyun ici olcumleriyle kapandi)
+
+- QNG DIYE BIR TAG YOK. Vanilla'nin Qing'i MCH'nin yeniden adlandirilmisi:
+  flavor_MCH.txt:1024-1030 (flavor_mch.17) CHI_f formluyor, sonra QNG'yi
+  ISIM/sifat/renk olarak yaziyor.
+- Eski kodda QNG kimlik blogu vardi -> spawn oldu -> jurchen kulturu +
+  Mancurya'nin tamami MCH_f'in potential'ini sagladi -> AI Later Jin'i
+  formladi -> tag MCH oldu. Yazarin gordugu MCH bizim QNG'ydi. 1667
+  save'inde: Tag MCH, debug Key 2342 (bizim ucuncu mod tag'imiz),
+  Historical Tag CHI, Flag CHI, baskent Dadu, din Tengrism, kultur Jurchen.
+- Yazar QNG->MCH degisikligini yapinca 1670'te mr_return_manchuria = yes
+  calisti ve HICBIR SEY OLMADI: MCH'nin vanilla'da hicbir kimlik blogu yok
+  (46 dosyanin hicbirinde "MCH" gecmiyor; tek kaydi MCH_f formable'i).
+
+## FORM_COUNTRY'NIN GERCEK SEMANTIGI (iki yuzu de ayni kampanyada olculdu)
+
+Hedef tag BOSSA tag'i yaziyor, DOLUYSA yazmiyor - ama form_effect ve sonraki
+butun satirlar her iki durumda da calisiyor.
+  QNG -> MCH_f : MCH bostu  -> tag MCH oldu
+  MCH -> CHI_f : CHI doluydu (Filipinler'de kalinti CHI, `tag CHI` konsolu
+                 Qing'e gitmiyor) -> tag MCH kaldi, Historical Tag CHI oldu
+Vanilla bunu dort yerde koruyor: LAT_f 793/801, THE_f 985/995,
+rise_of_the_ottomans.txt:355 (ve :379'da c:TUR diye hitap ediyor),
+red_turban_rebellions.txt:520 (mevcut CHI'yi YUA yapip tag'i BOSALTIYOR).
+
+Vanilla'nin ilani ONCE yapabilmesinin sebebi flavor_mch.17'nin bir event
+option'i olmasi ve ARDINDAN ULKEYE TAG'LE HITAP EDEN HICBIR KOD OLMAMASI.
+Bizde bes sey vardi. CHI'nin yok edildigi bir kampanyada Cin tiyatrosu
+sessizce olurdu.
+
+## YAZILANLAR
+
+- Kimlik blogu QNG -> MCH (color = map_MCH). Bedava gelenler: gercek Mancu
+  armasi (pre_scripted_countries.txt:23903), country_MCH.txt'nin alti
+  advance'i (has_or_had_tag ile korunuyor, re-tag'den sag cikiyor), 19
+  olayllik flavor_MCH zinciri. QNG'nin hic armasi yoktu.
+- MR_great_partition.txt'teki olu `tag = QNG` satiri silindi.
+- Cin tiyatrosu yeniden siralandi: ONCE toprak, sonra koltuk/rutbe/grace,
+  EN SON ilan - ve ilan `c:MCH` yerine `scope:mr_qing` ile yapiliyor.
+  Bu ayni zamanda vanilla'nin kendi flavor_mch.17'sine (tag = MCH,
+  monthly_chance = 100) karsi da bagisiklik veriyor.
+- YENI DOSYA main_menu/setup/start/28_MR_countries.txt (BOM YOK): KAZ, IRA,
+  MCH icin topraksiz baslangic bloklari. Sekiller vanilla'dan: KAZ <- TIM
+  (:48847), IRA <- FEZ (:19464), MCH <- DNG (:49828). Uc baskentin de
+  kendi kesif sablonunun icinde oldugu tek tek dogrulandi (shavgar
+  khorasan_region / isfahan persia_region / shenyang manchuria_region).
+- Yedi halefe elle kimlik: create_character + set_new_ruler +
+  change_religion + change_religion_for_ruler_and_family + change_culture.
+  Isimler tarihsel (Haci, Jangir, Abbas, Aldar, Nurhaci, Erdeni, Abdullah),
+  hanedanlar vanilla'dan (borjigin, aisin_gioro, choros), `age = 35` ile -
+  birth_date degil, cunku partition'in sabit tarihi yok (vanilla'nin 1358
+  create_character blogunun 487'si ayni sekilde).
+- HARNESS 34 -> 36:
+  * BOM kontrolu main_menu/setup/start/ icin TERSINE cevrildi (o klasor tek
+    BOM kabul etmeyen agac; BOM'lu dosya sessizce olu sayiliyor).
+  * YENI: "land is only handed to registered tags" - change_location_owner =
+    c:X cagrilarinda X'in kimlik registry'sinde olup olmadigini bakiyor.
+    form_country ile formlanan taglar (MGO) ve define_unique_country_tag ile
+    basilanlar muaf, cunku ikisi de yaratmiyor/kayit istemiyor. KIRMA TESTI
+    YAPILDI: c:MCH kayitsiz bir tag'e cevrilince kontrol yakaladi.
+  * YENI: "mod-registered tags have a start block".
+
+## 1066 MODU DENETIMI (ayni ajan turunda, salt okuma)
+
+Bizim hatayi TASIMIYOR: 2385 kimlik blogu / 2382 baslangic blogu, kimlik-ama-
+baslangic-yok olan sadece vanilla'nin DUMMY/MER/PIR'i. Ama kendi hatasi var:
+ABS ve FAT butun oyundaki (mod + vanilla) TEK iki karali ulke blogu ki
+parliament_type'i yok - 30.07'de yapilan duzeltme sablonun verdigi dort seyin
+ucunu tekrar yazip dorduncusunu atlamis. Ayrica dokuz tag'in baskenti kendi
+topraginda/iddiasinda degil (vanilla'da da dokuz ayni sinif var, bu yuzden
+SUPHELI), ve DUB/ULD sablonun 2'sine karsi 3 teknoloji seviyesi yaziyor.
+Bunlar 1066 modunun kendi HANDOFF'una yazilmali - burada degil.
+
+## HALA ACIK
+
+- YENI KAMPANYA SART: setup sadece kampanya kurulurken okunuyor.
+- CHG'nin dini: tag'in kendi kaydi tengri, ama 1650'de Yarkand Hanligi
+  Muslumandi. Muhafazakar secim yapildi (tag'in kendi kaydi), degistirmek
+  tasarim karari.
+- Kalici Faz 1-3 odul modifierlari hala olculmedi.
+- OIR (+26y) ve CHG (+41y) hic test edilmedi.
+
+## MEKANIZMA NETLESTI (yazarin eski turlardaki gozlemi, 31.07)
+
+Yazar: "Kirim Mogol'un icinden ciktiginda advance'leri etrafindakilerle
+AYNIYDI, cikarken yetismisti. Ama Pers ve Mancu/Qing hep gerideydi."
+
+Bu, teknoloji farkinin sebebinin "yetisme" degil VAR OLMA oldugunu gosteriyor:
+baslangic blogu olan tag kampanya kurulurken ulke nesnesi olarak yaratiliyor
+ve topraksiz da olsa 313 yil boyunca dunyanin cag ilerlemesini yasiyor;
+sadece kimlik blogu olan tag ise toprak verilene kadar HIC var olmuyor ve
+sifirdan doguyor.
+
+starting_technology_level bu isin kaldiraci DEGIL: motorun kendi yorumu
+(0_age_of_traditions.txt:1) "sadece age of traditions'ta gecerli" diyor, 215
+advance dosyasinin 6'sinda toplam 25 advance'ta var ve kullanilan degerler
+sadece 1/2/3/4. Yani 3 yazmak 1337'deki birkac cag-1 advance'ini belirliyor,
+baska hicbir sey yapmiyor.
+
+TEST EDILEBILIR TAHMIN: yeni kampanyada IRA ve MCH de tam olarak CRI gibi
+davranacak - ciktiklari anda komsulariyla ayni seviyede. Yanlis cikarsa
+mekanizma baska bir seydir ve her halefe elle secilmis research_advance
+listesi yazmak gerekir (EU5'in tek advance verme yolu; toplu verme guvenli
+degil - dort *_advance_definition iteratorunun vanilla'da sifir kullanimi var
+ve caga gore suzecek hicbir trigger yok).
+
+## ILK CANLI GERI BILDIRIM (31.07, yeni kampanya)
+
+    government.cpp:3544  Removing invalid policy 'polygyny' for 'KAZ Kazakh' 2340 at game start
+
+IKI SEY SOYLUYOR:
+1. IYI HABER: polygyny yasasi SADECE eurasian_horde_not_present sablonundan
+   gelebilir, KAZ da o sablonu sadece bugun yazilan 28_MR_countries.txt
+   uzerinden aliyor. Yani DOSYA OKUNUYOR, vanilla'nin 10_countries.txt'siyle
+   BIRLESIYOR, ve KAZ artik kampanya kurulusunda var (id 2340).
+   Ek dosya (farkli isim) rotasi calisiyor.
+2. HATA: polygyny'nin potential'i `is_country_religion_pagan OR hindu OR
+   indian culture group` (01_common.txt:1686-1692). KAZ SUNNI, gecmiyor,
+   motor yasayi atiyor. Vanilla'nin ayni sablonu kullanan iki Musluman
+   ulkesi de tam bu yuzden eziyor: CHB muslim_marriage (10_countries.txt
+   :57721), TIM monogamous_marriage (:48857).
+   Duzeltildi: KAZ'a laws = { marriage_law = muslim_marriage }.
+   muslim_marriage'in potential'i sadece religion.group = muslim (:1656) ve
+   modifierleri polygyny ile birebir ayni.
+
+CIKARILAN GENEL KURAL: bir include'dan gelen yasa, o include'u kullanan
+ulkeye UYDUGU GARANTI DEGIL. Din/kultur kapili her yasa, ulkenin kendi dinine
+gore yeniden yazilmali. IRA (muslim_monarchy_not_present -> muslim_marriage)
+ve MCH (jianzhou_tribe_not_present -> polygyny, tungusic_shamanism pagan)
+bu yuzden sikayet uretmedi.
+
+DOGRULANDI (31.07, ayni gun ikinci new game): polygyny satiri gitti.
+marriage_law = muslim_marriage duzeltmesi calisiyor. Ayrica bu ikinci kez
+dogruluyor ki farkli isimli ek dosya main_menu/setup/start/ icinde
+BIRLESIYOR ve BOM'suz haliyle okunuyor.
+
+## KAPANDI: BOOKMARK INIT YAGMURU (31.07, olculdu)
+
+Yazar yeni kampanya kurdu ve KAZ/IRA/MCH icin initialize_from_bookmark.cpp
+satirlarinin HEPSI gitti. On satirin on tanesi de. Teshis dogruydu ve
+duzeltme tamdir:
+
+  kimlik blogu (in_game/setup/countries/)  -> c:TAG cozulur
+  baslangic blogu (main_menu/setup/start/) -> hukumet tipi, veraset, baskent,
+                                              KESIF, yasalar, toplum
+                                              degerleri, parlamento, dini okul
+  IKISI BIRDEN sart. Vanilla'da 2337/2337 tag'in ikisi de var.
+
+Bu ayni zamanda su iddiayi da olcmus oluyor: is_historic = yes o on satiri
+susturmuyordu, susturan sey baslangic blogu.
+
+## HENUZ OLCULMEDI (sadece 1650'lerde partition acilinca gorunur)
+
+- IRA ve MCH cikarken komsulariyla ayni seviyede mi (tahmin: evet, CRI gibi)
+- Kirim Sunni, MCH Tungusik Samanist, IRA Sii mi
+- Hukumdarlar isimli mi (Haci, Jangir, Abbas, Aldar, Nurhaci, Erdeni,
+  Abdullah)
+- "County of Kazakh" gitti mi
+- Cin adiminda toprak-once sirasi ve "Qing Empire" + CHI bayragi
+- OIR (+26y) ve CHG (+41y) hala hic gorulmedi

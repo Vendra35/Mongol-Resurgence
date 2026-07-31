@@ -149,13 +149,22 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   "collapsed" empire still ran from Shiraz to Canton, because Persia, Iraq,
   Anatolia, all of China, Korea, Tibet, Manchuria and the Volga had no heir
   at all. Now each theatre returns to the power that actually held it around
-  1650–1700 — CRI, KAZ, **IRA**, BSH, **RUS/MOS**, NOG, **TUR**, **QNG**
+  1650–1700 — CRI, KAZ, **IRA**, BSH, **RUS/MOS**, NOG, **TUR**, **MCH**
   (Manchuria first at +32y, China at +48y, as it happened), OIR, **TIB**,
   **KOR**, CHG — one scripted effect each in
   `in_game/common/scripted_effects/MR_partition_effects.txt`, called from BOTH
   `on_monthly` (on schedule) and `on_ending` (the final sweep), each guarded
-  by its own `mr_returned_*` global so nothing fires twice. Only IRA and QNG
+  by its own `mr_returned_*` global so nothing fires twice. Only IRA and MCH
   needed new identity blocks; RUS is only ever named behind `country_exists`.
+  **QNG IS NOT A TAG.** Vanilla's Qing is MCH renamed: `flavor_MCH.txt`
+  :1024-1030 forms `CHI_f` on an MCH country and writes QNG as its name,
+  adjective and colour. `QNG` is a loc key (`country_names:3034`) and
+  `map_QNG` a named colour, nothing more. The mod briefly registered QNG as a
+  tag of its own; it spawned, immediately satisfied `MCH_f`'s jurchen-culture
+  potential because it held all of Manchuria, and the AI formed Later Jin —
+  arriving at MCH by luck. The block now sits on MCH, which also buys the real
+  Manchu coat of arms, `map_MCH`, the six `country_MCH.txt` advances (gated
+  `has_or_had_tag`, so they survive a re-tag) and the `flavor_MCH` chain.
   **The clock is `mr_partition_momentum`**, a counter that existed from the
   start and was read by nothing. ORDER IS HISTORY, PACE IS THE CAMPAIGN: the
   real dates cannot be the gate, because the situation opens at 1600 at the
@@ -200,9 +209,18 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   makes the schedule mean anything: a 14-location Crimea beside a superpower
   carrying permanent phase rewards is lunch, and the map churns back to a blob.
   Ranks are set at the handover with vanilla's `set_country_rank_effect` (an
-  upgrade-only ratchet): IRA/TUR/RUS-or-MOS/QNG to empire, KAZ and QNG's first
+  upgrade-only ratchet): IRA/TUR/RUS-or-MOS/MCH to empire, KAZ and MCH's first
   Manchurian step to kingdom; CRI, NOG, BSH, OIR, CHG, TIB and KOR already
   carry the right rank in vanilla's setup.
+  **The seven heirs that are BORN here write their own identity by hand** —
+  `create_character` + `set_new_ruler`, `change_religion`,
+  `change_religion_for_ruler_and_family`, `change_culture` — because a handover
+  is not a release (see the law below). MOS/RUS, NOG, TUR, TIB and KOR are
+  deliberately untouched, the same list `set_capital` already respects.
+  **The China theatre proclaims the Qing LAST**, after the land, holding the
+  country by `save_scope_as` rather than by tag: `form_country` can re-tag it
+  (see the law below), and vanilla can afford to proclaim first only because
+  `flavor_mch.17` is an event option with nothing after it.
   **Its end trigger is three clauses, and the pair matters**: Karakorum out of
   the realm (the SEAT, read backwards from Phase 1's clause) OR
   `MR_cohesion_score < 40`. Karakorum alone can never fire in practice — it
@@ -524,9 +542,88 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   the console answers `tag IRA` with "country is not valid". **Any change to
   `setup/countries` is a hard requirement to start a NEW campaign** — say so in
   the testing guide, because this failure is invisible and unrecoverable.
-- **A `country_type = pop` country cannot own locations.** Vanilla's setup has
+  (Count correction: the identity tree holds **2340** blocks in 45 files —
+  2337 real tags plus the engine's reserved `DUMMY`, `PIR`, `MER`.)
+- **AN IDENTITY BLOCK WITHOUT A START BLOCK IS A BUG, AND VANILLA NEVER DOES
+  IT.** `in_game/setup/countries/` makes `c:TAG` resolvable; `main_menu/setup/
+  start/10_countries.txt` is where government type, heir selection, capital,
+  map discovery, laws, society values, parliament type, `religious_school` and
+  `starting_technology_level` actually live. **2337 of 2337 real vanilla tags
+  have both**; the only three with an identity block and no start block are
+  DUMMY/PIR/MER. Ship one without the other and the engine prints ten lines per
+  tag at every campaign creation (`initialize_from_bookmark.cpp` :495 no
+  government type, :498/:517 heir-selection, :520 religious_school, :525/:528
+  capital and its discovery, :1558 marriage_law, :1576 heir_religion_law, :169
+  society values, :1719 parliament_type) and they are **not cosmetic**: :495 is
+  the root cause of "County of Kazakh" (both name-composition tables branch on
+  government type and a country with none falls through to the county default),
+  and :528 means the country cannot see the world — measured here as IRA and
+  MCH spawning in an age-5 campaign with no advances and no map knowledge,
+  while CRI, which has a landless start block, came out fine.
+  `is_historic = yes` silences a DIFFERENT line, :592, and does not touch these.
+  **The additive route works and is measured**: `main_menu/setup/start/` merges
+  its files at country level (vanilla extends SWE from `10_countries.txt:17`,
+  `25_area_preferences.txt:8` and `26_ai_personalities.txt:9`), so a new
+  filename adds countries safely — MR ships `28_MR_countries.txt`. A mod file
+  literally named `10_countries.txt` replaces vanilla's whole file and empties
+  the map. **That folder is the one tree that takes NO BOM** (0 of vanilla's 25
+  files carry one); a BOM there is read as a token and the file goes silently
+  inert. `verify_mod.py`'s BOM check is INVERTED for it, not waived.
+- **`form_country` re-tags the country when the formable's `tag` is FREE, and
+  leaves the tag alone when it is taken** — but its `form_effect` and every
+  following line run either way. MEASURED here in one campaign: the mod's
+  spawned tag formed `MCH_f` (MCH free) and BECAME MCH, then formed `CHI_f`
+  and stayed MCH with **Historical Tag** CHI, because a rump CHI was still
+  alive. (Tag and Historical Tag are separate fields in the Object Inspector;
+  the latter is what `has_or_had_tag` reads, which is why a country keeps its
+  old tag's advances.) Vanilla guards this in four places — `LAT_f`
+  (`00_formable_countries.txt:793/:801`) and `THE_f` (`:985/:995`) carry
+  `NOT = { country_exists = c:X }`, `rise_of_the_ottomans.txt:355` checks it
+  before forming `RUM_f` and then addresses `c:TUR` at `:379`, and
+  `red_turban_rebellions.txt:520` re-tags the incumbent CHI to YUA to free the
+  tag first. **So nothing addressed by tag may follow a `form_country` call.**
+  Hold the country with `save_scope_as` instead — a saved scope is the country
+  OBJECT and survives the re-tag (`nanbokuchou.txt:134-153`).
+  Corollary: a formable target needs NO identity block, because forming
+  CONVERTS an existing country rather than creating one. 94 of vanilla's 143
+  formable targets are in no registry, MGO among them.
+- **`religion_definition` and `culture_definition` are RELEASE-time fields.**
+  The Setup-modding wiki says so in the file's own comment: "used to determine
+  the culture and religion of this tag WHEN RELEASED". `change_location_owner`
+  is not a release — it moves ground and runs none of the release path — so
+  neither field is ever read and the country takes its faith from the ground
+  and its generated ruler. MEASURED twice: CRI arrived ORTHODOX against a
+  crimean/sunni block, and the Manchu heir arrived TENGRI against a
+  tungusic_shamanism block. Vanilla writes them by hand on every one of its
+  four Delhi successors (`fall_of_delhi.txt:181-193`: `create_character` →
+  `set_new_ruler` → `change_religion` →
+  `change_religion_for_ruler_and_family`) and on Timur (`flavor_tim.txt:549`
+  `change_culture`). `set_country_religion`/`change_country_religion` do not
+  exist. For a date-independent ruler use `age = 35` rather than `birth_date`
+  — 487 of vanilla's 1358 `create_character` blocks do.
+  Vanilla's full release path, if a handover ever needs to become a real one,
+  is `add_core` on the parent's own locations → optional
+  `create_sub_unit_with_owner` → `create_country_from_cores_in_our_locations`
+  → `cancel_subject` (`flavor_tim.txt:477-591`, `flavor_chi.txt:2530-2582`).
+- **There is no "technology" in EU5 script, only advances**, and the only
+  granting effect is `research_advance = advance_type:X` (16 vanilla uses, each
+  naming ONE literal advance). No bulk grant is safe: the four
+  `*_advance_definition` iterators have zero vanilla uses and nothing can
+  filter them (no trigger takes an advance scope). The real knob is
+  `starting_technology_level` in the start block, and it only bites in the age
+  of traditions (`0_age_of_traditions.txt:1`). Map discovery is
+  `discover_area` (country scope, area target); the attested runtime sweep is
+  `every_area = { limit = { NOT = { c:X = { has_discovered_area = prev } } }
+  c:X = { discover_area = prev } }` (`flavor_chi.txt:813-823`). At setup it is
+  the `expl_*` include templates — and `expl_silk_road_center` is an
+  ALL-COMMENT no-op template, so including it grants nothing, silently.
+- **A `type = pop` country cannot own locations.** Vanilla's setup has
   448 of them (the nomad and tribe entities that hold POPS, not ground) and BSH
-  is one. `change_location_owner` into a pop country is another silent no-op —
+  is one. **The field is `type`, written top-level inside the country block in
+  `main_menu/setup/start/10_countries.txt`** (451 occurrences) — NOT
+  `country_type`, and NOT in `in_game/setup/countries/`, where the string
+  occurs zero times in all 45 files. Grepping the identity tree for
+  `country_type` finds nothing and reads as "BSH is fine". `change_location_owner` into a pop country is another silent no-op —
   measured 2026-07-30: Ufa was still Mongol at 1670 with `mr_returned_bashkiria`
   already set. Turn it into a landholder first, the way vanilla does when a
   horde settles: `change_country_type = location`
