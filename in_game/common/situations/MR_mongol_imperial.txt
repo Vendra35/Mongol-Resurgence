@@ -201,6 +201,17 @@ mongol_imperial = {
 			}
 			trigger_event_non_silently = mr_dominance.23
 		}
+		# NEWS REACHES THE WORLD BEYOND. The block above speaks only to
+		# whoever holds Phase 2's six goal regions. This one speaks to the
+		# outer ring - everyone who historically would have heard of the
+		# Mongols and has no other way of finding out that an empire is
+		# being assembled. See mr_distant_observer.
+		every_country = {
+			limit = {
+				mr_distant_observer = yes
+			}
+			trigger_event_non_silently = mr_distant.1
+		}
 		# The claimant sheds alliances with those same powers, so the
 		# railroad's declare event is not blocked by its own treaties.
 		every_country = {
@@ -869,6 +880,15 @@ mongol_imperial = {
 			# terminals directly" doctrine; mr_dominance.125 sets it
 			# redundantly, like mr_dominance.1 does for Phase 1).
 			set_global_variable = mr_phase_two_complete
+			# THE EMBASSY RIDES OUT. An empire has just been proclaimed, and
+			# the world beyond its borders is told the way it was told in 1246:
+			# submit, or find out.
+			every_country = {
+				limit = {
+					mr_distant_observer = yes
+				}
+				trigger_event_non_silently = mr_distant.2
+			}
 			# The tag just changed, so the resolution events go to
 			# whichever of the two the claimant now is — tag = is a
 			# string comparison and never errors.

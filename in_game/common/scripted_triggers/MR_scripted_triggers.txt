@@ -155,6 +155,16 @@ mr_dominance_visible = {
 		has_presence_in = sub_continent:south_east_asia
 		has_presence_in = sub_continent:eastern_europe		## Includes Russia, Steppes region, Poland etc.
 		has_presence_in = sub_continent:middle_east		## Includes Persia, Crescent and Anatolia.
+		# ADDED 2026-07-31. Phase 3 is the phase that takes Persia, Iraq and
+		# Anatolia, and those are precisely the conquests that made the
+		# Mongols everyone else's problem. Mamluk Egypt met them at Ain
+		# Jalut in 1260 and was in no audience of this mod at all; western
+		# Europe sent Carpini in 1245 and Rubruck in 1253 on far less news
+		# than a restored empire standing on the Levant. Both belong here,
+		# and only here - neither has any business seeing Phase 1, which is
+		# a quarrel between steppe hordes nobody west of Persia noticed.
+		has_presence_in = sub_continent:north_africa
+		has_presence_in = sub_continent:western_europe
 	}
 }
 
@@ -1253,12 +1263,21 @@ mr_partition_visible = {
 			country_exists = c:MGE
 			is_neighbor_of = c:MGE
 		}
+		# The collapse is world news, so this list matches
+		# mr_partition_is_spectator exactly - a country that receives the
+		# beat events must also be able to open the panel they refer to.
+		# south_east_asia was missing while Phase 3 had it, which meant a
+		# Vietnamese or Javanese player could watch the empire arrive and
+		# then lose sight of it as it came apart.
 		has_presence_in = sub_continent:east_asia
 		has_presence_in = sub_continent:north_asia
 		has_presence_in = sub_continent:central_asia
 		has_presence_in = sub_continent:south_asia
+		has_presence_in = sub_continent:south_east_asia
 		has_presence_in = sub_continent:eastern_europe
 		has_presence_in = sub_continent:middle_east
+		has_presence_in = sub_continent:north_africa
+		has_presence_in = sub_continent:western_europe
 	}
 }
 
@@ -1354,12 +1373,75 @@ mr_partition_is_spectator = {
 	NOT = {
 		mr_partition_is_neighbour = yes
 	}
+	# THE WORLD THAT HISTORICALLY HEARD. Three sub-continents were added
+	# 2026-07-31 and each has a reason:
+	#   south_east_asia - the Mongols invaded Dai Viet, Champa, Pagan in
+	#     1287 and Java in 1293. Phase 3 already showed them the empire;
+	#     leaving them out of its collapse was an inconsistency.
+	#   north_africa - Mamluk Egypt BEAT the Mongols at Ain Jalut in 1260,
+	#     the most famous defeat they ever took. Egypt was in no audience
+	#     of this mod at all, which was simply a hole.
+	#   western_europe - they saw no Mongol army and heard everything.
+	#     Frederick II's circular letters, Louis IX, the council of 1241,
+	#     Carpini sent in 1245 and Rubruck in 1253, Matthew Paris writing
+	#     it down in England, and the Baltic herring market collapsing in
+	#     1238 because Gotland's fishermen would not sail. News, envoys
+	#     and panic, which is exactly what a spectator beat is.
+	# Deliberately absent: sub-Saharan Africa, the Americas, Oceania. No
+	# word of the Mongols reached them and none should.
 	OR = {
 		has_presence_in = sub_continent:east_asia
 		has_presence_in = sub_continent:north_asia
 		has_presence_in = sub_continent:central_asia
 		has_presence_in = sub_continent:south_asia
+		has_presence_in = sub_continent:south_east_asia
 		has_presence_in = sub_continent:eastern_europe
 		has_presence_in = sub_continent:middle_east
+		has_presence_in = sub_continent:north_africa
+		has_presence_in = sub_continent:western_europe
+	}
+}
+
+# =================================================================
+# THE WORLD BEYOND THE CONQUEST - who hears the news, and when
+# =================================================================
+# The Great Partition always had three audiences: the Khaghan, his
+# neighbours, and distant spectators. The three phases that BUILD the
+# empire had only two - the claimant, and whoever held the ground it
+# wanted. So a player in western Europe, in Egypt or in India could
+# watch a Mongol empire grow from Korea to Anatolia across three
+# centuries and never be told a thing.
+#
+# This is the outer ring, and it is drawn on what the world actually
+# heard in the thirteenth century rather than on distance. Everyone
+# here has a historical reason to receive word from the east; the
+# Americas, Oceania and sub-Saharan Africa have none and are absent.
+# The inner ring - the steppe itself, and whoever holds the ground a
+# phase is currently taking - already gets its own targeted events, so
+# neighbours are excluded here and nobody hears the same news twice.
+mr_distant_observer = {
+	NOR = {
+		tag = MGE
+		tag = MGO
+	}
+	NOT = {
+		AND = {
+			country_exists = c:MGO
+			is_neighbor_of = c:MGO
+		}
+	}
+	NOT = {
+		AND = {
+			country_exists = c:MGE
+			is_neighbor_of = c:MGE
+		}
+	}
+	OR = {
+		has_presence_in = sub_continent:western_europe
+		has_presence_in = sub_continent:eastern_europe
+		has_presence_in = sub_continent:north_africa
+		has_presence_in = sub_continent:middle_east
+		has_presence_in = sub_continent:south_asia
+		has_presence_in = sub_continent:south_east_asia
 	}
 }

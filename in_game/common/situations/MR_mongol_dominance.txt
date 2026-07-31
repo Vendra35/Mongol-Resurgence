@@ -284,6 +284,16 @@ mongol_dominance = {
 			}
 			trigger_event_non_silently = mr_dominance.26
 		}
+		# AND THE REST OF THE WORLD, which by now has heard twice and is
+		# about to have a Mongol frontier. Phase 3 takes Persia, Iraq and
+		# Anatolia - the conquests that historically turned this from the
+		# steppe's business into everyone's.
+		every_country = {
+			limit = {
+				mr_distant_observer = yes
+			}
+			trigger_event_non_silently = mr_distant.3
+		}
 		# The claimant sheds alliances with those same powers, so the
 		# railroad's declare event is not blocked by its own treaties.
 		every_country = {

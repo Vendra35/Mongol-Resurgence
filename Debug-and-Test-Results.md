@@ -1738,3 +1738,67 @@ tiyatro eklendiginde bayatlayan kisimdi - liste tamamen cikarildi.
    (remove_casus_belli, vanilla coalition.txt:137 / religious_leagues.txt:151).
 5. Great Partition'a hint eklendi - alti situation icinde hint'i olmayan tek
    situation oydu.
+
+## DIS DUNYA ICIN IMMERSION KATMANI (31.07)
+
+Yazarin sorusu: Anadolu'da, Avrupa'da, Hindistan'da oynayan bir oyuncu AI
+Mogol'un yukselisini olaylarla gorebiliyor mu, tehlikenin geldigini hissediyor
+mu?
+
+## OLCUM: HAYIR, VE BIR DELIK VAR
+
+Great Partition'in UC KATMANLI dinleyici kitlesi zaten var (Kagan / komsular /
+uzak seyirciler). Ama imparatorlugun KURULDUGU uc fazda oyle bir katman yok:
+  Faz 1 - butun dis olaylari mongolian_group + steppe_horde kapili, yani
+          sadece diger bozkir hordalari
+  Faz 2 - sadece alti hedef bolgede topragi olanlar
+  Faz 3 - persia / pontic / russian_lands / song_china / western_reach
+Yani Hindistan 1420-1650 arasi hicbir sey duymuyor, Anadolu ancak 1550'de tek
+olay aliyor.
+
+VE ASIL DELIK: mr_partition_is_spectator listesinde western_europe YOKTU.
+Fransa/HRE/Iberya/Britanya oyuncusu modun HICBIR olayini, dagilmada bile,
+hicbir zaman gormuyordu. north_africa da hicbir yerde yoktu - Memluk Misir'i
+Ayn Calut'ta Mogollari YENEN taraf, ve modun hicbir kitlesinde degildi.
+south_east_asia ise Faz 3'te vardi ama partition'da yoktu.
+
+## TARIHSEL OLCUT (kim gercekten duydu)
+
+Halka 1, bozkirin kendisi : mongol hordalari, north/central/east asia
+Halka 2, istila edilenler : middle_east (Kose Dag 1243, Bagdat 1258),
+                            south_asia (Delhi'ye akinlar), eastern_europe
+                            (Legnica ve Mohi 1241), south_east_asia (Dai Viet,
+                            Champa, Pagan 1287, Java 1293), north_africa
+                            (Ayn Calut 1260)
+Halka 3, sadece duyanlar  : western_europe - ordu gormediler, her seyi
+                            duydular: II. Friedrich'in genelge mektuplari,
+                            IX. Louis, 1241 konseyi, Carpini 1245, Rubruck
+                            1253, Matthew Paris, ve 1238'de Gotland
+                            balikcilarinin denize acilmamasi yuzunden coken
+                            Baltik ringa piyasasi
+HIC DUYMAYANLAR (bilerek disarida): Sahra alti Afrika, Amerika, Okyanusya
+
+## YAZILANLAR
+
+- mr_partition_is_spectator'a south_east_asia + north_africa + western_europe.
+- mr_dominance_visible ve mr_partition_visible ayni sekilde genisletildi.
+  Faz 1 ve 2 KASITLI OLARAK dar birakildi: Faz 1 bozkir hordalarinin kendi
+  kavgasi, Pers'in batisinda kimse fark etmedi.
+- YENI: mr_distant_observer trigger'i - dis halka. Kagan degil, komsusu degil,
+  ve yalnizca tarihsel olarak duyan alt kitalar.
+- YENI DOSYA in_game/events/situations/MR_distant_events.txt, namespace
+  mr_distant, uc olay, haberin gercekte yayildigi sirayla tirmaniyor:
+    .1  Faz 2 acilisi   - tuccar soylentisi ("rumour")
+    .2  MGE ilani       - Mogol elcisi tabiiyet istiyor. Metin Guyuk Han'in
+                          1246'da Papa IV. Innocentius'a verdigi cevaba yakin.
+    .3  Faz 3 acilisi   - artik soylenti degil, sinir
+  UCUNDE DE MODIFIER YOK. Bunlar haber, odul degil. Uzaktaki bir gucun bir
+  imparatorlugun varligini ogrenmesi bir sey hak etmesi anlamina gelmiyor.
+
+## HARNESS IKI HATAYI YAKALADI (ikisi de bilinen sinif)
+
+- Yeni event dosyasinda BOM yoktu.
+- Loc degerlerindeki \n gercek satir sonuna donusmustu, yani deger ikiye
+  bolunmustu - CLAUDE.md'nin "loc degerleri TEK fiziksel satirda yasar"
+  kuralinin tam ornegi. Harness "value opens a quote it never closes" ile
+  yakaladi.

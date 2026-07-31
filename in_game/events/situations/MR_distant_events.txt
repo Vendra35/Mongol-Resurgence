@@ -1,0 +1,114 @@
+﻿namespace = mr_distant
+
+# =================================================================
+# NEWS FROM THE EAST - the world beyond the conquest
+# =================================================================
+# The Great Partition always had three audiences: the Khaghan, his
+# neighbours, and distant spectators. The three phases that BUILD the
+# empire had only two - the claimant, and whoever happened to hold the
+# ground a phase was currently taking. Phase 1's every outward event is
+# gated on mongolian_group + steppe_horde, so nobody outside the steppe
+# hears it at all; Phase 2 speaks only to holders of its six goal
+# regions; Phase 3 adds Persia, the Pontic, Russia, China and Anatolia.
+#
+# So a player in western Europe, in Egypt or in India could watch a
+# Mongol empire grow from Korea to the Levant across three centuries
+# and never once be told a thing was happening. This file is that
+# missing thread.
+#
+# THREE BEATS, AND THEY ESCALATE, because that is how the news actually
+# travelled: rumour, then an envoy, then an army on the horizon.
+#   .1  Phase 2 opens   - traders and refugees, a rumour worth hearing
+#   .2  MGE proclaimed  - an embassy arrives and asks for submission
+#   .3  Phase 3 opens   - it is no longer news, it is a border
+#
+# AUDIENCE is mr_distant_observer (scripted_triggers): the outer ring
+# only - not the Khaghan, not his neighbours, and only the parts of the
+# world that historically heard of the Mongols. Sub-Saharan Africa, the
+# Americas and Oceania are deliberately excluded; no word reached them
+# and none should. Neighbours are excluded because they already get
+# targeted events at these same moments, and nobody should hear the
+# same news twice.
+#
+# NOTHING HERE GRANTS A MODIFIER. These are news, not rewards. The rule
+# this mod already follows - flavour events grant their OWN modifier and
+# never a phase reward - is satisfied most simply by granting nothing at
+# all. A distant power learning that a Mongol empire exists has not
+# earned anything; it has been told something.
+# =================================================================
+
+# --- 1. RUMOUR (Phase 2 opens, ~1420) ----------------------------
+# The caravans come through thinner and later than they used to, and
+# the men leading them have a story. This is the stage at which Europe
+# first heard of Chinggis - garbled, third-hand, and mixed up with
+# Prester John.
+mr_distant.1 = {
+	type = country_event
+	category = situation_event
+	title = mr_distant.1.title
+	desc = mr_distant.1.desc
+	outcome = neutral
+	fire_only_once = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+	option = {
+		name = mr_distant.1.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# --- 2. THE EMBASSY (MGE is proclaimed, ~1550) -------------------
+# The Mongol envoys really did arrive with this message and really did
+# phrase it this way: submit, and you will be spared; refuse, and God
+# knows what will happen, we do not. Innocent IV received it in 1246 in
+# reply to his own letter, and it is the reason the option below is
+# refusal without consequence - the mod does not punish a distant power
+# for saying no to a demand it has no way to answer.
+mr_distant.2 = {
+	type = country_event
+	category = situation_event
+	title = mr_distant.2.title
+	desc = mr_distant.2.desc
+	outcome = negative
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+	option = {
+		name = mr_distant.2.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# --- 3. THE BORDER (Phase 3 opens, ~1550-1650) -------------------
+# By now it is not a rumour and not a letter. Phase 3 is the phase that
+# takes Persia, Iraq and Anatolia, which is exactly what turned the
+# Mongols from a story into everyone else's problem - Baghdad in 1258,
+# Ain Jalut in 1260, Kose Dag in 1243.
+mr_distant.3 = {
+	type = country_event
+	category = situation_event
+	title = mr_distant.3.title
+	desc = mr_distant.3.desc
+	outcome = negative
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+	option = {
+		name = mr_distant.3.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}

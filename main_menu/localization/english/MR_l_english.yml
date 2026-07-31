@@ -864,3 +864,22 @@
  mr_court.2.a: "Let the lamas speak last."
  mr_court.2.b: "The Eternal Sky needs no temples."
  mr_court.2.c: "The qadis argue well."
+
+ # ==============================================================================
+ # NEWS FROM THE EAST - the world beyond the conquest
+ # ==============================================================================
+ # Three beats to the outer ring, escalating the way the news actually
+ # travelled: rumour, then an envoy, then a border. Audience is
+ # mr_distant_observer - the parts of the world that historically heard of the
+ # Mongols, and not one league further.
+ mr_distant.1.title: "A Rumour Out of the East"
+ mr_distant.1.desc: "The caravans come thinner now, and later, and the men who lead them will not stop talking. Somewhere beyond the last road they know, the tribes of the steppe have taken one banner again - and the name they give the man who holds it is one our grandfathers were taught to fear.\n\nMerchants exaggerate. They always have. But they all exaggerate the same way this year, and the ones who have come furthest say the least."
+ mr_distant.1.a: "Old names, told by frightened men."
+ mr_distant.2.title: "The Khan's Envoys"
+ mr_distant.2.desc: "They did not ask for an audience. They rode to the gate, waited to be brought in, and delivered what they had been sent to deliver, in a tone suggesting they had said it before and would not be saying it twice.\n\n#I By the strength of the Eternal Sky. This is an order sent to you. Wherever you may be, submit to us and come to serve us, and we shall know your submission. And if you do not - what do we know? God knows.#!\n\nThey are already mounted, waiting for a reply we are not sure we can give."
+ mr_distant.2.a: "Let them carry silence back with them."
+ mr_distant.2.historical_info: "The wording is close to Guyug Khan's reply to Pope Innocent IV, carried west by Giovanni da Pian del Carpine in 1246. The Mongols wrote to everyone in that voice, and to them it was not a threat but a statement of the order of the world."
+ mr_distant.3.title: "No Longer a Rumour"
+ mr_distant.3.desc: "The reports have stopped disagreeing with each other, which is how we know they are true. The empire of the steppe stands on the roads to Persia and to the Levant, and the powers that stood between us and it stand there no longer.\n\nThere is nothing to decide yet. There is only the fact, and however long we have to look at it before it becomes our own frontier."
+ mr_distant.3.a: "Then we had best learn their roads."
+ mr_distant.3.historical_info: "This is the moment the West stopped writing about the Mongols as a wonder and began writing about them as a problem: Baghdad fell in 1258, Ain Jalut was fought in 1260, and Kose Dag had already broken the Seljuks of Rum in 1243."
