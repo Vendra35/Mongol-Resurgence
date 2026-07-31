@@ -272,7 +272,7 @@
  setting_MR_buff_disabled: "Vanilla (No Buffs)"
  setting_MR_buff_disabled_desc: "No military modifiers. The AI railroad paces its wars at roughly one every #Y 2 years#!.\n#color_red Not recommended if the AI plays the Mongols.#!\n#G Recommended if YOU play them - the conquest is yours to earn.#!"
  setting_MR_buff_historical: "Historical (Balanced and Historical Conquest)"
- setting_MR_buff_historical_desc: "Balanced modifiers for slow historical progression, with roughly #Y 1 year#! between the AI railroad's wars.\n#G Highly recommended if the Mongols are AI.#!\n#Y A human Khaghan gets the same bonuses, and they are strong - pick Vanilla for a fair fight.#!"
+ setting_MR_buff_historical_desc: "Balanced modifiers for slow historical progression, with roughly #Y 1 year#! between the AI railroad's wars. #G Highly recommended if the Mongols are AI.#!\n#Y A human Khaghan gets the same bonuses, and they are strong - pick Vanilla for a fair fight.#!"
  setting_MR_buff_enabled: "Terminator (Fast Conquest and Arcade Boss)"
  setting_MR_buff_enabled_desc: "Massive modifiers for lightning conquest; the AI railroad declares roughly every #Y 6 months#!.\n#color_red An apocalyptic end-game threat - pick this to be hunted.#!\n#color_red In your own hands it is a power fantasy, not a challenge.#!"
 
