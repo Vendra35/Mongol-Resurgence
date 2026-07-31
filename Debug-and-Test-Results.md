@@ -1599,3 +1599,47 @@ baslangic blogu var, baskenti fayzabad ve tam badakhshan_area icinde.
 
 mongolia_region ve baska hicbir sey. Yedi rayli-yol koltugundan BIRI kaliyor,
 Karakurum. Onceki 379 rakami ve "iki koltuk" ifadesi CLAUDE.md'de guncellendi.
+
+## YAYIN ONCESI IKI KARAR (31.07)
+
+### 1. FAZ 3 FAIL OLURSA HARITA KALICI OLARAK ALTERNATIF KALIYORDU
+
+Yazarin sorusu: insan Pers/Osmanli oynarsa completion failsafe onun topragini
+ALAMIYOR (bilerek, insan korumasi), yani Faz 3 fail ile kapanabilir. O zaman?
+
+OLCULEN DURUM: mr_can_start_partition hem mr_railroad_complete istiyordu hem
+mr_railroad_failed'i reddediyordu. Sonuc: Kagan Mogolistan + Mancurya + Tibet
++ Kuzey Cin + Sincan + Horasan'i elinde tutarak 1836'ya kadar oylece kaliyordu
+ve hicbir sey geri alamiyordu. Bu, situation'in var olma amacinin tam tersi.
+Ve nadir bir kose degil: insan korumasi BILEREK var, yani Pers/Anadolu/Ming/
+Rusya oynayan her oyuncu bunu sadece hayatta kalarak uretebilir.
+
+KOHEZYON ZATEN KALDIRIYOR: klozlar "tutmuyor VEYA geri verdi" seklinde, yani
+hic alinmamis ulus da kayip sayiliyor. Agirliklar heartland 30, sibir 16,
+kazak/cungar/tarim 12'ser, nogay 10, kirim 8. Bati bozkiri hic alinmamissa
+skor 70'ten basliyor - 40 tabanininn cok ustunde. Pers/Mezopotamya/Anadolu
+kohezyon girdisi DEGIL, yani insan Pers skoru bozmuyor.
+
+DUZELTME: kapi artik "rayli yol kazandi mi" degil "dagilacak bir imparatorluk
+var mi". mr_can_start_partition mr_railroad_complete yerine
+mr_phase_two_complete istiyor, mr_railroad_failed yasagi kalkti, ve
+mr_dominance.140 (partition'i 5 yil sonra kuran gecikmeli olay) Faz 3'un
+BASARISIZLIK dalindan da atesleniyor.
+  Faz 1 fail -> imparatorluk yok  -> partition yok (dogru)
+  Faz 2 fail -> sadece bozkir     -> partition yok (kohezyon 30'da acilip
+                                     ilk tikta biterdi)
+  Faz 3 fail -> imparatorluk var  -> partition aciliyor, kohezyon ~70
+
+### 2. OYUN KURALI ACIKLAMALARI SADECE AI'A GORE YAZILMISTI
+
+Uc buff seceneginin aciklamasi da yalnizca AI durumunu tarif ediyordu; insan
+oyuncuya hicbir sey soylemiyordu, ve "Historical (Balanced)" ismi insani
+dogal olarak "dengeli olan bu" diye yonlendiriyordu.
+
+OLCULDU: faz buff'larinda is_ai kapisi YOK (MR_mongol_imperial.txt:109-128) -
+insan claimant da ayni modifierleri aliyor. is_ai kapisi sadece
+MR_mongol_preparing_for_conquest'te var.
+
+Uc aciklamaya da ikinci bir satir eklendi: Vanilla -> oyuncu icin onerilen,
+Historical -> AI icin onerilen ama oyuncunun elinde zaten guclu, Terminator ->
+oyuncunun elinde meydan okuma degil guc fantezisi.

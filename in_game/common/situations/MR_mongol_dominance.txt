@@ -1272,6 +1272,38 @@ mongol_dominance = {
 				trigger_event_non_silently = mr_dominance.133
 			}
 			set_global_variable = mr_railroad_failed
+			# THE PARTITION IS ARMED ON THIS BRANCH TOO, and that is the
+			# point of the whole endgame. Phase 3 can fail for a reason the
+			# mod deliberately creates: the completion failsafe never takes
+			# land from a HUMAN or their subjects, so a player holding Persia,
+			# Anatolia, Ming China or Russia can simply refuse to fall. Before
+			# this line that outcome left the Khaghan sitting on Mongolia,
+			# Manchuria, Tibet, north China, Xinjiang and Khorasan until 1836
+			# with nothing to take it back — the exact permanently-alternate
+			# map this situation exists to prevent. A Chinggisid empire that
+			# FAILED is if anything likelier to come apart than one that
+			# succeeded.
+			#
+			# It still needs an empire to come apart, which mr_can_start_
+			# partition now checks as mr_phase_two_complete rather than
+			# mr_railroad_complete. Cohesion handles the smaller realm by
+			# itself: its clauses read "does not hold it OR has given it
+			# back", so uluses the Khaghan never reached are already counted
+			# as lost and the score simply opens lower — around 70 when the
+			# western steppe was never taken, which is still well above the
+			# 40 floor the situation ends on.
+			every_country = {
+				limit = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+				}
+				trigger_event_silently = {
+					id = mr_dominance.140
+					years = 5
+				}
+			}
 		}
 	}
 	on_ended = {

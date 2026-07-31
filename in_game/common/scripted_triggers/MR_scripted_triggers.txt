@@ -1179,7 +1179,24 @@ mr_can_start_partition = {
 	NOT = {
 		has_game_rule = mr_railroad_off
 	}
-	has_global_variable = mr_railroad_complete
+	# THERE MUST BE AN EMPIRE TO COME APART - and that is a different
+	# question from "did the railroad win". This used to demand
+	# mr_railroad_complete AND forbid mr_railroad_failed, which meant a
+	# Phase 3 that failed left the Khaghan holding Mongolia, Manchuria,
+	# Tibet, north China, Xinjiang and Khorasan for the rest of the game
+	# with nothing able to take any of it back. That is not a rare corner:
+	# the completion failsafe never takes land from a HUMAN or their
+	# subjects, by design, so any player holding Persia, Anatolia, Ming
+	# China or Russia can make Phase 3 fail simply by surviving. The
+	# permanently-alternate map that produced is the one thing this
+	# situation exists to prevent.
+	#
+	# mr_phase_two_complete is the honest gate: the north and the east
+	# were taken, so there IS an imperial realm. Phase 1 or Phase 2
+	# failing still means no partition - a Khaghan who never got past the
+	# steppe has nothing to give back, and cohesion would open near 30 and
+	# end the situation on its first tick.
+	has_global_variable = mr_phase_two_complete
 	has_global_variable = mr_partition_ready
 	NOT = {
 		has_global_variable = mr_partition_started
@@ -1192,10 +1209,6 @@ mr_can_start_partition = {
 	}
 	NOT = {
 		has_global_variable = mr_partition_survived
-	}
-	# Nothing to come apart if the railroad never finished.
-	NOT = {
-		has_global_variable = mr_railroad_failed
 	}
 	current_date > 1600.1.1
 	# The Khaghan is normally MGE; MGO is the failed-proclamation

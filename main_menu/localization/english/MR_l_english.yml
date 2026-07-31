@@ -268,11 +268,11 @@
  # --- Military Buffs ---
  rule_MR_mongol_buff_rule: "(MR) Mongol Military Buffs and Conquest Speed"
  setting_MR_buff_disabled: "Vanilla (No Buffs)"
- setting_MR_buff_disabled_desc: "No special military modifiers will be granted, and the AI railroad paces its unification wars at roughly one every #Y 2 years#!.\n#color_red Not recommended for AI-controlled Mongols.#!"
+ setting_MR_buff_disabled_desc: "No special military modifiers will be granted, and the AI railroad paces its unification wars at roughly one every #Y 2 years#!.\n#color_red Not recommended if the AI is playing the Mongols - it will struggle to keep the railroad's pace.#!\n#G Recommended if YOU are playing the Mongols. The situations still guide you and every phase goal still stands; the conquest is simply yours to earn.#!"
  setting_MR_buff_historical: "Historical (Balanced and Historical Conquest)"
- setting_MR_buff_historical_desc: "Grants balanced military modifiers focused on slow historical progression, with roughly #Y 1 year#! between the AI railroad's unification wars.\n#G Highly recommended if the Mongols are controlled by the AI.#!"
+ setting_MR_buff_historical_desc: "Grants balanced military modifiers focused on slow historical progression, with roughly #Y 1 year#! between the AI railroad's unification wars.\n#G Highly recommended if the Mongols are controlled by the AI.#!\n#Y The same bonuses go to a HUMAN Khaghan, and they are already strong in a player's hands - choose Vanilla instead if you want a fair fight.#!"
  setting_MR_buff_enabled: "Terminator (Fast Conquest and Arcade Boss)"
- setting_MR_buff_enabled_desc: "Grants massive military modifiers for lightning-fast conquest, and the AI railroad declares its unification wars roughly every #Y 6 months#!.\n#color_red WARNING: Transforms the AI into an apocalyptic end-game threat.#!"
+ setting_MR_buff_enabled_desc: "Grants massive military modifiers for lightning-fast conquest, and the AI railroad declares its unification wars roughly every #Y 6 months#!.\n#color_red WARNING: Transforms the AI into an apocalyptic end-game threat - pick this to be hunted, not to be safe.#!\n#color_red In a player's hands it is a power fantasy rather than a challenge.#!"
 
  # ==============================================================================
  # ----------------- FLAG LOCALIZATION -----------------
