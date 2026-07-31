@@ -1448,3 +1448,30 @@ sonra on_fully_activated = { change_country_type = location }.
 Yani vanilla bir pop ulkesini landholder yapmadan once BASKENTININ kendisinde
 ya da sahipsiz olmasini sart kosuyor. Bir gun canlandirilirsa TIP'ten degil
 BASKENT'ten baslanacak.
+
+## ILK CANLI PARTITION, YENI KAMPANYA (31.07) - UC DUZELTME BIRDEN DOGRULANDI
+
+Situation 4 acildi. Kirim Mogol'dan ayrildi:
+  - hukumdar ISLAM (Islam III Giray, 1644-1654) -> create_character +
+    set_new_ruler calisiyor, ve donem-dogru isim tuttu
+  - dini SUNNI -> change_religion calisiyor. Onceki turda ORTODOKS
+    doguyordu. release-time alan teshisi dogruydu.
+  - teknolojileri ARASTIRILMIS geldi
+Kazak da geldi:
+  - hukumdar JANGIR BORJIGIN -> isim VE hanedan birlikte tuttu
+  - dini SUNNI
+
+UC AYRI DUZELTME AYNI ANDA DOGRULANDI: elle yazilan din, elle yazilan
+donem-dogru hukumdar, ve hanedan. Kirim'in teknolojisi zaten sorunsuzdu
+(baslangic blogu vardi); KAZ'in blogu ise BUGUN eklendi.
+
+## HALA BEKLEYEN - ASIL TEKNOLOJI TESTI
+
+Kirim teknoloji sorununu hic yasamamisti. Tahminin gercek sinavi IRA (1658)
+ve MCH (1670): ikisi de bugune kadar HIC baslangic blogu tasimadi ve ikisi de
+"0 advance + harita korlugu" ile doguyordu. Onlar da komsulariyla ayni
+seviyede gelirse mekanizma ("var olmak yetiyor, yetisme diye bir sey yok")
+kapanir. Gelmezlerse elle research_advance listesi gerekir.
+
+Sonrasi: OIR (1673), TIB (1676), MCH'nin Cin adimi (1682, toprak-once sirasi
+ve "Qing Empire" + CHI bayragi), KOR (1685), CHG (1688).
