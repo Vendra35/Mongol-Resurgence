@@ -1,4 +1,4 @@
-# HANDOFF — resume here
+﻿# HANDOFF — resume here
 
 Written 2026-07-31. Read this first, then `Debug-and-Test-Results.md` from the
 bottom up (the 31.07 entry is the current one).
@@ -66,53 +66,36 @@ with historical names and `age = 35` rather than `birth_date`.
 
 ---
 
-## TEST LIST — a FRESH campaign, in this order
+## TEST LIST — ALL CLOSED, MEASURED IN GAME 2026-07-31
 
-1. ~~**Does the init log go quiet?**~~ **DONE — MEASURED 2026-07-31.** All ten
-   `initialize_from_bookmark.cpp` lines are gone for KAZ, IRA and MCH on a
-   fresh campaign. One follow-up was needed and is also fixed and re-measured:
-   `government.cpp:3544 Removing invalid policy 'polygyny' for 'KAZ Kazakh'`
-   — the horde template's `marriage_law = polygyny` is gated on a pagan/hindu/
-   indian country and KAZ is Sunni, so it is overridden with `muslim_marriage`
-   the way vanilla's CHB and TIM override it. **A law arriving from an
-   `include` is not guaranteed to fit the country that includes it.**
-   That error also proved the additive file is genuinely loaded and merged:
-   `polygyny` could only have reached KAZ through it.
-2. **Do IRA and MCH spawn LEVEL WITH THEIR NEIGHBOURS?** This is the whole
-   point of the new file, and it is a falsifiable prediction, not a hope.
-   MEASURED by the author across earlier runs: **CRI came out of the Mongols
-   already caught up**, while IRA and the Manchu heir were always behind. The
-   only difference between them was the start block — so the mechanism is not
-   a "catch-up" at all, it is simply EXISTING: a tag with a start block is
-   instantiated at campaign creation and rides the world's age progression for
-   313 years even while landless, whereas a tag with only an identity block
-   does not exist until the moment it is handed land, and therefore starts
-   from nothing.
-   **Prediction: IRA and MCH now behave exactly like CRI.** If they do not,
-   the mechanism is something else and the fallback is a curated
-   `research_advance` list per heir (the only advance-granting effect EU5 has;
-   no bulk grant is safe — the four `*_advance_definition` iterators have zero
-   vanilla uses and nothing can filter them by age).
-   Note `starting_technology_level` is NOT the lever here: it is an age-1-only
-   knob (`0_age_of_traditions.txt:1`), 25 advances across 6 files carry it, and
-   its only values are 1-4. MCH sits at 2 because
-   `jianzhou_tribe_not_present` says so, which is where every Jurchen tribe on
-   the map starts.
-3. **Are the heirs the right faith?** CRI Sunni, MCH Tungusic Shamanist, IRA
-   Shia — not Orthodox, not Tengri.
-4. **Are the rulers named?** Haci, Jangir, Abbas, Aldar, Nurhaci, Erdeni,
-   Abdullah — not generated strangers.
-5. **What do the heirs render as?** "County of Kazakh" should be gone now that
-   they have a government type. Check the country panel for each.
-6. **Does the Qing take Manchuria at +32y and China at +48y?** MCH must appear
-   at the Manchuria step now, not by forming Later Jin off a QNG spawn. And
-   after the China step it should read "Qīng Empire" with the CHI flag.
-7. Still never observed: **OIR (+26y) and CHG (+41y)**.
-8. Still unmeasured: the **permanent Phase 1–3 reward modifiers** — strip,
-   weaken or leave. Read what they actually give in
-   `main_menu/common/static_modifiers/MR_modifiers.txt` before ruling.
+The whole fourteen-theatre schedule was watched end to end on a fresh campaign
+and came out right: Crimea, the Kazakhs, Persia, Manchuria, Dzungaria, Tibet,
+China, Korea and the Tarim — each on its own date, with the right faith, an
+era-correct named ruler, researched advances and a visible map.
 
----
+What that settles, none of it inferred:
+
+1. **The init barrage is gone.** Zero `initialize_from_bookmark.cpp` lines for
+   KAZ, IRA and MCH.
+2. **The technology question is answered, and it was never a catch-up
+   mechanic.** A tag with a start block is instantiated at campaign creation
+   and rides the world's age progression even while landless; a tag with only
+   an identity block does not exist until it is handed land. IRA and MCH now
+   behave exactly like CRI. No `research_advance` list was needed.
+3. **Religion, culture, ruler and dynasty all take** from the hand-written
+   identity block — Crimea Sunni with Islam III Giray, the Kazakhs Sunni with
+   Jangir Borjigin.
+4. **"County of Kazakh" is gone**, because government type now comes from the
+   start block.
+5. **The Qing arrive as MCH** and the proclamation runs last, after the land.
+6. **Korea returns.** Its sweep had been buried inside `country_exists = c:KOR`
+   — the only one of the fourteen written that way — so an annexed Joseon could
+   never come back. Fixed; the guard now wraps only `cancel_subject`.
+7. One follow-up surfaced and was fixed and re-measured on the way:
+   `government.cpp:3544` removing `marriage_law = polygyny` from a Sunni KAZ.
+   **A law arriving from an `include` is not guaranteed to fit the country that
+   includes it.** That error was also the proof the additive setup file loads
+   at all.
 
 ## Open decisions, none blocking
 

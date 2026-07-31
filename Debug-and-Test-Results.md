@@ -1510,3 +1510,34 @@ mr_return_north'un dordu) ve BESI DE KASITLI: hepsi Rusya tiyatrosu, once
 RUS-veya-MOS'u scope:mr_partition_heir'e cozuyor ve ancak biri hayattaysa
 supuruyor. RUS'un kimlik blogu YOK, yani sifirdan yaratilmamasi gerekiyor.
 Kore tek yanlisti.
+
+## BUTUN TAKVIM CANLI OLARAK GECILDI (31.07, kapanis)
+
+Yazar on dort tiyatronun tamamini yeni kampanyada izledi: "hepsi duzgun".
+Kirim, Kazak, Pers, Mancurya, Cungarya, Tibet, Cin, Kore, Tarim - hepsi
+kendi tarihinde, dogru din, dogru donem-hukumdari, arastirilmis advance'lar
+ve harita bilgisiyle.
+
+BUGUN KAPANAN SORULAR (hepsi oyunda olculdu, hicbiri cikarim degil):
+  - bookmark init yagmuru (10 satir x 3 tag) -> baslangic bloklariyla sifir
+  - "0 teknoloji + harita korlugu" -> sebep yetisme eksikligi degil, VAR
+    OLMAMAKTI; baslangic blogu cozdu
+  - Kirim ortodoks / Mancu tengri -> elle change_religion cozdu
+  - rastgele hukumdarlar -> elle create_character + set_new_ruler, donem-dogru
+    isimler ve hanedanlarla
+  - "County of Kazakh" -> hukumet tipi baslangic blogundan geliyor
+  - QNG diye bir tag yok -> kimlik blogu MCH'ye tasindi, Qing ilani en sona
+    alindi (form_country hedef tag bossa re-tag ediyor)
+  - Kore hic cikmiyordu -> supurme country_exists blogunun disina alindi
+  - polygyny -> muslim_marriage (include'dan gelen yasa ulkeye uymayabilir)
+
+HALA ACIK (hicbiri bu turun urunu degil):
+  - Kalici Faz 1-3 odul modifierlari: strip mi, zayiflat mi, birak mi.
+    Once ne verdiklerinin OLCULMESI lazim.
+  - CHG'nin dini: tag'in kendi kaydi tengri, 1650'de Yarkand Muslumandi.
+    Tasarim karari.
+  - horde_unity_hit_at_ruler_death = -25 buyuklugu attested degil.
+  - MR_l_english.yml:311'in kuresel rank_empire_horde override'i.
+  - Dort kardes rebel-growth satiri (failure modifierlari).
+  - Baskurt tiyatrosu yazarin karariyla kapali; Rusya ural_region ile aliyor.
+  - MCH'de Kangxi 16 yasinda: regency gozlenmedi, ama gorulurse yas yukseltilir.
