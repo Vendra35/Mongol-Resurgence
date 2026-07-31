@@ -919,7 +919,10 @@ mr_great_partition = {
 						tag = MOS
 						tag = NOG
 						tag = TUR
-						tag = QNG
+						# MCH is the Manchu heir; CHI is what it becomes if
+						# the Qing proclamation finds the CHI tag free.
+						# QNG is deliberately absent — it is a loc key and a
+						# named colour, never a tag (flavor_MCH.txt:1024-1030).
 						tag = MCH
 						tag = CHI
 						tag = OIR

@@ -40,6 +40,48 @@
 # spawned. Every tag below either ships an identity block in vanilla
 # or gets one in zz_mr_new_countries.txt, except RUS, which is only
 # ever named behind country_exists.
+#
+# BUT A HANDOVER IS NOT A RELEASE, AND THE HEIR ARRIVES BLANK.
+# `change_location_owner` moves ground and nothing else. It runs none
+# of the engine's release path, so `religion_definition` and
+# `culture_definition` in the identity block are never read — the
+# Setup-modding wiki says outright that those two fields are "used to
+# determine the culture and religion of this tag WHEN RELEASED".
+# MEASURED IN GAME, twice: CRI arrived ORTHODOX although its vanilla
+# block (steppes.txt:16-17) declares crimean/sunni, and the Manchu
+# heir arrived TENGRI although its block declares tungusic_shamanism
+# (Object Inspector, 1667 save: Tag MCH, religion "Tengrism", a
+# generated ruler named Zongqian). The country takes its religion
+# from the ground and the generated ruler, not from its own database
+# entry.
+#
+# So every heir that is BORN here writes its own identity by hand,
+# immediately after its seat is set:
+#
+#   create_character + set_new_ruler   a named founder instead of a
+#                                      generated stranger — the same
+#                                      shape this mod already uses for
+#                                      the Great Khans (mr_dominance
+#                                      .104), with `age` rather than
+#                                      birth_date because the partition
+#                                      has no fixed date. 487 of
+#                                      vanilla's 1358 create_character
+#                                      blocks do exactly that.
+#   change_religion                    the country's own faith
+#   change_religion_for_ruler_and_family   the ruler's, and his heirs'
+#   change_culture                     the country's own culture
+#
+# That is vanilla's own order, from the four Delhi successors
+# (fall_of_delhi.txt:181-193) and from Timur (flavor_tim.txt:549).
+# Religion and culture values are each tag's OWN database entry, not
+# an invention: crimean/sunni (steppes.txt:16), bashkir/sunni (:53),
+# oirat_culture/tengri (east_asia.txt:3274), mongolian_culture/tengri
+# (:2223), and for the three tags this mod registers itself, whatever
+# zz_mr_new_countries.txt declares.
+#
+# THE SAME "DO NOT TOUCH" LIST APPLIES AS FOR set_capital: MOS, RUS,
+# NOG, TUR, TIB and KOR are live 1337 countries with their own rulers
+# and faiths. Nothing here is written for them.
 # =================================================================
 # --- 1. THE CRIMEAN KHANATE (1441) -------------------------------
 # Haci Giray's ulus: furthest from Karakorum, and the Chinggisid
@@ -100,6 +142,31 @@ mr_return_crimea = {
 				# 1337 countries with working capitals and governments; set_capital on them
 				# MOVES a living capital.
 				set_capital = location:qarasuvbazar
+
+				# IDENTITY BY HAND — see the file header. Haci Giray founded
+				# this ulus in 1441 and the Girays were Chinggisids, so the
+				# dynasty is Borjigin. crimean/sunni are CRI's own database
+				# entry (steppes.txt:16-17); it arrived ORTHODOX without this.
+				create_character = {
+					estate = estate_type:nobles_estate
+					first_name = Haci
+					age = 35
+					culture = culture:crimean
+					religion = religion:sunni
+					dynasty = dynasty:borjigin_dynasty
+					adm = { 40 70 }
+					dip = { 50 80 }
+					mil = { 40 70 }
+					create_in_limbo = yes
+					save_scope_as = mr_crimea_khan
+				}
+				set_new_ruler = scope:mr_crimea_khan
+				change_religion = religion:sunni
+				change_religion_for_ruler_and_family = {
+					country = c:CRI
+					religion = religion:sunni
+				}
+				change_culture = culture:crimean
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
 					years = 25
@@ -193,6 +260,32 @@ mr_return_kazakh = {
 				# 1337 countries with working capitals and governments; set_capital on them
 				# MOVES a living capital.
 				set_capital = location:shavgar
+
+				# IDENTITY BY HAND — see the file header. Salqam-Jangir Khan
+				# ruled the Kazakhs 1643-1652, which is when this theatre
+				# lands; the Kazakh khans were Jochid Chinggisids, so Borjigin.
+				# cuman_culture/sunni are KAZ's own entry in
+				# zz_mr_new_countries.txt.
+				create_character = {
+					estate = estate_type:nobles_estate
+					first_name = Jangir
+					age = 35
+					culture = culture:cuman_culture
+					religion = religion:sunni
+					dynasty = dynasty:borjigin_dynasty
+					adm = { 40 70 }
+					dip = { 40 70 }
+					mil = { 50 80 }
+					create_in_limbo = yes
+					save_scope_as = mr_kazakh_khan
+				}
+				set_new_ruler = scope:mr_kazakh_khan
+				change_religion = religion:sunni
+				change_religion_for_ruler_and_family = {
+					country = c:KAZ
+					religion = religion:sunni
+				}
+				change_culture = culture:cuman_culture
 				change_government_type = government_type:steppe_horde
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
@@ -312,6 +405,34 @@ mr_return_persia = {
 				# 1337 countries with working capitals and governments; set_capital on them
 				# MOVES a living capital.
 				set_capital = location:isfahan
+
+				# IDENTITY BY HAND — see the file header. Abbas II ruled Safavid
+				# Persia 1642-1666, the window this theatre lands in.
+				# NO dynasty line on purpose: safavid_dynasty is not in
+				# 04_dynasties.txt, it is created at runtime by
+				# create_dynasty_from_location in flavor_ira.txt:3141, so naming
+				# it here would reference a dynasty that may never have existed
+				# in this campaign. dynasty is optional — 487 of vanilla's
+				# create_character blocks omit it along with birth_date.
+				create_character = {
+					estate = estate_type:nobles_estate
+					first_name = Abbas
+					age = 35
+					culture = culture:farsi_culture
+					religion = religion:shia
+					adm = { 50 80 }
+					dip = { 40 70 }
+					mil = { 40 70 }
+					create_in_limbo = yes
+					save_scope_as = mr_persian_shah
+				}
+				set_new_ruler = scope:mr_persian_shah
+				change_religion = religion:shia
+				change_religion_for_ruler_and_family = {
+					country = c:IRA
+					religion = religion:shia
+				}
+				change_culture = culture:farsi_culture
 				change_government_type = government_type:monarchy
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
@@ -435,6 +556,31 @@ mr_return_bashkiria = {
 				# 1337 countries with working capitals and governments; set_capital on them
 				# MOVES a living capital.
 				set_capital = location:sterlitamak
+
+				# IDENTITY BY HAND — see the file header. Aldar Isyangildin is
+				# the Bashkir batyr of this era. No dynasty line: vanilla ships
+				# no Bashkir house in 04_dynasties.txt and inventing one would
+				# be a second piece of alternate history. bashkir/sunni are
+				# BSH's own database entry (steppes.txt:53-54).
+				create_character = {
+					estate = estate_type:nobles_estate
+					first_name = Aldar
+					age = 35
+					culture = culture:bashkir
+					religion = religion:sunni
+					adm = { 30 60 }
+					dip = { 40 70 }
+					mil = { 50 80 }
+					create_in_limbo = yes
+					save_scope_as = mr_bashkir_khan
+				}
+				set_new_ruler = scope:mr_bashkir_khan
+				change_religion = religion:sunni
+				change_religion_for_ruler_and_family = {
+					country = c:BSH
+					religion = religion:sunni
+				}
+				change_culture = culture:bashkir
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
 					years = 25
@@ -477,7 +623,7 @@ mr_return_bashkiria = {
 # Muscovy has normally formed Russia; MOS is the fallback. Neither is
 # ever instantiated from nothing: no country_exists, no handover, and
 # the ground simply stays Mongol. This is also why RUS needs no
-# identity block while IRA and MCH-Manchu(QNG) do.
+# identity block while IRA and MCH do.
 mr_return_middle_volga = {
 	if = {
 		limit = {
@@ -923,6 +1069,32 @@ mr_return_manchuria = {
 				# 1337 countries with working capitals and governments; set_capital on them
 				# MOVES a living capital.
 				set_capital = location:shenyang
+
+				# IDENTITY BY HAND — see the file header. Nurhaci founded the
+				# Later Jin in 1616, which is the year this theatre lands, and
+				# aisin_gioro_dynasty is the Qing house, present in vanilla's
+				# 04_dynasties.txt. MEASURED: without change_religion this heir
+				# arrived TENGRI, the Mongol faith, not Tungusic Shamanist.
+				create_character = {
+					estate = estate_type:nobles_estate
+					first_name = Nurhaci
+					age = 35
+					culture = culture:jurchen_culture
+					religion = religion:tungusic_shamanism
+					dynasty = dynasty:aisin_gioro_dynasty
+					adm = { 50 80 }
+					dip = { 50 80 }
+					mil = { 60 90 }
+					create_in_limbo = yes
+					save_scope_as = mr_manchu_khan
+				}
+				set_new_ruler = scope:mr_manchu_khan
+				change_religion = religion:tungusic_shamanism
+				change_religion_for_ruler_and_family = {
+					country = c:MCH
+					religion = religion:tungusic_shamanism
+				}
+				change_culture = culture:jurchen_culture
 				change_government_type = government_type:monarchy
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
@@ -1017,6 +1189,32 @@ mr_return_dzungaria = {
 				# 1337 countries with working capitals and governments; set_capital on them
 				# MOVES a living capital.
 				set_capital = location:hoboksar
+
+				# IDENTITY BY HAND — see the file header. Erdeni Batur founded
+				# the Dzungar Khanate in 1634 — the date in this theatre's own
+				# header — and the Choros were its ruling clan; choros_dynasty
+				# is in vanilla's 04_dynasties.txt. oirat_culture/tengri are
+				# OIR's own database entry (east_asia.txt:3274-3275).
+				create_character = {
+					estate = estate_type:nobles_estate
+					first_name = Erdeni
+					age = 35
+					culture = culture:oirat_culture
+					religion = religion:tengri
+					dynasty = dynasty:choros_dynasty
+					adm = { 40 70 }
+					dip = { 40 70 }
+					mil = { 60 90 }
+					create_in_limbo = yes
+					save_scope_as = mr_dzungar_khan
+				}
+				set_new_ruler = scope:mr_dzungar_khan
+				change_religion = religion:tengri
+				change_religion_for_ruler_and_family = {
+					country = c:OIR
+					religion = religion:tengri
+				}
+				change_culture = culture:oirat_culture
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
 					years = 25
@@ -1121,7 +1319,7 @@ mr_return_tibet = {
 
 # --- 12. THE QING TAKE CHINA (1644) ------------------------------
 # Beijing falls to the Manchus in 1644 and the Ming are finished.
-# Deliberately MCH=QNG and not MNG or CHI even when those still exist:
+# Deliberately MCH — the Qing — and not MNG or CHI even when those live:
 # this schedule is the 1650-1700 map, and in 1650 China is Qing.
 mr_return_china = {
 	if = {
@@ -1130,22 +1328,34 @@ mr_return_china = {
 				has_global_variable = mr_returned_china
 			}
 		}
-		if = {
-			limit = {
-				country_exists = c:MCH
-			}
-			## # Proclamation of the Qing
-			## This is vanilla's official way of forming QNG. Look game\in_game\events\DHE\flavor_MCH.txt:985-1038 lines. It is the only way to get the QNG tag. 
-			c:MCH = {
-				form_country = formable_country:CHI_f
-				hidden_effect = {
-					change_country_flag = CHI
-				}
-				change_country_adjective = QNG_ADJ
-				change_country_name = QNG
-				change_country_color = map_QNG
-			}
-		}
+		# THE LAND FIRST, THE PROCLAMATION LAST (it now sits at the bottom
+		# of this effect). MEASURED 2026-07-31: form_country writes the
+		# formable's `tag` field onto this country WHEN THAT TAG IS FREE,
+		# and leaves the tag alone when it is taken. Both halves were seen
+		# in one campaign — the old QNG spawn formed MCH_f (MCH free) and
+		# BECAME MCH; it then formed CHI_f, and because a rump CHI was
+		# still alive it stayed MCH with Historical Tag CHI.
+		# Vanilla guards the same hazard in four places: LAT_f
+		# (00_formable_countries.txt:793/:801) and THE_f (:985/:995) both
+		# carry NOT = { country_exists = c:X }; rise_of_the_ottomans.txt:355
+		# checks it before forming RUM_f and addresses c:TUR at :379; and
+		# red_turban_rebellions.txt:520 goes further, re-tagging the
+		# incumbent CHI to YUA to FREE the tag first.
+		#
+		# Vanilla can afford to proclaim first because flavor_mch.17 is an
+		# event option and NOTHING follows it — the country is never
+		# addressed by tag again, so either outcome is an ending. Here five
+		# things follow it, all naming c:MCH. In a campaign where CHI has
+		# been annexed the form would succeed, MCH would become CHI, and
+		# both sweeps, the seat, the rank and the grace modifier would
+		# silently do nothing — forever, because the work-guard at the
+		# bottom would correctly refuse to set the flag and the theatre
+		# would retry every month achieving nothing.
+		#
+		# Land-first also makes CHI_f's own form_effect do more work:
+		# rtr_recreate_middle_kingdom -> rtr_core_all_of_china_effect
+		# (situation_effects.txt:175-193) only upgrades integration on
+		# locations the country ALREADY owns.
 		scripted_geography:MR_geo_north_china = {
 			every_location_in_scripted_geography = {
 				limit = {
@@ -1174,8 +1384,11 @@ mr_return_china = {
 			# schedule mean anything: a fourteen-location Crimea next to a
 			# superpower still carrying PERMANENT phase rewards is lunch, and
 			# without it the map churns straight back to a blob.
-			# Emperor of China from 1644. The ratchet lifts QNG from the kingdom
-			# rank the Manchuria handover gave it.
+			# Emperor of China from 1644. The ratchet lifts the Manchus from
+			# the kingdom rank the Manchuria handover gave them. CHI_f's own
+			# form_effect sets rank_empire too (00_formable_countries.txt
+			# :3966) — but only if the proclamation below actually lands, and
+			# it may not, so this call stays.
 			c:MCH = {
 				# MEASURED: a tag brought onto the map by change_location_owner is
 				# instantiated from its setup/countries identity block alone, and that block
@@ -1194,8 +1407,20 @@ mr_return_china = {
 				# 1337 countries with working capitals and governments; set_capital on them
 				# MOVES a living capital.
 				#
-				# Beijing in 1644: the Qing move their seat out of Mukden the year
-				# they take China, which is the year this theatre lands.
+				# A DURABLE HANDLE FOR THE PROCLAMATION BELOW. A saved scope is
+				# the country OBJECT and survives a re-tag: nanbokuchou.txt
+				# :134-153 keeps using scope:target_emperor straight through a
+				# YMT_f form, and rise_of_the_ottomans.txt:364-365 writes a
+				# variable on the country in the same block as the form and
+				# reads it back afterwards. This is also what makes the theatre
+				# immune to vanilla's own flavor_mch.17 (tag = MCH,
+				# monthly_chance = 100), which can proclaim the Qing by itself
+				# the month after MCH appears — sixteen game-years before we
+				# get here — and re-tag the heir out from under a c:MCH call.
+				save_scope_as = mr_qing
+
+				# Beijing in 1644: the Qing move their seat out of Mukden the
+				# year they take China, which is the year this theatre lands.
 				set_capital = location:dadu
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
@@ -1211,6 +1436,28 @@ mr_return_china = {
 					}
 				}
 			}
+		}
+		# --- THE PROCLAMATION OF THE QING, AND IT MUST STAY LAST ---------
+		# Vanilla's own Qing proclamation, copied verbatim from
+		# flavor_MCH.txt:1024-1030 (flavor_mch.17, "Proclamation of the
+		# Qing"). QNG IS NOT A TAG — it is a loc key (country_names:3034)
+		# and a named colour (02_map.txt:2455); vanilla's Qing is MCH
+		# wearing CHI's clothes. The flag is CHI's because vanilla's CHI
+		# coat of arms IS the Qing one (pre_scripted_countries.txt:7776,
+		# "CHI = { # China - Qing") and QNG has no coat of arms at all.
+		# change_country_adjective is the load-bearing line: at rank_empire
+		# the name composes from ADJ + RANK and the NAME key is never read
+		# (country_name_construction.txt:117), so this renders "Qīng Empire".
+		#
+		# NOTHING MAY BE ADDED BELOW THIS BLOCK THAT NAMES c:MCH.
+		scope:mr_qing ?= {
+			form_country = formable_country:CHI_f
+			hidden_effect = {
+				change_country_flag = CHI
+			}
+			change_country_adjective = QNG_ADJ
+			change_country_name = QNG
+			change_country_color = map_QNG
 		}
 		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT.
 		#
@@ -1386,6 +1633,34 @@ mr_return_tarim = {
 				# 1337 countries with working capitals and governments; set_capital on them
 				# MOVES a living capital.
 				set_capital = location:yarkand
+
+				# IDENTITY BY HAND — see the file header. Abdullah Khan ruled
+				# Yarkand 1638-1669; the Yarkand khans were Chagatayids, so the
+				# house is Borjigin. mongolian_culture/tengri are CHG's own
+				# database entry (east_asia.txt:2223-2224) — NOTE the real
+				# Yarkand Khanate was Muslim by this date; using the tag's own
+				# entry is the conservative choice and the alternative is a
+				# design call, not a bug fix.
+				create_character = {
+					estate = estate_type:nobles_estate
+					first_name = Abdullah
+					age = 35
+					culture = culture:mongolian_culture
+					religion = religion:tengri
+					dynasty = dynasty:borjigin_dynasty
+					adm = { 40 70 }
+					dip = { 40 70 }
+					mil = { 50 80 }
+					create_in_limbo = yes
+					save_scope_as = mr_yarkand_khan
+				}
+				set_new_ruler = scope:mr_yarkand_khan
+				change_religion = religion:tengri
+				change_religion_for_ruler_and_family = {
+					country = c:CHG
+					religion = religion:tengri
+				}
+				change_culture = culture:mongolian_culture
 				add_country_modifier = {
 					modifier = MR_ulus_of_its_own
 					years = 25
