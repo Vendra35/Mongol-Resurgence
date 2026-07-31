@@ -182,5 +182,46 @@ countries = {
 			capital = shenyang
 		}
 
+		# The Khanate of Bukhara — Transoxiana and Khwarazm, the last
+		# ground the Khaghan used to keep. Vanilla has no tag for Bukhara
+		# or Khiva at all, so BUK is registered by this mod; see the long
+		# note in in_game/setup/countries/zz_mr_new_countries.txt.
+		#
+		# Same shape as IRA: a landless Muslim monarchy on
+		# muslim_monarchy_not_present, which supplies the sliders, the
+		# parliament, both laws and starting_technology_level but NOT
+		# `type` and NOT `heir_selection`, so both are inline. hanafi is
+		# written on purpose — Bukhara-i Sharif was the Hanafi centre of
+		# Central Asia, and the school and its sharia_law policy are
+		# paired the way FEZ pairs maliki (10_countries.txt:19464).
+		#
+		# capital: bukhara, khorasan_region / transoxiana_area, and
+		# expl_mongols grants khorasan_region — so the capital is inside
+		# the discovery, which is what initialize_from_bookmark.cpp:528
+		# demands.
+		BUK = {
+			own_control_core = { }
+			our_cores_conquered_by_others = { }
+
+			starting_technology_level = 3
+			include = "expl_mongols"
+			include = "muslim_monarchy_not_present"
+
+			government = {
+				type = monarchy
+				heir_selection = cognatic_primogeniture
+				ruler = random
+
+				laws = {
+					sharia_law = hanafi_policy
+				}
+			}
+
+			court_language = karluk_language
+			religious_school = hanafi_school
+			country_rank = rank_duchy
+			capital = bukhara
+		}
+
 	}
 }

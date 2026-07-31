@@ -102,3 +102,35 @@ MCH = {
 
 	is_historic = yes
 }
+
+# The Khanate of Bukhara. VANILLA HAS NO TAG FOR IT, and none for
+# Khiva either: "Bukhara", "Khiva", "Uzbek" and "Shaybanid" return zero
+# hits in country_names_l_english.yml, and no formable targets that
+# ground. So the two Chinggisid khanates that really ruled Transoxiana
+# and Khwarazm past 1700 - the Janids at Bukhara to 1747, the
+# Arabshahids at Khiva to 1740 - are simply absent from the game. The
+# partition used to leave that ground Mongol for exactly that reason,
+# which made it the one place the alternate timeline never closed back
+# onto the real map. BUK is registered here so it can.
+#
+# One tag, not two. Bukhara and Khiva were separate khanates and
+# fought each other, but they go to the same heir on the same date
+# here: a fourteen-location Khiva beside a restored empire is not a
+# country, it is a snack, and the mod already learned that lesson with
+# Crimea (MR_ulus_of_its_own exists because of it).
+#
+# culture: uzbek_culture (turkic.txt:86) - the khanate's ruling
+# stratum, and the name the period itself uses. religion: sunni;
+# Bukhara-i Sharif was the Hanafi centre of Central Asia.
+# colour: a raw rgb rather than a named colour, because there is no
+# map_BUK to point at - vanilla's own _default.txt writes colours this
+# way. Green is the Bukharan banner.
+BUK = {
+	color = rgb { 34 120 70 }
+	color2 = rgb { 16 41 202 }
+
+	culture_definition = uzbek_culture
+	religion_definition = sunni
+
+	is_historic = yes
+}

@@ -17,7 +17,7 @@
 # guard flag are named in exactly one place.
 #
 # EACH EFFECT IS IDEMPOTENT. The global flag is checked inside, not
-# by the caller, so on_ending can simply call all fourteen and the
+# by the caller, so on_ending can simply call all sixteen and the
 # ones that already fired do nothing. A theatre also never fires
 # twice, which matters: without the flag a reconquest would be
 # snapped back out of the Khaghan's hands every month.
@@ -1750,6 +1750,187 @@ mr_return_tarim = {
 				}
 			}
 			set_global_variable = mr_returned_tarim
+		}
+	}
+}
+
+# --- 15. THE KHANATE OF BUKHARA (1599) ------------------------------
+# The Janids — Toqay-Timurid Chinggisids of the Astrakhan line —
+# take Bukhara in 1599 and hold it to 1747; the Arabshahids hold
+# Khiva to 1740. Both are Chinggisid, and NEITHER is the Great Khan,
+# which is the whole point: this ground used to stay Mongol because
+# "Chinggisids ruled it" was read as "the Khaghan may keep it".
+# Rides the Nogai step (author's ruling 2026-07-31) - the Tarim stays
+# last, and the Janid date sits in the same generation as the Nogai
+# split, later than the Kazakh Khanate one step before.
+mr_return_bukhara = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_buk
+			}
+		}
+		scripted_geography:MR_geo_bukhara = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:BUK
+				add_core = c:BUK
+				change_integration_level = core
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:BUK
+			}
+			c:BUK = {
+				# The capital is set AFTER the sweep, because a country cannot be
+				# seated in ground it does not own yet.
+				set_capital = location:bukhara
+
+				# IDENTITY BY HAND — see the file header. A handover is not a
+				# release, so the identity block's religion and culture are never
+				# read and the heir would take both from the ground and from a
+				# generated ruler.
+				# Dated to when this theatre fires, 1691: Subhan Quli Khan ruled
+				# Bukhara 1681-1702. Borjigin because the Janids were Jochid
+				# Chinggisids — vanilla ships no Janid or Ashtarkhanid house.
+				create_character = {
+					estate = estate_type:nobles_estate
+					first_name = Subhan
+					age = 60
+					culture = culture:uzbek_culture
+					religion = religion:sunni
+					dynasty = dynasty:borjigin_dynasty
+					adm = { 40 70 }
+					dip = { 40 70 }
+					mil = { 40 70 }
+					create_in_limbo = yes
+					save_scope_as = mr_buk_khan
+				}
+				set_new_ruler = scope:mr_buk_khan
+				change_religion = religion:sunni
+				change_religion_for_ruler_and_family = {
+					country = c:BUK
+					religion = religion:sunni
+				}
+				change_culture = culture:uzbek_culture
+
+				# Twenty-five years of grace, the clause that makes the schedule
+				# mean anything against a superpower carrying permanent rewards.
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
+			}
+		}
+		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT — the same guard
+		# every theatre carries, so a silent failure retries instead of
+		# sealing itself shut for the campaign.
+		if = {
+			limit = {
+				NOT = {
+					scripted_geography:MR_geo_bukhara = {
+						any_location_in_scripted_geography = {
+							mr_partition_takeable = yes
+						}
+					}
+				}
+			}
+			set_global_variable = mr_returned_buk
+		}
+	}
+}
+
+# --- 16. BADAKHSHAN (1657) ------------------------------
+# Mir Yar Beg founds the Yarid mirdom in the mid-1600s and his house
+# holds the Oxus valley into the next century. BKH needs no
+# registration: it is a live vanilla tag with its own identity block
+# (east_asia.txt:3359) and its own start block, already seated at
+# fayzabad inside badakhshan_area. Rides the same step as Bukhara:
+# the Oxus valley goes when Transoxiana does.
+mr_return_badakhshan = {
+	if = {
+		limit = {
+			NOT = {
+				has_global_variable = mr_returned_bkh
+			}
+		}
+		scripted_geography:MR_geo_badakhshan = {
+			every_location_in_scripted_geography = {
+				limit = {
+					mr_partition_takeable = yes
+				}
+				change_location_owner = c:BKH
+				add_core = c:BKH
+				change_integration_level = core
+			}
+		}
+		if = {
+			limit = {
+				country_exists = c:BKH
+			}
+			c:BKH = {
+				# The capital is set AFTER the sweep, because a country cannot be
+				# seated in ground it does not own yet.
+				set_capital = location:fayzabad
+
+				# IDENTITY BY HAND — see the file header. A handover is not a
+				# release, so the identity block's religion and culture are never
+				# read and the heir would take both from the ground and from a
+				# generated ruler.
+				# DELIBERATE DEVIATION: BKH's own identity block declares mahayana
+				# (east_asia.txt:3364), which is a statement about 1337 Badakhshan.
+				# By 1694 the mirdom is Muslim — the lowlands Sunni, the Pamirs
+				# Ismaili — and this situation exists to close the timeline back onto
+				# the REAL map. One line to revert if that reading is rejected.
+				# No dynasty: the Yarid mirs claimed Alexandrian, not Chinggisid,
+				# descent, and vanilla ships no house for them.
+				create_character = {
+					estate = estate_type:nobles_estate
+					first_name = Yarbeg
+					age = 45
+					culture = culture:tajik_culture
+					religion = religion:sunni
+					adm = { 40 70 }
+					dip = { 40 70 }
+					mil = { 40 70 }
+					create_in_limbo = yes
+					save_scope_as = mr_bkh_khan
+				}
+				set_new_ruler = scope:mr_bkh_khan
+				change_religion = religion:sunni
+				change_religion_for_ruler_and_family = {
+					country = c:BKH
+					religion = religion:sunni
+				}
+				change_culture = culture:tajik_culture
+
+				# Twenty-five years of grace, the clause that makes the schedule
+				# mean anything against a superpower carrying permanent rewards.
+				add_country_modifier = {
+					modifier = MR_ulus_of_its_own
+					years = 25
+					mode = add
+				}
+			}
+		}
+		# THE FLAG ONLY LANDS IF THE GROUND ACTUALLY WENT — the same guard
+		# every theatre carries, so a silent failure retries instead of
+		# sealing itself shut for the campaign.
+		if = {
+			limit = {
+				NOT = {
+					scripted_geography:MR_geo_badakhshan = {
+						any_location_in_scripted_geography = {
+							mr_partition_takeable = yes
+						}
+					}
+				}
+			}
+			set_global_variable = mr_returned_bkh
 		}
 	}
 }

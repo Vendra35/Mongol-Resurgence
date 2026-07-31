@@ -1541,3 +1541,61 @@ HALA ACIK (hicbiri bu turun urunu degil):
   - Dort kardes rebel-growth satiri (failure modifierlari).
   - Baskurt tiyatrosu yazarin karariyla kapali; Rusya ural_region ile aliyor.
   - MCH'de Kangxi 16 yasinda: regency gozlenmedi, ama gorulurse yas yukseltilir.
+
+##### 31.07.2026 (IKINCI PAKET) CINGGISID BATI: BUHARA VE BADAHSAN #####
+
+Yazar MR_geo_tarim'e badakhshan + transoxiana + khwarazm ekleyerek Kagan'in
+elindeki bati topragini Cagatay'a vermisti. Amac dogruydu, ama yontemin iki
+sorunu vardi.
+
+## SORUN 1: ATOMUN ALTI TUKETICISI VAR, BIRI ISTEDI
+
+MR_geo_tarim'e eklenen uc alan sessizce sunlari da degistirdi:
+  - mr_dzungar_end_hold_tt (MR_scripted_triggers.txt:852) - BAGIMSIZ CUNGAR
+    HANLIGI situation'inin bitis sarti. Artik bir Mogol bozkir hordasinin
+    Tarim'in yani sira SEMERKANT, BUHARA, HIVE VE BADAHSAN'i da tutmasi
+    gerekiyordu. O situation 1634-1650 arasi calisiyor; bu haliyle pratikte
+    kazanilamaz.
+  - mr_ulus_tarim_held (:1093) - partition'in kohezyon girdilerinden biri.
+  - cb_MR_carve_the_ulus wargoal'unun allowed_locations'i (MR_wargoals.txt:198).
+Bu, CLAUDE.md'nin "bir atom, alti tuketici" uyarisinin canli ornegi.
+
+## SORUN 2: CAGATAY O TOPRAGIN TARIHSEL SAHIBI DEGIL
+
+1688'de Semerkant ve Buhara Canogullari'nin (Toqay-Timurid Cengizli), Hive
+Arabsahilerin. Yarkend Hanligi oralari hic tutmadi.
+
+## ARASTIRMA SONUCU
+
+Vanilla'da Buhara/Hive/Ozbek/Seybani diye TAG YOK - country_names_l_english
+.yml'de sifir gecis, o topraga bakan formable da yok. Ama BADAHSAN VAR:
+BKH canli bir vanilla tag'i, kendi kimlik blogu (east_asia.txt:3359) ve
+baslangic blogu var, baskenti fayzabad ve tam badakhshan_area icinde.
+
+## YAZILANLAR
+
+- MR_geo_tarim tarim_area'ya geri dondu. Iki yeni atom: MR_geo_bukhara
+  (transoxiana + khwarazm, ayni halefe ayni tarihte gittikleri icin tek atom)
+  ve MR_geo_badakhshan.
+- BUK bu modda KAYIT EDILDI (KAZ/IRA/MCH ile ayni yol): kimlik blogu
+  (uzbek_culture / sunni, ham rgb renk cunku map_BUK yok), baslangic blogu
+  (28_MR_countries.txt, IRA'nin sekli, baskent bukhara - khorasan_region,
+  expl_mongols kapsiyor), ve loc anahtarlari BUK / BUK_ADJ.
+- BKH'ye hicbir kayit gerekmedi.
+- Iki yeni tiyatro efekti, digerlerinin ayni sekli: supurme + core +
+  integration, sonra baskent, elle kimlik (din/kultur/hukumdar), 25 yillik
+  lutuf, ve is-koruma bayragi.
+  Hukumdarlar: BUK Subhan (Subhan Quli Han, 1681-1702), BKH Yarbeg
+  (Mir Yar Beg, Yarid mirdomunun kurucusu).
+  BUK hanedani borjigin (Canogullari Cuci soyundan Cengizli); BKH'ye hanedan
+  YOK (Yarid mirleri Iskender soyu iddia ediyordu).
+- BKH'DE BILEREK SAPMA: BKH'nin kimlik blogu mahayana diyor, ama o 1337
+  Badahsan'i hakkinda bir ifade. 1694'te mirdom Musluman. sunni yazildi ve
+  yorumda tek satirda geri alinabilecegi belirtildi.
+- YAZARIN KARARI (tur icinde): iki tiyatro kendi kademesini almadi, NOGAY
+  adimina bindirildi (momentum > 168 / 1664). Tarim/Cagatay en son kaliyor.
+
+## SONUC: KAGAN'IN ELINDE ARTIK 213 LOKASYON
+
+mongolia_region ve baska hicbir sey. Yedi rayli-yol koltugundan BIRI kaliyor,
+Karakurum. Onceki 379 rakami ve "iki koltuk" ifadesi CLAUDE.md'de guncellendi.

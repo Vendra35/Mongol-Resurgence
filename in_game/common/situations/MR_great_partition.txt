@@ -12,7 +12,7 @@
 #
 # HISTORICAL CONVERGENCE. The successors are deliberately the
 # polities that ACTUALLY EXISTED on the steppe around 1650-1700 —
-# Kazakh, Oirat, Crimea, Nogai, Bashkir, Chagatai in the Tarim — and
+# Kazakh, Oirat, Crimea, Nogai, Chagatai in the Tarim, Bukhara — and
 # NOT the 1337 khanates. A Golden Horde reappearing in 1650 would be
 # a second piece of alternate history; the point of this situation is
 # the opposite, the alternate timeline closing back onto the real
@@ -274,6 +274,18 @@ mr_great_partition = {
 					}
 				}
 				mr_return_nogai = yes
+				# --- BUKHARA (1599) AND BADAKHSHAN (1657) RIDE THE SAME STEP ---
+				# AUTHOR'S RULING 2026-07-31: the Tarim stays LAST. These two are
+				# the Khaghan's last western ground - Samarkand, Bukhara, Khiva
+				# and the Oxus valley - and they used to stay Mongol forever,
+				# which made them the one place the alternate timeline never
+				# closed back onto the real map. They ride Nogai's step rather
+				# than getting tiers of their own: two more tiers would push the
+				# ladder to 1697 and buy nothing, and the Janid date (1599) sits
+				# in the same generation as the Nogai split (1557) - later than
+				# the Kazakh Khanate (1465), which is the step before.
+				mr_return_bukhara = yes
+				mr_return_badakhshan = yes
 			}
 			# --- 7. RUSSIA IN THE NORTH (1582-1598) - Yermak crosses the Urals,
 			# the Sibir Khanate is finished by 1598.
@@ -817,6 +829,8 @@ mr_great_partition = {
 			mr_return_china = yes
 			mr_return_korea = yes
 			mr_return_tarim = yes
+			mr_return_bukhara = yes
+			mr_return_badakhshan = yes
 		}
 		else = {
 			set_global_variable = mr_partition_survived
@@ -856,7 +870,7 @@ mr_great_partition = {
 		remove_global_variable = mr_partition_beat_85_fired
 		remove_global_variable = mr_partition_beat_55_fired
 		remove_global_variable = mr_partition_beat_40_fired
-		# The fourteen theatre flags. A resolved partition never reopens
+		# The sixteen theatre flags. A resolved partition never reopens
 		# (both terminals are checked in mr_can_start_partition), so these
 		# are cleared purely to keep them out of the savefile.
 		remove_global_variable = mr_returned_crimea
@@ -873,6 +887,8 @@ mr_great_partition = {
 		remove_global_variable = mr_returned_china
 		remove_global_variable = mr_returned_korea
 		remove_global_variable = mr_returned_tarim
+		remove_global_variable = mr_returned_buk
+		remove_global_variable = mr_returned_bkh
 	}
 	tooltip = {
 		if = {
@@ -901,6 +917,8 @@ mr_great_partition = {
 					is_in_scripted_geography = scripted_geography:MR_geo_safavid_khorasan
 					is_in_scripted_geography = scripted_geography:MR_geo_kuban_and_yedisan
 					is_in_scripted_geography = scripted_geography:MR_geo_pontic_frontier
+					is_in_scripted_geography = scripted_geography:MR_geo_bukhara
+					is_in_scripted_geography = scripted_geography:MR_geo_badakhshan
 				}
 			}
 			custom_tooltip = mr_partition_map_tt
@@ -950,6 +968,8 @@ mr_great_partition = {
 						tag = TIB
 						tag = KOR
 						tag = CHG
+						tag = BUK
+						tag = BKH
 						tag = OGE
 					}
 				}

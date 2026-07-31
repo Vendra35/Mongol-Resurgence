@@ -144,18 +144,19 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   timeline closing back onto the real map. They come back with plain
   `change_location_owner`; a landless-but-defined tag needs no formable
   (CONFIRMED IN GAME 2026-07-30: `is_historic` KAZ spawned — audit D2 closed).
-  **FOURTEEN theatres, not six, and they run on a CLOCK** (added 2026-07-30
+  **SIXTEEN theatres, not six, and they run on a CLOCK** (added 2026-07-30
   after the first game test). The steppe six were only half the map: a
   "collapsed" empire still ran from Shiraz to Canton, because Persia, Iraq,
   Anatolia, all of China, Korea, Tibet, Manchuria and the Volga had no heir
   at all. Now each theatre returns to the power that actually held it around
   1650–1700 — CRI, KAZ, **IRA**, BSH, **RUS/MOS**, NOG, **TUR**, **MCH**
   (Manchuria first at +32y, China at +48y, as it happened), OIR, **TIB**,
-  **KOR**, CHG — one scripted effect each in
+  **KOR**, CHG, **BUK**, **BKH** — one scripted effect each in
   `in_game/common/scripted_effects/MR_partition_effects.txt`, called from BOTH
   `on_monthly` (on schedule) and `on_ending` (the final sweep), each guarded
   by its own `mr_returned_*` global so nothing fires twice. Only IRA and MCH
-  needed new identity blocks; RUS is only ever named behind `country_exists`.
+  needed new identity blocks — and later BUK; RUS is only ever named behind
+  `country_exists`, and BKH is a live vanilla tag needing nothing.
   **QNG IS NOT A TAG.** Vanilla's Qing is MCH renamed: `flavor_MCH.txt`
   :1024-1030 forms `CHI_f` on an MCH country and writes QNG as its name,
   adjective and colour. `QNG` is a loc key (`country_names:3034`) and
@@ -189,18 +190,30 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   54 (beat 55, CB) → 42 → 30 (beat 40, end).
   `on_ending`'s survival branch now also requires cohesion ≥ 70, or a gutted
   empire timing out at 1720 would collect `MR_the_ulus_endures`.
-  **What the Khaghan is left holding: 379 locations, computed and independently
-  re-computed** — `mongolia_region` 213 (Karakorum) + transoxiana 96 + khwarazm
-  32 + badakhshan 38 (Samarkand). **Nothing at all in `steppes_region`.** Three
-  atoms added 2026-07-30 for exactly that (`MR_geo_safavid_khorasan`,
+  **What the Khaghan is left holding: `mongolia_region`, 213 locations, and
+  nothing else.** Khalkha Mongolia, and ONE of the seven railroad seats,
+  Karakorum. **Nothing at all in `steppes_region`** — three atoms were added
+  2026-07-30 for exactly that (`MR_geo_safavid_khorasan`,
   `MR_geo_kuban_and_yedisan`, `MR_geo_pontic_frontier`), FOLDED into the
-  persia / crimea / north theatres rather than given slots of their own — three
-  more slots would push the ladder to 17 entries and 1714 and buy nothing. The
-  rump is the real 1700 map: Khalkha Mongolia, and Bukhara and Khiva, which
-  were ruled by **Chinggisids** (Janids to 1747, Arabshahids to 1740). Two of
-  the seven railroad seats survive, Karakorum and Samarkand; Sarai al-Jadid
-  goes because New Sarai had been a ruin since 1395 and a 42-location exclave
-  4000 km from Karakorum is not a settlement.
+  persia / crimea / north theatres rather than given slots of their own. Sarai
+  al-Jadid goes because New Sarai had been a ruin since 1395 and a 42-location
+  exclave 4000 km from Karakorum is not a settlement.
+  **It used to be 379, keeping Samarkand, Bukhara and Khiva**, on the reasoning
+  that those really were Chinggisid past 1700 — Janids to 1747, Arabshahids to
+  1740. True, and the flaw: they were ruled by DIFFERENT Chinggisid houses, not
+  by the Great Khan, so that ground was the one place the alternate timeline
+  never closed back onto the real map. Vanilla has no tag for either khanate
+  (zero hits for "Bukhara", "Khiva", "Uzbek", "Shaybanid" in
+  `country_names_l_english.yml`), which is why it had been left Mongol; **BUK
+  is now registered by this mod** the way KAZ, IRA and MCH are, and Badakhshan
+  goes to **BKH**, a live vanilla tag already seated at fayzabad. Both ride the
+  Nogai step; the Tarim stays last.
+  **`MR_geo_tarim` is the Tarim and nothing else.** Those three areas were
+  briefly folded into it, which worked for the partition and silently broke
+  three of its other five consumers — the standalone Dzungar situation's end
+  trigger began demanding Samarkand, Bukhara and Khiva, `mr_ulus_tarim_held`
+  began counting them, and the carve-the-ulus wargoal widened. They have their
+  own atoms now, `MR_geo_bukhara` and `MR_geo_badakhshan`.
   **The Khaghan feels it**: three decline tiers (`MR_the_centre_cannot_hold` /
   `MR_the_uluses_drift` / `MR_khaghan_in_name_only`) granted inside the 85/55/40
   beats that already fire, each replacing the last, all three removed at the top
@@ -652,7 +665,7 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   low tax and manpower — which is why a "successor" handed 155 locations still
   looks and plays like a corpse. All 22 MR handover loops shipped without it.
 - **An effect must never mark itself done unless it actually did something.**
-  The partition's fourteen theatres each set a `mr_returned_*` global at the end
+  The partition's sixteen theatres each set a `mr_returned_*` global at the end
   regardless of whether a single location moved, so the one theatre whose tag
   could not instantiate sealed itself shut for the rest of the campaign. Guard
   the flag on the WORK, not on having run: each effect now sets its flag only

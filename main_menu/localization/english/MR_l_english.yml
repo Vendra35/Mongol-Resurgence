@@ -327,6 +327,15 @@
  MGO_f: "Mongol Horde"
  MGO_f_desc: "A powerful confederation of Mongol tribes, united under a single khan. Though not yet an empire, its warrior traditions and steppe mobility make it a threat to all settled civilizations on its borders."
 
+ # The Khanate of Bukhara, a Great Partition heir. These two keys exist
+ # nowhere in vanilla — "Bukhara", "Khiva", "Uzbek" and "Shaybanid" all
+ # return zero hits in country_names_l_english.yml — which is why the tag
+ # itself had to be registered in zz_mr_new_countries.txt. Adjective form
+ # matters more than the name: at empire rank the displayed title composes
+ # from ADJ + RANK and the NAME key is never read.
+ BUK: "Bukhara"
+ BUK_ADJ: "Bukharan"
+
  # ==============================================================================
  # ----------------- SITUATION EVENTS (mr_dominance) -----------------
  # ==============================================================================

@@ -223,12 +223,18 @@ MR_geo_dzungaria = {
 	}
 }
 
+# THE TARIM IS THE TARIM AND NOTHING ELSE. Badakhshan, Transoxiana
+# and Khwarazm were briefly folded in here so the Great Partition
+# could hand the Khaghan's last western ground to somebody — and it
+# worked, but this atom has SIX consumers and only one of them wanted
+# it: the Dzungar situation's end trigger (mr_dzungar_end_hold_tt)
+# silently began demanding Samarkand, Bukhara and Khiva as well as the
+# Tarim, mr_ulus_tarim_held began counting them, and the carve-the-ulus
+# wargoal widened. This is the exact hazard the file header warns
+# about. The three areas now have atoms of their own, below.
 MR_geo_tarim = {
 	area = {
 		tarim_area
-		badakhshan_area
-		transoxiana_area
-		khwarazm_area
 	}
 }
 
@@ -443,9 +449,9 @@ MR_geo_kuban_and_yedisan = {
 # Ukraine were literally settled from Muscovy in the 1650s;
 # Zaporizhzhia is Cossack ground under Russian protection from 1654;
 # Azov and the lower Don are Don Cossack and Ottoman. lower_don_area
-# carries sarai_al_jadid, and giving up a khanate seat is the point:
-# the Khaghan keeps Karakorum and Samarkand, the two seats a Chinggisid
-# dynasty actually still held in 1700.
+# carries sarai_al_jadid, and giving up a khanate seat is the point.
+# (The Khaghan used to keep Samarkand too; he no longer does - see
+# MR_geo_bukhara below. Karakorum is now the one seat that survives.)
 MR_geo_pontic_frontier = {
 	area = {
 		kursk_area
@@ -453,5 +459,42 @@ MR_geo_pontic_frontier = {
 		zaporizhzhia_area
 		lower_don_area
 		azov_area
+	}
+}
+
+# =================================================================
+# THE GREAT PARTITION - THE CHINGGISID WEST
+# =================================================================
+# The last two theatres, added 2026-07-31. Until then the Khaghan kept
+# Transoxiana, Khwarazm and Badakhshan and ended the campaign holding
+# 379 locations across Mongolia and the old Silk Road. The reasoning
+# was that Bukhara and Khiva really were ruled by Chinggisids past
+# 1700 - Janids to 1747, Arabshahids to 1740 - which is true, and
+# which is also the flaw: they were ruled by DIFFERENT Chinggisid
+# houses, not by the Great Khan. Leaving that ground Mongol was the
+# one place where the alternate timeline did not close back onto the
+# real map.
+#
+# Vanilla has no tag for either khanate - "Bukhara", "Khiva", "Uzbek"
+# and "Shaybanid" return ZERO hits in country_names_l_english.yml - so
+# BUK is registered by this mod, the same way KAZ, IRA and MCH are.
+# Badakhshan needs nothing: BKH is a live vanilla tag with its own
+# identity block (east_asia.txt:3359) and its own start block, seated
+# at fayzabad, inside badakhshan_area.
+#
+# TWO ATOMS, NOT ONE. Transoxiana and Khwarazm share one because they
+# go to the same heir on the same date and are never separately true -
+# the same reason MR_geo_kuban_and_yedisan is a single atom. Badakhshan
+# is a different heir on a different date, so it is its own.
+MR_geo_bukhara = {
+	area = {
+		transoxiana_area
+		khwarazm_area
+	}
+}
+
+MR_geo_badakhshan = {
+	area = {
+		badakhshan_area
 	}
 }
