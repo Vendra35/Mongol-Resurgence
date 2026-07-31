@@ -226,6 +226,9 @@ MR_geo_dzungaria = {
 MR_geo_tarim = {
 	area = {
 		tarim_area
+		badakhshan_area
+		transoxiana_area
+		khwarazm_area
 	}
 }
 
