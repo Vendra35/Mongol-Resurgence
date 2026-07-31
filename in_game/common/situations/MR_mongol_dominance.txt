@@ -623,6 +623,54 @@ mongol_dominance = {
 			}
 			set_global_variable = mr_beat_131_fired
 		}
+		# BAGHDAD. 1258, and the end of the Abbasid caliphate. Fired on the city
+		# itself rather than on the region, because it was the CITY the world
+		# wrote about.
+		if = {
+			limit = {
+				NOT = {
+					has_global_variable = mr_beat_baghdad_fired
+				}
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:baghdad
+				}
+			}
+			every_country = {
+				limit = {
+					mr_distant_observer = yes
+				}
+				trigger_event_non_silently = mr_distant.4
+			}
+			set_global_variable = mr_beat_baghdad_fired
+		}
+		# THE RUS LANDS. Presence, not conquest - 1237-40 was a campaign of
+		# burned cities and submissions rather than a border moving, and it is
+		# what put the Mongols on Europe's doorstep.
+		if = {
+			limit = {
+				NOT = {
+					has_global_variable = mr_beat_rus_fired
+				}
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					has_presence_in = scripted_geography:MR_geo_russian_lands
+				}
+			}
+			every_country = {
+				limit = {
+					mr_distant_observer = yes
+				}
+				trigger_event_non_silently = mr_distant.6
+			}
+			set_global_variable = mr_beat_rus_fired
+		}
 		# --- The Four Corners: all four khanate capitals held ---
 		# Not momentum-timed — this one fires the month it becomes
 		# TRUE: Karakorum, Dadu, Samarkand and Sarai under one banner.
@@ -1247,6 +1295,17 @@ mongol_dominance = {
 				trigger_event_non_silently = mr_dominance.132
 			}
 			set_global_variable = mr_railroad_complete
+			# THE ROADS OPEN. The counterweight to three centuries of dread:
+			# one empire from the Mediterranean to the Pacific is also one set
+			# of tolls and one safe-conduct, which is how Rubruck, Polo and Ibn
+			# Battuta travelled. Grants nothing - it is an opportunity being
+			# announced, not a gift.
+			every_country = {
+				limit = {
+					mr_distant_observer = yes
+				}
+				trigger_event_non_silently = mr_distant.7
+			}
 			# Arm the Great Partition, 30 years out. The endgame
 			# situation opens on this flag rather than on a calendar
 			# date: Phase 3 can close any time between 1550 and 1650,
@@ -1321,6 +1380,8 @@ mongol_dominance = {
 	on_ended = {
 		remove_variable = mr_dominance_momentum
 		remove_global_variable = mr_beat_131_fired
+		remove_global_variable = mr_beat_baghdad_fired
+		remove_global_variable = mr_beat_rus_fired
 		remove_global_variable = mr_beat_135_fired
 		remove_global_variable = mr_beat_201i_fired
 		remove_global_variable = mr_beat_202i_fired

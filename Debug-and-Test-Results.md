@@ -1802,3 +1802,39 @@ HIC DUYMAYANLAR (bilerek disarida): Sahra alti Afrika, Amerika, Okyanusya
   bolunmustu - CLAUDE.md'nin "loc degerleri TEK fiziksel satirda yasar"
   kuralinin tam ornegi. Harness "value opens a quote it never closes" ile
   yakaladi.
+
+## DIS DUNYA KATMANI GENISLETILDI: DORT ISIMLI DARBE (31.07)
+
+Ilk uc olay haberin SEKLIYDI (soylenti / elci / sinir). Bu dordu ICERIGI -
+on ucuncu yuzyilin adiyla hatirladigi anlar, bu kampanya ayni yerlere
+vardiginda atesleniyor. ZAMANA DEGIL KONUMA bagli: Bagdat'i hic almayan bir
+kampanya Bagdat'i hic duymuyor.
+
+  .5  Faz 2, Dadu alininca   - Mandate el degistiriyor (Zhongdu 1215,
+                               Hanbalik 1264). Bozkir artik yagmalamiyor,
+                               vergi topluyor.
+  .4  Faz 3, Bagdat alininca - 1258. Hulagu sehri aliyor, son Abbasi halifesi
+                               oldurulyor (halinin icinde, Mogol usulu kan
+                               dokmeden), bes yuzyillik hilafet bir haftada
+                               bitiyor.
+  .6  Faz 3, Rus topraginda  - 1237-40: Ryazan, Vladimir, Kiev. Ardindan
+      varlik olunca            1241'de Legnica ve Mohi. PRESENCE ile bagli,
+                               fetih ile degil - o bir sinirin kaymasi degil,
+                               yakilmis sehirler kampanyasiydi.
+  .7  Faz 3 BASARIYLA         - PAX MONGOLICA. Yollar aciliyor.
+      bitince
+
+## .7 NEDEN VAR
+
+Bilerek korku degil. Mogol yuzyili sadece terör degildi: Akdeniz'den Pasifik'e
+tek yargi alani, tek gumruk, tek yol guvencesi - Rubruck 1254'te Karakurum'a,
+Polo 1275'te Hanbalik'a, Ibn Battuta neredeyse tamamini gecti, ve Rabban Bar
+Sauma'nin Yuan elciligi 1287'de Roma'ya ve Paris'e ulasti. Uzaktaki oyuncuyu
+sadece korkutan bir mod tarihin yarisini anlatir - ve korku, tek nota
+olmadiginda daha sert vurur.
+
+HICBIRI MODIFIER VERMIYOR, .7 dahil. Yollarin acilmasi oyuncuya duyurulan bir
+FIRSAT, verilen bir hediye degil.
+
+Bayraklar: mr_beat_dadu_fired (Faz 2), mr_beat_baghdad_fired ve
+mr_beat_rus_fired (Faz 3), ucu de kendi fazinin on_ended'inda temizleniyor.

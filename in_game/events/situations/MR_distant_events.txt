@@ -112,3 +112,124 @@ mr_distant.3 = {
 		}
 	}
 }
+
+# =================================================================
+# THE NAMED BLOWS - four moments the world recorded by name
+# =================================================================
+# The three beats above are the shape of the news: rumour, envoy,
+# border. These four are the CONTENT - the specific events that made
+# the thirteenth century remember the Mongols, fired when this
+# campaign reaches the same places. They hang off the claimant
+# actually holding the ground, not off a timer, so a campaign that
+# never takes Baghdad never hears about Baghdad.
+#
+# And the last of them is deliberately not dread. The Mongol century
+# was not only terror: it reopened the road from the Mediterranean to
+# China under one jurisdiction for the first and only time, and that
+# is how Rubruck, Polo and Ibn Battuta got where they were going. A
+# mod that only ever frightens the distant player is telling half the
+# history - and the fear lands harder when it is not the only note.
+# =================================================================
+
+# --- 5. THE MANDATE CHANGES HANDS (Phase 2, Dadu taken) ----------
+# Khanbaliq is the seat of the Mandate of Heaven and everyone from
+# Korea to Java traded through it. Its fall in 1215 and again in 1264
+# was the news that told the settled world the steppe was not raiding
+# any more, it was governing.
+mr_distant.5 = {
+	type = country_event
+	category = situation_event
+	title = mr_distant.5.title
+	desc = mr_distant.5.desc
+	outcome = negative
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+	option = {
+		name = mr_distant.5.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# --- 4. BAGHDAD (Phase 3, Baghdad taken) -------------------------
+# 1258. Hulegu takes the city, the last Abbasid caliph is killed, and
+# five centuries of the caliphate end in a week. This is the single
+# most resonant thing the Mongols ever did as far as the Islamic
+# world is concerned, and it was reported to Europe too - not always
+# with regret.
+mr_distant.4 = {
+	type = country_event
+	category = situation_event
+	title = mr_distant.4.title
+	desc = mr_distant.4.desc
+	outcome = negative
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+	option = {
+		name = mr_distant.4.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# --- 6. THE RUS LANDS (Phase 3, presence in russian_region) ------
+# 1237-1240: Ryazan, Vladimir, Kiev. The campaign that put the
+# Mongols on Europe's own doorstep and led directly to Legnica and
+# Mohi in 1241, the year the Emperor wrote to every crowned head in
+# the West and the Pope called a council about it.
+mr_distant.6 = {
+	type = country_event
+	category = situation_event
+	title = mr_distant.6.title
+	desc = mr_distant.6.desc
+	outcome = negative
+	fire_only_once = yes
+	major = yes
+	illustration_tags = {
+		10 = exterior
+		10 = regular
+	}
+	option = {
+		name = mr_distant.6.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+# --- 7. THE ROADS ARE OPEN (Phase 3 succeeds) --------------------
+# The counterweight, and the reason this file is not only a horror
+# story. One empire from the Mediterranean to the Pacific meant one
+# set of tolls, one safe-conduct and one law on the road: Rubruck
+# reached Karakorum in 1254, Polo reached Khanbaliq in 1275, Ibn
+# Battuta crossed the whole of it, and a Yuan embassy reached Rome.
+# GRANTS NOTHING, like the rest of this file - the roads opening is
+# an opportunity the player is being told about, not a gift.
+mr_distant.7 = {
+	type = country_event
+	category = situation_event
+	title = mr_distant.7.title
+	desc = mr_distant.7.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+	option = {
+		name = mr_distant.7.a
+		ai_chance = {
+			factor = 100
+		}
+	}
+}

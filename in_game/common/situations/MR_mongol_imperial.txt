@@ -502,6 +502,29 @@ mongol_imperial = {
 			}
 			set_global_variable = mr_beat_121_fired
 		}
+		# THE MANDATE. Hung on actually holding Khanbaliq, not on a timer, so a
+		# campaign that never takes it never announces that it did.
+		if = {
+			limit = {
+				NOT = {
+					has_global_variable = mr_beat_dadu_fired
+				}
+				any_country = {
+					OR = {
+						tag = MGO
+						tag = MGE
+					}
+					owns = location:dadu
+				}
+			}
+			every_country = {
+				limit = {
+					mr_distant_observer = yes
+				}
+				trigger_event_non_silently = mr_distant.5
+			}
+			set_global_variable = mr_beat_dadu_fired
+		}
 		# --- The First Wave: the campaign opens (~8 years) ---
 		if = {
 			limit = {
@@ -938,6 +961,7 @@ mongol_imperial = {
 		remove_variable = mr_imperial_momentum
 		remove_global_variable = mr_tumu_reaction_seen
 		remove_global_variable = mr_beat_121_fired
+		remove_global_variable = mr_beat_dadu_fired
 		remove_global_variable = mr_beat_122_fired
 		remove_global_variable = mr_beat_123_fired
 		remove_global_variable = mr_beat_124_fired
