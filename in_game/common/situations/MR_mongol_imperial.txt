@@ -422,6 +422,12 @@ mongol_imperial = {
 									has_presence_in = scripted_geography:MR_geo_siberian_marches
 								}
 							}
+							NOT = {
+								relative_defensive_alliance_strength = {
+									target = c:MGO
+									value < 1.2
+								}
+							}
 						}
 					}
 				}

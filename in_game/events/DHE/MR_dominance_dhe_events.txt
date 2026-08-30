@@ -396,6 +396,103 @@ mr_dominance_dhe.9 = {
 	}
 }
 
+# --- The Khuriltai's Call (AI catch-up, Phase 1 End - Phase 2 Start) -------------------
+# Same family as mr_dominance_dhe.10, stripped down to just the unit:
+# no city rank, no buildings, no market, no pop conversion — forty
+# regiments of horse archers at the capital and nothing else.
+mr_dominance_dhe.13 = {
+	type = country_event
+	title = mr_dominance_dhe.13.title
+	desc = mr_dominance_dhe.13.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+	dynamic_historical_event = {
+		# tag = MGE as well: the proclamation can land before this
+		# window closes, and an unfired event must survive the switch.
+		tag = MGO
+		tag = MGE
+		from = 1415.5.5
+		to = 1550.1.1
+		monthly_chance = 100
+	}
+	trigger = {
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
+		is_ai = yes
+	}
+	option = {
+		name = mr_dominance_dhe.13.a
+		ai_chance = {
+			factor = 100
+		}
+		custom_tooltip = mr_dominance_dhe.13.a.tt1
+		add_manpower = 1000
+		capital ?= {
+			while = {
+				count = 50
+				create_sub_unit_with_owner = {
+					# owner = root, not c:MGO — see mr_dominance_dhe.9.
+					type = a_steppe_horse_archers
+					owner = root
+				}
+			}
+		}
+	}
+}
+
+# --- Raising the Tümen (AI catch-up, Phase 2) ----------------------
+# Same as mr_dominance_dhe.13, plus a manpower grant — the levy alone
+# was outrunning the AI's manpower pool.
+mr_dominance_dhe.14 = {
+	type = country_event
+	title = mr_dominance_dhe.14.title
+	desc = mr_dominance_dhe.14.desc
+	outcome = positive
+	fire_only_once = yes
+	illustration_tags = {
+		10 = interior
+		10 = regular
+	}
+	dynamic_historical_event = {
+		# tag = MGE as well: the proclamation can land before this
+		# window closes, and an unfired event must survive the switch.
+		tag = MGO
+		tag = MGE
+		from = 1415.10.10
+		to = 1550.1.1
+		monthly_chance = 100
+	}
+	trigger = {
+		NOT = {
+			has_game_rule = mr_railroad_off
+		}
+		is_ai = yes
+	}
+	option = {
+		name = mr_dominance_dhe.14.a
+		ai_chance = {
+			factor = 100
+		}
+		custom_tooltip = mr_dominance_dhe.14.a.tt1
+		add_manpower = 1000
+		capital ?= {
+			while = {
+				count = 50
+				create_sub_unit_with_owner = {
+					# owner = root, not c:MGO — see mr_dominance_dhe.9.
+					type = a_steppe_horse_archers
+					owner = root
+				}
+			}
+		}
+	}
+}
+
 # --- Karakorum Restored (AI catch-up, Phase 2) -------------------
 # Mongolized from PD's pd_brandenburg_dhe.2: Ogedei's capital rises
 # again — city rank, walls, barracks, a market on the caravan road,
@@ -476,7 +573,7 @@ mr_dominance_dhe.10 = {
 					instant = yes
 				}
 				while = {
-					count = 40
+					count = 50
 					create_sub_unit_with_owner = {
 						# owner = root, not c:MGO — see mr_dominance_dhe.9.
 						type = a_steppe_horse_archers

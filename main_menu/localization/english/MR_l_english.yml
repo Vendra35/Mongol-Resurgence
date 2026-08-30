@@ -681,6 +681,18 @@
  mr_dominance_dhe.12.a: "Count the men first. The tumens must be filled."
  mr_dominance_dhe.12.b: "Count the herds first. The campaigns must be paid for."
 
+ mr_dominance_dhe.13.title: "The Khuriltai's Call"
+ mr_dominance_dhe.13.entry: "(MR) - The Khuriltai's Call (AI Only)"
+ mr_dominance_dhe.13.desc: "When Genghis Khan called a khuriltai, the clans of the steppe rode in from every pasture — each chieftain bringing spears, bows, and sworn riders to whatever war the assembly named. A council of felt tents could raise an army faster than any settled kingdom's muster rolls.\n\nSuch a khuriltai convenes again. Riders carry the Khan's summons from ordu to ordu, and by the old custom every clan answers in kind: a fresh wave of horse archers rides out from the capital to swell the Khan's banners."
+ mr_dominance_dhe.13.a: "Answer the Khuriltai's call!"
+ mr_dominance_dhe.13.a.tt1: "Gain 10000 manpower, and fifty regiments of [ShowUnitDefinitionName('a_steppe_horse_archers')] muster at the capital"
+
+ mr_dominance_dhe.14.title: "Raising the Tümen"
+ mr_dominance_dhe.14.entry: "(MR) - Raising the Tümen (AI Only)"
+ mr_dominance_dhe.14.desc: "A tümen was ten thousand men, counted out by decimal ranks from arban to minghan to tümen — the unit of reckoning by which Genghis Khan's generals turned herdsmen into an army. Where the manpower fell short, the count was simply refilled from the next camp over.\n\nThe reckoning is made again. Fresh levies are drawn from the pasturelands to bring the ranks to full strength, and a wave of horse archers rides out to join them."
+ mr_dominance_dhe.14.a: "Fill the ranks of the Tümen!"
+ mr_dominance_dhe.14.a.tt1: "Gain 10000 manpower, and fifty regiments of [ShowUnitDefinitionName('a_steppe_horse_archers')] muster at the capital"
+
  # ==============================================================================
  # ----------------- HISTORICAL DHE LAYER (mr_history) -----------------
  # ==============================================================================

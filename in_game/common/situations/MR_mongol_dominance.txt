@@ -284,7 +284,6 @@ mongol_dominance = {
 			}
 			trigger_event_non_silently = mr_dominance.26
 		}
-
 		# The claimant sheds alliances with those same powers, so the
 		# railroad's declare event is not blocked by its own treaties.
 		every_country = {
@@ -446,7 +445,7 @@ mongol_dominance = {
 						}
 						relative_defensive_alliance_strength = {
 							target = scope:mr_dom_claimant
-							value < 1.5
+							value < 1.3
 						}
 						OR = {
 							has_presence_in = scripted_geography:MR_geo_russian_lands
@@ -499,6 +498,10 @@ mongol_dominance = {
 						OR = {
 							tag = MGO
 							tag = MGE
+							AND = {
+								country_exists = c:MGE
+								top_overlord_or_this ?= c:MGE
+							}
 							NOT = {
 								OR = {
 									has_presence_in = scripted_geography:MR_geo_russian_lands
@@ -512,6 +515,12 @@ mongol_dominance = {
 									has_presence_in = scripted_geography:MR_geo_north_china
 									has_presence_in = scripted_geography:MR_geo_song_china
 									has_presence_in = scripted_geography:MR_geo_korea
+								}
+							}
+							NOT = {
+								relative_defensive_alliance_strength = {
+									target = c:MGE
+									value < 1.3
 								}
 							}
 						}

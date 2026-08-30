@@ -93,8 +93,11 @@ MR_empire_fulfilled = {
 	}
 	land_morale_modifier = 0.1
 	global_manpower_modifier = 0.15
+	max_manpower = 50
 	monthly_prestige = 0.15
 	global_integration_speed_modifier = 1
+	land_unit_attrition = -0.1
+	regiment_reinforcement_speed = 0.1
 	expected_army_size_modifier = 1
 	num_local_governors = 1
 }
@@ -221,6 +224,7 @@ MR_great_khan = {
 	antagonism_received_modifier = -1
 	army_maintenance_efficiency = 0.85
 	army_reinforce_efficiency = 0.85
+	max_manpower = 2000
 	character_life_expectancy = 30
 	character_fertility = 50
 	monthly_legitimacy = 1
@@ -231,6 +235,9 @@ MR_great_khan = {
 	subject_loyalty = 100
 	max_war_exhaustion = -5
 	aggressiveness_modifier = 1
+	land_unit_attrition = -0.85
+	regiment_reinforcement_speed = 0.85
+	expected_army_size_modifier = 10
 	force_allow_as_leader = yes
 	can_colonize = no
 }
@@ -281,6 +288,7 @@ MR_mongol_historical_modifier = {
 	monthly_gold_income = 200
 	army_light_cavalry_power = 0.33
 	global_manpower_modifier = 0.5
+	max_manpower = 50
 	global_levy_size_modifier = 1
 	levy_combat_efficiency_modifier = 1
 	army_tradition_from_battle = 1
@@ -303,9 +311,12 @@ MR_mongol_historical_modifier_2 = {
 	army_light_cavalry_power = 0.1
 	siege_ability = 0.1
 	global_manpower_modifier = 0.1
+	max_manpower = 25
 	global_integration_speed_modifier = 1
 	global_pop_assimilation_speed_modifier = 1
 	character_mil_child_education = 1
+	land_unit_attrition = -0.1
+	regiment_reinforcement_speed = 0.1
 	expected_army_size_modifier = 1
 	monthly_complacency = -10
 }
@@ -319,6 +330,7 @@ MR_imperial_historical_modifier = {
 	army_light_cavalry_power = 0.33
 	monthly_gold_income = 200
 	global_manpower_modifier = 0.25
+	max_manpower = 200
 	army_maintenance_efficiency = 0.25
 	global_integration_speed_modifier = 2
 	global_pop_assimilation_speed_modifier = 2
@@ -330,6 +342,8 @@ MR_imperial_historical_modifier = {
 	subject_loyalty = 100
 	monthly_horde_unity = 1
 	stability_investment = 0.5
+	land_unit_attrition = -0.5
+	regiment_reinforcement_speed = 0.5
 	expected_army_size_modifier = 2
 	blocks_country_formation = yes
 	blocked_from_conversion = yes
@@ -343,6 +357,7 @@ MR_dominance_historical_modifier = {
 	siege_ability = 0.5
 	army_light_cavalry_power = 0.25
 	global_manpower_modifier = 0.25
+	max_manpower = 250
 	global_integration_speed_modifier = 3
 	global_pop_assimilation_speed_modifier = 3
 	annexation_speed_base = 5
@@ -626,19 +641,18 @@ MR_path_of_the_qadis = {
 # coup = in_game/common/disasters/coup_attempt.txt,
 # succ = in_game/common/disasters/succession_crisis.txt,
 # aip = in_game/common/ai_personalities/00_ai_personalities.txt.
-
 # --- Tier 1, cohesion below 85: the first crack ---
 MR_the_centre_cannot_hold = {
 	game_data = {
 		category = country
 	}
-	global_crown_estate_power = -0.2		# hcw:66
-	country_cabinet_efficiency = -0.2		# coup:26
-	court_spending_efficiency = -0.2		# coup:27
-	global_max_control = -0.1			# country.txt:1675
-	global_levy_size_modifier = -0.1		# country.txt:8666
-	discipline = -0.05				# country.txt:3093
-	monthly_prestige = -0.2				# country.txt:9694
+	global_crown_estate_power = -0.2	# hcw:66
+	country_cabinet_efficiency = -0.2	# coup:26
+	court_spending_efficiency = -0.2	# coup:27
+	global_max_control = -0.1	# country.txt:1675
+	global_levy_size_modifier = -0.1	# country.txt:8666
+	discipline = -0.05	# country.txt:3093
+	monthly_prestige = -0.2	# country.txt:9694
 }
 
 # --- Tier 2, cohesion below 55: the uluses stop answering ---
@@ -658,21 +672,21 @@ MR_the_uluses_drift = {
 	game_data = {
 		category = country
 	}
-	global_crown_estate_power = -0.33		# country.txt:7420
-	country_cabinet_efficiency = -0.33		# country.txt:1191
-	court_spending_efficiency = -0.2		# coup:27
-	global_max_control = -0.1			# country.txt:1675
-	global_levy_size_modifier = -0.33		# country.txt:11803
-	army_reinforce_efficiency = -0.25		# country.txt:8860
-	discipline = -0.1				# hcw:65
-	land_morale_modifier = -0.1			# country.txt:7359
-	monthly_war_exhaustion = 0.15			# country.txt:8665
-	monthly_horde_unity = -0.05			# country.txt:8858
+	global_crown_estate_power = -0.33	# country.txt:7420
+	country_cabinet_efficiency = -0.33	# country.txt:1191
+	court_spending_efficiency = -0.2	# coup:27
+	global_max_control = -0.1	# country.txt:1675
+	global_levy_size_modifier = -0.33	# country.txt:11803
+	army_reinforce_efficiency = -0.25	# country.txt:8860
+	discipline = -0.1	# hcw:65
+	land_morale_modifier = -0.1	# country.txt:7359
+	monthly_war_exhaustion = 0.15	# country.txt:8665
+	monthly_horde_unity = -0.05	# country.txt:8858
 	horde_unity_hit_at_ruler_death = -25
-	antagonism_received_modifier = 0.2		# country.txt:559
-	carefulness_modifier = 0.25			# aip:73
-	ai_months_between_wars = 12			# aip:75
-	blocked_from_creating_subjects = yes		# succ:59
+	antagonism_received_modifier = 0.2	# country.txt:559
+	carefulness_modifier = 0.25	# aip:73
+	ai_months_between_wars = 12	# aip:75
+	blocked_from_creating_subjects = yes	# succ:59
 }
 
 # --- Tier 3, cohesion below 40: Khaghan in name only ---
@@ -680,30 +694,30 @@ MR_khaghan_in_name_only = {
 	game_data = {
 		category = country
 	}
-	global_crown_estate_power = -0.5		# country.txt:9698
-	country_cabinet_efficiency = -0.33		# country.txt:1191
-	court_spending_efficiency = -0.2		# coup:27
-	global_max_control = -0.1			# country.txt:1675
-	global_levy_size_modifier = -0.45		# country.txt:8430
-	global_mercenaries_modifier = -0.75		# country.txt:8431
-	army_maintenance_efficiency = -0.25		# country.txt:5413
-	army_reinforce_efficiency = -0.25		# country.txt:8860
-	army_tradition_decay = 0.001			# country.txt:7421
-	discipline = -0.1				# hcw:65
-	land_morale_modifier = -0.1			# country.txt:7359
-	monthly_war_exhaustion = 0.15			# country.txt:8665
-	monthly_horde_unity = -0.05			# country.txt:8858
+	global_crown_estate_power = -0.5	# country.txt:9698
+	country_cabinet_efficiency = -0.33	# country.txt:1191
+	court_spending_efficiency = -0.2	# coup:27
+	global_max_control = -0.1	# country.txt:1675
+	global_levy_size_modifier = -0.45	# country.txt:8430
+	global_mercenaries_modifier = -0.75	# country.txt:8431
+	army_maintenance_efficiency = -0.25	# country.txt:5413
+	army_reinforce_efficiency = -0.25	# country.txt:8860
+	army_tradition_decay = 0.001	# country.txt:7421
+	discipline = -0.1	# hcw:65
+	land_morale_modifier = -0.1	# country.txt:7359
+	monthly_war_exhaustion = 0.15	# country.txt:8665
+	monthly_horde_unity = -0.05	# country.txt:8858
 	horde_unity_hit_at_ruler_death = -25
-	monthly_prestige = -0.5				# country.txt:4867
-	monthly_diplomats = -0.2			# country.txt:6076
-	antagonism_received_modifier = 0.5		# country.txt:9696
+	monthly_prestige = -0.5	# country.txt:4867
+	monthly_diplomats = -0.2	# country.txt:6076
+	antagonism_received_modifier = 0.5	# country.txt:9696
 	global_integration_speed_modifier = -0.5	# country.txt:5144
-	annexation_speed_modifier = -0.15		# country.txt:2555
-	global_war_score_efficiency = -0.1		# country.txt:1930
-	stability_cost_efficiency = -0.33		# country.txt:8981
-	carefulness_modifier = 0.3			# aip:94
-	ai_months_between_wars = 24			# aip:141
-	blocked_from_creating_subjects = yes		# succ:59
+	annexation_speed_modifier = -0.15	# country.txt:2555
+	global_war_score_efficiency = -0.1	# country.txt:1930
+	stability_cost_efficiency = -0.33	# country.txt:8981
+	carefulness_modifier = 0.3	# aip:94
+	ai_months_between_wars = 24	# aip:141
+	blocked_from_creating_subjects = yes	# succ:59
 }
 
 # =================================================================
@@ -737,16 +751,16 @@ MR_ulus_of_its_own = {
 	game_data = {
 		category = country
 	}
-	monthly_prestige = 0.5				# country.txt:5910
-	global_monthly_control = 0.005			# country.txt:5913
-	global_defensive = 0.25				# country.txt:6085
-	fort_maintenance_efficiency = 0.4		# country.txt:6084
-	global_hostile_attrition = 1			# country.txt:6095
-	global_garrison_size_modifier = 0.25		# country.txt:12462
-	global_levy_size_modifier = 0.2			# country.txt:5040
-	levy_recovery_modifier = 0.33			# country.txt:770
-	discipline = 0.1				# country.txt:2933
-	land_morale_modifier = 0.1			# country.txt:3140
+	monthly_prestige = 0.5	# country.txt:5910
+	global_monthly_control = 0.005	# country.txt:5913
+	global_defensive = 0.25	# country.txt:6085
+	fort_maintenance_efficiency = 0.4	# country.txt:6084
+	global_hostile_attrition = 1	# country.txt:6095
+	global_garrison_size_modifier = 0.25	# country.txt:12462
+	global_levy_size_modifier = 0.2	# country.txt:5040
+	levy_recovery_modifier = 0.33	# country.txt:770
+	discipline = 0.1	# country.txt:2933
+	land_morale_modifier = 0.1	# country.txt:3140
 }
 
 # =================================================================

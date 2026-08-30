@@ -107,8 +107,12 @@ mongol_resurgence = {
 				# shape. `exists = scope:x` is vanilla's own unset-scope
 				# guard (D008_flavor_BYZ.txt immediate).
 				OR = {
-					NOT = { exists = scope:mr_first_claimant }
-					NOT = { this = scope:mr_first_claimant }
+					NOT = {
+						exists = scope:mr_first_claimant
+					}
+					NOT = {
+						this = scope:mr_first_claimant
+					}
 				}
 				capital ?= {
 					OR = {
@@ -362,6 +366,19 @@ mongol_resurgence = {
 		# 0.45 (situations/hundred_years_war.txt:112). Block form per
 		# docs/EU5-Vanilla-Script-Docs/triggers.log:9904; vanilla uses the
 		# function form at generic_actions/rise_of_the_ottomans.txt:242.
+		#
+		# AUDIT (2026-08-28): 1.5 let MGO pick fights it had no business
+		# picking — observed picking a target whose bloc it could not
+		# plausibly beat. 1.5 means "still an acceptable target even if
+		# the target's bloc is 50% STRONGER than MGO", which is far
+		# looser than vanilla's 0.45 (target's bloc must be well under
+		# half of the attacker's strength). Tightened to 1.1: the
+		# target's bloc may be at most 10% stronger than MGO, not 50%.
+		# Still looser than vanilla on purpose — MGO needs to find a
+		# fight more often than a normal AI across a single 50-year
+		# phase — but no longer loose enough to wave through a target
+		# MGO cannot realistically beat.
+		#
 		# No is_ai gate, PD-style: a human claimant also gets targets
 		# picked and the war event offered — with the option to postpone.
 		if = {
@@ -384,7 +401,7 @@ mongol_resurgence = {
 						}
 						relative_defensive_alliance_strength = {
 							target = c:MGO
-							value < 1.5
+							value < 0.7
 						}
 						has_presence_in = scripted_geography:MR_geo_heartland
 					}
@@ -485,8 +502,21 @@ mongol_resurgence = {
 			}
 		}
 		# --- FALLBACK: the chosen target stopped being valid ---
-		# (annexed, became our subject, truced, or lost its Mongolian
-		# holdings). Clear the slot so a new target can be picked.
+		# (annexed, became our subject, truced, lost its Mongolian
+		# holdings, or grew out of reach). Clear the slot so a new
+		# target can be picked.
+		#
+		# AUDIT (2026-08-28): the DECLARE block above only re-checks
+		# existence/overlord/truce before firing mr_dominance.997 — not
+		# the alliance-strength ratio that got the target picked in the
+		# first place. Selection and declaration are 4-12 months apart
+		# (the buff-tiered mr_conquest_cooldown wait), which was enough
+		# time for a picked target to pull in a defensive bloc MGO could
+		# no longer plausibly fight, and the war still fired because
+		# nothing rechecked the ratio in between. The third OR branch
+		# below closes that gap: same 1.1 gate as selection, rechecked
+		# every tick the target sits in the slot, so a target that grew
+		# too strong gets dropped here instead of attacked.
 		if = {
 			limit = {
 				var:mr_conquest_target = 1
@@ -503,6 +533,12 @@ mongol_resurgence = {
 							}
 							NOT = {
 								has_presence_in = scripted_geography:MR_geo_heartland
+							}
+							NOT = {
+								relative_defensive_alliance_strength = {
+									target = c:MGO
+									value < 0.7
+								}
 							}
 						}
 					}
@@ -867,6 +903,73 @@ mongol_resurgence = {
 					form_country = formable_country:MGO_f
 					trigger_event_silently = mr_dominance.998
 				}
+			}
+		}
+		# --- MGO REVIVAL (design doc, layer a, broadened for the 1415
+		# hand-off) ---
+		# All three tiers above only ever look at a steppe-horde
+		# claimant. If MGO forms and is later destroyed (annexed,
+		# partitioned, etc.) and nothing of mongol culture still runs a
+		# steppe horde in the heartland — the whole region absorbed by a
+		# settled neighbour, say — layer a can never re-fire and c:MGO
+		# stays permanently absent. That silently disables the
+		# completion failsafe right below this block too, since it
+		# hard-requires country_exists = c:MGO and never gets an actor
+		# to hand the land TO. This pass drops the steppe_horde and
+		# is_subject requirements and takes whoever of mongol culture
+		# still holds ground in the heartland, so the 1415 hand-off is
+		# never stranded just because the native horde died out.
+		#
+		# AI-only, same as every tier above — a human is never converted
+		# without saying yes. If the only mongol-culture claimant left in
+		# the heartland is a human player, this pass finds no candidate
+		# and the phase times out at 1420 instead — the same "honest
+		# outcome" tier 3 above already accepts when only human
+		# candidates remain.
+		#
+		# Deliberately ONE tier, not three: by the time this runs, all
+		# three tiers above have already failed every month since
+		# MGO died, so there is no "prefer a free horde at peace"
+		# nuance left to preserve — just take the strongest candidate
+		# there is, freeing it from a subject relationship if needed.
+		if = {
+			limit = {
+				has_game_rule = MR_mongol_resurgence_auto_conquest_yes
+				current_date > 1415.1.1
+				NOT = {
+					mr_resurgence_end_trigger = yes
+				}
+				NOT = {
+					has_global_variable = mr_failsafe_p1_fired
+				}
+				NOT = {
+					country_exists = c:MGO
+				}
+				any_country = {
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
+					has_presence_in = scripted_geography:MR_geo_heartland
+					is_ai = yes
+				}
+			}
+			ordered_country = {
+				limit = {
+					culture = {
+						has_culture_group = culture_group:mongolian_group
+					}
+					has_presence_in = scripted_geography:MR_geo_heartland
+					is_ai = yes
+				}
+				order_by = military_strength
+				max = 1
+				check_range_bounds = no
+				save_scope_as = mr_revival_candidate
+				overlord ?= {
+					cancel_subject = prev
+				}
+				form_country = formable_country:MGO_f
+				trigger_event_silently = mr_dominance.998
 			}
 		}
 		# --- COMPLETION FAILSAFE (design doc, layer b) ---
