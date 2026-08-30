@@ -356,28 +356,45 @@ mongol_resurgence = {
 		# Pick the weakest neighbour holding Mongolian ground whose
 		# defensive alliance web is not overwhelming. Ordered by
 		# num_locations ascending, so the softest target comes first.
-		# The gate is a RATIO, not an absolute comparison. It used to read
-		# `defensive_alliance_strength < c:MGO.offensive_alliance_strength`:
-		# the target plus every country that would defend it, against MGO
-		# plus every country that would join its attack. MGO is normally
-		# allianceless here (mr_dominance.28 breaks its treaties on
-		# purpose), so that demanded MGO ALONE outweigh the target's whole
-		# bloc — a bar above 1.0, while vanilla's own AI war gate opens at
-		# 0.45 (situations/hundred_years_war.txt:112). Block form per
-		# docs/EU5-Vanilla-Script-Docs/triggers.log:9904; vanilla uses the
-		# function form at generic_actions/rise_of_the_ottomans.txt:242.
+		# The gate is a RATIO in the TARGET's scope: "this country's
+		# strength INCLUDING its defensive allies, relative to MGO". Below
+		# 1.0 demands a target bloc weaker than MGO; above 1.0 accepts one
+		# that is stronger.
 		#
-		# AUDIT (2026-08-28): 1.5 let MGO pick fights it had no business
-		# picking — observed picking a target whose bloc it could not
-		# plausibly beat. 1.5 means "still an acceptable target even if
-		# the target's bloc is 50% STRONGER than MGO", which is far
-		# looser than vanilla's 0.45 (target's bloc must be well under
-		# half of the attacker's strength). Tightened to 1.1: the
-		# target's bloc may be at most 10% stronger than MGO, not 50%.
-		# Still looser than vanilla on purpose — MGO needs to find a
-		# fight more often than a normal AI across a single 50-year
-		# phase — but no longer loose enough to wave through a target
-		# MGO cannot realistically beat.
+		# The denominator is MGO ALONE, not MGO's own alliance web. The
+		# script docs give relative_strength (triggers.log:9922) and
+		# relative_defensive_alliance_strength (:9904) the same sentence
+		# word for word except the inserted phrase "including defensive
+		# alliances", which attaches to the SCOPE country only. That is
+		# tolerable here because mr_dominance.28 breaks MGO's treaties on
+		# purpose - but MR_mongol_dominance.txt:446 aims this at
+		# scope:mr_dom_claimant, who may have allies that go uncounted.
+		# The Prussian Destiny writes the same test the explicit way, and
+		# that is the clearer form if this ever needs auditing:
+		#     defensive_alliance_strength < {
+		#         value = c:MGO.offensive_alliance_strength
+		#         multiply = X
+		#     }
+		#
+		# CORRECTION (2026-08-30): this comment used to cite
+		# situations/hundred_years_war.txt:112 as "vanilla's own AI war gate
+		# opens at 0.45" and reason from it. That line is
+		#     relative_strength = { target = c:FRA  value > 0.45 }
+		# inside c:ENG - a DIFFERENT trigger, in the ATTACKER's scope, with
+		# `>`. It is a floor on how strong England must be, not a ceiling on
+		# the target's bloc. The two numbers were never comparable, so the
+		# 1.5-then-1.1 reasoning built on it was building on nothing.
+		#
+		# The only vanilla use of THIS trigger is a desire weight,
+		# generic_actions/rise_of_the_ottomans.txt:242, with
+		# `multiply = 150  subtract = 60` - it crosses zero at 0.4. That is
+		# the one real scale reference that exists.
+		#
+		# The value below is 0.7, set from watching MGO suicide at looser
+		# settings. Given the above, that is the right basis. Do not
+		# re-derive it from vanilla's numbers - they do not translate.
+		# Sibling gates: MR_mongol_imperial 1.2, MR_mongol_dominance 1.3,
+		# both deliberate.
 		#
 		# No is_ai gate, PD-style: a human claimant also gets targets
 		# picked and the war event offered — with the option to postpone.
@@ -406,9 +423,24 @@ mongol_resurgence = {
 						has_presence_in = scripted_geography:MR_geo_heartland
 					}
 					max = 1
+					# Smallest first among equals - the gate above has already discarded
+					# anything unwinnable, so the easy war before the hard one is right.
+					# But size must NOT outrank the objective. This situation ends on
+					# something a BIG country holds, and without the bonus below that
+					# country sorts LAST, behind every minor neighbour - so the AI would
+					# take the one target that finishes the job last, if ever. Nothing
+					# errors; it simply never does the thing the situation is about.
+					# Conditional order_by per country_interactions/hre.txt:2143.
+					# Karakorum is the seat this phase needs.
 					order_by = {
 						value = num_locations
 						multiply = -1
+						if = {
+							limit = {
+								owns = location:karakorum
+							}
+							add = 100000
+						}
 					}
 					situation:mongol_resurgence = {
 						set_variable = {
@@ -507,16 +539,19 @@ mongol_resurgence = {
 		# target can be picked.
 		#
 		# AUDIT (2026-08-28): the DECLARE block above only re-checks
-		# existence/overlord/truce before firing mr_dominance.997 — not
-		# the alliance-strength ratio that got the target picked in the
-		# first place. Selection and declaration are 4-12 months apart
-		# (the buff-tiered mr_conquest_cooldown wait), which was enough
-		# time for a picked target to pull in a defensive bloc MGO could
-		# no longer plausibly fight, and the war still fired because
-		# nothing rechecked the ratio in between. The third OR branch
-		# below closes that gap: same 1.1 gate as selection, rechecked
-		# every tick the target sits in the slot, so a target that grew
-		# too strong gets dropped here instead of attacked.
+		# existence/overlord/truce before firing mr_dominance.997 - not the
+		# alliance-strength ratio that got the target picked. Selection and
+		# declaration are 4-12 months apart, which was enough time for a
+		# picked target to pull in a defensive bloc MGO could no longer
+		# plausibly fight, and the war fired anyway because nothing
+		# rechecked the ratio in between. The third OR branch below closes
+		# that gap: the SAME gate as selection, rechecked every tick the
+		# target sits in the slot.
+		#
+		# Keep the two numbers identical. This comment said 1.1 while the
+		# code said 0.7 until 2026-08-30 - the drift that made The Prussian
+		# Destiny move its own copy into a single scripted trigger
+		# (PD_ascension_valid_target) called from both sites.
 		if = {
 			limit = {
 				var:mr_conquest_target = 1

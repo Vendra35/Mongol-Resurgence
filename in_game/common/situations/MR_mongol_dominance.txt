@@ -462,9 +462,32 @@ mongol_dominance = {
 						}
 					}
 					max = 1
+					# Smallest first among equals - the gate above has already discarded
+					# anything unwinnable, so the easy war before the hard one is right.
+					# But size must NOT outrank the objective. This situation ends on
+					# something a BIG country holds, and without the bonus below that
+					# country sorts LAST, behind every minor neighbour - so the AI would
+					# take the one target that finishes the job last, if ever. Nothing
+					# errors; it simply never does the thing the situation is about.
+					# Conditional order_by per country_interactions/hre.txt:2143.
+					# All seven seats this phase needs.
 					order_by = {
 						value = num_locations
 						multiply = -1
+						if = {
+							limit = {
+								OR = {
+									owns = location:karakorum
+									owns = location:dadu
+									owns = location:samarkand
+									owns = location:sarai_al_jadid
+									owns = location:kazan
+									owns = location:tabriz
+									owns = location:baghdad
+								}
+							}
+							add = 100000
+						}
 					}
 					situation:mongol_dominance = {
 						set_variable = {
