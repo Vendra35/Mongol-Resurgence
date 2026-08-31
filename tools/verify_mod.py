@@ -57,6 +57,7 @@ def _np(p):
 
 txt_files = sorted(_np(p) for p in glob.glob(MOD + "/in_game/**/*.txt", recursive=True) + glob.glob(MOD + "/main_menu/**/*.txt", recursive=True))
 yml_files = sorted(_np(p) for p in glob.glob(MOD + "/**/*.yml", recursive=True))
+gui_files = sorted(_np(p) for p in glob.glob(MOD + "/**/*.gui", recursive=True))
 all_files = txt_files + yml_files
 
 def read(p):
@@ -923,6 +924,59 @@ probs = [f"{t} has an identity block but no start block — ten init errors per 
          "and it spawns with no advances and no map knowledge"
          for t in sorted(_mod_tags - _start_tags)]
 check("mod-registered tags have a start block", len(_mod_tags), probs, min_count=1)
+
+
+# --- A variable the panel READS must be one the script WRITES -----------------
+# Ported from The Prussian Destiny 2026-08-31. A name that matches nothing
+# produces no error at all: the widget draws a blank, or a zero that reads as a
+# real value, and the panel confidently reports the wrong state. Scans .gui AND
+# .yml, because vanilla loc reads situation variables too (26 uses in its own
+# english tree). Whole-line comments are skipped - but only whole-line, since
+# "#Y [...GetVariable...]" is a live read inside a formatting tag.
+probs = []
+_written = set()
+for _p, _s in code.items():
+    _written |= set(re.findall(r"\bname\s*=\s*([A-Za-z_][A-Za-z_0-9]*)", _s))
+    _written |= set(re.findall(
+        r"\b(?:set_variable|set_global_variable|set_local_variable)"
+        r"\s*=\s*([A-Za-z_][A-Za-z_0-9]*)\s*$", _s, re.M))
+_var_reads = 0
+for _p in gui_files + yml_files:
+    _rel = os.path.relpath(_p, MOD)
+    for _n, _line in enumerate(read(_p).split(chr(10)), 1):
+        if _line.lstrip().startswith("#"):
+            continue
+        for _v in re.findall(r"GetVariable\('([A-Za-z_][A-Za-z_0-9]*)'\)", _line):
+            _var_reads += 1
+            if _v not in _written:
+                probs.append(f"{_rel}:{_n}: panel reads variable '{_v}', which no "
+                             "script under the mod ever writes - the engine reports "
+                             "nothing and the widget draws empty or zero")
+check("panel variables are written by script", _var_reads, sorted(set(probs)),
+      min_count=21)  # measured 2026-08-31
+
+# --- An image path in script must resolve ------------------------------------
+# check on .gui textures does not cover images named in script - a situation or
+# event illustration. A missing one draws nothing and reports nothing.
+# min_count = 0: MR names no script images yet. RAISE IT with the first one.
+probs = []
+_img = 0
+for _p in txt_files:
+    _rel = os.path.relpath(_p, MOD)
+    for _n, _line in enumerate(read(_p).split(chr(10)), 1):
+        for _tex in re.findall(r'image\s*=\s*"(gfx/[^"]+)"', _line):
+            _img += 1
+            if _line.lstrip().startswith("#"):
+                continue          # counted but inert, so it cannot draw wrong
+            _roots = [os.path.join(MOD, _d) for _d in ("in_game", "main_menu")]
+            if VAN:
+                _roots += [os.path.join(VAN, _d)
+                           for _d in ("in_game", "main_menu", "loading_screen")]
+            if not any(os.path.isfile(os.path.join(_r, _tex.replace("/", os.sep)))
+                       for _r in _roots):
+                probs.append(f"{_rel}:{_n}: image '{_tex}' does not exist - it will "
+                             "draw nothing, silently")
+check("script image paths resolve", _img, probs, min_count=0)
 
 print()
 if fails:
