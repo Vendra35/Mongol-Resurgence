@@ -1,5 +1,9 @@
 ﻿# HANDOFF — resume here
 
+> **Superseded 2026-11-12 (1.1.0, the 1.4 port).** This is the 1.3 record. Since
+> 1.4 the start-block file below lives in `main_menu/setup/1337/`, not
+> `setup/start/`; the current state is CLAUDE.md, "1.4 Rio Salado".
+
 Written 2026-07-31. Read this first, then `Debug-and-Test-Results.md` from the
 bottom up (the 31.07 entry is the current one).
 

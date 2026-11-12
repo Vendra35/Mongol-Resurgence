@@ -492,9 +492,10 @@ Khaghan's ability to win Phase 3 - only an observer run over decades shows it.
 
 ### Verification
 - **`docs/EU5-Vanilla-Script-Docs/` is the authority.** It is the console output
-  of `script_docs` and `dump_data_types` run against the shipped game: 1798
-  triggers and 1534 effects **each with its `**Supported Scopes**`**, 2436
-  modifier tags, 289 event targets with input/output scopes, and the on_action
+  of `script_docs` and `dump_data_types` run against the shipped game (1.4.7,
+  modless, copied from `$EU5_KB/script-docs/1.4.7/` on 2026-11-12): 1967
+  triggers and 1662 effects **each with its `**Supported Scopes**`**, 2750
+  modifier tags, 357 event targets with input/output scopes, and the on_action
   list with expected scopes. Look there FIRST — before grepping vanilla, which
   only ever showed what someone happened to use, never what is legal.
   Regenerate after a game patch: launch with `-debug_mode`, console

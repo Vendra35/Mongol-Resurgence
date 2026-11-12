@@ -140,12 +140,6 @@ Expected Scope: none/any
 
 --------------------
 
-on_brandenburg_construct_army_pulse:
-From Code: No
-Expected Scope: country
-
---------------------
-
 on_pre_winning_war:
 From Code: Yes
 Expected Scope: none/any
@@ -512,12 +506,6 @@ Expected Scope: country
 
 --------------------
 
-on_brandenburg_manpower_pulse:
-From Code: No
-Expected Scope: country
-
---------------------
-
 yearly_hre_circle_leader_pulse:
 From Code: No
 Expected Scope: country
@@ -569,6 +557,12 @@ Expected Scope: country
 on_command_lost:
 From Code: Yes
 Expected Scope: none/any
+
+--------------------
+
+yearly_flavor_ire_pulse:
+From Code: No
+Expected Scope: country
 
 --------------------
 
@@ -785,12 +779,6 @@ Expected Scope: none/any
 on_join_war:
 From Code: Yes
 Expected Scope: none/any
-
---------------------
-
-on_brandenburg_situation_1_pulse:
-From Code: No
-Expected Scope: country
 
 --------------------
 
@@ -1217,12 +1205,6 @@ Expected Scope: none/any
 religious_order_conquest_cleanup_pulse:
 From Code: No
 Expected Scope: none/any
-
---------------------
-
-on_brandenburg_situation_2_pulse:
-From Code: No
-Expected Scope: country
 
 --------------------
 

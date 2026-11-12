@@ -72,8 +72,9 @@ Rules that cost us real bugs:
 ## 2b. Total conversion: where the world actually comes from
 
 Neither of the two total-conversion mods studied repaints the map. The world at
-game start is `main_menu/setup/start/`, a numbered pipeline of 25 files that a
-mod overrides wholesale:
+game start is `main_menu/setup/1337/` since 1.4 (`setup/start/` in 1.3; the
+folder is the one the bookmark in `main_menu/common/bookmarks/` names), a
+numbered pipeline of 26 files that a mod overrides wholesale:
 
 ```
 02_core  03_markets  04_dynasties  05_characters  06_pops
@@ -95,7 +96,9 @@ Anything no country claims simply stays empty — which is how a mod ships a
 playable world covering one region only.
 
 Three layers, in increasing cost:
-1. **Replace `setup/start`** — required, and sufficient for a playable world.
+1. **Replace the bookmark's setup folder** (`setup/1337`, or a new folder and
+   bookmark for another start date) — required, and sufficient for a playable
+   world.
 2. **Replace `map_data/location_templates.txt`** — optional fidelity. One line
    per location (28,573 in vanilla) setting `topography`, `vegetation`,
    `climate`, `religion`, `culture`, `raw_material`,
@@ -477,10 +480,10 @@ Both need `-debug_mode`; output lands in the user folder
 
 | File | Contains | Format |
 |---|---|---|
-| `triggers.log` | 1798 triggers | `## name`, description, `Traits:`, `**Supported Scopes**: …` |
-| `effects.log` | 1534 effects | same |
-| `event_targets.log` | 289 scope links | `### name`, `Input Scopes:`, `Output Scopes:` |
-| `modifiers.log` | 2436 modifier tags | `Tag: name, Categories: …` |
+| `triggers.log` | 1967 triggers (1.4.7) | `## name`, description, `Traits:`, `**Supported Scopes**: …` |
+| `effects.log` | 1662 effects | same |
+| `event_targets.log` | 357 scope links | `### name`, `Input Scopes:`, `Output Scopes:` |
+| `modifiers.log` | 2750 modifier tags | `Tag: name, Categories: …` |
 | `on_actions.log` | every hook | `name:`, `From Code:`, `Expected Scope:` |
 | `data_types/*.txt` | GUI/promote types, 2.9 MB | `dump_data_types` output |
 
