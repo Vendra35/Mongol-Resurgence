@@ -16,6 +16,7 @@ Mongol Resurgence 1.1.0 - updated for EU5 1.4 "Rio Salado"
 *- The seven situations now end the 1.4 way, through outcomes. Every panel lists its possible endings - the goal and the deadline, and for the Great Partition the collapse, the empire enduring and the empire hollow at the deadline - with what each means and what it needs. Rewards and failure paths are unchanged.
 *- The panels' old End Requirements card is gone; the hint button now sits on each outcome.
 *- Complacency removed from two modifiers, as 1.4 removed the mechanic.
+*- The mod's map groupings (the Mongol Heartland, the Song Lands and 32 more) show their names; 1.4 began displaying them.
 ```
 
 ## Description - What's New (BBCode)
@@ -28,6 +29,7 @@ Mongol Resurgence 1.1.0 - updated for EU5 1.4 "Rio Salado"
 [*]The seven situations end the 1.4 way: every panel lists its possible endings, what each means and what it needs. Rewards and failure paths are unchanged.
 [*]The old End Requirements card is gone from the panels; the hint button sits on each outcome.
 [*]Complacency removed from two modifiers, as 1.4 removed the mechanic.
+[*]The mod's map groupings show their names; 1.4 began displaying them.
 [/list]
 ```
 

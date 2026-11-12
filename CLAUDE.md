@@ -467,11 +467,15 @@ the 1632 save records `end_outcome="mr_resurgence_outcome_time"`,
 events fired (`mr_dominance.2`, `mr_steppe.3`) and `mr_railroad_failed` was set;
 the Phase 1 panel showed the Outcomes card with both outcomes, their text,
 requirement lists and hint buttons. Not seen: a small (late-steppe) panel - the
-test played CHI, which `mr_torghut_visible` does not include. Logged at load,
-1.4-side: 34 `MR_geo_*` with no name loc (KB
-`loc.one-point-four-five-names-every-scripted-geography`), `map.cpp:819` for IRA
-and BUK (KB `errors.a-tag-sharing-a-map-name-is-a-dynamic-naming-warning`,
-accepted), and the older `mr_dominance.99x` title/outcome lines. **Not measured
+test played CHI, which `mr_torghut_visible` does not include. Logged at load
+and FIXED the same day (the author's approval): 34 `MR_geo_*` with no name loc
+(KB `loc.one-point-four-five-names-every-scripted-geography`; the names are in
+`MR_l_english.yml`), `title = empty_text` on the hidden `mr_dominance.995/996/
+998/999` and `outcome = positive` on the war events `.992/.993/.997`; two
+harness checks hold both, each proven by breaking. Accepted, not fixed:
+`map.cpp:819` for IRA ('Persia') and BUK ('Bukhara') - the remedy is a field on
+the map units in `definitions.txt`, a whole-file override (KB
+`errors.a-tag-sharing-a-map-name-is-a-dynamic-naming-warning`). **Not measured
 at all:** 1.4's balance (manpower
 gated by control, cavalry 4 to 3.25, mercenaries dearer) against the AI
 Khaghan's ability to win Phase 3 - only an observer run over decades shows it.

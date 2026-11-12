@@ -327,6 +327,36 @@ for p in gui_files:
         probs.append(f"{_rel}: outcome hint names '{_h.group(1)}', which MR_hints.txt does not define")
 check("situation panels in 1.4 shape (no End Requirements, outcome hint)", _panels, probs, min_count=7)
 
+# ---- 1.4.5: every scripted geography carries a name ----
+# 1.4.5 localises every scripted geography at load; one with no loc key named
+# exactly after it logs localization_util.cpp:103 ('MR_geo_x: "MR geo x"') and
+# shows that fallback wherever the geography is named (KB loc.one-point-four-
+# five-names-every-scripted-geography). MR's first 1.4.7 launch logged all 34.
+_geos = []
+for p in sorted(_np(p) for p in glob.glob(MOD + "/in_game/common/scripted_geography/*.txt")):
+    _geos += re.findall(r"^([A-Za-z_][A-Za-z_0-9]*)\s*=\s*\{", strip_comments(read(p)), re.M)
+probs = [f"{g} has no name loc - the game shows '{g.replace('_', ' ')}'" for g in _geos if g not in loc_keys]
+check("scripted geographies carry a name loc (1.4.5)", len(_geos), probs, min_count=34)
+
+# ---- every event has a title; every visible event an outcome ----
+# event_database.cpp:624 logs 'Event #X is missing a title' for a hidden event
+# too (vanilla writes title = empty_text; KB errors.a-hidden-event-still-needs-
+# a-title), and :630 'is missing an outcome' for a visible one (outcome =
+# positive / neutral / negative sets its sound; KB events.outcome-is-mandatory).
+# Once per event per load, nothing else breaks - and they bury the lines that
+# matter. MR's first 1.4.7 launch logged four and three.
+probs, _evs = [], 0
+for p, s in code.items():
+    if "/events/" not in p: continue
+    _rel = os.path.relpath(p, MOD)
+    for _key, _body in _blocks(strip_comments(s), r"^([a-z_]+\.[0-9]+)\s*=\s*\{"):
+        _evs += 1
+        if not re.search(r"^\s*title\s*=", _body, re.M):
+            probs.append(f"{_rel}: {_key} has no title (event_database.cpp:624, hidden or not)")
+        if not re.search(r"^\s*hidden\s*=\s*yes", _body, re.M) and not re.search(r"^\s*outcome\s*=", _body, re.M):
+            probs.append(f"{_rel}: {_key} is visible and has no outcome = (event_database.cpp:630)")
+check("every event titled, every visible event has an outcome", _evs, probs, min_count=100)
+
 # ---- hint tags ----
 hints_def = set(re.findall(r"^([a-z_0-9]+) = \{", strip_comments(read(MOD + "/in_game/common/scriptable_hints/MR_hints.txt")), re.M))
 hint_refs = set()
