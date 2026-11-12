@@ -67,20 +67,38 @@ def strip_comments(s):
     return re.sub(r"#.*", "", s)
 
 # ---- 1. BOM ----
-# main_menu/setup/start/ is the ONE tree that refuses a BOM: 0 of vanilla's 25
-# files there carry one, while 45 of 45 in in_game/setup/countries/ do. A BOM
-# there is read as a token (pdx_persistent_reader.cpp:289 "Unexpected token:
+# The start's setup folder is the ONE tree that refuses a BOM: 0 of vanilla
+# 1.4.7's 26 files in main_menu/setup/1337/ carry one (0 of 25 in 1.3's
+# setup/start/), while 45 of 45 in in_game/setup/countries/ do. A BOM there is
+# read as a token (pdx_persistent_reader.cpp:289 "Unexpected token:
 # <invisible>") and the file goes silently inert — which once made a sibling
 # project conclude that additive setup files cannot redefine a country, when
 # the file had simply never been parsed. So the rule is INVERTED there, not
 # waived: a missing BOM everywhere else is a finding, and a PRESENT BOM here is.
-_NO_BOM_TREE = "/main_menu/setup/start/"
+_NO_BOM_TREE = "/main_menu/setup/1337/"
 _bom_required = [p for p in all_files if _NO_BOM_TREE not in p]
 _bom_forbidden = [p for p in all_files if _NO_BOM_TREE in p]
 probs = [os.path.relpath(p, MOD) for p in _bom_required if open(p, "rb").read(3) != b"\xef\xbb\xbf"]
-probs += [os.path.relpath(p, MOD) + " (setup/start takes NO BOM — the file would be inert)"
+probs += [os.path.relpath(p, MOD) + " (setup/1337 takes NO BOM — the file would be inert)"
           for p in _bom_forbidden if open(p, "rb").read(3) == b"\xef\xbb\xbf"]
-check("BOM present outside setup/start, absent inside", len(all_files), probs, min_count=10)
+check("BOM present outside setup/1337, absent inside", len(all_files), probs, min_count=10)
+
+# ---- 1b. nothing in 1.3's setup folder ----
+# 1.4 reads the start from the folder its bookmark names
+# (main_menu/common/bookmarks/00_bookmarks.txt: setup_folder = "setup/1337");
+# main_menu/setup/start/ no longer exists in vanilla, and a mod file left
+# there is read by nothing, with no error (KB setup.one-point-four-reads-the-
+# start-from-the-bookmarks-setup-folder). MR's start blocks shipped there for
+# 1.3 and went inert the day 1.4 landed.
+_dead_setup = sorted(_np(p) for p in glob.glob(MOD + "/main_menu/setup/start/**/*", recursive=True)
+                     if os.path.isfile(p))
+_live_setup = sorted(_np(p) for p in glob.glob(MOD + "/main_menu/setup/1337/*.txt"))
+assert os.path.isfile(os.path.join(VAN, "main_menu", "common", "bookmarks", "00_bookmarks.txt")) and \
+    'setup_folder = "setup/1337"' in open(os.path.join(VAN, "main_menu", "common", "bookmarks", "00_bookmarks.txt"),
+                                          encoding="utf-8-sig").read(), \
+    "vanilla's bookmark no longer names setup/1337 - re-read 00_bookmarks.txt before trusting this check"
+probs = [os.path.relpath(p, MOD) + " sits in 1.3's setup/start/, which 1.4 never reads" for p in _dead_setup]
+check("setup files sit in the bookmark's folder (setup/1337)", len(_live_setup), probs, min_count=1)
 
 # ---- 2. braces balanced ----
 probs = []
@@ -230,6 +248,84 @@ for k in sit_keys:
     if k not in loc_keys: probs.append(f"{k} (situation name loc missing)")
     if k + "_desc" not in loc_keys: probs.append(f"{k}_desc (situation desc loc missing)")
 check("situation <key>/<key>_desc loc", len(sit_keys), probs, min_count=6)
+
+# ---- 1.4: a situation ends by its outcome blocks ----
+# 1.4 moved vanilla's situations from can_end to outcome = { name desc trigger }
+# blocks (23 of 23 in 1.4.7, none with a can_end), and the panel draws them as
+# its Outcomes card. A 1.3 file still parses, so nothing says its ending moved;
+# whether a lone can_end still ends a situation was never measured. Refuse a
+# can_end in a situation, require at least one outcome, and require each
+# outcome's name and desc loc (a missing one prints its own key on the card).
+def _blocks(s, pattern):
+    """(key, body) for every `pattern` match opening a `{`, brace-matched; tabs or
+    spaces alike (vanilla mixes them). Matches inside an earlier match's body are
+    skipped, so with a ^-anchored pattern this walks one level."""
+    out, i = [], 0
+    for m in re.finditer(pattern, s, re.M):
+        if m.start() < i:
+            continue
+        depth, j = 0, m.end() - 1
+        while True:
+            depth += {"{": 1, "}": -1}.get(s[j], 0)
+            if depth == 0:
+                break
+            j += 1
+        out.append((m.group(1), s[m.end():j]))
+        i = j
+    return out
+
+def _outcome_findings(src, rel):
+    found, n_out = [], 0
+    for key, body in _blocks(strip_comments(src), r"^([A-Za-z_][A-Za-z_0-9.]*)\s*=\s*\{"):
+        if re.search(r"^\s*can_end\s*=", body, re.M):
+            found.append(f"{rel}: {key} still carries a can_end - 1.4 ends a situation by outcome blocks")
+        outs = [b for _, b in _blocks(body, r"^\s*(outcome)\s*=\s*\{")]
+        if not outs:
+            found.append(f"{rel}: {key} has no outcome block - it can never end, and its Outcomes card is empty")
+        for o in outs:
+            n_out += 1
+            for fld in ("name", "desc"):
+                mm = re.search(rf'^\s*{fld}\s*=\s*"?([A-Za-z_0-9.]+)"?', o, re.M)
+                if not mm:
+                    found.append(f"{rel}: {key} has an outcome without {fld}")
+                elif mm.group(1) not in loc_keys:
+                    found.append(f"{rel}: {key} outcome {fld} '{mm.group(1)}' has no loc - the card prints the key")
+    return found, n_out
+
+# Canary: the 1.3 shape must be flagged.
+_c, _ = _outcome_findings("x = {\n\tcan_end = {\n\t\talways = no\n\t}\n}\n", "canary")
+assert len(_c) == 2, f"outcome scanner is broken - canary gave {_c}"
+probs, _n_out = [], 0
+for p, s in code.items():
+    if "/common/situations/" not in p: continue   # not events/situations/
+    f_, n_ = _outcome_findings(s, os.path.relpath(p, MOD))
+    probs += f_
+    _n_out += n_
+check("situations end by outcome blocks (1.4), outcome loc exists", _n_out, probs,
+      min_count=15)  # measured 2026-11-12: 6 situations x 2 + the partition's 3
+
+# ---- 1.4: panels carry no End Requirements card, and the hint moved ----
+# GetEndConditions is written for the DisasterView only in 1.4 (KB gui.one-
+# point-four-situation-panel-draws-an-outcomes-card-for-every-situation); a
+# situation panel's own End Requirements card would duplicate the engine's
+# Outcomes card or draw empty. Vanilla's 23 panels carry their hint button on
+# blockoverride "situation_panel_outcome_hint"; each of ours must name a
+# defined hint there.
+_hint_defs = set(re.findall(r"^([a-z_0-9]+) = \{", strip_comments(read(MOD + "/in_game/common/scriptable_hints/MR_hints.txt")), re.M))
+probs, _panels = [], 0
+for p in gui_files:
+    if "/panels/situation/" not in p: continue
+    _panels += 1
+    _rel = os.path.relpath(p, MOD)
+    _src = strip_comments(read(p))
+    if "GetEndConditions" in _src or "END_REQUIREMENTS" in _src:
+        probs.append(f"{_rel}: still draws 1.3's End Requirements card (GetEndConditions)")
+    _h = re.search(r'blockoverride "situation_panel_outcome_hint".*?selected_hint = ([a-z_0-9]+)', _src, re.S)
+    if not _h:
+        probs.append(f"{_rel}: no situation_panel_outcome_hint - the outcomes carry no hint button")
+    elif _h.group(1) not in _hint_defs:
+        probs.append(f"{_rel}: outcome hint names '{_h.group(1)}', which MR_hints.txt does not define")
+check("situation panels in 1.4 shape (no End Requirements, outcome hint)", _panels, probs, min_count=7)
 
 # ---- hint tags ----
 hints_def = set(re.findall(r"^([a-z_0-9]+) = \{", strip_comments(read(MOD + "/in_game/common/scriptable_hints/MR_hints.txt")), re.M))
@@ -901,8 +997,8 @@ assert [1 for m in re.finditer(r"change_location_owner\s*=\s*c:([A-Z][A-Z0-9]{2,
 check("land is only handed to registered tags", _cnt, probs, min_count=20)
 
 # ---- every tag the mod registers also has a START block ----
-# The other half of the same law, and the reason for main_menu/setup/start/
-# 28_MR_countries.txt. An identity block with no start block occurs ZERO times
+# The other half of the same law, and the reason for main_menu/setup/1337/
+# 28_MR_countries.txt (setup/start/ until 1.4 moved the start's folder). An identity block with no start block occurs ZERO times
 # in vanilla among real tags (2337 of 2337 have both); the only three without
 # one are the engine's reserved DUMMY, PIR and MER. The engine answers a
 # missing start block with ten lines per tag at every campaign creation
@@ -914,8 +1010,8 @@ _mod_tags = set()
 for p in sorted(_np(p) for p in glob.glob(MOD + "/in_game/setup/countries/*.txt")):
     _mod_tags |= set(_tag_re.findall(open(p, encoding="utf-8-sig", errors="ignore").read()))
 _start_src = ""
-for p in sorted(_np(p) for p in glob.glob(VAN + "/main_menu/setup/start/*.txt")) \
-       + sorted(_np(p) for p in glob.glob(MOD + "/main_menu/setup/start/*.txt")):
+for p in sorted(_np(p) for p in glob.glob(VAN + "/main_menu/setup/1337/*.txt")) \
+       + sorted(_np(p) for p in glob.glob(MOD + "/main_menu/setup/1337/*.txt")):
     _start_src += open(p, encoding="utf-8-sig", errors="ignore").read()
 _start_tags = set(re.findall(r"^\s*([A-Z][A-Z0-9]{2,4})\s*=\s*\{", strip_comments(_start_src), re.M))
 assert "SWE" in _start_tags and len(_start_tags) > 2000, \

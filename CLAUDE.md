@@ -255,8 +255,10 @@ AI find-target and fallback, failsafe handover, `tooltip`/
 - Phase chaining via globals: `mr_phase_one_complete` → `mr_phase_two_complete` →
   `mr_railroad_complete`, with `mr_railroad_failed` set on **every** failure path
   (on_ending sets terminals directly; events set them redundantly).
-- Every situation `can_end`s on **goal OR time expiry**; `on_ending` branches on the
-  goal trigger, never on side-signals.
+- Every situation ends on **goal OR time expiry**, since 1.4 as two `outcome`
+  blocks in that order (the Great Partition three: collapse, then the deadline
+  split by cohesion 70 exactly as `on_ending` splits it); `on_ending` branches on
+  the goal trigger, never on side-signals.
 - **Game rules** (PD_config shape, `main_menu/common/game_rules/`), FIVE rules:
   master switch `mr_railroad` (on/off — all content checks
   `NOT mr_railroad_off`, and that is now literally true: five DHE events
@@ -416,6 +418,52 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   (`flavor_chi_mon`), Treaty of Ugra (`flavor_MOS`/`flavor_LIT`), Altan Khan's
   conversion (`buddhism_events.13`).
 
+## 1.4 "Rio Salado" - what moved under this mod (1.1.0, 2026-11-12)
+
+Measured against the vanilla store's `v1.3.11`..`v1.4.7` diff and the 1.4.7
+script docs; the KB laws are cited. **Four things broke, silently:**
+
+- **The start's folder moved.** 1.4 reads the setup from the folder its bookmark
+  names (`main_menu/common/bookmarks/00_bookmarks.txt`: `setup_folder =
+  "setup/1337"`); `main_menu/setup/start/` no longer exists, so
+  `28_MR_countries.txt` there was read by nothing and KAZ, IRA, MCH and BUK lost
+  their start blocks again ("County of Kazakh"). It now lives in
+  `main_menu/setup/1337/`, unchanged but for its comments' line numbers (KB
+  `setup.one-point-four-reads-the-start-from-the-bookmarks-setup-folder`). The
+  harness refuses a file left in `setup/start/`, and its BOM rule and start-block
+  scan read `setup/1337/`.
+- **Complacency is gone.** `monthly_complacency` and `has_complacency_effects`
+  are in 1.3.11's `modifiers.log` and not in 1.4.7's; the two
+  `monthly_complacency = -10` lines (`MR_unified_mongol_banner`,
+  `MR_shattered_horde_ai`) were deleted. Nothing replaces them: the mechanic they
+  countered no longer exists.
+- **A situation ends by `outcome` blocks.** All seven `can_end`s became outcomes
+  in the same order (goal, then time; the partition's deadline split in two by
+  cohesion 70, as `on_ending` splits it), each with a `name` and `desc` loc key;
+  `on_ending` is unchanged and still branches on the goal trigger. The timeout
+  tooltips lost their "Or" (each is now its own outcome's trigger). The harness
+  refuses a `can_end` in a situation and an outcome without loc (KB
+  `situations.one-point-four-ends-a-situation-by-outcome-blocks`).
+- **The panels' End Requirements card is dead.** `GetEndConditions` is a
+  DisasterView call in 1.4 and the engine draws an Outcomes card itself above
+  `situation_panel_main_content`. The card is gone from all seven panels, and its
+  hint button moved to `blockoverride "situation_panel_outcome_hint"`, vanilla's
+  `rise_of_the_ottomans.gui` conversion (KB
+  `gui.one-point-four-situation-panel-draws-an-outcomes-card-for-every-situation`).
+
+Checked and unchanged: no effect, trigger or on_action 1.4 removed is used here;
+`horde_list` (the one `TRY_REPLACE`) is byte-identical in 1.4.7; every template,
+law, language and capital in the start blocks resolves; every GUI template and
+block the panels use exists. The partition's cohesion read in
+`mr_partition_end_trigger` became a `trigger_if` because the Outcomes card draws
+it in tooltip mode.
+
+**Not yet proven by a game** (the 1.1.0 test in `docs/TESTING-GUIDE.md`, Track
+0b): that the moved file is read, that an outcome ends a situation and runs
+`on_ending`, the new panels. **Not measured at all:** 1.4's balance (manpower
+gated by control, cavalry 4 to 3.25, mercenaries dearer) against the AI
+Khaghan's ability to win Phase 3 - only an observer run over decades shows it.
+
 ## Hard rules
 > **PORTABLE TO A NEW EU5 REPO:** everything from here to the end of
 > `### Known EU5 specifics`, plus `## Workflow` and `## Language`, is
@@ -563,7 +611,7 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   2337 real tags plus the engine's reserved `DUMMY`, `PIR`, `MER`.)
 - **AN IDENTITY BLOCK WITHOUT A START BLOCK IS A BUG, AND VANILLA NEVER DOES
   IT.** `in_game/setup/countries/` makes `c:TAG` resolvable; `main_menu/setup/
-  start/10_countries.txt` is where government type, heir selection, capital,
+  1337/10_countries.txt` (`setup/start/` until 1.4) is where government type, heir selection, capital,
   map discovery, laws, society values, parliament type, `religious_school` and
   `starting_technology_level` actually live. **2337 of 2337 real vanilla tags
   have both**; the only three with an identity block and no start block are
@@ -578,13 +626,14 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   MCH spawning in an age-5 campaign with no advances and no map knowledge,
   while CRI, which has a landless start block, came out fine.
   `is_historic = yes` silences a DIFFERENT line, :592, and does not touch these.
-  **The additive route works and is measured**: `main_menu/setup/start/` merges
-  its files at country level (vanilla extends SWE from `10_countries.txt:17`,
+  **The additive route works and is measured**: `main_menu/setup/1337/` (1.3:
+  `setup/start/`) merges its files at country level (vanilla extends SWE from
+  `10_countries.txt:18`,
   `25_area_preferences.txt:8` and `26_ai_personalities.txt:9`), so a new
   filename adds countries safely — MR ships `28_MR_countries.txt`. A mod file
   literally named `10_countries.txt` replaces vanilla's whole file and empties
-  the map. **That folder is the one tree that takes NO BOM** (0 of vanilla's 25
-  files carry one); a BOM there is read as a token and the file goes silently
+  the map. **That folder is the one tree that takes NO BOM** (0 of vanilla
+  1.4.7's 26 files carry one); a BOM there is read as a token and the file goes silently
   inert. `verify_mod.py`'s BOM check is INVERTED for it, not waived.
 - **`form_country` re-tags the country when the formable's `tag` is FREE, and
   leaves the tag alone when it is taken** — but its `form_effect` and every
@@ -637,7 +686,7 @@ AI find-target and fallback, failsafe handover, `tooltip`/
 - **A `type = pop` country cannot own locations.** Vanilla's setup has
   448 of them (the nomad and tribe entities that hold POPS, not ground) and BSH
   is one. **The field is `type`, written top-level inside the country block in
-  `main_menu/setup/start/10_countries.txt`** (451 occurrences) — NOT
+  `main_menu/setup/1337/10_countries.txt`** (451 occurrences in 1.3) — NOT
   `country_type`, and NOT in `in_game/setup/countries/`, where the string
   occurs zero times in all 45 files. Grepping the identity tree for
   `country_type` finds nothing and reads as "BSH is fine".
@@ -677,7 +726,7 @@ AI find-target and fallback, failsafe handover, `tooltip`/
   survivable; one that marks itself done is not.
 - **A formable is NOT a tag registration; EU5 has TWO country registries.**
   `in_game/setup/countries/` (2339 tag blocks in 45 files) is what makes
-  `c:TAG` resolvable at runtime; `main_menu/setup/start/10_countries.txt` is
+  `c:TAG` resolvable at runtime; `main_menu/setup/1337/10_countries.txt` is
   what gives a country land, a ruler and a starting RANK. `common/formable_countries/`
   is neither — it supplies name/flag/adjective/colour to a country that already
   exists, and 94 of vanilla's 143 formable target tags appear in no registry at

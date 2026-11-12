@@ -2,8 +2,8 @@
 # MONGOL RESURGENCE - ON ACTIONS
 # =================================================================
 # The situations own their own lifecycle now (can_start opens them,
-# on_monthly drives the beats and the AI railroad, can_end closes
-# them), so this file no longer hand-fires phase events — that
+# on_monthly drives the beats and the AI railroad, the outcome
+# blocks close them - can_end until 1.4), so this file no longer hand-fires phase events — that
 # duplication is what produced the dangling trigger_event calls in
 # the original version.
 #

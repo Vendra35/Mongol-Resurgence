@@ -30,6 +30,17 @@ situation_panel = {
     }
 
     ##################################### MAIN CONTENT #####################################
+    # 1.4: vanilla draws the Outcomes card above the main content from the
+    # situation's outcome blocks (common.gui situation_outcomes); this puts
+    # the hint button on each outcome, as vanilla's 23 panels do. It
+    # replaces 1.3's End Requirements card, which read GetEndConditions.
+    blockoverride "situation_panel_outcome_hint" {
+        action_tooltip = {
+            title = "OPEN_HINT"
+            on_action = "[OpenLateralViewWithParams('hints', 'selected_hint = hint_mongol_resurgence')]"
+        }
+    }
+
     blockoverride "situation_panel_main_content" {
         vbox = {
             layoutpolicy_horizontal = expanding
@@ -71,35 +82,7 @@ situation_panel = {
                 }
             }
 
-            # CARD 2: OBJECTIVES LIST
-            situation_card_expandable = {
-                blockoverride "header_button_onclick" {
-                    onclick = "[LateralView.Vars.Toggle( 'mr_resurgence_req_toggled' )]"
-                }
-                blockoverride "header_text" {
-                    text = "END_REQUIREMENTS"
-                }
-                blockoverride "header_icon" {
-                    texture = "gfx/interface/icons/disasters/end_requirements_green.dds"
-                }
-                blockoverride "bottom_content" {
-                    TooltipRequirementsList = {
-                        textcontext = "[SituationView.GetActiveSituation.GetSituation.GetEndConditions]"
-                        margin = { 15 10 }
-                    }
-                }
-                blockoverride "bottom_content_onclick" {
-                    visible = "[LateralView.Vars.Exists( 'mr_resurgence_req_toggled' )]"
-                }
-                blockoverride "icon_replace_visible_yes" {
-                    visible = "[LateralView.Vars.Exists( 'mr_resurgence_req_toggled' )]"
-                }
-                blockoverride "icon_replace_visible_not" {
-                    visible = "[Not(LateralView.Vars.Exists( 'mr_resurgence_req_toggled' ))]"
-                }
-            }
-
-            # CARD 3: LEADER COMPARISON CARD
+            # CARD 2: LEADER COMPARISON CARD
             situation_fancy_two_line_card = {
                 block "card_datacontext" { }
                 

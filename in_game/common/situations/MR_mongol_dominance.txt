@@ -30,12 +30,28 @@ mongol_dominance = {
 	visible = {
 		mr_dominance_visible = yes
 	}
-	can_end = {
-		OR = {
+	# How the situation ends (1.4): outcome blocks, the first true one wins.
+	# 1.3 ended it by a can_end OR of the same rungs in the same order; 1.4's
+	# vanilla situations carry no can_end at all and the panel draws these
+	# blocks as its Outcomes card. on_ending still runs beside them and
+	# branches on the same goal trigger, so every reward is unchanged (KB
+	# situations.one-point-four-ends-a-situation-by-outcome-blocks,
+	# situations.a-can-end-rung-converts-to-one-outcome-with-its-tooltip-
+	# key-reused).
+	outcome = {
+		name = "mr_dominance_outcome_restored"
+		desc = "mr_dominance_outcome_restored_desc"
+		trigger = {
 			mr_dominance_end_trigger = yes
-			# Time expiry. Without this the situation can only ever end in
-			# success, which leaves on_ending's failure branch unreachable
-			# and lets a failed phase run to the end of the campaign.
+		}
+	}
+	outcome = {
+		name = "mr_dominance_outcome_time"
+		desc = "mr_dominance_outcome_time_desc"
+		# Time expiry. Without it the situation could only ever end on its
+		# goal, leaving on_ending's other branch unreachable and a failed
+		# phase running to the end of the campaign.
+		trigger = {
 			custom_tooltip = {
 				text = mr_dominance_timeout_tt
 				current_date > 1650.1.1

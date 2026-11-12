@@ -1,18 +1,25 @@
 # =================================================================
 # THE GREAT PARTITION'S HEIRS - THEIR START BLOCKS
 # =================================================================
+# THE FOLDER IS LOAD-BEARING. Since 1.4 the start is read from the
+# folder the bookmark names (main_menu/common/bookmarks/00_bookmarks.txt:
+# setup_folder = "setup/1337"); main_menu/setup/start/, where this file
+# lived for 1.3, no longer exists in vanilla, and a file left there is
+# read by nothing - silently (KB setup.one-point-four-reads-the-start-
+# from-the-bookmarks-setup-folder). Moved here unchanged for 1.4.
+#
 # THIS FILE CARRIES NO BOM, AND THAT IS LOAD-BEARING. It is the only
-# tree in the game that refuses one: 0 of vanilla's 25 files in
-# main_menu/setup/start/ begin with efbbbf, while 45 of 45 in
+# tree in the game that refuses one: 0 of vanilla 1.4.7's 26 files in
+# main_menu/setup/1337/ begin with efbbbf, while 45 of 45 in
 # in_game/setup/countries/ do. A BOM here is read as a token
 # (pdx_persistent_reader.cpp:289 "Unexpected token: <invisible>") and
 # the whole file goes SILENTLY INERT. tools/verify_mod.py's BOM check
 # exempts this folder and asserts the opposite for it.
 #
 # THE FILENAME IS ALSO LOAD-BEARING. A mod file named 10_countries.txt
-# would REPLACE vanilla's entire 50k-line file and empty the map. The
+# would REPLACE vanilla's entire 63k-line file and empty the map. The
 # folder merges its files instead, at country level: vanilla itself
-# extends SWE from three separate files (10_countries.txt:17,
+# extends SWE from three separate files (10_countries.txt:18,
 # 25_area_preferences.txt:8, 26_ai_personalities.txt:9), and
 # 26_ai_personalities.txt is the additive precedent this file copies -
 # same `countries = { countries = { ... } }` wrapper, no BOM, a name
@@ -37,7 +44,7 @@
 #
 # THE PROOF THAT THIS IS THE FIX, from the author's own game: CRI came
 # out FINE while IRA and MCH did not - and CRI is the one that already
-# has a landless start block (10_countries.txt:4195-4222, with
+# has a landless start block (10_countries.txt:4200-4227, with
 # starting_technology_level = 3 and include = "expl_mongols"). These
 # three blocks give the other three what CRI always had.
 #
@@ -65,7 +72,7 @@ countries = {
 		# `type` is deliberately OMITTED here, on all three blocks. TIM,
 		# CHB, MGE and OIR all write `type = army` - but KAZ's handover was
 		# MEASURED WORKING in game 2026-07-30 with no start block and so no
-		# type at all, and ODO (10_countries.txt:49955) shows omitting it is
+		# type at all, and ODO (10_countries.txt:50429) shows omitting it is
 		# vanilla-attested. Do not add one without a reason.
 		#
 		# capital: shavgar, which is khorasan_region / zhetysu_area, and
@@ -92,8 +99,8 @@ countries = {
 				# (01_common.txt:1686-1692) — and KAZ is SUNNI, so the engine
 				# throws the law away. Both of vanilla's Muslim users of this
 				# same template override it for exactly this reason: CHB with
-				# muslim_marriage (10_countries.txt:57721), TIM with
-				# monogamous_marriage (:48857). muslim_marriage's potential is
+				# muslim_marriage (10_countries.txt:58196), TIM with
+				# monogamous_marriage (:49335). muslim_marriage's potential is
 				# just `religion.group = religion_group:muslim`
 				# (01_common.txt:1656) and its modifiers are identical to
 				# polygyny's, so it is a straight swap.
@@ -112,13 +119,13 @@ countries = {
 			capital = shavgar
 		}
 
-		# Safavid Persia. Shape copied from FEZ (10_countries.txt:19464),
+		# Safavid Persia. Shape copied from FEZ (10_countries.txt:19815),
 		# a landless Muslim monarchy on the same template.
 		# muslim_monarchy_not_present supplies the sliders, the parliament,
 		# both laws and starting_technology_level - but NOT `type` and NOT
 		# `heir_selection`, so both are written inline, exactly as FEZ does.
 		# The school is jafari, the Twelver school, with the matching
-		# sharia_law policy: CHB (10_countries.txt:57710) is vanilla's own
+		# sharia_law policy: CHB (10_countries.txt:58184) is vanilla's own
 		# shia country and pairs them the same way.
 		#
 		# capital: isfahan, persia_region / iraq_ajam_area, and
@@ -148,7 +155,7 @@ countries = {
 		}
 
 		# The Manchus - Later Jin in 1616, the Qing in 1644. Shape copied
-		# from DNG (10_countries.txt:49828), one of vanilla's Jianzhou
+		# from DNG (10_countries.txt:50303), one of vanilla's Jianzhou
 		# Jurchen tribes. jianzhou_tribe_not_present supplies `type = tribe`,
 		# the sliders, the parliament, both laws, the jianzhou_jurchen_reform
 		# and starting_technology_level = 2 - but no heir_selection, so
@@ -160,7 +167,7 @@ countries = {
 		# printed :520 twice and not three times.
 		#
 		# NO block-level `dynasty` either: aisin_gioro_dynasty is already
-		# assigned to a country at 10_countries.txt:49977, and the partition
+		# assigned to a country at 10_countries.txt:50451, and the partition
 		# gives the Manchu founder that house at runtime anyway.
 		#
 		# capital: shenyang, manchuria_region / liaodong_area, and
@@ -193,7 +200,7 @@ countries = {
 		# `type` and NOT `heir_selection`, so both are inline. hanafi is
 		# written on purpose — Bukhara-i Sharif was the Hanafi centre of
 		# Central Asia, and the school and its sharia_law policy are
-		# paired the way FEZ pairs maliki (10_countries.txt:19464).
+		# paired the way FEZ pairs maliki (10_countries.txt:19815).
 		#
 		# capital: bukhara, khorasan_region / transoxiana_area, and
 		# expl_mongols grants khorasan_region — so the capital is inside

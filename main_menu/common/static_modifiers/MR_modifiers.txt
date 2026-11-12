@@ -41,7 +41,6 @@ MR_unified_mongol_banner = {
 	character_mil_child_education = 0.75
 	num_local_governors = 1
 	expected_army_size_modifier = 1
-	monthly_complacency = -10
 }
 
 # --- Situation 1 Failure (AI) ---
@@ -318,7 +317,6 @@ MR_mongol_historical_modifier_2 = {
 	land_unit_attrition = -0.1
 	regiment_reinforcement_speed = 0.1
 	expected_army_size_modifier = 1
-	monthly_complacency = -10
 }
 
 # Historical Phase 2 Buff
@@ -623,10 +621,13 @@ MR_path_of_the_qadis = {
 #
 # NOT ONE UNREST TAG IN ANY OF THE THREE. No monthly_rebel_growth, no
 # global_separatism, no local_unrest, no pop_join_rebel_threshold, and
-# deliberately NOT `has_complacency_effects = yes` either - that
-# switch routes into pop_join_rebel_threshold = 0.1 through
-# auto_modifiers/country.txt:456, which quietly imports the whole
-# vanilla decline family the house rule exists to keep out.
+# deliberately NOT `has_complacency_effects = yes` either - in 1.3
+# that switch routed into pop_join_rebel_threshold = 0.1 through
+# auto_modifiers/country.txt:456, which quietly imported the whole
+# vanilla decline family the house rule exists to keep out. (1.4
+# removed complacency entirely: neither tag is in 1.4.7's
+# modifiers.log, and the two `monthly_complacency = -10` lines this
+# file carried in 1.3 went with it.)
 #
 # TWO LEVERS DELIBERATELY ABSENT, because they are DEAD on this
 # claimant: subject_loyalty (MR_unified_mongol_banner already gives a

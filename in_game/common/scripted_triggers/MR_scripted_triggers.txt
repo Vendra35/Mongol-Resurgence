@@ -1306,7 +1306,8 @@ mr_partition_visible = {
 # than an instant ending.
 #
 # var: at situation scope is how situations read their own variables
-# in can_end (great_pestilence.txt:14-18 does exactly this); the
+# in their ending triggers (1.4.7's great_pestilence.txt:18-20 does it
+# in an outcome trigger); the
 # has_variable guard is attested at the same scope in
 # black_death.txt:158 and costs nothing, and an unset variable
 # reading back as 0 would be this bug all over again.
@@ -1327,10 +1328,21 @@ mr_partition_end_trigger = {
 				}
 			}
 		}
+		# A trigger_if, not a sibling has_variable: 1.4's panel draws this
+		# trigger in tooltip mode as the first outcome, and there a sibling
+		# guard does not stop the read (KB situations.has-variable-guard-
+		# must-be-trigger-if). Same value at runtime.
 		custom_tooltip = {
 			text = mr_partition_cohesion_spent_tt
-			has_variable = MR_cohesion_score
-			var:MR_cohesion_score < 40
+			trigger_if = {
+				limit = {
+					has_variable = MR_cohesion_score
+				}
+				var:MR_cohesion_score < 40
+			}
+			trigger_else = {
+				always = no
+			}
 		}
 	}
 }

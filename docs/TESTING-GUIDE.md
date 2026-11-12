@@ -40,6 +40,32 @@ dates below.
 
 ---
 
+## Track 0b — the 1.4 port (1.1.0), one launch, about 30 minutes
+
+What it answers: the four things 1.4 broke and 1.1.0 changed (CLAUDE.md,
+"1.4 Rio Salado") work in the game - the start blocks are read from
+`main_menu/setup/1337/`, an outcome block ends a situation and runs its
+`on_ending`, and the panels draw vanilla's Outcomes card. One launch, and no
+second launch before the logs are read: each launch overwrites them.
+
+| # | Do | Expect | Proves |
+|---|---|---|---|
+| 0b.1 | Launch with `-debug_mode`, Mongol Resurgence the only mod. New Game | The lobby opens on 1 April 1337 - no crash, no hang in world generation | the setup file is valid where it now lives |
+| 0b.2 | Play **CHI** (Yuan, holds Karakorum in 1337). Start, pause | - | - |
+| 0b.3 | Console: `activate_situation mongol_resurgence`, then `activate_situation mr_torghut_migration`. Open both panels, expand the Outcomes card and one outcome in each. Screenshot both | An **Outcomes** card at the top with two outcomes each ("The Steppe United" / "The Moment Passes"; "The Trek Reaches the Volga" / "The Trek Ends Short"), each opening to its description and its requirement list, a hint button on each; **no** End Requirements card, no raw keys | panels + outcome loc |
+| 0b.4 | Save as **MR14_A** | - | - |
+| 0b.5 | Console: `change_date 1631.1.1`, unpause, let two months pass. Screenshot any event that appears | Both situations close. Phase 1 by either outcome - "The Moment Passes" (failure: `mr_railroad_failed`) or, if the 1415 completion failsafe fires first in the same tick, "The Steppe United"; either proves an outcome ends it and `on_ending` runs. Torghut by "The Trek Ends Short" | outcome blocks end a situation |
+| 0b.6 | Save as **MR14_B**, quit the game, and say "bitti" | - | - |
+
+Read afterwards (read-test-session: all three logs and both saves): no
+`initialize_from_bookmark.cpp` lines for KAZ, IRA, MCH or BUK (the start blocks
+were read; the save at 1337 gives each a government type); in MR14_B both
+situations ended and the matching global (`mr_railroad_failed`, or
+`mr_phase_one_complete`) set; no `MR_` or `mr_` key printed raw; nothing in
+error.log naming `monthly_complacency`, `can_end` or `GetEndConditions`.
+
+---
+
 ## Track 1 — Loading & localization (5 minutes, before anything else)
 
 | # | Check | Expect | Implemented in |

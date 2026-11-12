@@ -27,9 +27,28 @@ mr_chahar_reunification = {
 	visible = {
 		mr_chahar_visible = yes
 	}
-	can_end = {
-		OR = {
+	# How the situation ends (1.4): outcome blocks, the first true one wins.
+	# 1.3 ended it by a can_end OR of the same rungs in the same order; 1.4's
+	# vanilla situations carry no can_end at all and the panel draws these
+	# blocks as its Outcomes card. on_ending still runs beside them and
+	# branches on the same goal trigger, so every reward is unchanged (KB
+	# situations.one-point-four-ends-a-situation-by-outcome-blocks,
+	# situations.a-can-end-rung-converts-to-one-outcome-with-its-tooltip-
+	# key-reused).
+	outcome = {
+		name = "mr_chahar_outcome_reunited"
+		desc = "mr_chahar_outcome_reunited_desc"
+		trigger = {
 			mr_chahar_end_trigger = yes
+		}
+	}
+	outcome = {
+		name = "mr_chahar_outcome_time"
+		desc = "mr_chahar_outcome_time_desc"
+		# Time expiry. Without it the situation could only ever end on its
+		# goal, leaving on_ending's other branch unreachable and a failed
+		# phase running to the end of the campaign.
+		trigger = {
 			custom_tooltip = {
 				text = mr_chahar_timeout_tt
 				current_date > 1634.1.1
@@ -131,9 +150,28 @@ mr_torghut_migration = {
 	visible = {
 		mr_torghut_visible = yes
 	}
-	can_end = {
-		OR = {
+	# How the situation ends (1.4): outcome blocks, the first true one wins.
+	# 1.3 ended it by a can_end OR of the same rungs in the same order; 1.4's
+	# vanilla situations carry no can_end at all and the panel draws these
+	# blocks as its Outcomes card. on_ending still runs beside them and
+	# branches on the same goal trigger, so every reward is unchanged (KB
+	# situations.one-point-four-ends-a-situation-by-outcome-blocks,
+	# situations.a-can-end-rung-converts-to-one-outcome-with-its-tooltip-
+	# key-reused).
+	outcome = {
+		name = "mr_torghut_outcome_volga"
+		desc = "mr_torghut_outcome_volga_desc"
+		trigger = {
 			mr_torghut_end_trigger = yes
+		}
+	}
+	outcome = {
+		name = "mr_torghut_outcome_time"
+		desc = "mr_torghut_outcome_time_desc"
+		# Time expiry. Without it the situation could only ever end on its
+		# goal, leaving on_ending's other branch unreachable and a failed
+		# phase running to the end of the campaign.
+		trigger = {
 			custom_tooltip = {
 				text = mr_torghut_timeout_tt
 				current_date > 1630.1.1
@@ -277,9 +315,28 @@ mr_dzungar_khanate = {
 	visible = {
 		mr_dzungar_visible = yes
 	}
-	can_end = {
-		OR = {
+	# How the situation ends (1.4): outcome blocks, the first true one wins.
+	# 1.3 ended it by a can_end OR of the same rungs in the same order; 1.4's
+	# vanilla situations carry no can_end at all and the panel draws these
+	# blocks as its Outcomes card. on_ending still runs beside them and
+	# branches on the same goal trigger, so every reward is unchanged (KB
+	# situations.one-point-four-ends-a-situation-by-outcome-blocks,
+	# situations.a-can-end-rung-converts-to-one-outcome-with-its-tooltip-
+	# key-reused).
+	outcome = {
+		name = "mr_dzungar_outcome_khanate"
+		desc = "mr_dzungar_outcome_khanate_desc"
+		trigger = {
 			mr_dzungar_end_trigger = yes
+		}
+	}
+	outcome = {
+		name = "mr_dzungar_outcome_time"
+		desc = "mr_dzungar_outcome_time_desc"
+		# Time expiry. Without it the situation could only ever end on its
+		# goal, leaving on_ending's other branch unreachable and a failed
+		# phase running to the end of the campaign.
+		trigger = {
 			custom_tooltip = {
 				text = mr_dzungar_timeout_tt
 				current_date > 1650.1.1
