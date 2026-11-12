@@ -51,7 +51,7 @@ second launch before the logs are read: each launch overwrites them.
 | # | Do | Expect | Proves |
 |---|---|---|---|
 | 0b.1 | Launch with `-debug_mode`, Mongol Resurgence the only mod. New Game | The lobby opens on 1 April 1337 - no crash, no hang in world generation | the setup file is valid where it now lives |
-| 0b.2 | Play **CHI** (Yuan, holds Karakorum in 1337). Start, pause | - | - |
+| 0b.2 | Play **CHI** (Yuan, holds Karakorum in 1337). Start, pause. (CHI does not see the Torghut panel - `mr_torghut_visible` is OIR/MGO/MGE or Pontic/Russian/Ural presence; to SEE a small panel play the Golden Horde) | - | - |
 | 0b.3 | Console: `activate_situation mongol_resurgence`, then `activate_situation mr_torghut_migration`. Open both panels, expand the Outcomes card and one outcome in each. Screenshot both | An **Outcomes** card at the top with two outcomes each ("The Steppe United" / "The Moment Passes"; "The Trek Reaches the Volga" / "The Trek Ends Short"), each opening to its description and its requirement list, a hint button on each; **no** End Requirements card, no raw keys | panels + outcome loc |
 | 0b.4 | Save as **MR14_A** | - | - |
 | 0b.5 | Console: `change_date 1631.1.1`, unpause, let two months pass. Screenshot any event that appears | Both situations close. Phase 1 by either outcome - "The Moment Passes" (failure: `mr_railroad_failed`) or, if the 1415 completion failsafe fires first in the same tick, "The Steppe United"; either proves an outcome ends it and `on_ending` runs. Torghut by "The Trek Ends Short" | outcome blocks end a situation |
@@ -63,6 +63,12 @@ were read; the save at 1337 gives each a government type); in MR14_B both
 situations ended and the matching global (`mr_railroad_failed`, or
 `mr_phase_one_complete`) set; no `MR_` or `mr_` key printed raw; nothing in
 error.log naming `monthly_complacency`, `can_end` or `GetEndConditions`.
+
+**Run 2026-11-12: PASSED** (CLAUDE.md, "1.4 Rio Salado", has the evidence). The
+default save names stand in for MR14_A / MR14_B: SP_CHI_1337_05_01 and
+SP_CHI_1632_01_01. After `change_date 1631.1.1` every due situation closed
+together on 1631.5.6; the Chahar situation opened by itself on 1631.6.1 and
+closed on its goal two days later, because the jump leaves the 1337 map.
 
 ---
 

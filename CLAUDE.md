@@ -458,9 +458,21 @@ block the panels use exists. The partition's cohesion read in
 `mr_partition_end_trigger` became a `trigger_if` because the Outcomes card draws
 it in tooltip mode.
 
-**Not yet proven by a game** (the 1.1.0 test in `docs/TESTING-GUIDE.md`, Track
-0b): that the moved file is read, that an outcome ends a situation and runs
-`on_ending`, the new panels. **Not measured at all:** 1.4's balance (manpower
+**Proven in the game 2026-11-12** (Track 0b, MR alone on 1.4.7, saves
+SP_CHI_1337_05_01 and SP_CHI_1632_01_01): debug.log read
+`setup/1337/28_MR_countries.txt`, no `initialize_from_bookmark` line, and the
+1337 save gives KAZ, IRA, MCH and BUK their blocks' government, laws and rank;
+the 1632 save records `end_outcome="mr_resurgence_outcome_time"`,
+`"mr_torghut_outcome_time"` and `"mr_chahar_outcome_reunited"`, `on_ending`'s
+events fired (`mr_dominance.2`, `mr_steppe.3`) and `mr_railroad_failed` was set;
+the Phase 1 panel showed the Outcomes card with both outcomes, their text,
+requirement lists and hint buttons. Not seen: a small (late-steppe) panel - the
+test played CHI, which `mr_torghut_visible` does not include. Logged at load,
+1.4-side: 34 `MR_geo_*` with no name loc (KB
+`loc.one-point-four-five-names-every-scripted-geography`), `map.cpp:819` for IRA
+and BUK (KB `errors.a-tag-sharing-a-map-name-is-a-dynamic-naming-warning`,
+accepted), and the older `mr_dominance.99x` title/outcome lines. **Not measured
+at all:** 1.4's balance (manpower
 gated by control, cavalry 4 to 3.25, mercenaries dearer) against the AI
 Khaghan's ability to win Phase 3 - only an observer run over decades shows it.
 
