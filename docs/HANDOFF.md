@@ -1,5 +1,21 @@
 ﻿# HANDOFF — resume here
 
+> **GAME PATCH 1.4.9, 2026-11-18 — noted here from The Prussian Destiny's session,
+> on the author's word; read it BEFORE other work.** The game went from 1.4.7 to
+> 1.4.9; Mongol Resurgence 1.1.0 was built and tested on 1.4.7. The vanilla store
+> holds `v1.4.9` (`C:/Users/Desktop/eu5-vanilla-git`); the modless 1.4.9 script
+> docs are `eu5-knowledge/script-docs/1.4.9/`. What 1066's `update_audit.py`,
+> run unchanged for this mod, reports (tool output, NOT reviewed;
+> `eu5-knowledge/research/2026-11-18/patch-1.4.9-update-audit/mongol-resurgence.md`):
+> four changed vanilla objects this mod names - `change_religion_for_ruler_and_family`
+> (`MR_partition_effects.txt`; changed inside, same two arguments), the subject type
+> `tributary` (`MR_mongol_resurgence.txt`), `add_accepted_culture`
+> (`MR_dominance_dhe_events.txt`) and the unit type `a_light_dragoons`
+> (`MR_dominance_events.txt`). The audit does not compare `dlc/`. The patch also
+> split 22 combat, movement and siege defines into `_DAILY` / `_HOURLY` pairs for
+> a new game rule `tick_rate` (this mod ships no defines file). Owed here:
+> `tools/verify_mod.py` on the patched game and a load test before the next upload.
+
 > **Superseded 2026-11-12 (1.1.0, the 1.4 port).** This is the 1.3 record. Since
 > 1.4 the start-block file below lives in `main_menu/setup/1337/`, not
 > `setup/start/`; the current state is CLAUDE.md, "1.4 Rio Salado".
